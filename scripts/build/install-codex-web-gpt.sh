@@ -72,6 +72,7 @@ cat > "$wrapper" <<EOF
 set -eu
 export CODEX_WEB_GPT_LAUNCHER_EXECUTABLE="$wrapper"
 export CODEX_WEB_GPT_APPIMAGE="$target"
+export CODEX_WEB_GPT_DISABLE_UPDATES="\${CODEX_WEB_GPT_DISABLE_UPDATES:-1}"
 exec "$runner" "$target" "\$@"
 EOF
 chmod 0755 "$wrapper"
