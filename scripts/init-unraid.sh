@@ -35,6 +35,7 @@ CONTAINER_NAME="${CONTAINER_NAME:-chatgpt-ce-workstation}"
 SECRET_DIR="$APPDATA_ROOT/secrets"
 VNC_SECRET_FILE="$SECRET_DIR/novnc-password"
 KEYRING_SECRET_FILE="$SECRET_DIR/keyring-password"
+CODEX_LB_SECRET_FILE="$SECRET_DIR/codex-lb-api-key"
 CE_PROJECT_TARGET="$APPDATA_ROOT/home/Documents/ChatGPT"
 
 if [[ "$(id -u)" -ne 0 ]]; then
@@ -91,6 +92,15 @@ else
   echo "Keeping existing $KEYRING_SECRET_FILE"
 fi
 
+# Codex-LB is optional, but Compose needs a stable secret source path even when
+# native requests still use the official backend. Keep an empty 0600 placeholder
+# until scripts/set-codex-lb-key.sh stores a real key.
+if [[ ! -e "$CODEX_LB_SECRET_FILE" ]]; then
+  : > "$CODEX_LB_SECRET_FILE"
+  echo "Created empty optional Codex-LB secret source: $CODEX_LB_SECRET_FILE"
+fi
+chmod 0600 "$CODEX_LB_SECRET_FILE"
+
 # Persistent home must be writable by the configured container user.
 chown "$CODEX_UID:$CODEX_GID" "$APPDATA_ROOT/home" || true
 chmod 0750 "$APPDATA_ROOT/home"
@@ -140,11 +150,12 @@ esac
 
 echo
 echo "Prepared:"
-echo "  appdata:        $APPDATA_ROOT/home"
-echo "  projects host:  $PROJECTS_ROOT"
-echo "  projects in CE: /home/codex/Documents/ChatGPT"
-echo "  VNC secret:     $VNC_SECRET_FILE"
-echo "  keyring secret: $KEYRING_SECRET_FILE"
-echo "  identity:       UID $CODEX_UID / GID $CODEX_GID"
+echo "  appdata:          $APPDATA_ROOT/home"
+echo "  projects host:    $PROJECTS_ROOT"
+echo "  projects in CE:   /home/codex/Documents/ChatGPT"
+echo "  VNC secret:       $VNC_SECRET_FILE"
+echo "  keyring secret:   $KEYRING_SECRET_FILE"
+echo "  Codex-LB secret:  $CODEX_LB_SECRET_FILE (optional; may be empty)"
+echo "  identity:         UID $CODEX_UID / GID $CODEX_GID"
 echo
 echo "Next: bash scripts/build.sh"
