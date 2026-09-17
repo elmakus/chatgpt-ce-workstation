@@ -73,6 +73,17 @@ set -eu
 export CODEX_WEB_GPT_LAUNCHER_EXECUTABLE="$wrapper"
 export CODEX_WEB_GPT_APPIMAGE="$target"
 export CODEX_WEB_GPT_DISABLE_UPDATES="\${CODEX_WEB_GPT_DISABLE_UPDATES:-1}"
+
+# Optional Codex-LB/native-upstream credential. Keep it in the persistent
+# workstation home rather than Compose environment so it is not exposed by
+# normal docker inspect output. The custom upstream URL itself is non-secret and
+# comes from CODEX_CHATGPT_WEB_NATIVE_UPSTREAM.
+key_file="\${CODEX_LB_API_KEY_FILE:-/home/codex/.config/workstation/codex-lb-api-key}"
+if [ -s "\$key_file" ]; then
+  CODEX_LB_API_KEY="\$(cat "\$key_file")"
+  export CODEX_LB_API_KEY
+fi
+
 exec "$runner" "$target" "\$@"
 EOF
 chmod 0755 "$wrapper"
