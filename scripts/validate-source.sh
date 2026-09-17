@@ -59,7 +59,7 @@ grep -F 'source: ${PROJECTS_ROOT:-/mnt/user/projects}' compose.yaml >/dev/null |
 grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/novnc-password' compose.yaml >/dev/null || fail 'noVNC secret wiring missing'
 grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/keyring-password' compose.yaml >/dev/null || fail 'keyring secret wiring missing'
 grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/codex-lb-api-key' compose.yaml >/dev/null || fail 'Codex-LB secret wiring missing'
-grep -F 'CODEX_CHATGPT_WEB_NATIVE_UPSTREAM: ${CODEX_CHATGPT_WEB_NATIVE_UPSTREAM:-}' compose.yaml >/dev/null || fail 'optional native upstream setting missing'
+grep -F 'CODEX_CHATGPT_WEB_NATIVE_UPSTREAM: "${CODEX_CHATGPT_WEB_NATIVE_UPSTREAM:-}"' compose.yaml >/dev/null || fail 'optional native upstream setting missing'
 grep -F '/usr/local/bin/workstation-healthcheck' compose.yaml >/dev/null || fail 'desktop-aware healthcheck missing'
 if grep -Eq '^[[:space:]]*privileged:[[:space:]]*true|SYS_ADMIN|/var/run/docker\.sock' compose.yaml; then
   fail 'compose.yaml weakens the Docker isolation boundary'
