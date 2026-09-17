@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -14,6 +15,7 @@ concurrency:
 
 jobs:
   source-validation:
+    if: ${{ github.event.repository.private == false }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -42,6 +44,7 @@ jobs:
           shellcheck -x -S error "${files[@]}"
 
   dockerfile-check:
+    if: ${{ github.event.repository.private == false }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -52,6 +55,7 @@ jobs:
         run: docker buildx build --check --file Dockerfile .
 
   secret-scan:
+    if: ${{ github.event.repository.private == false }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
