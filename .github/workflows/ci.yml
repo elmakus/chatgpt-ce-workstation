@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate workstation source
+        run: bash scripts/validate-source.sh
+
+      - name: ShellCheck workstation scripts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+          mapfile -t files < <(
+            {
+              find scripts -type f -name '*.sh' -print
+              find rootfs -type f \
+                \( -name '*.sh' -o -path '*/usr/local/bin/chatgpt-ce' -o -path '*/usr/local/bin/workstation-healthcheck' \) \
+                -print
+              find rootfs/etc/cont-init.d -type f -print 2>/dev/null || true
+              find rootfs/etc/s6-overlay/s6-rc.d -type f -name run -print 2>/dev/null || true
+            } | sort -u
+          )
+          shellcheck -x -S error "${files[@]}"
+
+  dockerfile-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Dockerfile static checks
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - name: Check Dockerfile without building image
+        run: docker buildx build --check --file Dockerfile .
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - name: Scan repository history for secrets
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

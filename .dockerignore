@@ -1,0 +1,8 @@
+.git
+.env
+*.local
+*.local.*
+secrets/
+**/secrets/
+*.log
+.DS_Store

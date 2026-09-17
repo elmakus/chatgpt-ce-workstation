@@ -1,0 +1,13 @@
+{
+  "enabled": [
+    "remote-mobile-control",
+    "agent-workspace",
+    "computer-use-linux",
+    "authored-message-visibility",
+    "automation-extensions",
+    "mcp-helper-reaper",
+    "node-repl-reaper",
+    "project-group-last-updated-sort",
+    "directory-only-working-tree-watch"
+  ]
+}

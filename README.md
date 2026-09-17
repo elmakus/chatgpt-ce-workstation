@@ -1,99 +1,233 @@
 # ChatGPT CE Workstation for Unraid
 
-A Docker-native, always-on ChatGPT Community Edition / Codex workstation for Unraid, designed to be controlled primarily through **ChatGPT Remote Control on Android**.
+Docker-native, always-on ChatGPT Community Edition / Codex workstation for Unraid, controlled primarily through **ChatGPT Remote Control on Android** with a lightweight noVNC recovery desktop.
 
-> Status: **PLANNING / BOOTSTRAP SCAFFOLD**. The architecture and decisions are recorded, but the image has not yet been validated end-to-end on the target Unraid host. Follow `docs/IMPLEMENTATION_PLAN.md` in order and do not skip the Remote Control checkpoint.
+## Current status
 
-## Goal
+Validated on the target Unraid host:
 
-Run a full Linux development workstation in one Unraid Docker container without reserving CPU/RAM for a VM.
+- ChatGPT CE builds and starts;
+- CE login and GNOME keyring state persist;
+- Android Remote Control pairs and executes native Codex tasks;
+- Codex runs with `approval_policy = "never"` and `sandbox_mode = "danger-full-access"` inside the Docker boundary;
+- noVNC works for setup/recovery.
+
+Current repository state:
+
+- canonical project path: `/home/codex/Documents/ChatGPT`;
+- host project share: `/mnt/user/projects`;
+- no active `/workspace` project mount in Compose;
+- ChatGPT CE and Codex Web GPT start automatically with the desktop session;
+- noVNC uses Openbox + Tint2 so GUI apps can be Quit and relaunched without restarting the container;
+- the direct project-bind migration still needs to be applied and verified on the live Unraid host after pulling current `main`.
+
+## Architecture
 
 ```text
 ChatGPT Android
       |
       | Remote Control
       v
-+------------------------------------------------------+
-| Unraid                                               |
-|                                                      |
-| chatgpt-ce-workstation                               |
-|                                                      |
-| s6-overlay                                           |
-|  |- Xvfb + Openbox + noVNC                          |
-|  |- ChatGPT Community Edition                       |
-|  |    `- bundled official Codex                     |
-|  `- Codex Web GPT / codex-chatgpt-web               |
-|                                                      |
-| Git / gh / SSH / Node / Python / Rust / Go / Java   |
-| build tools / media tools / diagnostics              |
-|                                                      |
-| /home/codex  -> /mnt/user/appdata/.../home          |
-| /workspace   -> /mnt/user/projects                  |
-+------------------------------------------------------+
++-----------------------------------------------------------+
+| Unraid                                                    |
+|                                                           |
+| Compose Manager -> compose.yaml                           |
+|                    |                                      |
+|                    v                                      |
+| chatgpt-ce-workstation                                    |
+|                                                           |
+| s6-overlay                                                |
+|  `- desktop service                                      |
+|      |- Xvfb                                             |
+|      |- Openbox + Tint2                                  |
+|      |- x11vnc + websockify/noVNC                        |
+|      |- ChatGPT Community Edition                        |
+|      `- Codex Web GPT                                    |
+|                                                           |
+| Google Chrome Stable                                      |
+| Git / gh / SSH / Node / Python / Rust / Go / Java        |
+| build tools / media tools / diagnostics                   |
+|                                                           |
+| /home/codex                      -> appdata persistent home |
+| /home/codex/Documents/ChatGPT    -> /mnt/user/projects     |
++-----------------------------------------------------------+
 ```
 
 ## Locked-in design decisions
 
-- **Docker, not a VM.** No permanently reserved guest RAM/CPU and no full guest OS.
-- **ChatGPT Community Edition** is the desktop host.
-- Use CE's **bundled Codex**. Do **not** install a second standalone Codex CLI in v1; Android Remote is the primary interface and CE Remote explicitly uses the bundled Codex runtime.
-- Enable CE Linux features:
-  - `remote-mobile-control`
-  - `agent-workspace`
-  - `computer-use-linux`
-- Use **s6-overlay**, not systemd, as container PID 1 / process supervisor.
-- Use **Xvfb + Openbox + x11vnc + noVNC** for the headless desktop and first-time setup.
-- Build/install CE as a **native Debian package**, not AppImage.
-- Disable CE's native updater (`PACKAGE_WITH_UPDATER=0`). Updates happen by rebuilding the Docker image and recreating the container.
-- Install **codex-chatgpt-web** in the image. Its user/browser state remains under persistent `/home/codex`.
-- Ignore Codex-LB for v1. Do not mix its routing into the first deployment.
-- Persistent user state: `/home/codex` -> Unraid `appdata`.
-- Projects: `/workspace` -> `/mnt/user/projects`.
-- Large project-local files remain inside each project directory and are excluded with that project's `.gitignore`. Do not create a separate `project-data` share unless a later use case actually requires shared/huge data on another pool.
-- Do **not** mount `/var/run/docker.sock` in v1.
-- Do **not** run Electron as root and do **not** default to `--no-sandbox`.
-- noVNC is a setup/recovery surface, not the normal daily interface after Android Remote is paired.
+- **Docker, not a VM.**
+- **Docker Compose is authoritative.** Unraid Compose Manager may operate the stack, but `compose.yaml` defines runtime state.
+- **ChatGPT Community Edition** is the desktop host and provides the bundled Codex used by Android Remote.
+- Use **s6-overlay**, not systemd, as PID 1 / service supervisor.
+- Use **Xvfb + Openbox + Tint2 + x11vnc + noVNC** as the recovery desktop.
+- Use **official Google Chrome Stable** for browser-dependent workflows.
+- Build/install CE as a native Debian package with `PACKAGE_WITH_UPDATER=0`; updates happen by rebuilding the image.
+- Install **Codex Web GPT** from `elmakus/codex-chatgpt-web`; user/browser state remains under persistent `/home/codex`.
+- Pin Agent Workspace to a known version (`0.3.2` by default).
+- Persistent user state: `/home/codex` -> `/mnt/user/appdata/chatgpt-ce-workstation/home`.
+- Projects: `/home/codex/Documents/ChatGPT` -> `/mnt/user/projects`.
+- The workstation repo itself should live at `/mnt/user/projects/chatgpt-ce-workstation`.
+- The `codex` user has passwordless sudo **inside this dedicated container**.
+- Codex runs full-access/no-approval; Docker is the external isolation boundary.
+- Do not mount `/var/run/docker.sock`, the Unraid host root, or use `privileged`/`SYS_ADMIN` as shortcuts.
+- CE and the workstation Chrome launcher intentionally use `--no-sandbox` because the accepted unprivileged Unraid Docker boundary cannot initialize their inner Chromium/Electron sandbox reliably. Do not compensate by weakening the container boundary.
+- Useful runtime tool installs must be persisted back to `Dockerfile`, `compose.yaml`, `rootfs/`, scripts, or the relevant project manifest.
+
+Enabled CE Linux features are tracked in `config/ce-features.json`; rationale is documented in `docs/CE_FEATURES.md`.
 
 ## Persistent vs replaceable data
 
-The Docker image owns replaceable system/application files:
+Replaceable image-owned state includes system packages, CE, Chrome, Codex Web GPT, toolchains and files under `/opt` and `/usr`.
 
-```text
-/usr
-/bin
-/lib
-/opt/codex-desktop
-/opt/codex-web-gpt
-system packages and developer toolchains
-```
-
-Unraid owns persistent state:
+Persistent host-owned state:
 
 ```text
 /mnt/user/appdata/chatgpt-ce-workstation/home
   -> /home/codex
 
 /mnt/user/projects
-  -> /workspace
+  -> /home/codex/Documents/ChatGPT
 ```
 
-Rebuilding the image or recreating the container must not delete logins, CE/Codex settings, SSH/GitHub state, Remote Control keys, codex-chatgpt-web profile data, repositories, unpushed commits, ignored binaries, or project artifacts.
+Rebuilding or recreating the container must not delete CE/Codex settings, logins, keyring data, Remote Control keys, SSH/GitHub state, Codex Web GPT profile data, repositories, unpushed commits or project artifacts.
 
-## First-login flow
+## noVNC desktop behavior
 
-1. Start the container.
-2. Open noVNC in a browser: `http://UNRAID_IP:6080/vnc.html`.
-3. Sign in to ChatGPT Community Edition.
-4. Restart/recreate the container once and verify that the ChatGPT login persists.
-5. Configure CE Remote Control and pair the Android ChatGPT app.
-6. Validate a normal native Codex task over Remote before adding another moving part.
-7. Open Codex Web GPT through noVNC, sign in to its embedded ChatGPT browser, run its browser smoke test, install routed models and configure Full Harness / `Codex Native2`.
-8. Test a routed ChatGPT Web model from Android Remote against a disposable repository.
-9. Only then enable/test Agent Workspace and broader Computer Use workflows.
+At desktop-session start:
 
-## Main risk
+```text
+Xvfb starts
+Openbox starts
+Tint2 panel starts
+x11vnc + websockify/noVNC start
+Codex Web GPT starts
+ChatGPT CE starts
+```
 
-The main uncertainty is **Linux Remote Control**, not Docker/noVNC. `remote-mobile-control` is an experimental CE adaptation. OpenAI may still reject or change Linux host enrollment server-side. Treat successful Android pairing and a real remote Codex turn as the first hard gate before investing time in optional integrations.
+The Tint2 panel provides launchers for ChatGPT CE, Codex Web GPT and a terminal. The Openbox right-click menu provides the same recovery paths.
+
+If ChatGPT CE is closed with **Quit**, the noVNC desktop remains alive. Relaunch CE from the panel, the Openbox menu, or `/usr/local/bin/chatgpt-ce`.
+
+Openbox/x11vnc/websockify are treated as critical desktop-substrate processes. If one exits, the s6 longrun is restarted cleanly. CE itself is deliberately **not** part of Docker health, so intentionally quitting CE does not make the workstation unhealthy.
+
+## Fresh deployment
+
+```bash
+cd /mnt/user/projects
+git clone git@github.com:elmakus/chatgpt-ce-workstation.git
+cd chatgpt-ce-workstation
+bash scripts/init-unraid.sh
+bash scripts/build.sh
+bash scripts/run.sh
+```
+
+Then open noVNC on the host port configured in Compose / `.env` (default `6080`). `scripts/run.sh` prints the published binding.
+
+## Existing installation: migrate to the canonical project bind
+
+Run from the Unraid root shell. Pull first because older local checkouts may not yet contain the current migration helper:
+
+```bash
+cd /mnt/user/projects/chatgpt-ce-workstation
+git pull --ff-only
+bash scripts/migrate-project-bind.sh
+```
+
+The one-shot migration is intentionally defensive. It:
+
+1. requires a clean `main` checkout;
+2. fast-forwards `main` again with `git pull --ff-only` and re-execs itself if that pull advanced the source;
+3. runs `scripts/validate-source.sh`;
+4. runs non-mutating `scripts/preflight-host.sh` to verify Compose, persistent paths and both secrets before downtime;
+5. asks for confirmation;
+6. builds the replacement image **before** stopping the current workstation;
+7. stops the stack;
+8. runs `scripts/init-unraid.sh` to normalize the nested bind target;
+9. preserves unexpected old `Documents/ChatGPT` content as `ChatGPT.pre-*` rather than deleting it;
+10. recreates the workstation;
+11. waits for desktop health;
+12. runs `scripts/verify-runtime.sh`.
+
+`scripts/init-unraid.sh` refuses to manipulate the nested bind target while the workstation container is running.
+
+A successful verification ends with:
+
+```text
+WORKSTATION_RUNTIME_GREEN
+```
+
+The verifier checks:
+
+- the **exact** persistent-home and project bind sources/destinations;
+- absence of `/workspace`, Docker socket and host-root mounts;
+- unprivileged/no-`SYS_ADMIN` container boundary;
+- restart policy;
+- canonical working directory and project write access;
+- keyring/VNC runtime state;
+- desktop launchers and Tint2 panel;
+- noVNC desktop health.
+
+Old `ChatGPT.pre-*` backups are reported but are not a failure. They may contain only disposable test repositories; delete them after confirming nothing useful is inside.
+
+## Source validation
+
+```bash
+bash scripts/validate-source.sh
+```
+
+A successful result ends with:
+
+```text
+SOURCE_VALIDATION_GREEN
+```
+
+It validates shell syntax, Compose parsing, canonical path rules, container isolation invariants, Codex policy, CE feature selection, recovery desktop/s6 wiring, and secret-ignore hygiene.
+
+## Updating upstream software
+
+Use:
+
+```bash
+bash scripts/update.sh
+```
+
+The helper changes `UPSTREAM_REFRESH`, rebuilds, recreates, waits for desktop health and runs runtime verification. This prevents remote-source layers from being satisfied only from stale Docker cache.
+
+Persistent bind mounts remain attached to the replacement container.
+
+## Agent self-maintenance model
+
+The agent may temporarily install a missing tool inside the container, for example:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y protobuf-compiler
+```
+
+If the package is useful, persist it in the source of truth:
+
+```text
+system package/tool     -> Dockerfile
+mount/port/env/device   -> compose.yaml
+service/startup         -> rootfs/ / scripts/container/
+project-only dependency -> project manifest/environment
+```
+
+Then run checks and commit/push the accepted source change. Host-side image rebuild may happen afterward.
+
+## First-login / recovery flow
+
+For a new persistent home:
+
+1. Start the stack and open noVNC.
+2. Sign in to ChatGPT CE.
+3. Restart/recreate once and verify login persistence.
+4. Pair Android Remote Control.
+5. Validate a normal native Codex task from Android.
+6. Configure Codex Web GPT in noVNC and verify its routed models.
+7. Test Agent Workspace / browser automation only after the native path is healthy.
+
+The target workstation has already passed the CE login/keyring and Android Remote gates. They remain regression checks after major CE/upstream changes.
 
 ## Repository map
 
@@ -102,24 +236,37 @@ The main uncertainty is **Linux Remote Control**, not Docker/noVNC. `remote-mobi
 |- README.md
 |- AGENTS.md
 |- Dockerfile
+|- compose.yaml
+|- .env.example
 |- config/
 |  `- ce-features.json
 |- defaults/
 |  `- AGENTS.md
 |- docs/
+|  |- CE_FEATURES.md
 |  |- DECISIONS.md
-|  `- IMPLEMENTATION_PLAN.md
+|  |- IMPLEMENTATION_PLAN.md
+|  `- TOOLCHAIN.md
 |- rootfs/
 |  |- etc/cont-init.d/10-workstation-init
-|  |- etc/s6-overlay/s6-rc.d/...
-|  `- usr/local/share/applications/codex-web-gpt.desktop
+|  |- etc/s6-overlay/s6-rc.d/desktop/...
+|  |- etc/xdg/openbox/menu.xml
+|  |- etc/xdg/tint2/tint2rc
+|  |- usr/local/bin/chatgpt-ce
+|  |- usr/local/bin/workstation-healthcheck
+|  `- usr/local/share/applications/...
 `- scripts/
+   |- build/install-codex-web-gpt.sh
+   |- container/...
    |- build.sh
    |- init-unraid.sh
+   |- migrate-project-bind.sh
+   |- preflight-host.sh
    |- run.sh
-   `- update.sh
+   |- update.sh
+   |- validate-source.sh
+   |- verify-runtime.sh
+   `- wait-healthy.sh
 ```
 
-## Tomorrow
-
-Start at `docs/IMPLEMENTATION_PLAN.md`. Build and validate one layer at a time. Do not jump directly to `codex-chatgpt-web` until native CE + persistence + Android Remote are proven.
+See `docs/IMPLEMENTATION_PLAN.md` for the current deployment sequence and `docs/DECISIONS.md` for architecture rationale.

@@ -1,0 +1,57 @@
+name: chatgpt-ce-workstation
+
+services:
+  workstation:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        CE_REF: ${CE_REF:-main}
+        S6_OVERLAY_VERSION: ${S6_OVERLAY_VERSION:-3.2.3.2}
+        CODEX_CHATGPT_WEB_VERSION: ${CODEX_CHATGPT_WEB_VERSION:-}
+        AGENT_WORKSPACE_VERSION: ${AGENT_WORKSPACE_VERSION:-0.3.2}
+        CODEX_UID: ${CODEX_UID:-99}
+        CODEX_GID: ${CODEX_GID:-100}
+        UPSTREAM_REFRESH: ${UPSTREAM_REFRESH:-bootstrap}
+    image: ${IMAGE_NAME:-chatgpt-ce-workstation}:${IMAGE_TAG:-local}
+    container_name: ${CONTAINER_NAME:-chatgpt-ce-workstation}
+    hostname: chatgpt-ce-workstation
+    restart: unless-stopped
+    shm_size: ${SHM_SIZE:-1gb}
+    working_dir: /home/codex/Documents/ChatGPT
+    environment:
+      TZ: ${TZ_VALUE:-Europe/Zurich}
+      # Explicitly accepted workstation-wide Codex policy. The init script only
+      # creates ~/.codex/AGENTS.md when it does not already exist.
+      INSTALL_GLOBAL_AGENTS: ${INSTALL_GLOBAL_AGENTS:-1}
+    ports:
+      - "${NOVNC_BIND_IP:-0.0.0.0}:${NOVNC_PORT:-6080}:6080"
+    volumes:
+      - type: bind
+        source: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/home
+        target: /home/codex
+      - type: bind
+        source: ${PROJECTS_ROOT:-/mnt/user/projects}
+        target: /home/codex/Documents/ChatGPT
+    secrets:
+      - source: novnc_password
+        target: novnc-password
+        mode: 0400
+      - source: keyring_password
+        target: keyring-password
+        mode: 0400
+    healthcheck:
+      # CE itself is intentionally not part of health. It may be Quit from the
+      # desktop and relaunched without making the workstation unhealthy.
+      test: ["CMD", "bash", "/usr/local/bin/workstation-healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    stop_grace_period: 30s
+
+secrets:
+  novnc_password:
+    file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/novnc-password
+  keyring_password:
+    file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/keyring-password

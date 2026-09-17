@@ -1,0 +1,8 @@
+# Enforce the workstation's no-prompt/full-access Codex policy.
+# This container intentionally provides its isolation boundary through Docker,
+# mounts, and omitted host-control surfaces rather than Codex's inner sandbox.
+# Codex requires `read-only` to be present whenever managed sandbox modes are
+# constrained so built-in PermissionProfiles remain valid. The effective default
+# is still `danger-full-access` from /etc/codex/config.toml.
+allowed_approval_policies = ["never"]
+allowed_sandbox_modes = ["read-only", "danger-full-access"]

@@ -1,0 +1,132 @@
+#!/command/with-contenv bash
+set -Eeuo pipefail
+
+home=/home/codex
+codex_group="$(id -g codex)"
+config_root="$home/.config"
+config_dir="$config_root/workstation"
+local_root="$home/.local"
+local_share="$local_root/share"
+applications_dir="$local_share/applications"
+documents_root="$home/Documents"
+ce_projects_path="$documents_root/ChatGPT"
+vnc_auth_file="$config_dir/vnc.pass"
+vnc_secret_file=/run/secrets/novnc-password
+keyring_secret_file=/run/secrets/keyring-password
+runtime_secret_dir=/run/workstation
+runtime_keyring_secret="$runtime_secret_dir/keyring-password"
+
+# These directories are created by root during container init, but the persistent
+# home is a normal user home. Explicitly hand every root-created parent back to
+# codex so Electron/CE and other user applications can create their own state.
+mkdir -p "$home" "$config_dir" "$applications_dir" "$documents_root" "$runtime_secret_dir"
+chown codex:"$codex_group" \
+  "$home" \
+  "$config_root" \
+  "$config_dir" \
+  "$local_root" \
+  "$local_share" \
+  "$applications_dir" \
+  "$documents_root" \
+  "$runtime_secret_dir" 2>/dev/null || true
+chmod 0700 "$config_dir" "$runtime_secret_dir"
+
+# PROJECTS_ROOT is mounted directly at CE's native Create Project location.
+# There is intentionally no /workspace alias or symlink: this path is the single
+# canonical project root both for CE and for shell/Remote tasks.
+if [[ ! -d "$ce_projects_path" ]]; then
+  echo "[init] CE project root is not mounted: $ce_projects_path" >&2
+  exit 1
+fi
+if ! runuser -u codex -- test -w "$ce_projects_path"; then
+  echo "[init] CE project root is not writable by codex: $ce_projects_path" >&2
+  echo "[init] run scripts/init-unraid.sh on the host to repair root permissions." >&2
+  exit 1
+fi
+
+if [[ -r "$vnc_secret_file" ]]; then
+  password="$(cat "$vnc_secret_file")"
+  if [[ -z "$password" ]]; then
+    echo "[init] $vnc_secret_file is empty" >&2
+    exit 1
+  fi
+  x11vnc -storepasswd "$password" "$vnc_auth_file" >/dev/null
+  chown codex:"$codex_group" "$vnc_auth_file"
+  chmod 0600 "$vnc_auth_file"
+elif [[ ! -f "$vnc_auth_file" ]]; then
+  echo "[init] no VNC password available." >&2
+  echo "[init] mount /run/secrets/novnc-password or restore $vnc_auth_file from persistent home." >&2
+  exit 1
+fi
+
+# Docker Compose's local secret uid/gid/mode controls are not portable across
+# Unraid Compose implementations. Stage the keyring password into a root-created
+# runtime file with deterministic ownership and permissions for the codex user.
+if [[ -r "$keyring_secret_file" ]]; then
+  if [[ ! -s "$keyring_secret_file" ]]; then
+    echo "[init] $keyring_secret_file is empty" >&2
+    exit 1
+  fi
+  install -m 0400 -o codex -g "$codex_group" "$keyring_secret_file" "$runtime_keyring_secret"
+else
+  echo "[init] missing keyring password secret: $keyring_secret_file" >&2
+  echo "[init] run scripts/init-unraid.sh to provision it." >&2
+  exit 1
+fi
+
+# Workstation-wide Codex defaults are enabled by Compose after explicit user
+# approval. Seed once only; never overwrite an existing persistent policy.
+global_agents="$home/.codex/AGENTS.md"
+if [[ "${INSTALL_GLOBAL_AGENTS:-0}" == "1" && ! -e "$global_agents" ]]; then
+  mkdir -p "$home/.codex"
+  cp /opt/workstation/defaults/AGENTS.md "$global_agents"
+  chown -R codex:"$codex_group" "$home/.codex"
+  chmod 0644 "$global_agents"
+fi
+
+# Older stock templates named /workspace as the project root. Migrate only when
+# the exact stock sentence is still present, so arbitrary user-edited AGENTS files
+# are not broadly rewritten. This keeps persistent policy aligned after removing
+# the compatibility alias.
+if [[ -f "$global_agents" ]] && grep -Fq 'Repositories live under `/workspace` and physically reside on the Unraid host.' "$global_agents"; then
+  sed -i \
+    -e 's#Do not assume that editing files on `/workspace` synchronizes them to GitHub.#Do not assume that editing files under `/home/codex/Documents/ChatGPT` synchronizes them to GitHub.#' \
+    -e 's#Repositories live under `/workspace` and physically reside on the Unraid host.#Repositories live under `/home/codex/Documents/ChatGPT` and physically reside on the Unraid host at `/mnt/user/projects`.#' \
+    -e 's#/workspace/chatgpt-ce-workstation#/home/codex/Documents/ChatGPT/chatgpt-ce-workstation#g' \
+    "$global_agents"
+  chown codex:"$codex_group" "$global_agents"
+  echo "[init] migrated stock global AGENTS project paths to $ce_projects_path"
+fi
+
+# These launchers are workstation-managed generated state, not user-authored
+# configuration. Refresh them on every container start so a rebuilt image cannot
+# leave stale persistent desktop entries behind.
+install -m 0644 -o codex -g "$codex_group" \
+  /usr/local/share/applications/codex-web-gpt.desktop \
+  "$applications_dir/codex-web-gpt.desktop"
+
+# Electron's shell.openExternal delegates OAuth/login links to the desktop URL
+# handler. Chrome's own Linux sandbox is not usable inside this Unraid Docker
+# boundary, just like CE's Electron sandbox, so expose a container-scoped browser
+# launcher with --no-sandbox while keeping the Docker container unprivileged.
+chrome_desktop="$applications_dir/google-chrome-workstation.desktop"
+cat >"$chrome_desktop" <<'EOF'
+[Desktop Entry]
+Name=Google Chrome
+Type=Application
+Exec=/usr/bin/google-chrome --no-sandbox --user-data-dir=/home/codex/.config/google-chrome %U
+Terminal=false
+MimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;
+Categories=Network;WebBrowser;
+EOF
+chown codex:"$codex_group" "$chrome_desktop"
+chmod 0644 "$chrome_desktop"
+
+# Keep OAuth/web links deterministic after rebuilds and container recreation.
+# These files live in the persistent home, so the setting also survives updates.
+runuser -u codex -- env HOME="$home" XDG_DATA_HOME="$local_share" \
+  xdg-mime default google-chrome-workstation.desktop x-scheme-handler/http
+runuser -u codex -- env HOME="$home" XDG_DATA_HOME="$local_share" \
+  xdg-mime default google-chrome-workstation.desktop x-scheme-handler/https
+runuser -u codex -- env HOME="$home" XDG_DATA_HOME="$local_share" \
+  xdg-mime default google-chrome-workstation.desktop text/html
