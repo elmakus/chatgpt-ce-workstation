@@ -28,7 +28,7 @@ services:
       INSTALL_GLOBAL_AGENTS: ${INSTALL_GLOBAL_AGENTS:-1}
       # Empty preserves the official native Codex backend. Configure only when
       # routing native models through a dedicated upstream such as Codex-LB.
-      CODEX_CHATGPT_WEB_NATIVE_UPSTREAM: ${CODEX_CHATGPT_WEB_NATIVE_UPSTREAM:-}
+      CODEX_CHATGPT_WEB_NATIVE_UPSTREAM: "${CODEX_CHATGPT_WEB_NATIVE_UPSTREAM:-}"
     ports:
       - "${NOVNC_BIND_IP:-0.0.0.0}:${NOVNC_PORT:-6080}:6080"
     volumes:
