@@ -86,6 +86,8 @@ if grep -F 'shallow-repository-watches' config/ce-features.json >/dev/null; then
   fail 'conflicting shallow-repository-watches feature is enabled'
 fi
 grep -F 'PACKAGE_WITH_UPDATER=0' Dockerfile >/dev/null || fail 'CE native updater is not disabled at build time'
+grep -F 'CODEX_WEB_GPT_DISABLE_UPDATES="\${CODEX_WEB_GPT_DISABLE_UPDATES:-1}"' scripts/build/install-codex-web-gpt.sh >/dev/null \
+  || fail 'Codex Web GPT self-updater is not disabled by default in the workstation wrapper'
 pass 'Codex policy, CE feature set and image-managed updates'
 
 echo
