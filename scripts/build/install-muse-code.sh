@@ -45,7 +45,8 @@ runuser -u codex -- env \
 }
 
 # Resolve the real stable binary during image build if the vendor launcher does
-# that lazily. Runtime auto-update is disabled by the workstation wrapper.
+# that lazily. MUSE_SYNC_UPDATE is intentional only here; the runtime wrapper
+# disables automatic updates for ordinary workstation/worker runs.
 runuser -u codex -- env \
   HOME="$build_home" \
   USER=codex \
@@ -53,7 +54,6 @@ runuser -u codex -- env \
   MUSE_INSTALL_DIR="$install_dir" \
   MUSE_NO_MODIFY_PATH=1 \
   MUSE_SYNC_UPDATE=1 \
-  MUSE_NO_AUTO_UPDATE=1 \
   "$install_dir/muse" --version
 
 chown -R root:root /opt/muse-code
