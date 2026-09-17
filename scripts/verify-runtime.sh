@@ -33,6 +33,7 @@ appdata_root="${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}"
 projects_root="${PROJECTS_ROOT:-/mnt/user/projects}"
 expected_home_source="${appdata_root%/}/home"
 expected_project_source="${projects_root%/}"
+codex_lb_host_secret="${appdata_root%/}/secrets/codex-lb-api-key"
 
 echo '=== compose ==='
 command -v docker >/dev/null || fail 'docker is required'
@@ -101,17 +102,32 @@ set -Eeuo pipefail
 [[ ! -e /var/run/docker.sock ]]
 [[ -r /run/workstation/keyring-password ]]
 [[ -s /home/codex/.config/workstation/vnc.pass ]]
-for cmd in chatgpt-ce codex-web-gpt openbox tint2 xterm google-chrome workstation-healthcheck; do
+[[ -x /opt/muse-code/bin/muse ]]
+for cmd in chatgpt-ce codex-web-gpt muse openbox tint2 xterm google-chrome workstation-healthcheck; do
   command -v \"\$cmd\" >/dev/null
   echo \"OK command: \$cmd\"
 done
+muse --version
 pgrep -x tint2 >/dev/null
 printf '%s\n' 'OK process: tint2'
 touch '$canonical_root/.workstation-write-test'
 rm -f '$canonical_root/.workstation-write-test'
 bash /usr/local/bin/workstation-healthcheck
 "
-pass 'canonical pwd, launchers, secrets, panel, write access and desktop health'
+pass 'canonical pwd, launchers, Muse, secrets, panel, write access and desktop health'
+
+echo
+echo '=== optional Codex-LB secret ==='
+if [[ -s "$codex_lb_host_secret" ]]; then
+  docker exec -u codex "$container" test -s /run/workstation/codex-lb-api-key \
+    || fail 'host Codex-LB key is configured but staged runtime secret is missing/empty'
+  pass 'configured Codex-LB key is staged for the codex user'
+else
+  if docker exec -u codex "$container" test -e /run/workstation/codex-lb-api-key; then
+    fail 'runtime Codex-LB secret exists although host key source is empty'
+  fi
+  pass 'Codex-LB runtime key is absent while optional host source is empty'
+fi
 
 echo
 echo '=== persistent home ==='
