@@ -73,6 +73,16 @@ set -eu
 export CODEX_WEB_GPT_LAUNCHER_EXECUTABLE="$wrapper"
 export CODEX_WEB_GPT_APPIMAGE="$target"
 export CODEX_WEB_GPT_DISABLE_UPDATES="\${CODEX_WEB_GPT_DISABLE_UPDATES:-1}"
+
+# Keep the Codex-LB credential out of Compose environment and docker inspect.
+# Container init stages the optional Docker secret for the codex user only when
+# the host secret file is non-empty.
+secret_file="\${CODEX_LB_API_KEY_FILE:-/run/workstation/codex-lb-api-key}"
+if [ -z "\${CODEX_LB_API_KEY:-}" ] && [ -s "\$secret_file" ]; then
+  CODEX_LB_API_KEY="\$(cat "\$secret_file")"
+  export CODEX_LB_API_KEY
+fi
+
 exec "$runner" "$target" "\$@"
 EOF
 chmod 0755 "$wrapper"
