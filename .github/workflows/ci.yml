@@ -41,7 +41,13 @@ jobs:
               find rootfs/etc/s6-overlay/s6-rc.d -type f -name run -print 2>/dev/null || true
             } | sort -u
           )
-          shellcheck -x -S error "${files[@]}"
+          for file in "${files[@]}"; do
+            if head -n1 "$file" | grep -q '^#!/command/with-contenv bash$'; then
+              shellcheck -x -S error -s bash "$file"
+            else
+              shellcheck -x -S error "$file"
+            fi
+          done
 
   dockerfile-check:
     if: ${{ github.event.repository.private == false }}
