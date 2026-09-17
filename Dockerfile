@@ -7,6 +7,8 @@ ARG CE_REPOSITORY=https://github.com/ilysenko/codex-desktop-linux.git
 ARG CE_REF=main
 ARG CODEX_CHATGPT_WEB_VERSION=
 ARG AGENT_WORKSPACE_VERSION=0.3.2
+ARG MUSE_INSTALLER_URL=https://dev.meta.ai/install.sh
+ARG MUSE_INSTALLER_SHA256=
 ARG CODEX_UID=99
 ARG CODEX_GID=100
 ARG UPSTREAM_REFRESH=bootstrap
@@ -206,6 +208,20 @@ RUN set -eux; \
 RUN npm install -g "@agent-sh/agent-workspace-linux@${AGENT_WORKSPACE_VERSION}" \
     && command -v agent-workspace-linux
 
+# Install Muse Code into the immutable application layer while keeping build-time
+# installer state out of /home/codex. The helper records the installer checksum,
+# optionally verifies a configured pin, resolves the current stable binary and
+# leaves runtime auth/settings to the persistent user home.
+COPY scripts/build/install-muse-code.sh /tmp/install-muse-code.sh
+RUN set -eux; \
+    echo "Muse Code upstream refresh token: ${UPSTREAM_REFRESH}"; \
+    chmod 0755 /tmp/install-muse-code.sh; \
+    MUSE_INSTALLER_URL="${MUSE_INSTALLER_URL}" \
+    MUSE_INSTALLER_SHA256="${MUSE_INSTALLER_SHA256}" \
+      /tmp/install-muse-code.sh; \
+    test -x /opt/muse-code/bin/muse; \
+    rm -f /tmp/install-muse-code.sh
+
 # Install Codex Web GPT into the immutable application layer. The helper follows
 # the upstream release/checksum contract but intentionally does NOT launch its
 # Electron GUI during docker build; the GUI is started later inside Xvfb/noVNC.
@@ -223,6 +239,7 @@ COPY defaults/AGENTS.md /opt/workstation/defaults/AGENTS.md
 
 RUN chmod 0755 /opt/workstation/bin/*.sh \
     /usr/local/bin/chatgpt-ce \
+    /usr/local/bin/muse \
     /usr/local/bin/workstation-healthcheck \
     /etc/cont-init.d/10-workstation-init \
     /etc/s6-overlay/s6-rc.d/desktop/run \
