@@ -91,28 +91,6 @@ First live validation must:
 6. prove Muse remains authenticated;
 7. run one bounded disposable-repository task.
 
-## Codex-LB credential boundary
-
-Codex-LB credentials are separate from Muse and are stored as a Docker secret, not as a Compose environment value.
-
-Host path:
-
-```text
-/mnt/user/appdata/chatgpt-ce-workstation/secrets/codex-lb-api-key
-```
-
-The secret is mounted read-only at `/run/secrets/codex-lb-api-key`, staged for the `codex` user at `/run/workstation/codex-lb-api-key`, and loaded by the workstation-owned `codex-web-gpt` wrapper only when the file is non-empty. The key therefore does not appear in Git or normal `docker inspect` environment output.
-
-The custom native upstream URL remains a non-secret `.env`/Compose setting:
-
-```text
-CODEX_CHATGPT_WEB_NATIVE_UPSTREAM=
-```
-
-Leaving it empty preserves the official native Codex route. When a custom upstream is configured, the fork already fails closed unless a dedicated upstream API key is available.
-
-Use `scripts/set-codex-lb-key.sh` on the Unraid host to set or clear the secret without putting the key on a command line.
-
 ## Validation gates before merge
 
 ```text
@@ -129,5 +107,4 @@ Use `scripts/set-codex-lb-key.sh` on the Unraid host to set or clear the secret 
 [ ] sandbox behavior inside Docker is classified
 [ ] nested Muse fan-out policy is explicit
 [ ] no Muse secret is present in Git or image
-[ ] Codex-LB key secret can be set/cleared and is not exposed as Compose env
 ```
