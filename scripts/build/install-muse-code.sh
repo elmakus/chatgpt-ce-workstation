@@ -28,14 +28,15 @@ chown codex:"$codex_group" "$installer"
 chmod 0755 "$installer"
 
 # Keep all installer/user state out of the image's /home/codex because that path
-# is replaced by the persistent home bind at runtime. Only the application files
-# below /opt/muse-code are intended to survive from this build step.
+# is replaced by the persistent home bind at runtime. MUSE_LOGIN=0 keeps the image
+# build non-interactive; account login is a runtime action in the persistent home.
 runuser -u codex -- env \
   HOME="$build_home" \
   USER=codex \
   LOGNAME=codex \
   MUSE_INSTALL_DIR="$install_dir" \
   MUSE_NO_MODIFY_PATH=1 \
+  MUSE_LOGIN=0 \
   MUSE_SYNC_UPDATE=1 \
   bash "$installer"
 
@@ -53,6 +54,7 @@ runuser -u codex -- env \
   LOGNAME=codex \
   MUSE_INSTALL_DIR="$install_dir" \
   MUSE_NO_MODIFY_PATH=1 \
+  MUSE_LOGIN=0 \
   MUSE_SYNC_UPDATE=1 \
   "$install_dir/muse" --version
 
