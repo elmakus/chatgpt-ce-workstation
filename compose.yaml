@@ -21,8 +21,8 @@ services:
     working_dir: /home/codex/Documents/ChatGPT
     environment:
       TZ: ${TZ_VALUE:-Europe/Zurich}
-      # Optional non-secret override for native Codex traffic. Leave empty to use
-      # the official ChatGPT Codex backend directly.
+      # Workstation supplies only the native-upstream address. codex-chatgpt-web
+      # owns Codex-LB credential loading and fails closed when its required key is missing.
       CODEX_CHATGPT_WEB_NATIVE_UPSTREAM: ${CODEX_CHATGPT_WEB_NATIVE_UPSTREAM:-}
       # Explicitly accepted workstation-wide Codex policy. The init script only
       # creates ~/.codex/AGENTS.md when it does not already exist.

@@ -33,7 +33,7 @@ curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 60 \
   "$base_url/checksums.txt" -o "$tmp_dir/checksums.txt"
 
 expected="$(awk -v asset="$asset" '$2 == asset { print $1; exit }' "$tmp_dir/checksums.txt")"
-actual="$(sha256sum "$tmp_dir/$asset" | awk '{ print $1 }')"
+actual="$(sha256sum "$tmp_dir/$asset" | awk '{ print $1}')"
 [[ -n "$expected" ]] || { echo "checksums.txt has no entry for $asset" >&2; exit 1; }
 [[ "$actual" == "$expected" ]] || { echo "SHA-256 verification failed for $asset" >&2; exit 1; }
 
@@ -48,6 +48,10 @@ runner_source="$(find "$tmp_dir/extract/squashfs-root" -type f \
   -path '*/app.asar.unpacked/assets/linux-appimage-runner.sh' -print -quit)"
 [[ -n "$runner_source" ]] || { echo "Launcher AppImage has no bounded Linux runner" >&2; exit 1; }
 
+key_helper_source="$(find "$tmp_dir/extract/squashfs-root" -type f \
+  -path '*/app.asar.unpacked/assets/set-codex-lb-key.sh' -print -quit)"
+[[ -n "$key_helper_source" ]] || { echo "Launcher AppImage has no Codex-LB key helper" >&2; exit 1; }
+
 icon_source="$(find "$tmp_dir/extract/squashfs-root" -type f -path '*/512x512/*' -name '*.png' -print -quit)"
 if [[ -z "$icon_source" ]]; then
   icon_source="$(find "$tmp_dir/extract/squashfs-root" -type f -name '*.png' -print -quit)"
@@ -57,10 +61,12 @@ target_dir="/opt/codex-web-gpt/${version}"
 target="$target_dir/Codex Web GPT.AppImage"
 runner="/opt/codex-web-gpt/run-appimage"
 wrapper="/usr/local/bin/codex-web-gpt"
+key_helper="/usr/local/bin/codex-web-gpt-set-codex-lb-key"
 
 install -d -m 0755 "$target_dir" /opt/codex-web-gpt /usr/local/bin
 install -m 0755 "$tmp_dir/$asset" "$target"
 install -m 0755 "$runner_source" "$runner"
+install -m 0755 "$key_helper_source" "$key_helper"
 
 if [[ -n "$icon_source" ]]; then
   install -d -m 0755 /usr/local/share/icons/hicolor/512x512/apps
@@ -73,17 +79,6 @@ set -eu
 export CODEX_WEB_GPT_LAUNCHER_EXECUTABLE="$wrapper"
 export CODEX_WEB_GPT_APPIMAGE="$target"
 export CODEX_WEB_GPT_DISABLE_UPDATES="\${CODEX_WEB_GPT_DISABLE_UPDATES:-1}"
-
-# Optional Codex-LB/native-upstream credential. Keep it in the persistent
-# workstation home rather than Compose environment so it is not exposed by
-# normal docker inspect output. The custom upstream URL itself is non-secret and
-# comes from CODEX_CHATGPT_WEB_NATIVE_UPSTREAM.
-key_file="\${CODEX_LB_API_KEY_FILE:-/home/codex/.config/workstation/codex-lb-api-key}"
-if [ -s "\$key_file" ]; then
-  CODEX_LB_API_KEY="\$(cat "\$key_file")"
-  export CODEX_LB_API_KEY
-fi
-
 exec "$runner" "$target" "\$@"
 EOF
 chmod 0755 "$wrapper"
@@ -91,3 +86,4 @@ chmod 0755 "$wrapper"
 # Deliberately do not launch the GUI here. Docker image builds have no desktop
 # session; the launcher is started later from the running workstation/noVNC.
 printf 'Installed codex-chatgpt-web launcher v%s at %s\n' "$version" "$target"
+printf 'Installed Codex-LB key helper at %s\n' "$key_helper"
