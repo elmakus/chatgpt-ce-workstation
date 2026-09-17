@@ -10,6 +10,8 @@ services:
         S6_OVERLAY_VERSION: ${S6_OVERLAY_VERSION:-3.2.3.2}
         CODEX_CHATGPT_WEB_VERSION: ${CODEX_CHATGPT_WEB_VERSION:-}
         AGENT_WORKSPACE_VERSION: ${AGENT_WORKSPACE_VERSION:-0.3.2}
+        MUSE_INSTALLER_URL: ${MUSE_INSTALLER_URL:-https://dev.meta.ai/install.sh}
+        MUSE_INSTALLER_SHA256: ${MUSE_INSTALLER_SHA256:-}
         CODEX_UID: ${CODEX_UID:-99}
         CODEX_GID: ${CODEX_GID:-100}
         UPSTREAM_REFRESH: ${UPSTREAM_REFRESH:-bootstrap}
@@ -24,6 +26,9 @@ services:
       # Explicitly accepted workstation-wide Codex policy. The init script only
       # creates ~/.codex/AGENTS.md when it does not already exist.
       INSTALL_GLOBAL_AGENTS: ${INSTALL_GLOBAL_AGENTS:-1}
+      # Empty preserves the official native Codex backend. Configure only when
+      # routing native models through a dedicated upstream such as Codex-LB.
+      CODEX_CHATGPT_WEB_NATIVE_UPSTREAM: ${CODEX_CHATGPT_WEB_NATIVE_UPSTREAM:-}
     ports:
       - "${NOVNC_BIND_IP:-0.0.0.0}:${NOVNC_PORT:-6080}:6080"
     volumes:
@@ -40,6 +45,9 @@ services:
       - source: keyring_password
         target: keyring-password
         mode: 0400
+      - source: codex_lb_api_key
+        target: codex-lb-api-key
+        mode: 0400
     healthcheck:
       # CE itself is intentionally not part of health. It may be Quit from the
       # desktop and relaunched without making the workstation unhealthy.
@@ -55,3 +63,5 @@ secrets:
     file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/novnc-password
   keyring_password:
     file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/keyring-password
+  codex_lb_api_key:
+    file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/codex-lb-api-key
