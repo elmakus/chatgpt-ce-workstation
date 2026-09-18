@@ -1,11 +1,13 @@
 # Muse-max production runtime Master Plan
 
-Status: **approved**
-Revision: **R4**
+Status: **draft**
+Revision: **R5**
 Date: 2026-09-18
 Review requirement: **RECOMMENDED**
 
 R4 replanning trigger: after R3 received independent GREEN and was approved, Execution Prep verified the actual `codex_workflow` release path and found an exact-subject publication mismatch that R3 had not modeled. The current published release `v1.1.17-private.10` already targets `elmakus/codex_workflow@f2b1811853a2c1da5a5af4bb735c84c3111a44d6`; the independently reviewed and live two-lane-validated M09 source checkpoint `f6603767115cf7f31ef7d8c3cb3a419a7f430aca` still carries version `1.1.17-private.10`, and PR #6 intentionally excluded a release/version bump. The normal release workflow requires `main`, refuses an existing tag/release, and publishes the checkout commit as release provenance. R4 therefore preserves `f660376...` as the accepted M09 source checkpoint but requires a new metadata-only release-candidate commit on top of it with the next unique synchronized release version; that exact new commit must itself receive independent review GREEN and live two-lane Muse validation GREEN before publication/promotion. The Luna XHigh Companion sequencing introduced by R3 is unchanged: publication/promotion may proceed while Companion quota is unavailable, but M09/project completion remains blocked until the actual Companion creation/reuse proof is GREEN on the exact promoted release.
+
+R5 replanning trigger: after R4 received independent GREEN and was approved, execution of M09-T04 proved that the repository's current release regression contract contains version-coupled expectations in `scripts/test_workflow_runtime.py`. A four-file `.10` -> `.11` metadata bump made the 90-test runtime suite fail only on those stale version literals; a disposable diagnostic that additionally synchronized exactly four release-version literals in that test file made the same suite 90/90 GREEN. GitHub readback of the prior `v1.1.17-private.10` release commit also shows the same test file being version-synchronized during release preparation. R5 therefore keeps the R4 exact-subject strategy unchanged but makes the release-candidate scope explicit: the direct child of `f660376...` may change the four release metadata files plus only the version-coupled assertions/fixture literal in `scripts/test_workflow_runtime.py`, with no test-semantic or runtime-semantic change. Evidence: `implementation/blockers/M09_T04_RELEASE_VERSION_TEST_SYNC_2026-09-18.md`. The blocked over-constrained M09-T04 contract must be superseded through Execution Prep after R5 approval; it must not be silently widened in place.
 
 ## Authority
 
@@ -289,7 +291,7 @@ Final integrated verification for R1–R16.
 - Use two isolated non-overlapping worktrees/lanes whose Project Workflow authority marks them safe for parallel execution.
 - Demonstrate concurrent Muse invocations without shared mutable index/worktree or raw-log collision.
 - Preserve `elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca` as the independently reviewed and live two-lane-validated source implementation checkpoint.
-- Read back the current published version/tag state immediately before release preparation and choose the next unique private release version. Create one bounded release-candidate commit directly on top of the accepted source checkpoint that changes only synchronized release metadata required by the existing release contract (including `codex_workflow/operate/VERSION`, its marker in `user_AGENTS.md`, README release version text and `RELEASING.md`) and does not change runtime semantics.
+- Read back the current published version/tag state immediately before release preparation and choose the next unique private release version. Create one bounded release-candidate commit directly on top of the accepted source checkpoint that changes only synchronized release-version material required by the existing release contract: `codex_workflow/operate/VERSION`, its marker in `user_AGENTS.md`, README release version text, `RELEASING.md`, and only the version-coupled current/previous/next-version assertions plus update-fixture source literal in `scripts/test_workflow_runtime.py`. The test edits must be literal release-version synchronization only; they must not change test behavior, coverage, runtime semantics, Muse behavior, or any compute-profile allocation.
 - Run complete `codex_workflow` regression coverage on that exact release-candidate commit, including unchanged `plus`, `luna-xhigh`, and `pro-x5`.
 - Freeze that exact release-candidate commit for independent review. Correct any bounded finding normally; any corrective commit becomes a new exact subject and must be reviewed again.
 - After independent review GREEN, run the live M09 two-lane Muse validation on that same exact release-candidate commit. The earlier `f660376...` live smoke remains valid predecessor evidence but does not transfer exact-subject identity across the release-metadata commit.
@@ -317,7 +319,7 @@ Final integrated verification for R1–R16.
 
 - The deferred live Companion check is a hard **final M09 acceptance/project-completion** gate. Under the user-authorized R3 sequencing it is no longer a pre-publication/pre-promotion gate.
 - The gate still requires the accepted GPT-5.6 Luna XHigh Companion; Marina, Sol Medium or another substitute worker/model cannot satisfy it.
-- Publication/promotion may proceed only for the exact release-candidate commit, including its unique synchronized release metadata, after independent review GREEN and live two-lane Muse validation GREEN on that same commit. The earlier source-only `f660376...` review/live evidence remains predecessor evidence but cannot by itself satisfy release-subject identity after the required version-metadata cut. Publication/promotion still do not count as R3/R4 acceptance.
+- Publication/promotion may proceed only for the exact release-candidate commit, including its unique synchronized release metadata, after independent review GREEN and live two-lane Muse validation GREEN on that same commit. The earlier source-only `f660376...` review/live evidence remains predecessor evidence but cannot by itself satisfy release-subject identity after the required version-metadata cut. Publication/promotion still do not count as R3/R5 acceptance.
 - Live workstation update/recreate/runtime validation requires explicit live-operation authorization.
 - M09 must remain non-terminal until the actual Companion creation/reuse proof is GREEN on the exact promoted release.
 
@@ -356,7 +358,7 @@ current source/baseline readback
   -> M07 live single-worker smoke
   -> M08 sequential executor/tester/RED-repair role pilot + Companion allocation readback
   -> accepted source checkpoint f660376... with independent review + live two-lane GREEN
-  -> metadata-only cut of the next unique release candidate on top of that checkpoint
+  -> release-version synchronization cut of the next unique release candidate on top of that checkpoint
   -> full codex_workflow regression on the exact release candidate
   -> independent review of that exact release candidate
   -> live two-lane Muse validation on that same exact release candidate
@@ -401,7 +403,8 @@ Execution Prep should create only currently knowable Cards.
 - M07 parser/argv-specific Cards are created only after M05 evidence.
 - M08 role-pilot Cards are created only after M07 normalized adapter behavior is real.
 - M09 concurrency/source-review Cards are created after M07/M08 establish the actual adapter/orchestration shape.
-- After the accepted source checkpoint has independent review GREEN and live two-lane GREEN, Execution Prep may create a bounded release-preparation Card that cuts the next unique synchronized release metadata on top of that exact source checkpoint. Because this creates a new commit identity, the resulting release candidate must then receive its own independent review and live two-lane validation before publication.
+- After the accepted source checkpoint has independent review GREEN and live two-lane GREEN, Execution Prep may create a bounded release-preparation Card that cuts the next unique synchronized release-version material on top of that exact source checkpoint. The candidate may include only the four release metadata files and the version-coupled literals in `scripts/test_workflow_runtime.py` identified by the R5 blocker evidence; no other test/runtime change is authorized. Because this creates a new commit identity, the resulting release candidate must then receive its own independent review and live two-lane validation before publication.
+- After R5 approval, Execution Prep must supersede blocked M09-T04 and create a replacement release-candidate Card from this corrected scope rather than widening the already-started Card in place.
 - Publication/promotion Cards may become executable only after both gates are GREEN on the same exact release-candidate commit, even while the Luna XHigh Companion Card is quota-blocked.
 - The deferred live Luna XHigh Companion creation/reuse Card remains mandatory after production promotion and before M09 final acceptance/project completion.
 
@@ -416,7 +419,7 @@ GREEN.
 - Mixed-profile semantics are separated from provider-protocol implementation.
 - Sequential Muse-role correctness precedes concurrency.
 - The unavailable internal-Codex Companion live check is deferred across release/publication and production promotion by explicit user sequencing authority; R3/D21 remain unchanged and M09 final acceptance/project completion is hard-blocked until Luna XHigh creation/reuse is live GREEN on the exact promoted release.
-- The actual release mechanism is reconciled with exact-subject integrity: because `v1.1.17-private.10` already exists and `f660376...` intentionally contains no new version bump, R4 requires a metadata-only next-version release candidate on top of the accepted source checkpoint, then fresh independent review and live two-lane validation on that exact candidate before it can advance to `main` and publish.
+- The actual release mechanism is reconciled with exact-subject integrity: because `v1.1.17-private.10` already exists and `f660376...` intentionally contains no new version bump, R5 requires one direct-child next-version release candidate on top of the accepted source checkpoint. Its diff is limited to synchronized release-version material: the four release metadata files plus the four version-coupled literals in `scripts/test_workflow_runtime.py` proven necessary by the blocker diagnostic. The exact candidate then requires fresh independent review and live two-lane validation before it can advance to `main` and publish.
 - Concurrency remains subordinate to Project Workflow lane/worktree authority.
 - Other compute profiles have explicit regression protection.
 - Live authorization gates are explicit at both discovery and final deployment.
