@@ -67,12 +67,53 @@ Correction merged through workstation PR #2:
 
 The next live rebuild passed the former failing step and completed runtime verification GREEN.
 
+## Exact CLI surface observed
+
+`muse --help` confirms:
+
+- provider modes: `echo` and `meta` (default `meta`);
+- explicit `--model <MODEL>`;
+- Meta reasoning effort: `none|minimal|low|medium|high|xhigh|max|ultra` (default `high`);
+- explicit `--workspace <PATH>`;
+- Git worktree modes `off|create|existing`;
+- approval mode `untrusted|on-request|never`;
+- sandbox enabled by default with network modes `restricted|enabled|proxy-only` (default `proxy-only`);
+- independent controls for approval, sandbox, workspace writes and shell;
+- native subagent/worktree capability exists but is not selected by default.
+
+`muse exec --help` confirms the headless adapter surface:
+
+- `--json` emits machine-readable JSONL events on stdout;
+- `--prompt-file <PATH>`;
+- `--model <ID>`;
+- `--reasoning-effort <EFFORT>`, including `max`;
+- `--workspace <PATH>`;
+- `--output-schema <FILE>` for final-answer shaping on the Meta provider;
+- `--max-model-steps <N>`;
+- `--max-tool-output-bytes <N>`;
+- `--session-id <UUID>`;
+- `--user-input-auto-resolve` for headless request_user_input handling;
+- `--approval-mode <MODE>`;
+- `--sandbox-network <MODE>`;
+- `--disable-write`, `--disable-shell`, `--disable-web-tools`, `--disable-sandbox`, and `--disable-approval`.
+
+These flags are exact live evidence for Muse Code 1.3.0; later adapter implementation must bind to this observed surface rather than public-document assumptions.
+
+## Pre-login persistent-home state
+
+Before any Muse login:
+
+- `/home/codex/.config/muse` — absent;
+- `/home/codex/.local/share/muse` — absent;
+- `/home/codex/.local/state/muse` — absent.
+
+This provides a clean baseline for identifying login-created durable state.
+
 ## Still required for M05 acceptance
 
 Pending live evidence:
 
-- exact `muse --help` / `muse exec --help` invocation surface needed by the adapter;
-- pre-login Muse filesystem state under persistent `/home/codex`;
+- exact `muse login --help` behavior and account/subscription login flow;
 - account/subscription login and resulting persistent paths;
 - authentication survival across restart/recreate;
 - successful machine-readable read-only run;
