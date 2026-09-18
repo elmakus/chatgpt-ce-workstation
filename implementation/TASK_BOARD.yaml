@@ -10,9 +10,9 @@ chatgpt_control_chat:
   purpose: "strategic Codex decisions only"
 
 execution_ref:
-  branch: "elmakus/chatgpt-ce-workstation:main"
-  pr: 1
-  head: "153a3bb337671fd6e742664710c5cc8e4d5c9a7a"
+  branch: "elmakus/chatgpt-ce-workstation:fix/muse-installer-tmp-traversal"
+  pr: null
+  head: "2255b320e3285d09b799cbc31e0925c8ccdab504"
 
 milestones:
   M01:
@@ -271,6 +271,33 @@ cards:
     result_pr: 1
     evidence: "implementation/reviews/m03-muse-main-merge-2026-09-18.md"
     tests_summary: "PR #1 exact pre-merge head 618dcd14c6c8068238fef6f1e1434a0ffe6168fb passed CI run 35305060826: source validation, ShellCheck, Dockerfile static check and secret scan GREEN. PR was marked ready, merged with expected-head protection, and main readback confirmed merge commit 17111247fd28a07de15e5a94908bd3d63858184b with no file changes relative to the accepted PR head."
+
+  - id: M04-T02
+    title: "Fix Muse installer temporary-directory traversal"
+    milestone: M04
+    decision_state: accepted
+    execution_status: in_progress
+    executor: "chatgpt"
+    depends_on:
+      - "M03"
+    openspec_change: null
+    contract: "implementation/cards/M04-T02.md"
+    authority_refs:
+      - "implementation/cards/M04-T01.md"
+      - "live Unraid M04-T01 Muse installer permission failure"
+    parallel_safe: false
+    write_scope:
+      - "scripts/build/install-muse-code.sh"
+    exclusive_resources: []
+    lane_branch: "elmakus/chatgpt-ce-workstation:fix/muse-installer-tmp-traversal"
+    lane_base: "cbb9c0637964b446ad9e1af78dd9210ae7e28cbf"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: "Exact live failure identified: mktemp parent remained root:root 0700 while vendor installer was read by runuser codex. Bounded fix changes ownership of the per-build temp directory to codex and retains 0700 mode; CI pending."
 
   - id: M04-T01
     title: "Rebuild current main and establish live Muse baseline"

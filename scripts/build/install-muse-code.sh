@@ -24,7 +24,8 @@ fi
 
 codex_group="$(id -g codex)"
 install -d -m 0755 -o codex -g "$codex_group" "$install_dir" "$build_home"
-chown codex:"$codex_group" "$installer"
+chown codex:"$codex_group" "$tmp_dir" "$installer"
+chmod 0700 "$tmp_dir"
 chmod 0755 "$installer"
 
 # Keep all installer/user state out of the image's /home/codex because that path
