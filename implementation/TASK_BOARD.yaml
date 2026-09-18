@@ -8,9 +8,9 @@ chatgpt_control_chat:
   purpose: "strategic Codex decisions only"
 
 execution_ref:
-  branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
+  branch: "elmakus/chatgpt-codex-project-workflow:feat/delegated-workers"
   pr: null
-  head: "18412d435229d6efc0cfb04e8334e5f10025ebef"
+  head: "23b8c368aea160566abdfd3fbc42bd0facb88bd4"
 
 milestones:
   M01:
@@ -51,7 +51,7 @@ milestones:
 
   M04:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/MUSE_DELEGATED_WORKERS_MASTER_PLAN.md#milestone-m04--generic-delegated-worker-workflow-contract"
     checkpoint: null
     implementation_head: null
@@ -274,7 +274,7 @@ cards:
     title: "Add generic delegated-worker semantics to chatgpt_only"
     milestone: M04
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M03"
