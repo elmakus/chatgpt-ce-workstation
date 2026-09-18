@@ -434,7 +434,7 @@ cards:
     title: "Validate production Muse adapter live on workstation"
     milestone: M07
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: blocked
     executor: "chatgpt"
     depends_on:
       - "M07-T01"
@@ -454,5 +454,30 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: null
+    evidence: "implementation/evidence/M07_LIVE_ADAPTER_SMOKE_2026-09-18.md"
+    tests_summary: "First authorized read-only live attempt reached the exact M07 adapter but Muse exited 2 before emitting JSONL because argv selected the top-level/TUI parser. Workspace remained unchanged and adapter artifacts had expected private permissions. Live acceptance paused for bounded M07-T03 correction."
+    blocker: "M07-T03 must correct Muse exec argv ordering and pre-run CLI parser failure classification before live smoke resumes."
+
+  - id: M07-T03
+    title: "Correct live Muse exec argv dispatch"
+    milestone: M07
+    decision_state: accepted
+    execution_status: in_progress
+    executor: "chatgpt"
+    depends_on:
+      - "M07-T01"
+    openspec_change: null
+    contract: "implementation/cards/M07-T03.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex_workflow:impl/m07-muse-process-result-adapter"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex_workflow:impl/m07-muse-process-result-adapter"
+    lane_base: "elmakus/codex_workflow@ab9601d9a3e587168b4c3182b3be3dffd7cc12bd"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: "implementation/evidence/M07_LIVE_ADAPTER_SMOKE_2026-09-18.md"
     tests_summary: null
