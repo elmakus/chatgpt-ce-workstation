@@ -23,7 +23,7 @@ milestones:
     implementation_head: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
     handoff: null
     acceptance_evidence: "implementation/reviews/dual-native-upstreams-2026-09-18.md"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex-chatgpt-web@eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
     review_evidence: "implementation/reviews/dual-native-upstreams-zstd-correction-2026-09-18.md"
 
@@ -79,7 +79,7 @@ cards:
     title: "Preserve Muse routing for encoded native requests"
     milestone: M01
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M01-T02"
@@ -99,8 +99,10 @@ cards:
     exclusive_resources: []
     lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
     lane_base: "0cad74ba6f3f9bc13d6e973d94bc993d8b2ff5c3"
-    review_state: in_progress
+    review_state: green
     review_subject: "elmakus/codex-chatgpt-web@eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
-    review_evidence: "implementation/reviews/dual-native-upstreams-zstd-correction-2026-09-18.md"
+    review_evidence: "implementation/reviews/dual-native-upstreams-zstd-correction-independent-review-2026-09-18.md"
+    result_commit: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
+    result_pr: null
     evidence: "implementation/reviews/dual-native-upstreams-zstd-correction-2026-09-18.md"
-    tests_summary: "Corrective diff read back from GitHub. Added three zstd routing regressions covering fail-closed Muse without upstream, Muse -> CLIProxyAPI with exact encoded-byte preservation, and ordinary native -> Codex-LB. Targeted local zstd route check GREEN. Full Bun verification unavailable because Bun is absent and github.com DNS resolution fails; exact corrected SHA has no CI/status runs."
+    tests_summary: "Independent review GREEN at exact subject. GitHub source confirms decoded model identity is carried into automatic routing; the three zstd regressions cover fail-closed Muse, Muse -> CLIProxyAPI, ordinary native -> Codex-LB, and exact encoded-byte preservation. Full Bun verification remains unavailable and no commit CI/status runs exist."
