@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "c1accde7c1940703316fd584f8e0bfe359a8bca9"
+  head: "147368145ca36523aa3a3c20673b45ebdbf91caa"
 
 milestones:
   M01:
@@ -780,3 +780,44 @@ cards:
     result_pr: null
     evidence: null
     tests_summary: "Publication GREEN: main fast-forwarded with force=false directly to exact 4081cde7d4f71bcc2083c62cf69b7e3b845eefb8; Release run 35389560885 completed success with all release steps GREEN; v1.1.17-private.11 and published prerelease target exact same commit with exactly codex_workflow-1.1.17-private.11.zip plus SHA256SUMS."
+
+  - id: M09-T08
+    title: "Promote published Muse-max release to workstation production runtime"
+    milestone: M09
+    decision_state: accepted
+    execution_status: ready
+    executor: "chatgpt"
+    depends_on:
+      - "M09-T07"
+    openspec_change: null
+    contract: "implementation/cards/M09-T08.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
+      - "planning/reviews/R5.md"
+      - "requirements/MUSE_MAX_RUNTIME.md#r1--scope-is-only-muse-max"
+      - "requirements/MUSE_MAX_RUNTIME.md#r15--project-workflow-owns-lane-parallelism"
+      - "requirements/MUSE_MAX_RUNTIME.md#r16--workstation-boundary"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile"
+      - "implementation/evidence/M09_R5_PUBLICATION_2026-09-18.md"
+      - "elmakus/codex_workflow@4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
+    parallel_safe: false
+    write_scope:
+      - "live workstation persistent /home/codex/.codex production workflow runtime"
+      - "disposable production bootstrap/smoke workspaces under /home/codex/Documents/ChatGPT"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "production ~/.codex/codex_workflow runtime"
+      - "production ~/.codex workflow-owned user state"
+      - "live workstation Muse runtime/auth state"
+    lane_branch: null
+    lane_base: null
+    authorization: "M09 live operations explicitly authorized by user on 2026-09-18."
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
