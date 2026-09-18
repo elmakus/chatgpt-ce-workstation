@@ -77,7 +77,7 @@ milestones:
 
   M06:
     decision_state: accepted
-    execution_status: planned
+    execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m06--establish-mixed-harness-muse-max-profile-semantics"
     checkpoint: null
     implementation_head: null
@@ -385,7 +385,7 @@ cards:
     title: "Establish mixed-harness muse-max profile semantics"
     milestone: M06
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on: []
     openspec_change: null
