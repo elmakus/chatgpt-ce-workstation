@@ -619,7 +619,7 @@ cards:
     lane_branch: null
     lane_base: null
     authorization: "M09 live operations explicitly authorized by user on 2026-09-18."
-    blocker: "Exact promoted release 4081cde7d4f71bcc2083c62cf69b7e3b845eefb8 is bound and production-promoted GREEN. Final acceptance still requires one actual Codex Main muse-max session that creates GPT-5.6 Luna XHigh Companion and reuses the same Companion. Durable state records Luna XHigh quota/runtime availability as the remaining external gate; a rejection or substitute model is not GREEN."
+    blocker: "Exact promoted release 4081cde7d4f71bcc2083c62cf69b7e3b845eefb8 is bound and production-promoted GREEN. The remaining required operation must run inside one actual Codex Main muse-max session that exposes the internal Companion lifecycle; this normal ChatGPT execution surface cannot create/reuse that internal Companion. At execution time GPT-5.6 Luna XHigh must accept creation; any quota/runtime rejection or substitute model keeps the Card blocked and is not GREEN."
     blocker_evidence: "implementation/evidence/M09_T08_PRODUCTION_PROMOTION_2026-09-18.md"
     review_state: null
     review_subject: null
