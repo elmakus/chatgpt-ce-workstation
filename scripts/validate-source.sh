@@ -58,8 +58,7 @@ grep -F 'source: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/home'
 grep -F 'source: ${PROJECTS_ROOT:-/mnt/user/projects}' compose.yaml >/dev/null || fail 'project source is unexpected'
 grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/novnc-password' compose.yaml >/dev/null || fail 'noVNC secret wiring missing'
 grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/keyring-password' compose.yaml >/dev/null || fail 'keyring secret wiring missing'
-grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/codex-lb-api-key' compose.yaml >/dev/null || fail 'Codex-LB secret wiring missing'
-grep -F 'CODEX_CHATGPT_WEB_NATIVE_UPSTREAM: "${CODEX_CHATGPT_WEB_NATIVE_UPSTREAM:-}"' compose.yaml >/dev/null || fail 'optional native upstream setting missing'
+grep -F 'CODEX_CHATGPT_WEB_NATIVE_UPSTREAM: ${CODEX_CHATGPT_WEB_NATIVE_UPSTREAM:-}' compose.yaml >/dev/null || fail 'optional native upstream setting missing'
 grep -F '/usr/local/bin/workstation-healthcheck' compose.yaml >/dev/null || fail 'desktop-aware healthcheck missing'
 if grep -Eq '^[[:space:]]*privileged:[[:space:]]*true|SYS_ADMIN|/var/run/docker\.sock' compose.yaml; then
   fail 'compose.yaml weakens the Docker isolation boundary'
@@ -90,8 +89,9 @@ fi
 grep -F 'PACKAGE_WITH_UPDATER=0' Dockerfile >/dev/null || fail 'CE native updater is not disabled at build time'
 grep -F 'CODEX_WEB_GPT_DISABLE_UPDATES="\${CODEX_WEB_GPT_DISABLE_UPDATES:-1}"' scripts/build/install-codex-web-gpt.sh >/dev/null \
   || fail 'Codex Web GPT self-updater is not disabled by default in the workstation wrapper'
-grep -F 'CODEX_LB_API_KEY_FILE:-/run/workstation/codex-lb-api-key' scripts/build/install-codex-web-gpt.sh >/dev/null \
-  || fail 'Codex Web GPT wrapper does not load the staged Codex-LB key'
+grep -Fx 'CODEX_CHATGPT_WEB_VERSION=' .env.example >/dev/null || fail 'Codex Web GPT default version override must stay empty'
+grep -F 'releases/latest' scripts/build/install-codex-web-gpt.sh >/dev/null || fail 'Codex Web GPT installer no longer resolves releases/latest when unpinned'
+grep -F 'codex-web-gpt-set-codex-lb-key' scripts/build/install-codex-web-gpt.sh >/dev/null || fail 'Codex Web GPT packaged Codex-LB key helper is not installed'
 [[ -s scripts/build/install-muse-code.sh ]] || fail 'Muse build installer helper missing'
 [[ -s rootfs/usr/local/bin/muse ]] || fail 'Muse runtime wrapper missing'
 grep -F '/opt/muse-code/bin/muse' rootfs/usr/local/bin/muse >/dev/null || fail 'Muse wrapper does not target image-owned install'
@@ -99,7 +99,8 @@ grep -F 'MUSE_NO_AUTO_UPDATE="${MUSE_NO_AUTO_UPDATE:-1}"' rootfs/usr/local/bin/m
   || fail 'Muse runtime auto-update is not disabled by default'
 grep -F 'MUSE_INSTALLER_URL' Dockerfile >/dev/null || fail 'Muse installer URL build arg missing'
 grep -F '/tmp/install-muse-code.sh' Dockerfile >/dev/null || fail 'Muse install helper is not wired into Dockerfile'
-pass 'Codex policy, CE features, Codex Web GPT and Muse image-managed update boundaries'
+grep -F 'muse exec --help' scripts/verify-runtime.sh >/dev/null || fail 'runtime verification does not assert Muse exec surface'
+pass 'Codex policy, CE features, latest-release Codex Web GPT and Muse image-managed boundaries'
 
 echo
 echo '=== desktop recovery surface ==='

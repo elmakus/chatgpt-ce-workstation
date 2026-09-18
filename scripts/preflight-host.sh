@@ -35,7 +35,6 @@ PROJECTS_ROOT="${PROJECTS_ROOT:-/mnt/user/projects}"
 CONTAINER_NAME="${CONTAINER_NAME:-chatgpt-ce-workstation}"
 VNC_SECRET_FILE="$APPDATA_ROOT/secrets/novnc-password"
 KEYRING_SECRET_FILE="$APPDATA_ROOT/secrets/keyring-password"
-CODEX_LB_SECRET_FILE="$APPDATA_ROOT/secrets/codex-lb-api-key"
 CE_PROJECT_TARGET="$APPDATA_ROOT/home/Documents/ChatGPT"
 
 command -v docker >/dev/null || fail 'docker is required'
@@ -47,14 +46,7 @@ pass 'Docker/Compose available and compose.yaml resolves'
 [[ -d "$PROJECTS_ROOT" ]] || fail "project root does not exist: $PROJECTS_ROOT"
 [[ -s "$VNC_SECRET_FILE" ]] || fail "missing/empty noVNC secret: $VNC_SECRET_FILE"
 [[ -s "$KEYRING_SECRET_FILE" ]] || fail "missing/empty keyring secret: $KEYRING_SECRET_FILE"
-[[ -e "$CODEX_LB_SECRET_FILE" ]] || fail "missing optional Codex-LB secret source path: $CODEX_LB_SECRET_FILE (run scripts/init-unraid.sh)"
-pass 'persistent home, project root and required/optional secret sources exist'
-
-if [[ -s "$CODEX_LB_SECRET_FILE" ]]; then
-  echo "Codex-LB key source: configured"
-else
-  echo "Codex-LB key source: empty (official native Codex route unless configured later)"
-fi
+pass 'persistent home, project root and both runtime secrets exist'
 
 if docker inspect "$CONTAINER_NAME" >/dev/null 2>&1; then
   running="$(docker inspect --format='{{.State.Running}}' "$CONTAINER_NAME")"

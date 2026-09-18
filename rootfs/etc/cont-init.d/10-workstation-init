@@ -13,10 +13,8 @@ ce_projects_path="$documents_root/ChatGPT"
 vnc_auth_file="$config_dir/vnc.pass"
 vnc_secret_file=/run/secrets/novnc-password
 keyring_secret_file=/run/secrets/keyring-password
-codex_lb_secret_file=/run/secrets/codex-lb-api-key
 runtime_secret_dir=/run/workstation
 runtime_keyring_secret="$runtime_secret_dir/keyring-password"
-runtime_codex_lb_secret="$runtime_secret_dir/codex-lb-api-key"
 
 # These directories are created by root during container init, but the persistent
 # home is a normal user home. Explicitly hand every root-created parent back to
@@ -74,13 +72,6 @@ else
   echo "[init] missing keyring password secret: $keyring_secret_file" >&2
   echo "[init] run scripts/init-unraid.sh to provision it." >&2
   exit 1
-fi
-
-# Codex-LB is optional. Stage the secret only when non-empty so a normal official
-# native Codex route cannot accidentally inherit an empty or stale key.
-rm -f "$runtime_codex_lb_secret"
-if [[ -r "$codex_lb_secret_file" && -s "$codex_lb_secret_file" ]]; then
-  install -m 0400 -o codex -g "$codex_group" "$codex_lb_secret_file" "$runtime_codex_lb_secret"
 fi
 
 # Workstation-wide Codex defaults are enabled by Compose after explicit user
