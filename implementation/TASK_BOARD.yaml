@@ -39,6 +39,18 @@ milestones:
     review_subject: "elmakus/codex-chatgpt-web@4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
     review_evidence: "implementation/reviews/dual-native-upstreams-pr2-final-independent-review-2026-09-18.md"
 
+  M02:
+    decision_state: accepted
+    execution_status: in_progress
+    contract: "User-approved publication of the reviewed fork as the next release and preparation of feat/muse-code so the next workstation build is ready for Muse Code live validation"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
 cards:
   - id: M01-T01
     title: "Parallel Codex-LB and CLIProxyAPI native upstreams"
@@ -217,6 +229,50 @@ cards:
     exclusive_resources: []
     lane_branch: "elmakus/chatgpt-ce-workstation:feat/muse-code"
     lane_base: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+
+  - id: M02-T01
+    title: "Publish codex-chatgpt-web 5.0.10"
+    milestone: M02
+    decision_state: accepted
+    execution_status: in_progress
+    executor: "chatgpt"
+    depends_on:
+      - "M01"
+    openspec_change: null
+    contract: "implementation/cards/M02-T01.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:release/v5.0.10"
+      - "elmakus/codex-chatgpt-web:main"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+  - id: M02-T02
+    title: "Prepare next workstation build for Muse Code live validation"
+    milestone: M02
+    decision_state: accepted
+    execution_status: planned
+    executor: "chatgpt"
+    depends_on:
+      - "M02-T01"
+    openspec_change: null
+    contract: "implementation/cards/M02-T02.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/chatgpt-ce-workstation:feat/muse-code"
     review_state: null
     review_subject: null
     review_evidence: null
