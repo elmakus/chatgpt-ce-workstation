@@ -22,10 +22,10 @@ milestones:
     checkpoint: null
     implementation_head: "4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
     handoff: null
-    acceptance_evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
-    review_state: in_progress
+    acceptance_evidence: "implementation/reviews/dual-native-upstreams-pr2-final-independent-review-2026-09-18.md"
+    review_state: green
     review_subject: "elmakus/codex-chatgpt-web@4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
-    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-final-independent-review-2026-09-18.md"
 
 cards:
   - id: M01-T01
@@ -142,7 +142,7 @@ cards:
     title: "Make PR macOS ad-hoc package verification self-consistent"
     milestone: M01
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M01-T04"
@@ -156,10 +156,10 @@ cards:
     exclusive_resources: []
     lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
     lane_base: "afef9e799599e8c31539ed60689a3828be7728ea"
-    review_state: in_progress
+    review_state: green
     review_subject: "elmakus/codex-chatgpt-web@4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
-    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-final-independent-review-2026-09-18.md"
     result_commit: "4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
     result_pr: 2
     evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
-    tests_summary: "PR #2 run 35299105025 completed GREEN: actionlint and full verify/package/smoke matrix passed on macOS 15, Ubuntu latest, and Windows latest. macOS log confirms Electron Builder used ad-hoc identity '-' and the existing archive codesign verification passed."
+    tests_summary: "Independent review GREEN at exact subject. PR #2 run 35299105025 is GREEN: actionlint and full verify/package/smoke matrix passed on macOS 15, Ubuntu latest, and Windows latest; macOS used ad-hoc identity '-' and passed the existing archive codesign verification."
