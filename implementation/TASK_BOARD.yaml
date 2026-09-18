@@ -1,6 +1,6 @@
 project: "chatgpt-ce-workstation"
-plan_revision: "ad-hoc-2026-09-18-dual-native-upstreams"
-current_milestone: "M01"
+plan_revision: "ad-hoc-2026-09-18-release-and-muse-live-prep"
+current_milestone: "M02"
 
 execution_mode: serial
 parallel_card_limit: 1
@@ -10,11 +10,23 @@ chatgpt_control_chat:
   purpose: "strategic Codex decisions only"
 
 execution_ref:
-  branch: "elmakus/codex-chatgpt-web:main"
-  pr: 2
+  branch: "elmakus/codex-chatgpt-web:release/5.0.10"
+  pr: null
   head: "85d13359bef65208c286ae34e0a00ddbbd185e63"
 
 milestones:
+  M02:
+    decision_state: accepted
+    execution_status: in_progress
+    contract: "User-approved publication of the M01 routing-enabled codex-chatgpt-web release and repository-only preparation of feat/muse-code for the next live Muse Code validation build"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
   M01:
     decision_state: accepted
     execution_status: done
@@ -163,3 +175,52 @@ cards:
     result_pr: 2
     evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
     tests_summary: "Independent review GREEN at exact subject. PR #2 run 35299105025 is GREEN: actionlint and full verify/package/smoke matrix passed on macOS 15, Ubuntu latest, and Windows latest; macOS used ad-hoc identity '-' and passed the existing archive codesign verification."
+
+  - id: M02-T01
+    title: "Publish codex-chatgpt-web 5.0.10"
+    milestone: M02
+    decision_state: accepted
+    execution_status: in_progress
+    executor: "chatgpt"
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/cards/M02-T01.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:release/5.0.10"
+      - "elmakus/codex-chatgpt-web:main"
+      - "GitHub release v5.0.10"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex-chatgpt-web:release/5.0.10"
+    lane_base: "85d13359bef65208c286ae34e0a00ddbbd185e63"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+  - id: M02-T02
+    title: "Prepare next workstation build for Muse Code live validation"
+    milestone: M02
+    decision_state: accepted
+    execution_status: planned
+    executor: "chatgpt"
+    depends_on:
+      - "M02-T01"
+    openspec_change: null
+    contract: "implementation/cards/M02-T02.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/chatgpt-ce-workstation:feat/muse-code"
+    exclusive_resources: []
+    lane_branch: "elmakus/chatgpt-ce-workstation:feat/muse-code"
+    lane_base: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
