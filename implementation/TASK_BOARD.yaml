@@ -707,7 +707,7 @@ cards:
     title: "Live two-lane revalidation of exact R5 release candidate"
     milestone: M09
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M09-T05"
@@ -733,11 +733,11 @@ cards:
     lane_base: "elmakus/codex_workflow@4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
     authorization: "M09 live operations explicitly authorized by user on 2026-09-18."
     blocker: null
-    blocker_evidence: null
+    blocker_evidence: "implementation/evidence/M09_R5_LIVE_TWO_LANE_2026-09-18.md"
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "Live exact-release-candidate validation GREEN on 4081cde7d4f71bcc2083c62cf69b7e3b845eefb8: muse-max readback correct; two isolated Muse lanes concurrently active with distinct PGIDs/workspaces/run IDs; both normalized results completed exit 0 with only lane-local marker changes; exact candidate source remained clean; residual validation processes zero; disposable source/control/lane paths removed; main/tag remained unpromoted."
