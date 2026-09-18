@@ -107,7 +107,6 @@ cards:
     evidence: "implementation/reviews/dual-native-upstreams-zstd-correction-2026-09-18.md"
     tests_summary: "Independent review GREEN at exact subject. GitHub source confirms decoded model identity is carried into automatic routing; the three zstd regressions cover fail-closed Muse, Muse -> CLIProxyAPI, ordinary native -> Codex-LB, and exact encoded-byte preservation. Full Bun verification remains unavailable and no commit CI/status runs exist."
 
-
   - id: M01-T04
     title: "Make zstd regression helper typecheck clean"
     milestone: M01
@@ -131,10 +130,35 @@ cards:
     exclusive_resources: []
     lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
     lane_base: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
-    review_state: pending
-    review_subject: "elmakus/codex-chatgpt-web@afef9e799599e8c31539ed60689a3828be7728ea"
-    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-typecheck-correction-2026-09-18.md"
+    review_state: null
+    review_subject: null
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-codesign-publication-failure-2026-09-18.md"
     result_commit: "afef9e799599e8c31539ed60689a3828be7728ea"
     result_pr: 2
-    evidence: "implementation/reviews/dual-native-upstreams-pr2-typecheck-correction-2026-09-18.md"
-    tests_summary: "Corrective diff is one test file (+4/-2), converting the Bun zstd Buffer to an equal-length ArrayBuffer before Request construction. PR #2 run 35298637056 has bun run verify GREEN on macOS, Ubuntu, and Windows. macOS later fails only at the known PR-only unsigned codesign package check; prior PR #1 has the identical failure and base main@f8dc469 push CI is fully GREEN."
+    evidence: "implementation/reviews/dual-native-upstreams-pr2-codesign-publication-failure-2026-09-18.md"
+    tests_summary: "PR #2 run 35298637056: bun run verify GREEN on macOS 15, Ubuntu latest, and Windows latest. The BodyInit typecheck defect is closed; the same run exposed a separate PR-only macOS app:package codesign failure."
+
+  - id: M01-T05
+    title: "Make PR macOS ad-hoc package verification self-consistent"
+    milestone: M01
+    decision_state: accepted
+    execution_status: in_progress
+    executor: "chatgpt"
+    depends_on:
+      - "M01-T04"
+    openspec_change: null
+    contract: "implementation/cards/M01-T05.md"
+    authority_refs:
+      - "implementation/reviews/dual-native-upstreams-pr2-codesign-publication-failure-2026-09-18.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    lane_base: "afef9e799599e8c31539ed60689a3828be7728ea"
+    review_state: null
+    review_subject: null
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-codesign-publication-failure-2026-09-18.md"
+    result_pr: 2
+    evidence: "implementation/reviews/dual-native-upstreams-pr2-codesign-publication-failure-2026-09-18.md"
+    tests_summary: "PR #2 run 35298637056 reaches macOS app:package after GREEN bun run verify, but Electron Builder skips signing for pull_request while package.cjs unconditionally requires codesign verification."
