@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
   pr: null
-  head: "2c7eb2ac5266df0cf198a11abb14eba314f411e0"
+  head: "0cad74ba6f3f9bc13d6e973d94bc993d8b2ff5c3"
 
 milestones:
   M01:
@@ -20,12 +20,12 @@ milestones:
     execution_status: in_progress
     contract: "User-approved parallel Codex-LB and CLIProxyAPI routing in related fork elmakus/codex-chatgpt-web"
     checkpoint: null
-    implementation_head: "2c7eb2ac5266df0cf198a11abb14eba314f411e0"
+    implementation_head: "0cad74ba6f3f9bc13d6e973d94bc993d8b2ff5c3"
     handoff: null
     acceptance_evidence: "implementation/reviews/dual-native-upstreams-2026-09-18.md"
-    review_state: red
-    review_subject: "elmakus/codex-chatgpt-web@2c7eb2ac5266df0cf198a11abb14eba314f411e0"
-    review_evidence: "implementation/reviews/dual-native-upstreams-independent-review-2026-09-18.md"
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@0cad74ba6f3f9bc13d6e973d94bc993d8b2ff5c3"
+    review_evidence: "implementation/reviews/dual-native-upstreams-correction-2026-09-18.md"
 
 cards:
   - id: M01-T01
@@ -55,7 +55,7 @@ cards:
     title: "Fail closed Muse routing without Muse upstream"
     milestone: M01
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M01-T01"
@@ -67,7 +67,10 @@ cards:
     exclusive_resources: []
     lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
     lane_base: "2c7eb2ac5266df0cf198a11abb14eba314f411e0"
-    result_commit: null
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@0cad74ba6f3f9bc13d6e973d94bc993d8b2ff5c3"
+    review_evidence: "implementation/reviews/dual-native-upstreams-correction-2026-09-18.md"
+    result_commit: "0cad74ba6f3f9bc13d6e973d94bc993d8b2ff5c3"
     result_pr: null
-    evidence: "implementation/reviews/dual-native-upstreams-independent-review-2026-09-18.md"
-    tests_summary: null
+    evidence: "implementation/reviews/dual-native-upstreams-correction-2026-09-18.md"
+    tests_summary: "Corrective diff read back from GitHub. Targeted runtime routing check GREEN: muse-* without Muse upstream fails closed, while ordinary native requests still route to Codex-LB with its dedicated key. Full bun run verify was not executed because this runtime lacks Bun and repository CI has no branch/manual trigger."
