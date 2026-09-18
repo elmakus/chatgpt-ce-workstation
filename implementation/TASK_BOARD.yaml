@@ -11,7 +11,7 @@ chatgpt_control_chat:
 
 execution_ref:
   branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
-  pr: null
+  pr: 2
   head: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
 
 milestones:
@@ -23,9 +23,9 @@ milestones:
     implementation_head: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
     handoff: null
     acceptance_evidence: "implementation/reviews/dual-native-upstreams-m01-independent-acceptance-review-2026-09-18.md"
-    review_state: green
+    review_state: red
     review_subject: "elmakus/codex-chatgpt-web@eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
-    review_evidence: "implementation/reviews/dual-native-upstreams-m01-independent-acceptance-review-2026-09-18.md"
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-publication-failure-2026-09-18.md"
 
 cards:
   - id: M01-T01
@@ -106,3 +106,34 @@ cards:
     result_pr: null
     evidence: "implementation/reviews/dual-native-upstreams-zstd-correction-2026-09-18.md"
     tests_summary: "Independent review GREEN at exact subject. GitHub source confirms decoded model identity is carried into automatic routing; the three zstd regressions cover fail-closed Muse, Muse -> CLIProxyAPI, ordinary native -> Codex-LB, and exact encoded-byte preservation. Full Bun verification remains unavailable and no commit CI/status runs exist."
+
+
+  - id: M01-T04
+    title: "Make zstd regression helper typecheck clean"
+    milestone: M01
+    decision_state: accepted
+    execution_status: in_progress
+    executor: "chatgpt"
+    depends_on:
+      - "M01-T03"
+    openspec_change: null
+    contract: "The M01-T03 zstd regression helper must compile under repository typecheck using a BodyInit-compatible representation while preserving the exact compressed bytes and all accepted routing behavior."
+    authority_refs:
+      - "implementation/reviews/dual-native-upstreams-pr2-publication-failure-2026-09-18.md"
+      - "M01-T03 acceptance"
+    acceptance:
+      - "tests/native-passthrough.test.ts no longer passes Buffer<ArrayBufferLike> directly as Request.body"
+      - "the helper still forwards the exact Bun.zstdCompressSync output bytes"
+      - "PR #2 publication CI bun run verify is GREEN for the corrected subject"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    lane_base: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
+    review_state: null
+    review_subject: null
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-publication-failure-2026-09-18.md"
+    result_pr: 2
+    evidence: "implementation/reviews/dual-native-upstreams-pr2-publication-failure-2026-09-18.md"
+    tests_summary: "PR #2 CI run 35298432101 failed macOS bun run verify during TypeScript typecheck at tests/native-passthrough.test.ts:36 because Buffer<ArrayBufferLike> is not assignable to BodyInit."
