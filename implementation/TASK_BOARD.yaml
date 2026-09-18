@@ -785,7 +785,7 @@ cards:
     title: "Promote published Muse-max release to workstation production runtime"
     milestone: M09
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M09-T07"
