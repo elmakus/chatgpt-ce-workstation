@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
   pr: 2
-  head: "afef9e799599e8c31539ed60689a3828be7728ea"
+  head: "4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
 
 milestones:
   M01:
@@ -20,12 +20,12 @@ milestones:
     execution_status: in_progress
     contract: "User-approved parallel Codex-LB and CLIProxyAPI routing in related fork elmakus/codex-chatgpt-web"
     checkpoint: null
-    implementation_head: "afef9e799599e8c31539ed60689a3828be7728ea"
+    implementation_head: "4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
     handoff: null
-    acceptance_evidence: "implementation/reviews/dual-native-upstreams-pr2-typecheck-correction-2026-09-18.md"
+    acceptance_evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
     review_state: pending
-    review_subject: "elmakus/codex-chatgpt-web@afef9e799599e8c31539ed60689a3828be7728ea"
-    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-typecheck-correction-2026-09-18.md"
+    review_subject: "elmakus/codex-chatgpt-web@4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
 
 cards:
   - id: M01-T01
@@ -156,9 +156,10 @@ cards:
     exclusive_resources: []
     lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
     lane_base: "afef9e799599e8c31539ed60689a3828be7728ea"
-    review_state: null
-    review_subject: null
-    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-codesign-publication-failure-2026-09-18.md"
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
+    result_commit: "4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
     result_pr: 2
-    evidence: "implementation/reviews/dual-native-upstreams-pr2-codesign-publication-failure-2026-09-18.md"
-    tests_summary: "PR #2 run 35298637056 reaches macOS app:package after GREEN bun run verify, but Electron Builder skips signing for pull_request while package.cjs unconditionally requires codesign verification."
+    evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
+    tests_summary: "PR #2 run 35299105025 completed GREEN: actionlint and full verify/package/smoke matrix passed on macOS 15, Ubuntu latest, and Windows latest. macOS log confirms Electron Builder used ad-hoc identity '-' and the existing archive codesign verification passed."
