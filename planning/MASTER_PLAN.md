@@ -1,7 +1,11 @@
 # Muse-max production runtime Master Plan
 
-Status: **approved**
+Status: **draft**
+Revision: **R2**
 Date: 2026-09-18
+Review requirement: **RECOMMENDED**
+
+R2 replanning trigger: M08 live evidence proved the complete Muse-side sequential orchestration path, but live creation/reuse of the internal Codex Companion cannot be invoked from the current normal-ChatGPT execution surface. The user explicitly authorized deferring only that live Companion check into M09 final promotion. R3/D21 and the target Luna XHigh Companion remain unchanged.
 
 ## Authority
 
@@ -207,13 +211,13 @@ The normalized result/failure protocol is an internal cross-module runtime contr
 
 ### Outcome
 
-The complete single-lane `muse-max` behavior works end to end with the existing `codex_workflow` roles and preserves independent verification.
+The complete single-lane Muse-backed `muse-max` orchestration behavior works end to end with the existing `codex_workflow` roles and preserves independent verification. Companion allocation remains part of `muse-max`; only the live creation/reuse check may be deferred to M09 final promotion when the internal Codex lifecycle is unavailable for an external execution-surface/quota reason.
 
 ### Requirement ownership
 
-Primary: R2–R9.
+Primary: R2, R4–R9.
 
-Also verifies R10–R14 in real orchestration.
+Also verifies R10–R14 in real orchestration and verifies the R3/D21 Companion allocation contract. Final live Companion persistence verification is owned by M09.
 
 ### Dependencies
 
@@ -221,7 +225,8 @@ Also verifies R10–R14 in real orchestration.
 
 ### Planned work packages
 
-- Verify one persistent internal Luna XHigh Companion under active `muse-max`.
+- Verify that active `muse-max` renders exactly one internal Companion as GPT-5.6 Luna XHigh.
+- When an actual Codex Main worker lifecycle is available, verify live Companion creation/reuse. If that lifecycle is unavailable solely because of the current execution surface or account quota, persist the exact blocker and defer only this live check to the M09 pre-promotion gate.
 - Exercise all six Muse-routed roles sufficiently to prove routing and role boundaries:
   - Micro/Default/Senior Executor;
   - Tester;
@@ -240,7 +245,9 @@ Also verifies R10–R14 in real orchestration.
 
 ### Stable acceptance/checkpoint
 
-- Companion persistence and six-role routing match D21.
+- Six-role Muse routing matches D21.
+- Active `muse-max` renders exactly one internal Companion as GPT-5.6 Luna XHigh.
+- If live internal Codex lifecycle access is unavailable solely for an external execution-surface/quota reason, M08 may close with a durable explicit deferral of live Companion creation/reuse; this does not satisfy R3 live persistence and cannot satisfy the M09 pre-promotion gate.
 - Executor → fresh Tester GREEN path works.
 - RED → fresh repair Executor → fresh Tester path works.
 - Tester does not inherit executor transcript.
@@ -250,7 +257,7 @@ Also verifies R10–R14 in real orchestration.
 
 ### JIT trigger
 
-If M08 reveals a role-specific live limitation that does not change Definition, Execution Prep may create bounded corrective work. A limitation that changes the accepted six-role target returns to Project Definition.
+If M08 reveals a role-specific live limitation that does not change Definition, Execution Prep may create bounded corrective work. A limitation that changes the accepted six-role target returns to Project Definition. A pure inability to invoke the internal Codex Companion from the current execution surface does not redefine the target and may use the explicit M09 deferral above.
 
 ---
 
@@ -268,8 +275,9 @@ Final integrated verification for R1–R16.
 
 ### Dependencies
 
-- M08 GREEN.
+- M08 GREEN under the revised M08 acceptance above, including durable documentation of any permitted live-Companion deferral.
 - Exact concurrency mechanism becomes knowable from the M07 adapter shape and M08 orchestration evidence.
+- M09 implementation, regression and independent review may proceed while the permitted live-Companion check is deferred; publication/release and production promotion may not.
 
 ### Planned work packages
 
@@ -283,7 +291,8 @@ Final integrated verification for R1–R16.
 - Run complete `codex_workflow` regression coverage, including unchanged `plus`, `luna-xhigh`, and `pro-x5`.
 - Freeze the exact complete implementation subject for independent review before production promotion.
 - Correct bounded review findings as required and obtain GREEN on the final subject.
-- Publish through the existing `codex_workflow` owner release/update channel.
+- Before publication/release, close any M08 live-Companion deferral by using an actual Codex Main session on the exact reviewed candidate to demonstrate one GPT-5.6 Luna XHigh Companion creation and reuse within the same workflow session. A concrete quota/runtime rejection is evidence of a still-open gate, not a substitute pass.
+- Publish through the existing `codex_workflow` owner release/update channel only after that Companion gate is GREEN.
 - With explicit live authorization, update the workstation runtime to the reviewed release and perform final smoke:
   - active `muse-max`;
   - persistent Luna XHigh Companion;
@@ -302,7 +311,9 @@ Final integrated verification for R1–R16.
 
 ### Gates
 
-- Publication follows normal repository/release authority.
+- Any deferred M08 live Companion check is a hard **pre-publication/pre-promotion** gate in M09.
+- The gate requires the accepted GPT-5.6 Luna XHigh Companion; Marina, Sol Medium or another substitute worker/model cannot satisfy it.
+- Publication follows normal repository/release authority only after that gate is GREEN.
 - Live workstation update/recreate/runtime validation requires explicit live-operation authorization.
 
 ---
@@ -313,7 +324,7 @@ Final integrated verification for R1–R16.
 | --- | --- |
 | R1 only muse-max changes | M06, M09 |
 | R2 Codex Main orchestrator | M06, M08, M09 |
-| R3 persistent Luna XHigh Companion | M06, M08, M09 |
+| R3 persistent Luna XHigh Companion | M06, M09 |
 | R4 six Muse roles | M06, M08 |
 | R5 shared role contracts | M06 |
 | R6 profile-aware adapter | M06, M07 |
@@ -338,10 +349,11 @@ current source/baseline readback
   -> M06 profile-allocation + other-profile regression tests
   -> M07 deterministic process/protocol fixtures
   -> M07 live single-worker smoke
-  -> M08 sequential executor/tester/RED-repair role pilot
+  -> M08 sequential executor/tester/RED-repair role pilot + Companion allocation readback
   -> M09 isolated two-lane concurrency test
   -> full codex_workflow regression
   -> independent review of exact final subject
+  -> live Luna XHigh Companion creation/reuse on exact reviewed candidate
   -> release exact reviewed subject
   -> live workstation update/readback + final smoke
 ```
@@ -380,7 +392,8 @@ Execution Prep should create only currently knowable Cards.
 - M06 Cards may be prepared from current `codex_workflow` source and D21.
 - M07 parser/argv-specific Cards are created only after M05 evidence.
 - M08 role-pilot Cards are created only after M07 normalized adapter behavior is real.
-- M09 concurrency/release Cards are created only after M07/M08 establish the actual adapter/orchestration shape.
+- M09 concurrency/review Cards are created after M07/M08 establish the actual adapter/orchestration shape. A permitted M08 live-Companion deferral does not block those pre-promotion Cards.
+- M09 publication/promotion Cards remain blocked until the deferred live Luna XHigh Companion creation/reuse check is GREEN.
 
 Do not create placeholder future Cards merely to fill the Task Board.
 
@@ -391,7 +404,8 @@ GREEN.
 - Definition preconditions are complete and internally coherent.
 - Milestone order prevents guessed Muse CLI/protocol details from leaking into implementation.
 - Mixed-profile semantics are separated from provider-protocol implementation.
-- Sequential role correctness precedes concurrency.
+- Sequential Muse-role correctness precedes concurrency.
+- The unavailable internal-Codex Companion live check is deferred only across pre-promotion M09 work; R3/D21 remain unchanged and publication/promotion is hard-blocked until Luna XHigh creation/reuse is live GREEN.
 - Concurrency remains subordinate to Project Workflow lane/worktree authority.
 - Other compute profiles have explicit regression protection.
 - Live authorization gates are explicit at both discovery and final deployment.
