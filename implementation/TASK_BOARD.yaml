@@ -299,4 +299,4 @@ cards:
     result_commit: null
     result_pr: null
     evidence: null
-    tests_summary: "Live rebuild authorized. Concrete runtime blocker: this chat has no direct Unraid shell/SSH connector; user must run the bounded repository command and return its output for readback/acceptance."
+    tests_summary: "Live build completed on the Unraid host, but returned output proves the host executed an older scripts/update.sh variant: it stopped immediately after container start and printed the legacy manual-verification message instead of current main wait-healthy + verify-runtime flow. noVNC shows only the ChatGPT CE window; Openbox/Tint2 desktop surface and codex-web-gpt are not visible. Card remains blocked pending host checkout/remote/HEAD readback and rebuild from current main."
