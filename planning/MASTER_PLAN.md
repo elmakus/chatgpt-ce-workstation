@@ -1,11 +1,11 @@
 # Muse-max production runtime Master Plan
 
-Status: **approved**
-Revision: **R2**
+Status: **draft**
+Revision: **R3**
 Date: 2026-09-18
 Review requirement: **RECOMMENDED**
 
-R2 replanning trigger: M08 live evidence proved the complete Muse-side sequential orchestration path, but live creation/reuse of the internal Codex Companion cannot be invoked from the current normal-ChatGPT execution surface. The user explicitly authorized deferring only that live Companion check into M09 final promotion. R3/D21 and the target Luna XHigh Companion remain unchanged.
+R3 replanning trigger: after M09-T02 live two-lane validation was GREEN, the user explicitly directed the project to continue while GPT-5.6 Luna XHigh quota is unavailable and to perform the live Companion check later. This changes execution sequencing only. R3/D21 and the target persistent Luna XHigh Companion remain unchanged. Release/publication and production promotion may proceed on the exact independently reviewed and live Muse-concurrency-validated subject; M09 final acceptance and project completion remain blocked until an actual Codex Main session creates and reuses one Luna XHigh Companion on that exact promoted release.
 
 ## Authority
 
@@ -265,7 +265,7 @@ If M08 reveals a role-specific live limitation that does not change Definition, 
 
 ### Outcome
 
-The reviewed `muse-max` implementation supports safe Project Workflow-authorized parallel lanes, is published through the normal `codex_workflow` release path, and is validated on the workstation as the production candidate.
+The reviewed `muse-max` implementation supports safe Project Workflow-authorized parallel lanes, is published through the normal `codex_workflow` release path, and is validated on the workstation as the production candidate. The live Luna XHigh Companion proof may follow release/promotion when quota is unavailable, but M09 does not close until that proof is GREEN on the exact promoted release.
 
 ### Requirement ownership
 
@@ -277,7 +277,7 @@ Final integrated verification for R1–R16.
 
 - M08 GREEN under the revised M08 acceptance above, including durable documentation of any permitted live-Companion deferral.
 - Exact concurrency mechanism becomes knowable from the M07 adapter shape and M08 orchestration evidence.
-- M09 implementation, regression and independent review may proceed while the permitted live-Companion check is deferred; publication/release and production promotion may not.
+- M09 implementation, regression, independent review, publication/release and production promotion may proceed while the permitted live-Companion check is deferred. M09 final acceptance/project completion may not.
 
 ### Planned work packages
 
@@ -291,13 +291,13 @@ Final integrated verification for R1–R16.
 - Run complete `codex_workflow` regression coverage, including unchanged `plus`, `luna-xhigh`, and `pro-x5`.
 - Freeze the exact complete implementation subject for independent review before production promotion.
 - Correct bounded review findings as required and obtain GREEN on the final subject.
-- Before publication/release, close any M08 live-Companion deferral by using an actual Codex Main session on the exact reviewed candidate to demonstrate one GPT-5.6 Luna XHigh Companion creation and reuse within the same workflow session. A concrete quota/runtime rejection is evidence of a still-open gate, not a substitute pass.
-- Publish through the existing `codex_workflow` owner release/update channel only after that Companion gate is GREEN.
-- With explicit live authorization, update the workstation runtime to the reviewed release and perform final smoke:
-  - active `muse-max`;
-  - persistent Luna XHigh Companion;
+- Publish through the existing `codex_workflow` owner release/update channel once the exact source subject has independent review GREEN and the live M09 two-lane Muse validation is GREEN. Publication must preserve the exact reviewed subject.
+- With explicit live authorization, update the workstation runtime to that exact reviewed release and perform the production smoke that is available without consuming Luna XHigh quota:
+  - active `muse-max` allocation/readback;
   - Muse executor + fresh Tester;
   - one safe two-lane parallel run where the available Project Workflow/runtime supports it.
+- After release/promotion, or earlier if quota becomes available, close the deferred live-Companion obligation using an actual Codex Main session on the exact promoted release to demonstrate one GPT-5.6 Luna XHigh Companion creation and reuse within the same workflow session. A concrete quota/runtime rejection remains an open blocker, not a substitute pass.
+- If the deferred Companion proof exposes a defect in the promoted release, M09 remains non-terminal and routes through the normal correction/review/release path before final acceptance.
 
 ### Stable acceptance/checkpoint
 
@@ -306,15 +306,17 @@ Final integrated verification for R1–R16.
 - Complete profile regressions are GREEN.
 - Final exact subject receives independent review GREEN.
 - Published `codex_workflow` release is exactly the reviewed subject.
-- Live workstation update/readback confirms the reviewed release and target `muse-max` behavior.
+- Live workstation update/readback confirms the reviewed release and the available target `muse-max` behavior.
+- One actual Codex Main workflow session on the exact promoted release creates and later reuses the same GPT-5.6 Luna XHigh Companion before M09 is marked done.
 - No workstation-side second scheduler, generic Project Workflow delegated-worker runtime or duplicate Muse role contracts were introduced.
 
 ### Gates
 
-- Any deferred M08 live Companion check is a hard **pre-publication/pre-promotion** gate in M09.
-- The gate requires the accepted GPT-5.6 Luna XHigh Companion; Marina, Sol Medium or another substitute worker/model cannot satisfy it.
-- Publication follows normal repository/release authority only after that gate is GREEN.
+- The deferred live Companion check is a hard **final M09 acceptance/project-completion** gate. Under the user-authorized R3 sequencing it is no longer a pre-publication/pre-promotion gate.
+- The gate still requires the accepted GPT-5.6 Luna XHigh Companion; Marina, Sol Medium or another substitute worker/model cannot satisfy it.
+- Publication/promotion may proceed only for the exact independently reviewed subject after live two-lane Muse validation is GREEN; they do not count as R3 acceptance.
 - Live workstation update/recreate/runtime validation requires explicit live-operation authorization.
+- M09 must remain non-terminal until the actual Companion creation/reuse proof is GREEN on the exact promoted release.
 
 ---
 
@@ -353,9 +355,10 @@ current source/baseline readback
   -> M09 isolated two-lane concurrency test
   -> full codex_workflow regression
   -> independent review of exact final subject
-  -> live Luna XHigh Companion creation/reuse on exact reviewed candidate
   -> release exact reviewed subject
-  -> live workstation update/readback + final smoke
+  -> live workstation update/readback + Muse-side production smoke
+  -> live Luna XHigh Companion creation/reuse on exact promoted release
+  -> M09 final acceptance
 ```
 
 No passing claim may be upgraded from simulated/fixture evidence to live behavior without the corresponding live checkpoint.
@@ -392,8 +395,9 @@ Execution Prep should create only currently knowable Cards.
 - M06 Cards may be prepared from current `codex_workflow` source and D21.
 - M07 parser/argv-specific Cards are created only after M05 evidence.
 - M08 role-pilot Cards are created only after M07 normalized adapter behavior is real.
-- M09 concurrency/review Cards are created after M07/M08 establish the actual adapter/orchestration shape. A permitted M08 live-Companion deferral does not block those pre-promotion Cards.
-- M09 publication/promotion Cards remain blocked until the deferred live Luna XHigh Companion creation/reuse check is GREEN.
+- M09 concurrency/review Cards are created after M07/M08 establish the actual adapter/orchestration shape.
+- M09 publication/promotion Cards may be created once the exact source subject has independent review GREEN and the live M09 two-lane Muse validation is GREEN, even while the Luna XHigh Companion Card is quota-blocked.
+- The deferred live Luna XHigh Companion creation/reuse Card remains mandatory before M09 final acceptance/project completion.
 
 Do not create placeholder future Cards merely to fill the Task Board.
 
@@ -405,7 +409,7 @@ GREEN.
 - Milestone order prevents guessed Muse CLI/protocol details from leaking into implementation.
 - Mixed-profile semantics are separated from provider-protocol implementation.
 - Sequential Muse-role correctness precedes concurrency.
-- The unavailable internal-Codex Companion live check is deferred only across pre-promotion M09 work; R3/D21 remain unchanged and publication/promotion is hard-blocked until Luna XHigh creation/reuse is live GREEN.
+- The unavailable internal-Codex Companion live check is deferred across release/publication and production promotion by explicit user sequencing authority; R3/D21 remain unchanged and M09 final acceptance/project completion is hard-blocked until Luna XHigh creation/reuse is live GREEN on the exact promoted release.
 - Concurrency remains subordinate to Project Workflow lane/worktree authority.
 - Other compute profiles have explicit regression protection.
 - Live authorization gates are explicit at both discovery and final deployment.
