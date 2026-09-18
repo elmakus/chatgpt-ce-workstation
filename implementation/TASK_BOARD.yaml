@@ -1,6 +1,6 @@
 project: "chatgpt-ce-workstation"
 plan_revision: "planning/MASTER_PLAN.md@approved-2026-09-18"
-current_milestone: "M05"
+current_milestone: "M06"
 execution_mode: serial
 parallel_card_limit: 1
 
@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "c33009eb245f967e0c8d1b614dfc5569490d1cf3"
+  head: "b70e89362c8928df603b1b8902c3cb74700a42fa"
 
 milestones:
   M01:
