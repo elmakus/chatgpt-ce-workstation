@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "e0fe349058df4f0c089014c7efd5a283f517f726"
+  head: "d08ebd5cc6ca1b46da854eaa0c4d9dc6195778a8"
 
 milestones:
   M01:
@@ -89,15 +89,16 @@ milestones:
 
   M07:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: blocked
     contract: "planning/MASTER_PLAN.md#milestone-m07--build-the-production-muse-processresult-adapter"
     checkpoint: null
-    implementation_head: null
+    implementation_head: "ab9601d9a3e587168b4c3182b3be3dffd7cc12bd"
     handoff: null
     acceptance_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
+    blocker: "M07-T02 requires explicit user authorization before live workstation Muse adapter smoke."
 
   M08:
     decision_state: accepted
@@ -409,7 +410,7 @@ cards:
     title: "Build deterministic Muse process/result adapter"
     milestone: M07
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M05"
@@ -425,16 +426,16 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "ab9601d9a3e587168b4c3182b3be3dffd7cc12bd"
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "M07-T01 GREEN at exact codex_workflow checkpoint ab9601d9a3e587168b4c3182b3be3dffd7cc12bd. Focused adapter suite 11/11 GREEN, mixed-profile suite 7/7 GREEN, full workflow runtime regression 90/90 GREEN; Python compileall and git diff --check GREEN. Static scans found no duplicate Muse role TOMLs, no runner-local model/reasoning constants or hard-coded ~/.codex path, and no stale active M06/all-seven-Muse semantics. GitHub readback confirms the implementation branch points to this exact commit with M06 checkpoint 2ee25a1d84a6a3b111b68a61604276219190d2a0 as parent."
 
   - id: M07-T02
     title: "Validate production Muse adapter live on workstation"
     milestone: M07
     decision_state: accepted
-    execution_status: planned
+    execution_status: blocked
     executor: null
     depends_on:
       - "M07-T01"
@@ -448,7 +449,7 @@ cards:
       - "live workstation Muse process/runtime artifacts"
       - "persistent /home/codex Muse runtime state"
     lane_branch: "elmakus/codex_workflow:impl/m07-muse-process-result-adapter"
-    lane_base: null
+    lane_base: "elmakus/codex_workflow@ab9601d9a3e587168b4c3182b3be3dffd7cc12bd"
     review_state: null
     review_subject: null
     review_evidence: null
@@ -456,3 +457,4 @@ cards:
     result_pr: null
     evidence: null
     tests_summary: null
+    blocker: "Explicit live-operation authorization is required before read-only/write adapter smoke on the workstation."
