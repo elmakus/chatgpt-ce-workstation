@@ -25,9 +25,9 @@ Normal ChatGPT is the fixed Task Card executor. Do not run the Capability Gate o
 
 - Accepted architecture decisions: `docs/DECISIONS.md`
 - Approved workstation implementation/deployment plan: `docs/IMPLEMENTATION_PLAN.md`
-- Approved delegated Muse worker Master Plan: `planning/MUSE_DELEGATED_WORKERS_MASTER_PLAN.md`
+- Active Muse-max Project Definition: `requirements/MUSE_MAX_RUNTIME.md`
 - Muse Code workstream plan when that workstream is active: `docs/MUSE_CODE_PLAN.md`
-- Canonical requirements for delegated Muse workers: `requirements/MUSE_DELEGATED_WORKERS.md`
+- Superseded delegated-worker plan/requirements remain historical only and are not current authority.
 - Live implementation state: `implementation/TASK_BOARD.yaml`
 - Latest cumulative handoff: `project-handoffs/M03_HANDOFF.md`
 

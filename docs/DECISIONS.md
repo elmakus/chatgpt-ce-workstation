@@ -247,9 +247,11 @@ The earlier hold on merging before live validation is superseded by the user's e
 
 This does not waive the live validation itself. Muse authentication persistence, `muse exec` headless behavior, model/effort controls, timeout/cancellation, sandbox behavior, and orchestrator worker integration remain unvalidated until tested on the live workstation.
 
-## D20 — ChatGPT-owned delegated Muse workers behind a normalized harness
+## D20 — ChatGPT-owned delegated Muse workers behind a normalized harness — SUPERSEDED
 
-**Decision:** add an opt-in delegated-worker capability under the existing `chatgpt_only` policy. ChatGPT remains the formal Task Card executor/control plane; Muse Code is a bounded leaf worker used initially for `executor` and `tester` roles.
+**Status:** superseded on 2026-09-18 by D21 after the `muse-max` runtime audit established that internal worker orchestration belongs in `elmakus/codex_workflow`, not in generic `chatgpt_only` workflow semantics.
+
+**Historical decision:** add an opt-in delegated-worker capability under the existing `chatgpt_only` policy. ChatGPT remains the formal Task Card executor/control plane; Muse Code is a bounded leaf worker used initially for `executor` and `tester` roles.
 
 The workflow repository will define only generic delegated-worker semantics: ownership, wait/return behavior, bounded result expectations and authority boundaries. It will not embed Muse-specific CLI syntax.
 
@@ -277,3 +279,30 @@ The initial rollout is opt-in so existing `chatgpt_only` behavior remains backwa
 - injecting the worker JSONL/transcript into the main context;
 - interactive steering/MSP as a prerequisite;
 - allowing Muse to create its own subagent tree by default.
+
+
+## D21 — `muse-max` is a mixed-harness `codex_workflow` profile
+
+**Decision:** define Muse subagents only through the existing `elmakus/codex_workflow` worker-role system. Do not add a generic delegated-worker runtime to Project Workflow and do not create a second Muse orchestration layer in `chatgpt-ce-workstation`.
+
+The `muse-max` profile is the only profile changed by this work. `plus`, `luna-xhigh`, and `pro-x5` must preserve their current model allocations, lifecycle semantics, and internal Codex worker behavior.
+
+Under `muse-max`:
+
+- Main remains the user-selected Codex model and retains orchestration, architecture, scheduling, integration, acceptance, Project Workflow state, and user communication.
+- `companion` runs as one persistent internal Codex worker on GPT-5.6 Luna XHigh.
+- `micro_executor`, `default_executor`, `senior_executor`, `tester`, `investigator`, and `archivist` run through the native Muse Code harness using Muse Spark 1.3 Contributor with `max` reasoning.
+- the existing worker TOMLs remain the canonical semantic role contracts; do not create parallel `muse_*.toml` role definitions.
+- Muse-specific process behavior is supplied by a `muse-max` runtime adapter/overlay in `codex_workflow`, not by changing shared role semantics into provider-specific contracts.
+- Muse workers are bounded leaf invocations. They do not create nested workers or communicate directly with sibling Muse workers.
+- executor and tester are always separate invocations. Tester receives the accepted verification contract plus the resulting repository/worktree state, not the executor transcript.
+- ordinary RED verification routes through Main to a fresh executor repair invocation and then a fresh tester recheck; Main makes a strategic decision only when findings cross scope, contract, ownership, architecture, security, migration, or authority boundaries.
+- raw Muse event streams/stdout/stderr remain outside Main context. Main receives one compact normalized result plus bounded evidence/log references.
+- the Muse runtime adapter must validate the active profile and per-role harness from `compute_profiles.py`; it must not independently hard-code a role/model allocation that can drift from profile authority.
+- exact Muse CLI flags/event fields are bound from the installed workstation Muse build and live evidence rather than frozen from assumptions.
+
+Project Workflow continues to own Task Card dependencies, `parallel_safe` decisions, write ownership and isolated lane/worktree authority. Independent Task Card lanes may run concurrently when Project Workflow planning declares them safe. Within a lane, executor → tester → optional repair → fresh tester remains ordered. Muse does not own project-level worktree creation or lane scheduling.
+
+`chatgpt-ce-workstation` owns installation, persistence and runtime availability of the official Muse Code CLI and user authentication state. `codex_workflow` owns role routing, worker lifecycle, result normalization and Muse process control.
+
+**Rationale:** the existing Project Workflow integration contract already assigns internal Codex worker routing/lifecycle to `codex_workflow`. The 2026-09-18 runtime audit found the existing `muse-max` seam structurally appropriate but the current `runtime/muse_worker.py` only a proof-of-concept and identified profile-isolation, output-normalization, cancellation and lifecycle gaps. See `research/MUSE_MAX_RUNTIME_AUDIT_2026-09-18.md`.
