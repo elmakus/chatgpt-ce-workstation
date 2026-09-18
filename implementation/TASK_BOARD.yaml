@@ -527,7 +527,7 @@ cards:
     title: "Add bounded managed Muse lane concurrency"
     milestone: M09
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M08"
