@@ -1,9 +1,9 @@
 # Muse Code integration plan
 
-Status: implementation candidate / live-validation pending
-Branch: `feat/muse-code`
+Status: main-merge authorized / live-validation pending
+Integration: PR #1 from `feat/muse-code` to `main`
 
-This branch keeps Muse Code separate from the workstation baseline until the first live Unraid validation passes.
+The user explicitly authorized merging the source-ready Muse Code candidate into `main` before the first live Unraid validation. Any runtime defects found during validation will be corrected through normal follow-up changes.
 
 ## Goal
 
@@ -91,7 +91,7 @@ First live validation must:
 6. prove Muse remains authenticated;
 7. run one bounded disposable-repository task.
 
-## Validation gates before merge
+## Live validation gates after merge
 
 ```text
 [ ] workstation source validation passes

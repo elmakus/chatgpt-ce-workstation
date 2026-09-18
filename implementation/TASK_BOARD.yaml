@@ -1,6 +1,6 @@
 project: "chatgpt-ce-workstation"
-plan_revision: "ad-hoc-2026-09-18-release-and-muse-live-prep"
-current_milestone: "M02"
+plan_revision: "ad-hoc-2026-09-18-merge-muse-before-live-validation"
+current_milestone: "M03"
 
 execution_mode: serial
 parallel_card_limit: 1
@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-code"
   pr: 1
-  head: "3c3bab996a4b188a3566f09e2d7ff3a5146a4fd8"
+  head: "a29539917049d2cb0905f9647fc1623f51668c15"
 
 milestones:
   M01:
@@ -35,6 +35,18 @@ milestones:
     implementation_head: "3c3bab996a4b188a3566f09e2d7ff3a5146a4fd8"
     handoff: "project-handoffs/M02_HANDOFF.md"
     acceptance_evidence: "implementation/reviews/m02-muse-code-build-readiness-2026-09-18.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  M03:
+    decision_state: accepted
+    execution_status: in_progress
+    contract: "User-approved merge of the source-ready Muse Code candidate into workstation main before live Unraid validation; runtime corrections may follow after validation"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
@@ -224,3 +236,26 @@ cards:
     result_pr: 1
     evidence: "implementation/reviews/m02-muse-code-build-readiness-2026-09-18.md"
     tests_summary: "Source-readiness GREEN. PR #1 CI run 35304113360 is GREEN on the functional source checkpoint; later exact-head run 35304164411 also passed source-validation, ShellCheck, Dockerfile static checks and secret-scan. No live Unraid build/login was performed."
+
+  - id: M03-T01
+    title: "Merge Muse Code candidate into main for live validation"
+    milestone: M03
+    decision_state: accepted
+    execution_status: in_progress
+    executor: "chatgpt"
+    depends_on:
+      - "M02"
+    openspec_change: null
+    contract: "implementation/cards/M03-T01.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/chatgpt-ce-workstation:feat/muse-code"
+      - "elmakus/chatgpt-ce-workstation:main"
+      - "GitHub PR #1"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: 1
+    evidence: null
+    tests_summary: null
