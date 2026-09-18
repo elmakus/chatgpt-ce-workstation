@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "28b48a858cdac6d3ed2317d0a49374e55d9f3f59"
+  head: "fba11d978f6b53e26d9f2c036415bf369689e134"
 
 milestones:
   M01:
@@ -113,7 +113,7 @@ milestones:
 
   M09:
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     contract: "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
     checkpoint: null
     implementation_head: null
@@ -522,3 +522,35 @@ cards:
     result_pr: null
     evidence: "implementation/evidence/M08_SEQUENTIAL_ORCHESTRATION_2026-09-18.md"
     tests_summary: "M08 GREEN under approved Master Plan R2. Six Muse roles, executor -> fresh Tester GREEN, deliberate RED -> Main -> fresh repair Executor -> fresh Tester GREEN, raw-artifact isolation, leaf-worker checks and cleanup are durably GREEN. Active muse-max allocation renders one internal GPT-5.6 Luna XHigh Companion. Live Companion creation/reuse was not executed because the current ChatGPT surface lacks the internal Codex lifecycle; R2 explicitly defers only that unsatisfied R3/D21 proof to the M09 hard pre-publication/pre-promotion gate."
+
+  - id: M09-T01
+    title: "Add bounded managed Muse lane concurrency"
+    milestone: M09
+    decision_state: accepted
+    execution_status: ready
+    executor: "chatgpt"
+    depends_on:
+      - "M08"
+    openspec_change: null
+    contract: "implementation/cards/M09-T01.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
+      - "requirements/MUSE_MAX_RUNTIME.md#r15--project-workflow-owns-lane-parallelism"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile"
+      - "project-handoffs/M08_HANDOFF.md"
+      - "elmakus/codex_workflow@b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex_workflow:impl/m09-muse-lane-concurrency"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex_workflow:impl/m09-muse-lane-concurrency"
+    lane_base: "elmakus/codex_workflow@b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
