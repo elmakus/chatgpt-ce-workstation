@@ -1,0 +1,261 @@
+project: "chatgpt-ce-workstation"
+plan_revision: "ad-hoc-2026-09-18-merge-muse-before-live-validation"
+current_milestone: "M03"
+
+execution_mode: serial
+parallel_card_limit: 1
+
+chatgpt_control_chat:
+  name: null
+  purpose: "strategic Codex decisions only"
+
+execution_ref:
+  branch: "elmakus/chatgpt-ce-workstation:feat/muse-code"
+  pr: 1
+  head: "a29539917049d2cb0905f9647fc1623f51668c15"
+
+milestones:
+  M01:
+    decision_state: accepted
+    execution_status: done
+    contract: "User-approved parallel Codex-LB and CLIProxyAPI routing in related fork elmakus/codex-chatgpt-web"
+    checkpoint: "elmakus/codex-chatgpt-web@85d13359bef65208c286ae34e0a00ddbbd185e63"
+    implementation_head: "85d13359bef65208c286ae34e0a00ddbbd185e63"
+    handoff: "project-handoffs/M01_HANDOFF.md"
+    acceptance_evidence: "implementation/reviews/dual-native-upstreams-pr2-final-independent-review-2026-09-18.md"
+    review_state: green
+    review_subject: "elmakus/codex-chatgpt-web@4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-final-independent-review-2026-09-18.md"
+
+  M02:
+    decision_state: accepted
+    execution_status: done
+    contract: "User-approved publication of the reviewed fork as the next release and repository-only preparation of feat/muse-code so the next workstation build is ready for Muse Code live validation"
+    checkpoint: "elmakus/chatgpt-ce-workstation@3c3bab996a4b188a3566f09e2d7ff3a5146a4fd8"
+    implementation_head: "3c3bab996a4b188a3566f09e2d7ff3a5146a4fd8"
+    handoff: "project-handoffs/M02_HANDOFF.md"
+    acceptance_evidence: "implementation/reviews/m02-muse-code-build-readiness-2026-09-18.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  M03:
+    decision_state: accepted
+    execution_status: in_progress
+    contract: "User-approved merge of the source-ready Muse Code candidate into workstation main before live Unraid validation; runtime corrections may follow after validation"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: M01-T01
+    title: "Parallel Codex-LB and CLIProxyAPI native upstreams"
+    milestone: M01
+    decision_state: accepted
+    execution_status: done
+    executor: "chatgpt"
+    depends_on: []
+    openspec_change: null
+    contract: "User request: expose Codex-LB, Meta Muse through CLIProxyAPI, and chatgpt-web models through parallel routing"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    lane_base: "f8dc469a43cc562a4173bb77f7a7d9fe2b569187"
+    review_state: red
+    review_subject: "elmakus/codex-chatgpt-web@2c7eb2ac5266df0cf198a11abb14eba314f411e0"
+    review_evidence: "implementation/reviews/dual-native-upstreams-independent-review-2026-09-18.md"
+    result_commit: "2c7eb2ac5266df0cf198a11abb14eba314f411e0"
+    result_pr: null
+    evidence: "implementation/reviews/dual-native-upstreams-2026-09-18.md"
+    tests_summary: "Static GitHub self-check completed. Independent review found a fail-open routing defect for muse-* when CODEX_CHATGPT_WEB_MUSE_UPSTREAM is absent; exact review evidence recorded separately. Runtime verification was not available for this SHA."
+
+  - id: M01-T02
+    title: "Fail closed Muse routing without Muse upstream"
+    milestone: M01
+    decision_state: accepted
+    execution_status: done
+    executor: "chatgpt"
+    depends_on:
+      - "M01-T01"
+    openspec_change: null
+    contract: "muse-* must route only to CLIProxyAPI; if the Muse upstream is absent, the request must fail closed and must never fall through to Codex-LB or the official native backend"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    lane_base: "2c7eb2ac5266df0cf198a11abb14eba314f411e0"
+    review_state: red
+    review_subject: "elmakus/codex-chatgpt-web@0cad74ba6f3f9bc13d6e973d94bc993d8b2ff5c3"
+    review_evidence: "implementation/reviews/dual-native-upstreams-correction-independent-review-2026-09-18.md"
+    result_commit: "0cad74ba6f3f9bc13d6e973d94bc993d8b2ff5c3"
+    result_pr: null
+    evidence: "implementation/reviews/dual-native-upstreams-correction-2026-09-18.md"
+    tests_summary: "Corrective diff read back from GitHub. Targeted runtime routing check GREEN: muse-* without Muse upstream fails closed, while ordinary native requests still route to Codex-LB with its dedicated key. Full bun run verify was not executed because this runtime lacks Bun and repository CI has no branch/manual trigger."
+
+  - id: M01-T03
+    title: "Preserve Muse routing for encoded native requests"
+    milestone: M01
+    decision_state: accepted
+    execution_status: done
+    executor: "chatgpt"
+    depends_on:
+      - "M01-T02"
+    openspec_change: null
+    contract: "For every supported native request encoding, especially zstd, muse-* must be classified from the already decoded model identity and must route only to CLIProxyAPI; encoded ordinary native traffic must continue to route to Codex-LB."
+    authority_refs:
+      - "implementation/reviews/dual-native-upstreams-correction-independent-review-2026-09-18.md#blocking-finding"
+      - "M01-T02 contract"
+    acceptance:
+      - "zstd-compressed muse-* with no Muse upstream fails closed and never reaches Codex-LB or the official backend"
+      - "zstd-compressed muse-* with Muse configured routes to CLIProxyAPI using the Muse ingress key"
+      - "zstd-compressed non-Muse native traffic still routes to Codex-LB using the native key"
+      - "raw encoded body preservation remains intact"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    lane_base: "0cad74ba6f3f9bc13d6e973d94bc993d8b2ff5c3"
+    review_state: green
+    review_subject: "elmakus/codex-chatgpt-web@eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
+    review_evidence: "implementation/reviews/dual-native-upstreams-zstd-correction-independent-review-2026-09-18.md"
+    result_commit: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
+    result_pr: null
+    evidence: "implementation/reviews/dual-native-upstreams-zstd-correction-2026-09-18.md"
+    tests_summary: "Independent review GREEN at exact subject. GitHub source confirms decoded model identity is carried into automatic routing; the three zstd regressions cover fail-closed Muse, Muse -> CLIProxyAPI, ordinary native -> Codex-LB, and exact encoded-byte preservation. Full Bun verification remains unavailable and no commit CI/status runs exist."
+
+  - id: M01-T04
+    title: "Make zstd regression helper typecheck clean"
+    milestone: M01
+    decision_state: accepted
+    execution_status: done
+    executor: "chatgpt"
+    depends_on:
+      - "M01-T03"
+    openspec_change: null
+    contract: "The M01-T03 zstd regression helper must compile under repository typecheck using a BodyInit-compatible representation while preserving the exact compressed bytes and all accepted routing behavior."
+    authority_refs:
+      - "implementation/reviews/dual-native-upstreams-pr2-publication-failure-2026-09-18.md"
+      - "M01-T03 acceptance"
+    acceptance:
+      - "tests/native-passthrough.test.ts no longer passes Buffer<ArrayBufferLike> directly as Request.body"
+      - "the helper still forwards the exact Bun.zstdCompressSync output bytes"
+      - "PR #2 publication CI bun run verify is GREEN for the corrected subject"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    lane_base: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
+    review_state: null
+    review_subject: null
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-codesign-publication-failure-2026-09-18.md"
+    result_commit: "afef9e799599e8c31539ed60689a3828be7728ea"
+    result_pr: 2
+    evidence: "implementation/reviews/dual-native-upstreams-pr2-codesign-publication-failure-2026-09-18.md"
+    tests_summary: "PR #2 run 35298637056: bun run verify GREEN on macOS 15, Ubuntu latest, and Windows latest. The BodyInit typecheck defect is closed; the same run exposed a separate PR-only macOS app:package codesign failure."
+
+  - id: M01-T05
+    title: "Make PR macOS ad-hoc package verification self-consistent"
+    milestone: M01
+    decision_state: accepted
+    execution_status: done
+    executor: "chatgpt"
+    depends_on:
+      - "M01-T04"
+    openspec_change: null
+    contract: "implementation/cards/M01-T05.md"
+    authority_refs:
+      - "implementation/reviews/dual-native-upstreams-pr2-codesign-publication-failure-2026-09-18.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    lane_base: "afef9e799599e8c31539ed60689a3828be7728ea"
+    review_state: green
+    review_subject: "elmakus/codex-chatgpt-web@4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-final-independent-review-2026-09-18.md"
+    result_commit: "4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
+    result_pr: 2
+    evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
+    tests_summary: "Independent review GREEN at exact subject. PR #2 run 35299105025 is GREEN: actionlint and full verify/package/smoke matrix passed on macOS 15, Ubuntu latest, and Windows latest; macOS used ad-hoc identity '-' and passed the existing archive codesign verification."
+
+  - id: M02-T01
+    title: "Publish codex-chatgpt-web 5.0.10"
+    milestone: M02
+    decision_state: accepted
+    execution_status: done
+    executor: "chatgpt"
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/cards/M02-T01.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:release/v5.0.10"
+      - "elmakus/codex-chatgpt-web:main"
+      - "GitHub release v5.0.10"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex-chatgpt-web:release/v5.0.10"
+    lane_base: "85d13359bef65208c286ae34e0a00ddbbd185e63"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: "553b98f1cbe456643eb9b1955d84c2007375e99d"
+    result_pr: null
+    evidence: "implementation/reviews/codex-chatgpt-web-v5.0.10-release-2026-09-18.md"
+    tests_summary: "Fork Linux Release run 35303570175 GREEN: verify, package, Linux ABI and app smoke passed; v5.0.10 published as latest with AppImage/checksums, then fork main fast-forwarded to the exact release commit."
+
+  - id: M02-T02
+    title: "Prepare next workstation build for Muse Code live validation"
+    milestone: M02
+    decision_state: accepted
+    execution_status: done
+    executor: "chatgpt"
+    depends_on:
+      - "M02-T01"
+    openspec_change: null
+    contract: "implementation/cards/M02-T02.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/chatgpt-ce-workstation:feat/muse-code"
+    exclusive_resources: []
+    lane_branch: "elmakus/chatgpt-ce-workstation:feat/muse-code"
+    lane_base: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: "3c3bab996a4b188a3566f09e2d7ff3a5146a4fd8"
+    result_pr: 1
+    evidence: "implementation/reviews/m02-muse-code-build-readiness-2026-09-18.md"
+    tests_summary: "Source-readiness GREEN. PR #1 CI run 35304113360 is GREEN on the functional source checkpoint; later exact-head run 35304164411 also passed source-validation, ShellCheck, Dockerfile static checks and secret-scan. No live Unraid build/login was performed."
+
+  - id: M03-T01
+    title: "Merge Muse Code candidate into main for live validation"
+    milestone: M03
+    decision_state: accepted
+    execution_status: in_progress
+    executor: "chatgpt"
+    depends_on:
+      - "M02"
+    openspec_change: null
+    contract: "implementation/cards/M03-T01.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/chatgpt-ce-workstation:feat/muse-code"
+      - "elmakus/chatgpt-ce-workstation:main"
+      - "GitHub PR #1"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: 1
+    evidence: null
+    tests_summary: null

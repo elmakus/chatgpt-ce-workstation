@@ -238,3 +238,11 @@ The supported migration path is `scripts/migrate-project-bind.sh`. An existing i
 Runtime verification checks the exact home/project bind sources and destinations plus the intended container isolation boundary, not merely that some mount exists at the canonical destination.
 
 Unexpected pre-bind data under the old persistent-home project target is preserved under a timestamped `ChatGPT.pre-*` backup instead of being silently hidden or deleted. Disposable test-only backups may be deleted after final verification and manual inspection.
+
+## D19 — Merge Muse Code candidate before live validation
+
+**Decision:** merge the source-ready Muse Code candidate from PR #1 into workstation `main` before the first live Unraid validation.
+
+The earlier hold on merging before live validation is superseded by the user's explicit 2026-09-18 decision. The purpose is operational simplicity: the next workstation build should be runnable directly from `main`, and any installer/runtime defects discovered during live Muse validation will be corrected on normal follow-up branches/PRs.
+
+This does not waive the live validation itself. Muse authentication persistence, `muse exec` headless behavior, model/effort controls, timeout/cancellation, sandbox behavior, and orchestrator worker integration remain unvalidated until tested on the live workstation.

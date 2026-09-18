@@ -101,17 +101,22 @@ set -Eeuo pipefail
 [[ ! -e /var/run/docker.sock ]]
 [[ -r /run/workstation/keyring-password ]]
 [[ -s /home/codex/.config/workstation/vnc.pass ]]
-for cmd in chatgpt-ce codex-web-gpt openbox tint2 xterm google-chrome workstation-healthcheck; do
+[[ -x /opt/muse-code/bin/muse ]]
+for cmd in chatgpt-ce codex-web-gpt muse openbox tint2 xterm google-chrome workstation-healthcheck; do
   command -v \"\$cmd\" >/dev/null
   echo \"OK command: \$cmd\"
 done
+muse --version
+muse --help >/dev/null
+muse exec --help >/dev/null
+printf '%s\n' 'OK Muse CLI: version/help/exec-help'
 pgrep -x tint2 >/dev/null
 printf '%s\n' 'OK process: tint2'
 touch '$canonical_root/.workstation-write-test'
 rm -f '$canonical_root/.workstation-write-test'
 bash /usr/local/bin/workstation-healthcheck
 "
-pass 'canonical pwd, launchers, secrets, panel, write access and desktop health'
+pass 'canonical pwd, launchers, Muse CLI surface, secrets, panel, write access and desktop health'
 
 echo
 echo '=== persistent home ==='

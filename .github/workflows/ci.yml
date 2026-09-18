@@ -35,7 +35,7 @@ jobs:
             {
               find scripts -type f -name '*.sh' -print
               find rootfs -type f \
-                \( -name '*.sh' -o -path '*/usr/local/bin/chatgpt-ce' -o -path '*/usr/local/bin/workstation-healthcheck' \) \
+                \( -name '*.sh' -o -path '*/usr/local/bin/chatgpt-ce' -o -path '*/usr/local/bin/muse' -o -path '*/usr/local/bin/workstation-healthcheck' \) \
                 -print
               find rootfs/etc/cont-init.d -type f -print 2>/dev/null || true
               find rootfs/etc/s6-overlay/s6-rc.d -type f -name run -print 2>/dev/null || true
