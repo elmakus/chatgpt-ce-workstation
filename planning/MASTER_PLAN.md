@@ -1,11 +1,11 @@
 # Muse-max production runtime Master Plan
 
-Status: **approved**
-Revision: **R3**
+Status: **draft**
+Revision: **R4**
 Date: 2026-09-18
 Review requirement: **RECOMMENDED**
 
-R3 replanning trigger: after M09-T02 live two-lane validation was GREEN, the user explicitly directed the project to continue while GPT-5.6 Luna XHigh quota is unavailable and to perform the live Companion check later. This changes execution sequencing only. R3/D21 and the target persistent Luna XHigh Companion remain unchanged. Release/publication and production promotion may proceed on the exact independently reviewed and live Muse-concurrency-validated subject; M09 final acceptance and project completion remain blocked until an actual Codex Main session creates and reuses one Luna XHigh Companion on that exact promoted release.
+R4 replanning trigger: after R3 received independent GREEN and was approved, Execution Prep verified the actual `codex_workflow` release path and found an exact-subject publication mismatch that R3 had not modeled. The current published release `v1.1.17-private.10` already targets `elmakus/codex_workflow@f2b1811853a2c1da5a5af4bb735c84c3111a44d6`; the independently reviewed and live two-lane-validated M09 source checkpoint `f6603767115cf7f31ef7d8c3cb3a419a7f430aca` still carries version `1.1.17-private.10`, and PR #6 intentionally excluded a release/version bump. The normal release workflow requires `main`, refuses an existing tag/release, and publishes the checkout commit as release provenance. R4 therefore preserves `f660376...` as the accepted M09 source checkpoint but requires a new metadata-only release-candidate commit on top of it with the next unique synchronized release version; that exact new commit must itself receive independent review GREEN and live two-lane Muse validation GREEN before publication/promotion. The Luna XHigh Companion sequencing introduced by R3 is unchanged: publication/promotion may proceed while Companion quota is unavailable, but M09/project completion remains blocked until the actual Companion creation/reuse proof is GREEN on the exact promoted release.
 
 ## Authority
 
@@ -277,7 +277,7 @@ Final integrated verification for R1–R16.
 
 - M08 GREEN under the revised M08 acceptance above, including durable documentation of any permitted live-Companion deferral.
 - Exact concurrency mechanism becomes knowable from the M07 adapter shape and M08 orchestration evidence.
-- M09 implementation, regression, independent review, publication/release and production promotion may proceed while the permitted live-Companion check is deferred. M09 final acceptance/project completion may not.
+- M09 source implementation/regression may proceed while the permitted live-Companion check is deferred. Publication/promotion additionally requires a release-candidate commit with the next unique synchronized release metadata on top of the accepted source checkpoint, followed by independent review and live two-lane Muse validation on that exact release-candidate commit. M09 final acceptance/project completion still may not occur until the Companion proof is GREEN.
 
 ### Planned work packages
 
@@ -288,11 +288,13 @@ Final integrated verification for R1–R16.
 - Do not add a second project scheduler or task database.
 - Use two isolated non-overlapping worktrees/lanes whose Project Workflow authority marks them safe for parallel execution.
 - Demonstrate concurrent Muse invocations without shared mutable index/worktree or raw-log collision.
-- Run complete `codex_workflow` regression coverage, including unchanged `plus`, `luna-xhigh`, and `pro-x5`.
-- Freeze the exact complete implementation subject for independent review before production promotion.
-- Correct bounded review findings as required and obtain GREEN on the final subject.
-- Publish through the existing `codex_workflow` owner release/update channel once the exact source subject has independent review GREEN and the live M09 two-lane Muse validation is GREEN. Publication must preserve the exact reviewed subject.
-- With explicit live authorization, update the workstation runtime to that exact reviewed release and perform the production smoke that is available without consuming Luna XHigh quota:
+- Preserve `elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca` as the independently reviewed and live two-lane-validated source implementation checkpoint.
+- Read back the current published version/tag state immediately before release preparation and choose the next unique private release version. Create one bounded release-candidate commit directly on top of the accepted source checkpoint that changes only synchronized release metadata required by the existing release contract (including `codex_workflow/operate/VERSION`, its marker in `user_AGENTS.md`, README release version text and `RELEASING.md`) and does not change runtime semantics.
+- Run complete `codex_workflow` regression coverage on that exact release-candidate commit, including unchanged `plus`, `luna-xhigh`, and `pro-x5`.
+- Freeze that exact release-candidate commit for independent review. Correct any bounded finding normally; any corrective commit becomes a new exact subject and must be reviewed again.
+- After independent review GREEN, run the live M09 two-lane Muse validation on that same exact release-candidate commit. The earlier `f660376...` live smoke remains valid predecessor evidence but does not transfer exact-subject identity across the release-metadata commit.
+- Publish through the existing `codex_workflow` owner release/update channel only after the exact release candidate has both independent review GREEN and live two-lane Muse validation GREEN. Preserve commit identity by advancing `main` only when it can fast-forward to that exact candidate; the normal VERSION-triggered release workflow must publish a new unique tag whose release provenance targets that exact commit. If repository divergence would require a merge/squash/rebase commit, do not publish a different SHA; route through normal correction/review/revalidation instead.
+- With explicit live authorization, update the workstation runtime to that exact published release and perform the production smoke that is available without consuming Luna XHigh quota:
   - active `muse-max` allocation/readback;
   - Muse executor + fresh Tester;
   - one safe two-lane parallel run where the available Project Workflow/runtime supports it.
@@ -304,9 +306,10 @@ Final integrated verification for R1–R16.
 - Two independent authorized lanes execute concurrently in isolated workspaces without mutation/log/state collisions.
 - A lane failure/cancel does not corrupt or silently cancel an unrelated healthy lane.
 - Complete profile regressions are GREEN.
-- Final exact subject receives independent review GREEN.
-- Published `codex_workflow` release is exactly the reviewed subject.
-- Live workstation update/readback confirms the reviewed release and the available target `muse-max` behavior.
+- The exact release-candidate commit, including its release metadata, receives independent review GREEN.
+- Live two-lane Muse validation is GREEN on that same exact release-candidate commit.
+- Published `codex_workflow` release is exactly that reviewed and live-validated release-candidate commit.
+- Live workstation update/readback confirms the exact published release and the available target `muse-max` behavior.
 - One actual Codex Main workflow session on the exact promoted release creates and later reuses the same GPT-5.6 Luna XHigh Companion before M09 is marked done.
 - No workstation-side second scheduler, generic Project Workflow delegated-worker runtime or duplicate Muse role contracts were introduced.
 
@@ -314,7 +317,7 @@ Final integrated verification for R1–R16.
 
 - The deferred live Companion check is a hard **final M09 acceptance/project-completion** gate. Under the user-authorized R3 sequencing it is no longer a pre-publication/pre-promotion gate.
 - The gate still requires the accepted GPT-5.6 Luna XHigh Companion; Marina, Sol Medium or another substitute worker/model cannot satisfy it.
-- Publication/promotion may proceed only for the exact independently reviewed subject after live two-lane Muse validation is GREEN; they do not count as R3 acceptance.
+- Publication/promotion may proceed only for the exact release-candidate commit, including its unique synchronized release metadata, after independent review GREEN and live two-lane Muse validation GREEN on that same commit. The earlier source-only `f660376...` review/live evidence remains predecessor evidence but cannot by itself satisfy release-subject identity after the required version-metadata cut. Publication/promotion still do not count as R3/R4 acceptance.
 - Live workstation update/recreate/runtime validation requires explicit live-operation authorization.
 - M09 must remain non-terminal until the actual Companion creation/reuse proof is GREEN on the exact promoted release.
 
@@ -352,11 +355,13 @@ current source/baseline readback
   -> M07 deterministic process/protocol fixtures
   -> M07 live single-worker smoke
   -> M08 sequential executor/tester/RED-repair role pilot + Companion allocation readback
-  -> M09 isolated two-lane concurrency test
-  -> full codex_workflow regression
-  -> independent review of exact final subject
-  -> release exact reviewed subject
-  -> live workstation update/readback + Muse-side production smoke
+  -> accepted source checkpoint f660376... with independent review + live two-lane GREEN
+  -> metadata-only cut of the next unique release candidate on top of that checkpoint
+  -> full codex_workflow regression on the exact release candidate
+  -> independent review of that exact release candidate
+  -> live two-lane Muse validation on that same exact release candidate
+  -> fast-forward main to that exact candidate + automated release of the exact commit
+  -> live workstation update/readback + Muse-side production smoke on the published release
   -> live Luna XHigh Companion creation/reuse on exact promoted release
   -> M09 final acceptance
 ```
@@ -395,9 +400,10 @@ Execution Prep should create only currently knowable Cards.
 - M06 Cards may be prepared from current `codex_workflow` source and D21.
 - M07 parser/argv-specific Cards are created only after M05 evidence.
 - M08 role-pilot Cards are created only after M07 normalized adapter behavior is real.
-- M09 concurrency/review Cards are created after M07/M08 establish the actual adapter/orchestration shape.
-- M09 publication/promotion Cards may be created once the exact source subject has independent review GREEN and the live M09 two-lane Muse validation is GREEN, even while the Luna XHigh Companion Card is quota-blocked.
-- The deferred live Luna XHigh Companion creation/reuse Card remains mandatory before M09 final acceptance/project completion.
+- M09 concurrency/source-review Cards are created after M07/M08 establish the actual adapter/orchestration shape.
+- After the accepted source checkpoint has independent review GREEN and live two-lane GREEN, Execution Prep may create a bounded release-preparation Card that cuts the next unique synchronized release metadata on top of that exact source checkpoint. Because this creates a new commit identity, the resulting release candidate must then receive its own independent review and live two-lane validation before publication.
+- Publication/promotion Cards may become executable only after both gates are GREEN on the same exact release-candidate commit, even while the Luna XHigh Companion Card is quota-blocked.
+- The deferred live Luna XHigh Companion creation/reuse Card remains mandatory after production promotion and before M09 final acceptance/project completion.
 
 Do not create placeholder future Cards merely to fill the Task Board.
 
@@ -410,6 +416,7 @@ GREEN.
 - Mixed-profile semantics are separated from provider-protocol implementation.
 - Sequential Muse-role correctness precedes concurrency.
 - The unavailable internal-Codex Companion live check is deferred across release/publication and production promotion by explicit user sequencing authority; R3/D21 remain unchanged and M09 final acceptance/project completion is hard-blocked until Luna XHigh creation/reuse is live GREEN on the exact promoted release.
+- The actual release mechanism is reconciled with exact-subject integrity: because `v1.1.17-private.10` already exists and `f660376...` intentionally contains no new version bump, R4 requires a metadata-only next-version release candidate on top of the accepted source checkpoint, then fresh independent review and live two-lane validation on that exact candidate before it can advance to `main` and publish.
 - Concurrency remains subordinate to Project Workflow lane/worktree authority.
 - Other compute profiles have explicit regression protection.
 - Live authorization gates are explicit at both discovery and final deployment.
