@@ -707,7 +707,7 @@ cards:
     title: "Live two-lane revalidation of exact R5 release candidate"
     milestone: M09
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M09-T05"
