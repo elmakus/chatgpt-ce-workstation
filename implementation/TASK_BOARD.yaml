@@ -555,10 +555,10 @@ cards:
     tests_summary: "Exact source candidate f6603767115cf7f31ef7d8c3cb3a419a7f430aca / PR #6: GitHub Actions run 35378766734 GREEN; workflow runtime 90/90, Muse adapter 17/17 including managed concurrency/failure/cancel/retention checks, Python compile GREEN, muse-max/profile 7/7, package validation/build/archive verification GREEN; unified PR diff readback found no added-line trailing whitespace."
 
   - id: M09-T02
-    title: "Validate reviewed M09 candidate live and close the pre-publication gate"
+    title: "Validate reviewed M09 candidate with a live two-lane Muse smoke"
     milestone: M09
     decision_state: accepted
-    execution_status: blocked
+    execution_status: ready
     executor: "chatgpt"
     depends_on:
       - "M09-T01"
@@ -566,7 +566,6 @@ cards:
     contract: "implementation/cards/M09-T02.md"
     authority_refs:
       - "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
-      - "requirements/MUSE_MAX_RUNTIME.md#r3--companion-is-persistent-luna-xhigh"
       - "requirements/MUSE_MAX_RUNTIME.md#r15--project-workflow-owns-lane-parallelism"
       - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile"
       - "implementation/reviews/m09-muse-lane-concurrency-independent-review-2026-09-18.md"
@@ -574,17 +573,52 @@ cards:
     parallel_safe: false
     write_scope:
       - "live workstation / reversible exact-candidate validation"
-      - "actual Codex Main muse-max session evidence"
       - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
     exclusive_resources:
       - "live workstation Muse runtime/auth state"
-      - "active codex_workflow muse-max profile/session Companion state"
       - "M09 disposable validation workspaces"
     lane_branch: "elmakus/codex_workflow:impl/m09-muse-lane-concurrency"
     lane_base: "elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
-    authorization: "pending explicit M09 live-operation authorization"
-    blocker: "Live execution is gated on explicit M09 live-operation authorization. In addition, the mandatory R3/D21 Companion proof requires an actual Codex Main session exposing the internal Companion lifecycle; normal ChatGPT/terminal-only execution cannot substitute."
-    blocker_evidence: "implementation/cards/M09-T02.md"
+    authorization: "M09 live operations explicitly authorized by user on 2026-09-18."
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+  - id: M09-T03
+    title: "Close the deferred Luna XHigh Companion pre-publication gate"
+    milestone: M09
+    decision_state: accepted
+    execution_status: blocked
+    executor: "chatgpt"
+    depends_on:
+      - "M09-T01"
+      - "M09-T02"
+    openspec_change: null
+    contract: "implementation/cards/M09-T03.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
+      - "requirements/MUSE_MAX_RUNTIME.md#r3--companion-is-persistent-luna-xhigh"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile"
+      - "project-handoffs/M08_HANDOFF.md"
+      - "implementation/reviews/m09-muse-lane-concurrency-independent-review-2026-09-18.md"
+      - "elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
+    parallel_safe: false
+    write_scope:
+      - "actual Codex Main muse-max Companion session evidence"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "active codex_workflow muse-max profile/session Companion state"
+    lane_branch: "elmakus/codex_workflow:impl/m09-muse-lane-concurrency"
+    lane_base: "elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
+    authorization: "M09 live operations explicitly authorized by user on 2026-09-18."
+    blocker: "User reports no Luna XHigh quota and explicitly requests deferring the mandatory Companion creation/reuse check until quota is available. This remains a hard pre-publication/pre-promotion gate; no substitute model/harness may satisfy it."
+    blocker_evidence: "implementation/cards/M09-T03.md"
     review_state: null
     review_subject: null
     review_evidence: null
