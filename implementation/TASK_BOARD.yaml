@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "9c8a546cd2537094bced1999b4bd565df8a395f2"
+  head: "2ffa4946447d2f2eaa79a2c681a93d26c73f485e"
 
 milestones:
   M01:
@@ -101,7 +101,7 @@ milestones:
 
   M08:
     decision_state: accepted
-    execution_status: planned
+    execution_status: blocked
     contract: "planning/MASTER_PLAN.md#milestone-m08--verify-sequential-role-orchestration-and-red-repair"
     checkpoint: null
     implementation_head: null
@@ -480,3 +480,42 @@ cards:
     result_pr: null
     evidence: "implementation/evidence/M07_LIVE_ADAPTER_SMOKE_2026-09-18.md"
     tests_summary: "Corrective subject GREEN. Adapter suite 12/12, mixed-profile suite 7/7 and workflow runtime regression 90/90 GREEN; Python compileall and git diff --check GREEN. Generated argv now selects muse exec before exec flags; observed live CLI usage text classifies as adapter_internal. GitHub readback confirms exact branch head b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b."
+
+
+  - id: M08-T01
+    title: "Validate sequential Muse-max orchestration and RED repair"
+    milestone: M08
+    decision_state: accepted
+    execution_status: blocked
+    executor: "chatgpt"
+    depends_on:
+      - "M07"
+    openspec_change: null
+    contract: "implementation/cards/M08-T01.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m08--verify-sequential-role-orchestration-and-red-repair"
+      - "requirements/MUSE_MAX_RUNTIME.md#r8--separate-executor-and-tester"
+      - "requirements/MUSE_MAX_RUNTIME.md#r9--red-repair-loop-routes-through-main"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile"
+      - "project-handoffs/M07_HANDOFF.md"
+      - "implementation/evidence/M07_LIVE_ADAPTER_SMOKE_2026-09-18.md"
+      - "elmakus/codex_workflow@b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
+    parallel_safe: false
+    write_scope:
+      - "live workstation / Unraid codex_workflow + Muse runtime pilot"
+      - "bounded disposable M08 workspace and private runtime artifacts"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "live workstation Muse runtime/auth state"
+      - "active codex_workflow muse-max profile/session Companion state if required"
+      - "M08 disposable workspace"
+    lane_branch: "elmakus/codex_workflow:impl/m07-muse-process-result-adapter"
+    lane_base: "elmakus/codex_workflow@b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
+    blocker: "Explicit user authorization is required before M08 live workstation/runtime operations."
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
