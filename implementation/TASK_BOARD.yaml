@@ -1,5 +1,5 @@
 project: "chatgpt-ce-workstation"
-plan_revision: "planning/MASTER_PLAN.md@R4-approved-2026-09-18"
+plan_revision: "planning/MASTER_PLAN.md@R5-approved-2026-09-18"
 current_milestone: "M09"
 execution_mode: serial
 parallel_card_limit: 1
@@ -603,7 +603,7 @@ cards:
     contract: "implementation/cards/M09-T03.md"
     authority_refs:
       - "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
-      - "planning/reviews/R4.md"
+      - "planning/reviews/R5.md"
       - "requirements/MUSE_MAX_RUNTIME.md#r3--companion-is-persistent-luna-xhigh"
       - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile"
       - "implementation/reviews/m09-muse-lane-concurrency-independent-review-2026-09-18.md"
@@ -617,7 +617,7 @@ cards:
     lane_branch: null
     lane_base: null
     authorization: "M09 live operations explicitly authorized by user on 2026-09-18."
-    blocker: "Luna XHigh quota remains unavailable. Under approved Master Plan R4 this blocks only final M09/project acceptance, not release-candidate preparation, independent review, live two-lane revalidation, publication or production promotion. Before this Card may become ready, Execution Prep must bind the exact promoted release commit; no substitute model/harness may satisfy the gate."
+    blocker: "Luna XHigh quota remains unavailable. Under approved Master Plan R5 this blocks only final M09/project acceptance, not release-candidate preparation, independent review, live two-lane revalidation, publication or production promotion. Before this Card may become ready, Execution Prep must bind the exact promoted release commit; no substitute model/harness may satisfy the gate."
     blocker_evidence: "implementation/cards/M09-T03.md"
     review_state: null
     review_subject: null
@@ -631,7 +631,7 @@ cards:
     title: "Cut exact next-version release candidate"
     milestone: M09
     decision_state: accepted
-    execution_status: blocked
+    execution_status: superseded
     executor: "chatgpt"
     depends_on:
       - "M09-T01"
@@ -654,8 +654,46 @@ cards:
     exclusive_resources: []
     lane_branch: "elmakus/codex_workflow:release/m09-muse-max-candidate"
     lane_base: "elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
-    blocker: "Full regression on the four-file version bump fails because scripts/test_workflow_runtime.py contains release-version expectations that must be synchronized for 1.1.17-private.11. A disposable version-only test synchronization made the same suite 90/90 GREEN, but current M09-T04 explicitly excludes test changes. No candidate commit or remote release branch was produced; route for plan/Card scope reconciliation."
+    blocker: "Historical blocker: the four-file version bump required release-version synchronization in scripts/test_workflow_runtime.py, but M09-T04 excluded test changes. Approved R5 preserves this evidence and supersedes M09-T04 with M09-T05 rather than widening the started Card in place. No candidate commit or remote release branch was produced by M09-T04."
     blocker_evidence: "implementation/blockers/M09_T04_RELEASE_VERSION_TEST_SYNC_2026-09-18.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: "Superseded after approved Master Plan R5 and independent plan review GREEN. Historical blocker/evidence retained; replacement execution contract is M09-T05."
+
+  - id: M09-T05
+    title: "Cut R5 synchronized next-version release candidate"
+    milestone: M09
+    decision_state: accepted
+    execution_status: ready
+    executor: "chatgpt"
+    depends_on:
+      - "M09-T01"
+      - "M09-T02"
+    openspec_change: null
+    contract: "implementation/cards/M09-T05.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
+      - "planning/reviews/R5.md"
+      - "implementation/blockers/M09_T04_RELEASE_VERSION_TEST_SYNC_2026-09-18.md"
+      - "requirements/MUSE_MAX_RUNTIME.md#r1--scope-is-only-muse-max"
+      - "requirements/MUSE_MAX_RUNTIME.md#r16--workstation-boundary"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile"
+      - "implementation/reviews/m09-muse-lane-concurrency-independent-review-2026-09-18.md"
+      - "implementation/evidence/M09_LIVE_TWO_LANE_2026-09-18.md"
+      - "elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex_workflow:release/m09-muse-max-candidate"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex_workflow:release/m09-muse-max-candidate"
+    lane_base: "elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
+    blocker: null
+    blocker_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
