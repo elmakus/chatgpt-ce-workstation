@@ -1,6 +1,6 @@
 project: "chatgpt-ce-workstation"
 plan_revision: "planning/MASTER_PLAN.md@approved-2026-09-18"
-current_milestone: "M06"
+current_milestone: "M07"
 execution_mode: serial
 parallel_card_limit: 1
 
@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "b70e89362c8928df603b1b8902c3cb74700a42fa"
+  head: "e0fe349058df4f0c089014c7efd5a283f517f726"
 
 milestones:
   M01:
@@ -77,12 +77,12 @@ milestones:
 
   M06:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/MASTER_PLAN.md#milestone-m06--establish-mixed-harness-muse-max-profile-semantics"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
+    checkpoint: "elmakus/codex_workflow@2ee25a1d84a6a3b111b68a61604276219190d2a0"
+    implementation_head: "2ee25a1d84a6a3b111b68a61604276219190d2a0"
+    handoff: "project-handoffs/M06_HANDOFF.md"
+    acceptance_evidence: "project-handoffs/M06_HANDOFF.md"
     review_state: null
     review_subject: null
     review_evidence: null
@@ -385,7 +385,7 @@ cards:
     title: "Establish mixed-harness muse-max profile semantics"
     milestone: M06
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on: []
     openspec_change: null
@@ -399,8 +399,8 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "2ee25a1d84a6a3b111b68a61604276219190d2a0"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "project-handoffs/M06_HANDOFF.md"
+    tests_summary: "M06 GREEN at exact codex_workflow checkpoint 2ee25a1d84a6a3b111b68a61604276219190d2a0. Focused mixed-harness suite 7/7 GREEN; full workflow runtime regression 90/90 GREEN; git diff --check and Python compile checks GREEN. GitHub readback confirms the branch head is the exact checkpoint on approved baseline f2b1811853a2c1da5a5af4bb735c84c3111a44d6. muse-max now has one persistent internal Luna XHigh Companion and six Muse Contributor/max roles; Muse runner uses active profile authority, honors shared CODEX_HOME, and rejects non-muse-code roles."
 
