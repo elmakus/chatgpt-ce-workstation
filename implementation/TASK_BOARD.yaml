@@ -747,7 +747,7 @@ cards:
     title: "Publish exact reviewed and live-validated R5 release candidate"
     milestone: M09
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M09-T05"
@@ -772,11 +772,11 @@ cards:
     lane_branch: "elmakus/codex_workflow:main"
     lane_base: "elmakus/codex_workflow@f2b1811853a2c1da5a5af4bb735c84c3111a44d6"
     blocker: null
-    blocker_evidence: null
+    blocker_evidence: "implementation/evidence/M09_R5_PUBLICATION_2026-09-18.md"
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "Publication GREEN: main fast-forwarded with force=false directly to exact 4081cde7d4f71bcc2083c62cf69b7e3b845eefb8; Release run 35389560885 completed success with all release steps GREEN; v1.1.17-private.11 and published prerelease target exact same commit with exactly codex_workflow-1.1.17-private.11.zip plus SHA256SUMS."
