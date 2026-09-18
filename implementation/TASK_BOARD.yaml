@@ -1,0 +1,52 @@
+project: "chatgpt-ce-workstation"
+plan_revision: "ad-hoc-2026-09-18-dual-native-upstreams"
+current_milestone: "M01"
+
+execution_mode: serial
+parallel_card_limit: 1
+
+chatgpt_control_chat:
+  name: null
+  purpose: "strategic Codex decisions only"
+
+execution_ref:
+  branch: "feat/muse-code"
+  pr: null
+  head: "a0a97482251b81b08220e3548f0d4cac9d4fac4b"
+
+milestones:
+  M01:
+    decision_state: accepted
+    execution_status: in_progress
+    contract: "User-approved parallel Codex-LB and CLIProxyAPI routing in related fork elmakus/codex-chatgpt-web"
+    checkpoint: null
+    implementation_head: "2c7eb2ac5266df0cf198a11abb14eba314f411e0"
+    handoff: null
+    acceptance_evidence: "implementation/reviews/dual-native-upstreams-2026-09-18.md"
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@2c7eb2ac5266df0cf198a11abb14eba314f411e0"
+    review_evidence: "implementation/reviews/dual-native-upstreams-2026-09-18.md"
+
+cards:
+  - id: M01-T01
+    title: "Parallel Codex-LB and CLIProxyAPI native upstreams"
+    milestone: M01
+    decision_state: accepted
+    execution_status: done
+    executor: "chatgpt"
+    depends_on: []
+    openspec_change: null
+    contract: "User request: expose Codex-LB, Meta Muse through CLIProxyAPI, and chatgpt-web models through parallel routing"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    lane_base: "f8dc469a43cc562a4173bb77f7a7d9fe2b569187"
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@2c7eb2ac5266df0cf198a11abb14eba314f411e0"
+    review_evidence: "implementation/reviews/dual-native-upstreams-2026-09-18.md"
+    result_commit: "2c7eb2ac5266df0cf198a11abb14eba314f411e0"
+    result_pr: null
+    evidence: "implementation/reviews/dual-native-upstreams-2026-09-18.md"
+    tests_summary: "Static GitHub self-check completed. Runtime verification not executed: CI has no branch-only trigger and the current ChatGPT container cannot resolve github.com for a local clone."
