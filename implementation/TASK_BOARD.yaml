@@ -299,4 +299,4 @@ cards:
     result_commit: null
     result_pr: null
     evidence: null
-    tests_summary: "Live build completed on the Unraid host, but returned output proves the host executed an older scripts/update.sh variant: it stopped immediately after container start and printed the legacy manual-verification message instead of current main wait-healthy + verify-runtime flow. noVNC shows only the ChatGPT CE window; Openbox/Tint2 desktop surface and codex-web-gpt are not visible. Card remains blocked pending host checkout/remote/HEAD readback and rebuild from current main."
+    tests_summary: "Recovery readback proved the Unraid checkout is a divergent historical main: local HEAD 442637b508117f3618a73ec11559f9af186f0cb0 is 97 commits ahead and 91 behind current remote history, and its scripts/update.sh exactly matches the legacy output observed during rebuild. Remote main contains the accepted workstation/Muse state. Working tree is clean. Card remains blocked only on preserving the divergent local history under a backup branch, resetting local main to freshly fetched origin/main, then rerunning scripts/update.sh and runtime verification."
