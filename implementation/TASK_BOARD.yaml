@@ -65,7 +65,7 @@ milestones:
 
   M05:
     decision_state: accepted
-    execution_status: blocked
+    execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m05--capture-the-live-muse-runtime-contract"
     checkpoint: null
     implementation_head: null
@@ -358,7 +358,7 @@ cards:
     title: "Capture live Muse CLI/runtime contract"
     milestone: M05
     decision_state: accepted
-    execution_status: blocked
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M03"
@@ -379,7 +379,7 @@ cards:
     result_commit: null
     result_pr: null
     evidence: "implementation/reviews/m05-live-access-blocker-2026-09-18.md"
-    tests_summary: "Refresh Gate confirmed current workstation main is one commit ahead of the M03 Muse merge and still contains Muse Code. User authorized M05 live operations, but this chat has no connected terminal/SSH/remote-computer channel to execute the required live Unraid commands; no live validation was claimed."
+    tests_summary: "Refresh Gate confirmed current workstation main is one commit ahead of the M03 Muse merge and still contains Muse Code. User authorized M05 live operations and established a manual operator channel: ChatGPT supplies exact commands, user executes them on Unraid/workstation and returns output. Live validation is now in progress; no passing live claim has yet been made."
 
   - id: M06-T01
     title: "Establish mixed-harness muse-max profile semantics"
