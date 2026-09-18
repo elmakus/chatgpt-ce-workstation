@@ -546,7 +546,7 @@ cards:
     exclusive_resources: []
     lane_branch: "elmakus/codex_workflow:impl/m09-muse-lane-concurrency"
     lane_base: "elmakus/codex_workflow@b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
     review_evidence: null
     result_commit: "f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
