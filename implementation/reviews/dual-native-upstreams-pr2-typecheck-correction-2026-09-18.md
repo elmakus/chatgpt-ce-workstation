@@ -33,7 +33,7 @@ At readback:
 - `actionlint`: GREEN.
 - macOS: `bun run verify` GREEN.
 - Ubuntu: `bun run verify` GREEN; package/ABI/smoke GREEN; job GREEN.
-- Windows: `bun run verify` GREEN and package GREEN; final smoke was still in progress at the time this evidence was first written.
+- Windows: `bun run verify`, package, and app smoke are GREEN.
 
 The macOS job remains RED only at the later `bun run app:package` step. This is a known PR-event baseline failure rather than a change introduced by M01/T04:
 
