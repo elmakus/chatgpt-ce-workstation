@@ -785,7 +785,7 @@ cards:
     title: "Promote published Muse-max release to workstation production runtime"
     milestone: M09
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M09-T07"
@@ -817,7 +817,7 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M09_T08_PRODUCTION_PROMOTION_2026-09-18.md"
+    tests_summary: "GREEN: exact release/package/version/profile readback; required Muse Archivist; production Executor -> fresh Tester GREEN; managed two-lane concurrent Muse run GREEN; private artifact lifecycle/permissions GREEN; auth/hook preservation GREEN; no residual processes; disposable workspaces cleaned."
