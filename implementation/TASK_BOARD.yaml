@@ -10,23 +10,11 @@ chatgpt_control_chat:
   purpose: "strategic Codex decisions only"
 
 execution_ref:
-  branch: "elmakus/codex-chatgpt-web:release/5.0.10"
-  pr: null
-  head: "85d13359bef65208c286ae34e0a00ddbbd185e63"
+  branch: "elmakus/chatgpt-ce-workstation:feat/muse-code"
+  pr: 1
+  head: "3c3bab996a4b188a3566f09e2d7ff3a5146a4fd8"
 
 milestones:
-  M02:
-    decision_state: accepted
-    execution_status: in_progress
-    contract: "User-approved publication of the M01 routing-enabled codex-chatgpt-web release and repository-only preparation of feat/muse-code for the next live Muse Code validation build"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
-    review_state: null
-    review_subject: null
-    review_evidence: null
-
   M01:
     decision_state: accepted
     execution_status: done
@@ -41,12 +29,12 @@ milestones:
 
   M02:
     decision_state: accepted
-    execution_status: in_progress
-    contract: "User-approved publication of the reviewed fork as the next release and preparation of feat/muse-code so the next workstation build is ready for Muse Code live validation"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
+    execution_status: done
+    contract: "User-approved publication of the reviewed fork as the next release and repository-only preparation of feat/muse-code so the next workstation build is ready for Muse Code live validation"
+    checkpoint: "elmakus/chatgpt-ce-workstation@3c3bab996a4b188a3566f09e2d7ff3a5146a4fd8"
+    implementation_head: "3c3bab996a4b188a3566f09e2d7ff3a5146a4fd8"
+    handoff: "project-handoffs/M02_HANDOFF.md"
+    acceptance_evidence: "implementation/reviews/m02-muse-code-build-readiness-2026-09-18.md"
     review_state: null
     review_subject: null
     review_evidence: null
@@ -199,11 +187,11 @@ cards:
     contract: "implementation/cards/M02-T01.md"
     parallel_safe: false
     write_scope:
-      - "elmakus/codex-chatgpt-web:release/5.0.10"
+      - "elmakus/codex-chatgpt-web:release/v5.0.10"
       - "elmakus/codex-chatgpt-web:main"
       - "GitHub release v5.0.10"
     exclusive_resources: []
-    lane_branch: "elmakus/codex-chatgpt-web:release/5.0.10"
+    lane_branch: "elmakus/codex-chatgpt-web:release/v5.0.10"
     lane_base: "85d13359bef65208c286ae34e0a00ddbbd185e63"
     review_state: null
     review_subject: null
@@ -217,7 +205,7 @@ cards:
     title: "Prepare next workstation build for Muse Code live validation"
     milestone: M02
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M02-T01"
@@ -232,51 +220,7 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
-
-
-  - id: M02-T01
-    title: "Publish codex-chatgpt-web 5.0.10"
-    milestone: M02
-    decision_state: accepted
-    execution_status: in_progress
-    executor: "chatgpt"
-    depends_on:
-      - "M01"
-    openspec_change: null
-    contract: "implementation/cards/M02-T01.md"
-    parallel_safe: false
-    write_scope:
-      - "elmakus/codex-chatgpt-web:release/v5.0.10"
-      - "elmakus/codex-chatgpt-web:main"
-    review_state: null
-    review_subject: null
-    review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
-
-  - id: M02-T02
-    title: "Prepare next workstation build for Muse Code live validation"
-    milestone: M02
-    decision_state: accepted
-    execution_status: planned
-    executor: "chatgpt"
-    depends_on:
-      - "M02-T01"
-    openspec_change: null
-    contract: "implementation/cards/M02-T02.md"
-    parallel_safe: false
-    write_scope:
-      - "elmakus/chatgpt-ce-workstation:feat/muse-code"
-    review_state: null
-    review_subject: null
-    review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "3c3bab996a4b188a3566f09e2d7ff3a5146a4fd8"
+    result_pr: 1
+    evidence: "implementation/reviews/m02-muse-code-build-readiness-2026-09-18.md"
+    tests_summary: "Source-readiness GREEN. PR #1 CI run 35304113360 is GREEN on the functional source checkpoint; later exact-head run 35304164411 also passed source-validation, ShellCheck, Dockerfile static checks and secret-scan. No live Unraid build/login was performed."
