@@ -22,10 +22,10 @@ milestones:
     checkpoint: null
     implementation_head: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
     handoff: null
-    acceptance_evidence: "implementation/reviews/dual-native-upstreams-2026-09-18.md"
-    review_state: in_progress
+    acceptance_evidence: "implementation/reviews/dual-native-upstreams-m01-independent-acceptance-review-2026-09-18.md"
+    review_state: green
     review_subject: "elmakus/codex-chatgpt-web@eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
-    review_evidence: "implementation/reviews/dual-native-upstreams-zstd-correction-2026-09-18.md"
+    review_evidence: "implementation/reviews/dual-native-upstreams-m01-independent-acceptance-review-2026-09-18.md"
 
 cards:
   - id: M01-T01
