@@ -597,8 +597,7 @@ cards:
     execution_status: blocked
     executor: "chatgpt"
     depends_on:
-      - "M09-T01"
-      - "M09-T02"
+      - "M09-T08"
     openspec_change: null
     contract: "implementation/cards/M09-T03.md"
     authority_refs:
@@ -606,8 +605,11 @@ cards:
       - "planning/reviews/R5.md"
       - "requirements/MUSE_MAX_RUNTIME.md#r3--companion-is-persistent-luna-xhigh"
       - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile"
-      - "implementation/reviews/m09-muse-lane-concurrency-independent-review-2026-09-18.md"
-      - "implementation/evidence/M09_LIVE_TWO_LANE_2026-09-18.md"
+      - "implementation/reviews/m09-r5-release-candidate-independent-review-2026-09-18.md"
+      - "implementation/evidence/M09_R5_LIVE_TWO_LANE_2026-09-18.md"
+      - "implementation/evidence/M09_R5_PUBLICATION_2026-09-18.md"
+      - "implementation/evidence/M09_T08_PRODUCTION_PROMOTION_2026-09-18.md"
+      - "elmakus/codex_workflow@4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
     parallel_safe: false
     write_scope:
       - "actual Codex Main muse-max Companion session evidence"
@@ -617,8 +619,8 @@ cards:
     lane_branch: null
     lane_base: null
     authorization: "M09 live operations explicitly authorized by user on 2026-09-18."
-    blocker: "Luna XHigh quota remains unavailable. Under approved Master Plan R5 this blocks only final M09/project acceptance, not release-candidate preparation, independent review, live two-lane revalidation, publication or production promotion. Before this Card may become ready, Execution Prep must bind the exact promoted release commit; no substitute model/harness may satisfy the gate."
-    blocker_evidence: "implementation/cards/M09-T03.md"
+    blocker: "Exact promoted release 4081cde7d4f71bcc2083c62cf69b7e3b845eefb8 is bound and production-promoted GREEN. Final acceptance still requires one actual Codex Main muse-max session that creates GPT-5.6 Luna XHigh Companion and reuses the same Companion. Durable state records Luna XHigh quota/runtime availability as the remaining external gate; a rejection or substitute model is not GREEN."
+    blocker_evidence: "implementation/evidence/M09_T08_PRODUCTION_PROMOTION_2026-09-18.md"
     review_state: null
     review_subject: null
     review_evidence: null
