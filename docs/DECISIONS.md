@@ -246,3 +246,34 @@ Unexpected pre-bind data under the old persistent-home project target is preserv
 The earlier hold on merging before live validation is superseded by the user's explicit 2026-09-18 decision. The purpose is operational simplicity: the next workstation build should be runnable directly from `main`, and any installer/runtime defects discovered during live Muse validation will be corrected on normal follow-up branches/PRs.
 
 This does not waive the live validation itself. Muse authentication persistence, `muse exec` headless behavior, model/effort controls, timeout/cancellation, sandbox behavior, and orchestrator worker integration remain unvalidated until tested on the live workstation.
+
+## D20 — ChatGPT-owned delegated Muse workers behind a normalized harness
+
+**Decision:** add an opt-in delegated-worker capability under the existing `chatgpt_only` policy. ChatGPT remains the formal Task Card executor/control plane; Muse Code is a bounded leaf worker used initially for `executor` and `tester` roles.
+
+The workflow repository will define only generic delegated-worker semantics: ownership, wait/return behavior, bounded result expectations and authority boundaries. It will not embed Muse-specific CLI syntax.
+
+The workstation repository will own a stable Muse adapter (working name: `muse-worker`) that:
+- launches one Muse process for one assigned worker task;
+- awaits process completion instead of requiring the main agent to poll;
+- drains and stores raw Muse output outside the main context;
+- parses the installed Muse machine-readable output;
+- validates and emits one compact normalized final result;
+- enforces timeout and process-tree cancellation.
+
+For normal GREEN execution, the main ChatGPT agent consumes the normalized result, not the full Muse transcript. Raw logs are escalation/debug evidence only.
+
+A tester receives the accepted task/review contract plus actual repository/worktree state, not the executor transcript. This makes review independently grounded and prevents executor context from being recopied through the orchestrator.
+
+Muse-native nested fan-out remains disabled by default. Fan-out ownership stays with the ChatGPT orchestrator.
+
+The initial rollout is opt-in so existing `chatgpt_only` behavior remains backward compatible while the Muse path is validated.
+
+**Rationale:** current external harnesses converge on the same separation: a small CLI/subprocess runner localizes volatile backend contracts, the orchestrator awaits completion, structured results are schema-normalized, and full trajectories/logs remain separate from parent-facing context. See `research/muse-delegated-worker-orchestration-2026-09-18.md`.
+
+**Rejected for the first implementation:**
+- teaching the main agent to call raw `muse exec` flags directly;
+- periodic polling as the standard completion mechanism;
+- injecting the worker JSONL/transcript into the main context;
+- interactive steering/MSP as a prerequisite;
+- allowing Muse to create its own subagent tree by default.
