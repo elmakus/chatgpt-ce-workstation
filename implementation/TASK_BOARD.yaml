@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "04bfd50e5dc8f0a5a1b0df2eb26607618d4843bd"
+  head: "62ddf248b3ba695b122bc253574a42b742629d15"
 
 milestones:
   M01:
@@ -101,7 +101,7 @@ milestones:
 
   M08:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m08--verify-sequential-role-orchestration-and-red-repair"
     checkpoint: null
     implementation_head: null
@@ -486,7 +486,7 @@ cards:
     title: "Validate sequential Muse-max orchestration and RED repair"
     milestone: M08
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M07"
