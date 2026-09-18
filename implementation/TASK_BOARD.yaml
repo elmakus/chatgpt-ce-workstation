@@ -89,7 +89,7 @@ milestones:
 
   M07:
     decision_state: accepted
-    execution_status: blocked
+    execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m07--build-the-production-muse-processresult-adapter"
     checkpoint: null
     implementation_head: "ab9601d9a3e587168b4c3182b3be3dffd7cc12bd"
@@ -98,7 +98,6 @@ milestones:
     review_state: null
     review_subject: null
     review_evidence: null
-    blocker: "M07-T02 requires explicit user authorization before live workstation Muse adapter smoke."
 
   M08:
     decision_state: accepted
@@ -435,8 +434,8 @@ cards:
     title: "Validate production Muse adapter live on workstation"
     milestone: M07
     decision_state: accepted
-    execution_status: blocked
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on:
       - "M07-T01"
     openspec_change: null
@@ -457,4 +456,3 @@ cards:
     result_pr: null
     evidence: null
     tests_summary: null
-    blocker: "Explicit live-operation authorization is required before read-only/write adapter smoke on the workstation."
