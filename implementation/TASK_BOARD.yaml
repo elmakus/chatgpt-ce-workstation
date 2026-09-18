@@ -10,9 +10,9 @@ chatgpt_control_chat:
   purpose: "strategic Codex decisions only"
 
 execution_ref:
-  branch: null
+  branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: null
+  head: "153a3bb337671fd6e742664710c5cc8e4d5c9a7a"
 
 milestones:
   M01:
@@ -65,7 +65,7 @@ milestones:
 
   M05:
     decision_state: accepted
-    execution_status: planned
+    execution_status: blocked
     contract: "planning/MASTER_PLAN.md#milestone-m05--capture-the-live-muse-runtime-contract"
     checkpoint: null
     implementation_head: null
@@ -358,8 +358,8 @@ cards:
     title: "Capture live Muse CLI/runtime contract"
     milestone: M05
     decision_state: accepted
-    execution_status: planned
-    executor: null
+    execution_status: blocked
+    executor: "chatgpt"
     depends_on:
       - "M03"
     openspec_change: null
@@ -371,15 +371,15 @@ cards:
     exclusive_resources:
       - "live workstation deployment"
       - "persistent /home/codex Muse auth/runtime state"
-    lane_branch: null
-    lane_base: null
+    lane_branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
+    lane_base: "elmakus/chatgpt-ce-workstation@153a3bb337671fd6e742664710c5cc8e4d5c9a7a"
     review_state: null
     review_subject: null
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/reviews/m05-live-access-blocker-2026-09-18.md"
+    tests_summary: "Refresh Gate confirmed current workstation main is one commit ahead of the M03 Muse merge and still contains Muse Code. User authorized M05 live operations, but this chat has no connected terminal/SSH/remote-computer channel to execute the required live Unraid commands; no live validation was claimed."
 
   - id: M06-T01
     title: "Establish mixed-harness muse-max profile semantics"
