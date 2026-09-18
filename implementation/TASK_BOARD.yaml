@@ -89,7 +89,7 @@ milestones:
 
   M07:
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     contract: "planning/MASTER_PLAN.md#milestone-m07--build-the-production-muse-processresult-adapter"
     checkpoint: null
     implementation_head: null
@@ -404,3 +404,55 @@ cards:
     evidence: "project-handoffs/M06_HANDOFF.md"
     tests_summary: "M06 GREEN at exact codex_workflow checkpoint 2ee25a1d84a6a3b111b68a61604276219190d2a0. Focused mixed-harness suite 7/7 GREEN; full workflow runtime regression 90/90 GREEN; git diff --check and Python compile checks GREEN. GitHub readback confirms the branch head is the exact checkpoint on approved baseline f2b1811853a2c1da5a5af4bb735c84c3111a44d6. muse-max now has one persistent internal Luna XHigh Companion and six Muse Contributor/max roles; Muse runner uses active profile authority, honors shared CODEX_HOME, and rejects non-muse-code roles."
 
+
+  - id: M07-T01
+    title: "Build deterministic Muse process/result adapter"
+    milestone: M07
+    decision_state: accepted
+    execution_status: ready
+    executor: "chatgpt"
+    depends_on:
+      - "M05"
+      - "M06"
+    openspec_change: null
+    contract: "implementation/cards/M07-T01.md"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex_workflow:impl/m07-muse-process-result-adapter"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex_workflow:impl/m07-muse-process-result-adapter"
+    lane_base: "elmakus/codex_workflow@2ee25a1d84a6a3b111b68a61604276219190d2a0"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+  - id: M07-T02
+    title: "Validate production Muse adapter live on workstation"
+    milestone: M07
+    decision_state: accepted
+    execution_status: planned
+    executor: null
+    depends_on:
+      - "M07-T01"
+    openspec_change: null
+    contract: "implementation/cards/M07-T02.md"
+    parallel_safe: false
+    write_scope:
+      - "live workstation / Unraid Muse runtime"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
+    exclusive_resources:
+      - "live workstation Muse process/runtime artifacts"
+      - "persistent /home/codex Muse runtime state"
+    lane_branch: "elmakus/codex-workflow:impl/m07-muse-process-result-adapter"
+    lane_base: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
