@@ -558,7 +558,7 @@ cards:
     title: "Validate reviewed M09 candidate with a live two-lane Muse smoke"
     milestone: M09
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M09-T01"
@@ -585,10 +585,10 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
+    result_pr: 6
+    evidence: "implementation/evidence/M09_LIVE_TWO_LANE_2026-09-18.md"
+    tests_summary: "Live exact-candidate M09 smoke GREEN: isolated muse-max runtime readback correct; two non-overlapping Muse lanes observed concurrently with distinct process groups/workspaces/run IDs; both normalized results completed exit 0 with only lane-local marker changes; residual process count zero and disposable source/control/lane workspaces removed; PR #6 remained open/unmerged and no production promotion occurred."
 
   - id: M09-T03
     title: "Close the deferred Luna XHigh Companion pre-publication gate"
