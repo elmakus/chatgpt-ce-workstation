@@ -741,3 +741,42 @@ cards:
     result_pr: null
     evidence: null
     tests_summary: "Live exact-release-candidate validation GREEN on 4081cde7d4f71bcc2083c62cf69b7e3b845eefb8: muse-max readback correct; two isolated Muse lanes concurrently active with distinct PGIDs/workspaces/run IDs; both normalized results completed exit 0 with only lane-local marker changes; exact candidate source remained clean; residual validation processes zero; disposable source/control/lane paths removed; main/tag remained unpromoted."
+
+
+  - id: M09-T07
+    title: "Publish exact reviewed and live-validated R5 release candidate"
+    milestone: M09
+    decision_state: accepted
+    execution_status: ready
+    executor: "chatgpt"
+    depends_on:
+      - "M09-T05"
+      - "M09-T06"
+    openspec_change: null
+    contract: "implementation/cards/M09-T07.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
+      - "planning/reviews/R5.md"
+      - "requirements/MUSE_MAX_RUNTIME.md#r1--scope-is-only-muse-max"
+      - "requirements/MUSE_MAX_RUNTIME.md#r16--workstation-boundary"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile"
+      - "implementation/reviews/m09-r5-release-candidate-independent-review-2026-09-18.md"
+      - "implementation/evidence/M09_R5_LIVE_TWO_LANE_2026-09-18.md"
+      - "elmakus/codex_workflow@4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex_workflow:main exact fast-forward publication"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "elmakus/codex_workflow main/release publication"
+    lane_branch: "elmakus/codex_workflow:main"
+    lane_base: "elmakus/codex_workflow@f2b1811853a2c1da5a5af4bb735c84c3111a44d6"
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
