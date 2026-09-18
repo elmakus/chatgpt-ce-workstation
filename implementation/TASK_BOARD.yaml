@@ -558,7 +558,7 @@ cards:
     title: "Validate reviewed M09 candidate with a live two-lane Muse smoke"
     milestone: M09
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M09-T01"
