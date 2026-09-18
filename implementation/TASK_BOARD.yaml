@@ -23,7 +23,7 @@ milestones:
     implementation_head: "2c7eb2ac5266df0cf198a11abb14eba314f411e0"
     handoff: null
     acceptance_evidence: "implementation/reviews/dual-native-upstreams-2026-09-18.md"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex-chatgpt-web@2c7eb2ac5266df0cf198a11abb14eba314f411e0"
     review_evidence: "implementation/reviews/dual-native-upstreams-2026-09-18.md"
 
@@ -43,7 +43,7 @@ cards:
     exclusive_resources: []
     lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
     lane_base: "f8dc469a43cc562a4173bb77f7a7d9fe2b569187"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex-chatgpt-web@2c7eb2ac5266df0cf198a11abb14eba314f411e0"
     review_evidence: "implementation/reviews/dual-native-upstreams-2026-09-18.md"
     result_commit: "2c7eb2ac5266df0cf198a11abb14eba314f411e0"
