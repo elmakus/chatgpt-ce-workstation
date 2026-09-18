@@ -1,6 +1,6 @@
 project: "chatgpt-ce-workstation"
 plan_revision: "planning/MASTER_PLAN.md@approved-2026-09-18"
-current_milestone: "M07"
+current_milestone: "M08"
 execution_mode: serial
 parallel_card_limit: 1
 
@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "d08ebd5cc6ca1b46da854eaa0c4d9dc6195778a8"
+  head: "9c8a546cd2537094bced1999b4bd565df8a395f2"
 
 milestones:
   M01:
@@ -89,12 +89,12 @@ milestones:
 
   M07:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/MASTER_PLAN.md#milestone-m07--build-the-production-muse-processresult-adapter"
-    checkpoint: null
+    checkpoint: "elmakus/codex_workflow@b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
     implementation_head: "b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
-    handoff: null
-    acceptance_evidence: null
+    handoff: "project-handoffs/M07_HANDOFF.md"
+    acceptance_evidence: "implementation/evidence/M07_LIVE_ADAPTER_SMOKE_2026-09-18.md"
     review_state: null
     review_subject: null
     review_evidence: null
@@ -434,7 +434,7 @@ cards:
     title: "Validate production Muse adapter live on workstation"
     milestone: M07
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M07-T01"
@@ -452,10 +452,10 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "51d1f2fc20ae9f2e5c257374a63603a953dcafd3"
     result_pr: null
     evidence: "implementation/evidence/M07_LIVE_ADAPTER_SMOKE_2026-09-18.md"
-    tests_summary: "First authorized read-only live attempt exposed an argv/parser defect. M07-T03 corrected it at exact subject b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b; live smoke resumed against that subject."
+    tests_summary: "M07-T02 GREEN against exact corrected adapter subject b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b and installed Muse Code 1.3.0. Read-only investigator completed exit 0 with workspace hashes unchanged. Default executor completed exit 0 and created exactly the requested 22-byte file with no other tree/hash changes. Both successful raw streams had exactly one run.terminal.completed; run directories/files read back 0700/0600; normalized results excluded raw event content; no residual probe processes remained; disposable workspace cleanup verified. First failed argv attempt and bounded M07-T03 correction are preserved in the evidence record."
 
   - id: M07-T03
     title: "Correct live Muse exec argv dispatch"
