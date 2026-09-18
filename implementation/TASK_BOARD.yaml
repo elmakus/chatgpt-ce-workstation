@@ -1,5 +1,5 @@
 project: "chatgpt-ce-workstation"
-plan_revision: "planning/MASTER_PLAN.md@approved-2026-09-18"
+plan_revision: "planning/MASTER_PLAN.md@R4-approved-2026-09-18"
 current_milestone: "M09"
 execution_mode: serial
 parallel_card_limit: 1
@@ -591,7 +591,7 @@ cards:
     tests_summary: "Live exact-candidate M09 smoke GREEN: isolated muse-max runtime readback correct; two non-overlapping Muse lanes observed concurrently with distinct process groups/workspaces/run IDs; both normalized results completed exit 0 with only lane-local marker changes; residual process count zero and disposable source/control/lane workspaces removed; PR #6 remained open/unmerged and no production promotion occurred."
 
   - id: M09-T03
-    title: "Close the deferred Luna XHigh Companion pre-publication gate"
+    title: "Close the deferred Luna XHigh Companion final acceptance gate"
     milestone: M09
     decision_state: accepted
     execution_status: blocked
@@ -603,21 +603,21 @@ cards:
     contract: "implementation/cards/M09-T03.md"
     authority_refs:
       - "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
+      - "planning/reviews/R4.md"
       - "requirements/MUSE_MAX_RUNTIME.md#r3--companion-is-persistent-luna-xhigh"
       - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile"
-      - "project-handoffs/M08_HANDOFF.md"
       - "implementation/reviews/m09-muse-lane-concurrency-independent-review-2026-09-18.md"
-      - "elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
+      - "implementation/evidence/M09_LIVE_TWO_LANE_2026-09-18.md"
     parallel_safe: false
     write_scope:
       - "actual Codex Main muse-max Companion session evidence"
       - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
     exclusive_resources:
       - "active codex_workflow muse-max profile/session Companion state"
-    lane_branch: "elmakus/codex_workflow:impl/m09-muse-lane-concurrency"
-    lane_base: "elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
+    lane_branch: null
+    lane_base: null
     authorization: "M09 live operations explicitly authorized by user on 2026-09-18."
-    blocker: "User reports no Luna XHigh quota and explicitly requests deferring the mandatory Companion creation/reuse check until quota is available. This remains a hard pre-publication/pre-promotion gate; no substitute model/harness may satisfy it."
+    blocker: "Luna XHigh quota remains unavailable. Under approved Master Plan R4 this blocks only final M09/project acceptance, not release-candidate preparation, independent review, live two-lane revalidation, publication or production promotion. Before this Card may become ready, Execution Prep must bind the exact promoted release commit; no substitute model/harness may satisfy the gate."
     blocker_evidence: "implementation/cards/M09-T03.md"
     review_state: null
     review_subject: null
@@ -627,3 +627,39 @@ cards:
     evidence: null
     tests_summary: null
 
+  - id: M09-T04
+    title: "Cut exact next-version release candidate"
+    milestone: M09
+    decision_state: accepted
+    execution_status: ready
+    executor: "chatgpt"
+    depends_on:
+      - "M09-T01"
+      - "M09-T02"
+    openspec_change: null
+    contract: "implementation/cards/M09-T04.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
+      - "planning/reviews/R4.md"
+      - "requirements/MUSE_MAX_RUNTIME.md#r1--scope-is-only-muse-max"
+      - "requirements/MUSE_MAX_RUNTIME.md#r16--workstation-boundary"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile"
+      - "implementation/reviews/m09-muse-lane-concurrency-independent-review-2026-09-18.md"
+      - "implementation/evidence/M09_LIVE_TWO_LANE_2026-09-18.md"
+      - "elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex_workflow:release/m09-muse-max-candidate"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex_workflow:release/m09-muse-max-candidate"
+    lane_base: "elmakus/codex_workflow@f6603767115cf7f31ef7d8c3cb3a419a7f430aca"
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
