@@ -23,7 +23,7 @@ milestones:
     implementation_head: "4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
     handoff: null
     acceptance_evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex-chatgpt-web@4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
     review_evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
 
@@ -156,7 +156,7 @@ cards:
     exclusive_resources: []
     lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
     lane_base: "afef9e799599e8c31539ed60689a3828be7728ea"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex-chatgpt-web@4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
     review_evidence: "implementation/reviews/dual-native-upstreams-pr2-signing-correction-2026-09-18.md"
     result_commit: "4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
