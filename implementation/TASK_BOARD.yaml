@@ -192,7 +192,7 @@ cards:
     title: "Publish codex-chatgpt-web 5.0.10"
     milestone: M02
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on: []
     openspec_change: null
@@ -208,16 +208,16 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "553b98f1cbe456643eb9b1955d84c2007375e99d"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/reviews/codex-chatgpt-web-v5.0.10-release-2026-09-18.md"
+    tests_summary: "Fork Linux Release run 35303570175 GREEN: verify, package, Linux ABI and app smoke passed; v5.0.10 published as latest with AppImage/checksums, then fork main fast-forwarded to the exact release commit."
 
   - id: M02-T02
     title: "Prepare next workstation build for Muse Code live validation"
     milestone: M02
     decision_state: accepted
-    execution_status: planned
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M02-T01"
