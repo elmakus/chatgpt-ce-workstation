@@ -1,9 +1,9 @@
 # Muse Code integration plan
 
-Status: main-merge authorized / live-validation pending
-Integration: PR #1 from `feat/muse-code` to `main`
+Status: merged to main / live-validation pending
+Integration: PR #1 merged into `main`
 
-The user explicitly authorized merging the source-ready Muse Code candidate into `main` before the first live Unraid validation. Any runtime defects found during validation will be corrected through normal follow-up changes.
+The user explicitly authorized merging the source-ready Muse Code candidate into `main` before the first live Unraid validation, and PR #1 has now been merged. Any runtime defects found during validation will be corrected through normal follow-up changes.
 
 ## Goal
 

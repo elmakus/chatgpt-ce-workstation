@@ -10,9 +10,9 @@ chatgpt_control_chat:
   purpose: "strategic Codex decisions only"
 
 execution_ref:
-  branch: "elmakus/chatgpt-ce-workstation:feat/muse-code"
+  branch: "elmakus/chatgpt-ce-workstation:main"
   pr: 1
-  head: "a29539917049d2cb0905f9647fc1623f51668c15"
+  head: "17111247fd28a07de15e5a94908bd3d63858184b"
 
 milestones:
   M01:
@@ -41,12 +41,12 @@ milestones:
 
   M03:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "User-approved merge of the source-ready Muse Code candidate into workstation main before live Unraid validation; runtime corrections may follow after validation"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
+    checkpoint: "elmakus/chatgpt-ce-workstation@17111247fd28a07de15e5a94908bd3d63858184b"
+    implementation_head: "17111247fd28a07de15e5a94908bd3d63858184b"
+    handoff: "project-handoffs/M03_HANDOFF.md"
+    acceptance_evidence: "implementation/reviews/m03-muse-main-merge-2026-09-18.md"
     review_state: null
     review_subject: null
     review_evidence: null
@@ -241,7 +241,7 @@ cards:
     title: "Merge Muse Code candidate into main for live validation"
     milestone: M03
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M02"
@@ -255,7 +255,7 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "17111247fd28a07de15e5a94908bd3d63858184b"
     result_pr: 1
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/reviews/m03-muse-main-merge-2026-09-18.md"
+    tests_summary: "PR #1 exact pre-merge head 618dcd14c6c8068238fef6f1e1434a0ffe6168fb passed CI run 35305060826: source validation, ShellCheck, Dockerfile static check and secret scan GREEN. PR was marked ready, merged with expected-head protection, and main readback confirmed merge commit 17111247fd28a07de15e5a94908bd3d63858184b with no file changes relative to the accepted PR head."
