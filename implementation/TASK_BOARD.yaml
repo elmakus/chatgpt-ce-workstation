@@ -10,9 +10,9 @@ chatgpt_control_chat:
   purpose: "strategic Codex decisions only"
 
 execution_ref:
-  branch: "feat/muse-code"
+  branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
   pr: null
-  head: "a0a97482251b81b08220e3548f0d4cac9d4fac4b"
+  head: "2c7eb2ac5266df0cf198a11abb14eba314f411e0"
 
 milestones:
   M01:
