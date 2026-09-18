@@ -74,3 +74,29 @@ cards:
     result_pr: null
     evidence: "implementation/reviews/dual-native-upstreams-correction-2026-09-18.md"
     tests_summary: "Corrective diff read back from GitHub. Targeted runtime routing check GREEN: muse-* without Muse upstream fails closed, while ordinary native requests still route to Codex-LB with its dedicated key. Full bun run verify was not executed because this runtime lacks Bun and repository CI has no branch/manual trigger."
+
+  - id: M01-T03
+    title: "Preserve Muse routing for encoded native requests"
+    milestone: M01
+    decision_state: accepted
+    execution_status: in_progress
+    executor: "chatgpt"
+    depends_on:
+      - "M01-T02"
+    openspec_change: null
+    contract: "For every supported native request encoding, especially zstd, muse-* must be classified from the already decoded model identity and must route only to CLIProxyAPI; encoded ordinary native traffic must continue to route to Codex-LB."
+    authority_refs:
+      - "implementation/reviews/dual-native-upstreams-correction-independent-review-2026-09-18.md#blocking-finding"
+      - "M01-T02 contract"
+    acceptance:
+      - "zstd-compressed muse-* with no Muse upstream fails closed and never reaches Codex-LB or the official backend"
+      - "zstd-compressed muse-* with Muse configured routes to CLIProxyAPI using the Muse ingress key"
+      - "zstd-compressed non-Muse native traffic still routes to Codex-LB using the native key"
+      - "raw encoded body preservation remains intact"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    exclusive_resources: []
+    lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+    lane_base: "0cad74ba6f3f9bc13d6e973d94bc993d8b2ff5c3"
+
