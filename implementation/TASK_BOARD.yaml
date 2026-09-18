@@ -631,7 +631,7 @@ cards:
     title: "Cut exact next-version release candidate"
     milestone: M09
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M09-T01"
