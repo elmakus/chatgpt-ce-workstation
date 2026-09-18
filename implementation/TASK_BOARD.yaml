@@ -9,8 +9,8 @@ chatgpt_control_chat:
 
 execution_ref:
   branch: "elmakus/chatgpt-codex-project-workflow:feat/delegated-workers"
-  pr: null
-  head: "23b8c368aea160566abdfd3fbc42bd0facb88bd4"
+  pr: 23
+  head: "a5bca27b10f68703e9c7646a95735c04731778cf"
 
 milestones:
   M01:
@@ -284,10 +284,10 @@ cards:
       - "elmakus/chatgpt-codex-project-workflow:feat/delegated-workers"
     lane_branch: "elmakus/chatgpt-codex-project-workflow:feat/delegated-workers"
     lane_base: "23b8c368aea160566abdfd3fbc42bd0facb88bd4"
-    review_state: null
-    review_subject: null
+    review_state: pending
+    review_subject: "elmakus/chatgpt-codex-project-workflow@a5bca27b10f68703e9c7646a95735c04731778cf"
     review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "a5bca27b10f68703e9c7646a95735c04731778cf"
+    result_pr: 23
+    evidence: "implementation/reviews/m04-delegated-workers-implementation-2026-09-18.md"
+    tests_summary: "Implementer self-check only; independent verdict pending. Exact PR #23 head read back at a5bca27b10f68703e9c7646a95735c04731778cf; branch is ahead of workflow main with exactly 10 in-scope files changed. Targeted semantic scan GREEN for fixed ChatGPT Task Card ownership, sole Task Board authority, await/no-poll, transcript isolation, tester/executor separation, leaf-worker semantics, and tester != workflow Independent Review. Generic normative files contain no Muse-specific CLI/path/model terms."
