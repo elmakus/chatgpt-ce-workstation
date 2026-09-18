@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "62ddf248b3ba695b122bc253574a42b742629d15"
+  head: "050276aaee47d334f5453797e3746d01eb6b5487"
 
 milestones:
   M01:
@@ -101,7 +101,7 @@ milestones:
 
   M08:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: blocked
     contract: "planning/MASTER_PLAN.md#milestone-m08--verify-sequential-role-orchestration-and-red-repair"
     checkpoint: null
     implementation_head: null
@@ -486,7 +486,7 @@ cards:
     title: "Validate sequential Muse-max orchestration and RED repair"
     milestone: M08
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: blocked
     executor: "chatgpt"
     depends_on:
       - "M07"
@@ -512,10 +512,12 @@ cards:
     lane_branch: "elmakus/codex_workflow:impl/m07-muse-process-result-adapter"
     lane_base: "elmakus/codex_workflow@b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
     authorization: "M08 live operations explicitly authorized by user on 2026-09-18."
+    blocker: "Live persistent Luna XHigh Companion creation/reuse cannot be executed from this normal ChatGPT executor: no internal Codex spawn/resume/wait surface is exposed and no standalone codex CLI exists in the workstation container. Muse-side M08 acceptance is GREEN. Remaining evidence must come from an actual Codex Main session with active muse-max, or capture the concrete quota/runtime failure."
+    blocker_evidence: "implementation/evidence/M08_SEQUENTIAL_ORCHESTRATION_2026-09-18.md#companion-live-validation-blocker"
     review_state: null
     review_subject: null
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M08_SEQUENTIAL_ORCHESTRATION_2026-09-18.md"
+    tests_summary: "Muse-side M08 GREEN: six Muse roles completed as fresh one-shot invocations; executor -> fresh Tester GREEN; deliberate RED -> focused findings -> fresh repair Executor -> fresh Tester GREEN; nine runs each had one completed terminal marker, 0700/0600 private artifacts, no raw marker in normalized results, no artifact refs in capsules, no observed spawn_agent/send_message/nested muse exec, no residual pilot process, disposable workspace cleaned. Card remains blocked only on live persistent internal Luna XHigh Companion creation/reuse from a real Codex Main session."
