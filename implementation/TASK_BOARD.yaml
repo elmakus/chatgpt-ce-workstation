@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "32ed2b455092cd7fd4b8c21831cc603a0e2849d7"
+  head: "703116b2d677fa975ab3eccd1408b3fdf8ecaca2"
 
 milestones:
   M01:
@@ -379,7 +379,7 @@ cards:
     result_commit: null
     result_pr: null
     evidence: "implementation/evidence/M05_LIVE_MUSE_RUNTIME_2026-09-18.md"
-    tests_summary: "Manual operator channel is active and user-authorized. Workstation rebuild from synchronized current main is GREEN after bounded installer correction; WORKSTATION_RUNTIME_GREEN observed, container healthy, expected mounts/privilege boundary verified, Tint2 running, and live Muse version is 1.3.0 (1.3.0-R3401.1). Exact exec/help/auth/machine-readable/sandbox/failure contract evidence remains in progress; next step is help surface + pre-login persistent-home inventory."
+    tests_summary: "Manual operator channel is active and user-authorized. Workstation rebuild is GREEN and live Muse version is 1.3.0 (1.3.0-R3401.1). Exact live help now confirms exec --json JSONL stdout, explicit model, reasoning-effort including max, workspace, output-schema, max-model-steps, session-id, user-input-auto-resolve, approval and sandbox controls. Pre-login Muse config/share/state paths are all absent. Next step is exact login help and account/subscription login path capture."
 
   - id: M06-T01
     title: "Establish mixed-harness muse-max profile semantics"
