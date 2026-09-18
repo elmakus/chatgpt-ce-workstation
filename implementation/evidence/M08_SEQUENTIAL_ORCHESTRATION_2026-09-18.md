@@ -147,3 +147,23 @@ GREEN and durably evidenced:
 Not yet claimable:
 
 - live persistent internal Luna XHigh Companion creation/reuse.
+
+
+## Post-evidence R2 reconciliation
+
+The `Companion live-validation blocker` and `Current acceptance status` sections above are preserved as the exact pre-R2 acceptance snapshot. No historical live result is rewritten: live internal GPT-5.6 Luna XHigh Companion creation/reuse was **not** executed during M08.
+
+After that evidence was captured, Master Plan R2 was independently reviewed GREEN and approved. R2 changes milestone sequencing only: because the missing Companion check is unavailable solely from the current normal-ChatGPT execution surface, M08 may close with an explicit deferral while the live R3/D21 persistence proof moves to the M09 hard pre-publication/pre-promotion gate.
+
+The evidence already establishes the R2 closure prerequisites:
+
+- active `muse-max` allocation renders exactly one internal `gpt-5.6-luna` / `xhigh` / `codex` Companion;
+- all six Muse-routed roles are GREEN;
+- executor -> fresh Tester GREEN is GREEN;
+- deliberate RED -> Main repair capsule -> fresh Executor -> fresh Tester GREEN is GREEN;
+- raw trajectory isolation, private artifact permissions, leaf-worker behavior and cleanup are GREEN;
+- the reason live Companion creation/reuse is absent is the documented external execution-surface limitation, not a role/runtime substitution.
+
+Therefore **M08 is GREEN under approved R2**. The live Companion creation/reuse requirement remains unsatisfied at the project-definition level and is carried forward unchanged as the M09 hard pre-publication/pre-promotion gate. A future quota/runtime rejection is not a pass, and no substitute model may satisfy that gate.
+
+No additional live operation was performed by this reconciliation.
