@@ -385,8 +385,8 @@ cards:
     title: "Establish mixed-harness muse-max profile semantics"
     milestone: M06
     decision_state: accepted
-    execution_status: planned
-    executor: null
+    execution_status: ready
+    executor: "chatgpt"
     depends_on: []
     openspec_change: null
     contract: "implementation/cards/M06-T01.md"
@@ -394,7 +394,7 @@ cards:
     write_scope:
       - "elmakus/codex_workflow:<execution branch>"
     exclusive_resources: []
-    lane_branch: null
+    lane_branch: "elmakus/codex_workflow:impl/m06-muse-max-profile-semantics"
     lane_base: "elmakus/codex_workflow@f2b1811853a2c1da5a5af4bb735c84c3111a44d6"
     review_state: null
     review_subject: null
