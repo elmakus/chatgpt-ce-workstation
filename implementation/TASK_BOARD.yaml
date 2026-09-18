@@ -10,9 +10,9 @@ chatgpt_control_chat:
   purpose: "strategic Codex decisions only"
 
 execution_ref:
-  branch: "elmakus/chatgpt-ce-workstation:fix/muse-installer-tmp-traversal"
-  pr: null
-  head: "2255b320e3285d09b799cbc31e0925c8ccdab504"
+  branch: "elmakus/chatgpt-ce-workstation:main"
+  pr: 2
+  head: "d24387511a5e9fb1467f74e3de5f69e5857b979e"
 
 milestones:
   M01:
@@ -276,7 +276,7 @@ cards:
     title: "Fix Muse installer temporary-directory traversal"
     milestone: M04
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M03"
@@ -294,10 +294,10 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
-    result_pr: null
+    result_commit: "d24387511a5e9fb1467f74e3de5f69e5857b979e"
+    result_pr: 2
     evidence: null
-    tests_summary: "Exact live failure identified: mktemp parent remained root:root 0700 while vendor installer was read by runuser codex. Bounded fix changes ownership of the per-build temp directory to codex and retains 0700 mode; CI pending."
+    tests_summary: "PR #2 GREEN. Exact live failure was root-owned mktemp parent mode 0700 blocking runuser codex traversal. Bounded fix gives only the per-build temp directory to codex while retaining mode 0700 and preserving checksum/install/auth policy. Source validation, ShellCheck, Dockerfile static check, and secret scan all passed before merge."
 
   - id: M04-T01
     title: "Rebuild current main and establish live Muse baseline"
@@ -326,4 +326,4 @@ cards:
     result_commit: null
     result_pr: null
     evidence: null
-    tests_summary: "Recovery readback proved the Unraid checkout was a divergent historical main: local HEAD 442637b508117f3618a73ec11559f9af186f0cb0 had 97 commits outside current remote history and its scripts/update.sh exactly matched the legacy rebuild output. Exact tree audit old HEAD vs current main found 28 old files: 0 old-only paths, 15 byte-identical shared files, and 13 shared files replaced by newer implementations; current main adds 43 files. Runtime changes preserve/supersede the old behavior with stronger source/runtime validation, Openbox+Tint2 recovery desktop, codex-web-gpt autostart/relaunch support, Muse integration, and health/runtime verification. Rebuild from synchronized main is in progress; live acceptance remains pending."
+    tests_summary: "Recovery established the host checkout divergence and old-tree content preservation. First synchronized rebuild then exposed a concrete Muse installer traversal defect before container recreation. Corrective PR #2 is now merged GREEN to main. M04-T01 remains blocked only on pulling current main on Unraid and rerunning scripts/update.sh to obtain live WORKSTATION_RUNTIME_GREEN and Muse version readback."
