@@ -10,18 +10,18 @@ chatgpt_control_chat:
   purpose: "strategic Codex decisions only"
 
 execution_ref:
-  branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
+  branch: "elmakus/codex-chatgpt-web:main"
   pr: 2
-  head: "4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
+  head: "85d13359bef65208c286ae34e0a00ddbbd185e63"
 
 milestones:
   M01:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "User-approved parallel Codex-LB and CLIProxyAPI routing in related fork elmakus/codex-chatgpt-web"
-    checkpoint: null
-    implementation_head: "4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
-    handoff: null
+    checkpoint: "elmakus/codex-chatgpt-web@85d13359bef65208c286ae34e0a00ddbbd185e63"
+    implementation_head: "85d13359bef65208c286ae34e0a00ddbbd185e63"
+    handoff: "project-handoffs/M01_HANDOFF.md"
     acceptance_evidence: "implementation/reviews/dual-native-upstreams-pr2-final-independent-review-2026-09-18.md"
     review_state: green
     review_subject: "elmakus/codex-chatgpt-web@4eaa9c350a885faa627e3e681a8d8861c9f4ba41"
