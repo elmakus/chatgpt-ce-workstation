@@ -92,7 +92,7 @@ milestones:
     execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m07--build-the-production-muse-processresult-adapter"
     checkpoint: null
-    implementation_head: "ab9601d9a3e587168b4c3182b3be3dffd7cc12bd"
+    implementation_head: "b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
     handoff: null
     acceptance_evidence: null
     review_state: null
@@ -434,7 +434,7 @@ cards:
     title: "Validate production Muse adapter live on workstation"
     milestone: M07
     decision_state: accepted
-    execution_status: blocked
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M07-T01"
@@ -448,21 +448,20 @@ cards:
       - "live workstation Muse process/runtime artifacts"
       - "persistent /home/codex Muse runtime state"
     lane_branch: "elmakus/codex_workflow:impl/m07-muse-process-result-adapter"
-    lane_base: "elmakus/codex_workflow@ab9601d9a3e587168b4c3182b3be3dffd7cc12bd"
+    lane_base: "elmakus/codex_workflow@b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
     review_state: null
     review_subject: null
     review_evidence: null
     result_commit: null
     result_pr: null
     evidence: "implementation/evidence/M07_LIVE_ADAPTER_SMOKE_2026-09-18.md"
-    tests_summary: "First authorized read-only live attempt reached the exact M07 adapter but Muse exited 2 before emitting JSONL because argv selected the top-level/TUI parser. Workspace remained unchanged and adapter artifacts had expected private permissions. Live acceptance paused for bounded M07-T03 correction."
-    blocker: "M07-T03 must correct Muse exec argv ordering and pre-run CLI parser failure classification before live smoke resumes."
+    tests_summary: "First authorized read-only live attempt exposed an argv/parser defect. M07-T03 corrected it at exact subject b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b; live smoke resumed against that subject."
 
   - id: M07-T03
     title: "Correct live Muse exec argv dispatch"
     milestone: M07
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M07-T01"
@@ -477,7 +476,7 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
     result_pr: null
     evidence: "implementation/evidence/M07_LIVE_ADAPTER_SMOKE_2026-09-18.md"
-    tests_summary: null
+    tests_summary: "Corrective subject GREEN. Adapter suite 12/12, mixed-profile suite 7/7 and workflow runtime regression 90/90 GREEN; Python compileall and git diff --check GREEN. Generated argv now selects muse exec before exec flags; observed live CLI usage text classifies as adapter_internal. GitHub readback confirms exact branch head b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b."
