@@ -190,3 +190,105 @@ Result:
 - terminal JSONL record was `run.terminal.completed` with expected final text.
 
 This establishes that production parsing should consume stdout as JSONL and treat stderr as diagnostic text, without mixing the two streams.
+
+
+## Controlled failure contract
+
+A deliberate nonexistent-model probe established deterministic failure behavior:
+
+- process exit code: `1`;
+- stderr contains a human-readable provider/model failure;
+- JSONL includes `task.lifecycle.failed`;
+- terminal JSONL record is `run.terminal.failed`;
+- `payload.terminal: failed`;
+- `payload.reason` contains the provider/model failure reason;
+- `payload.text` is empty for this failure.
+
+The adapter can therefore classify a provider/model failure from structured stdout and use stderr as diagnostic context.
+
+## Workspace write behavior
+
+A disposable explicit workspace under the project bind was used with:
+
+- `--workspace <PATH>`;
+- `--disable-shell`;
+- `--disable-web-tools`;
+- approvals disabled;
+- sandbox left enabled;
+- explicit model `muse-spark-1.3-contributor`;
+- explicit `--reasoning-effort max`.
+
+Muse created exactly one requested file through non-shell workspace tooling and returned `run.terminal.completed` / exit `0`.
+
+Observed file:
+
+- mode `0644`;
+- exact bytes: `MUSE_WRITE_OK\n`.
+
+This proves policy-gated non-shell workspace writes function inside the current workstation container while the OS shell sandbox limitation below is independent.
+
+## Sandbox and network boundary
+
+The default Muse OS shell sandbox does **not** function inside the current unprivileged Unraid Docker boundary.
+
+Observed shell-tool failure with sandbox enabled:
+
+- Muse accepted/scheduled `tool.bash`;
+- bubblewrap failed before the shell command ran:
+  `bwrap: No permissions to create new namespace, likely because the kernel does not allow non-privileged user namespaces.`;
+- shell tool task became `task.lifecycle.failed`;
+- Muse attempted an unsandboxed retry path, which was rejected when approval prompts were disabled:
+  `unsandboxed execution requires human approval, but approval prompts are disabled`.
+
+Therefore production Muse shell execution in this workstation cannot rely on nested bubblewrap/user-namespace sandboxing.
+
+A second probe used `--disable-sandbox` while retaining the Docker container as the outer isolation boundary and keeping approvals disabled.
+
+Observed:
+
+- harmless shell `printf SHELL_OK` completed with exit `0`;
+- outbound HTTPS HEAD to `https://example.com` completed with exit `0` and `NET_OK`;
+- shell task lifecycle and `tool.result` records were emitted;
+- run terminal was `run.terminal.completed` with final text `SHELL_OK NET_OK`.
+
+Binding implication for later implementation: shell-capable Muse profiles on this workstation require `--disable-sandbox`; Docker remains the external isolation boundary. This is an observed runtime requirement, not a general Muse recommendation.
+
+## Process/subprocess and termination behavior
+
+A bounded live process-tree probe used a unique Muse session id and an unsandboxed shell command `sleep 60`.
+
+Observed while the command was active:
+
+- Muse process: PID/PGID/SID `1901/1901/1901`;
+- shell-tool process: `/bin/sh -c sleep 60`, PPID `1901`, but its own PGID/SID `1930/1930`;
+- `sleep 60` was a child of that shell and shared PGID/SID `1930/1930`.
+
+This proves shell-tool subprocesses may live in a distinct process group/session from the Muse parent, so a future adapter must not assume that signaling only the Muse process group is sufficient by POSIX grouping alone.
+
+Termination probe:
+
+- sent `SIGTERM` only to the active Muse PID;
+- two seconds later neither the Muse process nor the shell/sleep subtree remained;
+- Muse emitted `received SIGTERM; flushed session logs`;
+- outer process exit code was `143`.
+
+Therefore the observed Muse 1.3.0 runtime performs child cleanup on normal TERM. A production adapter should still retain a bounded process-tree verification/fallback kill path for timeout/cancel robustness because the child process group is distinct.
+
+## M05 acceptance summary
+
+GREEN for the live-runtime evidence Card:
+
+- exact installed version recorded;
+- exact headless/machine-readable argv surface recorded;
+- subscription/account auth path and persistent state recorded without secrets;
+- auth survives restart and full recreate;
+- read-only machine-readable success observed;
+- workspace-write success observed;
+- stdout/stderr separation observed;
+- controlled provider/model failure observed;
+- terminal success/failure JSONL records identified;
+- nested sandbox limitation classified;
+- unsandboxed shell/network behavior inside the Docker boundary classified;
+- process/subprocess layout and TERM cleanup behavior observed.
+
+No credential content, login code, token, cookie, or secret-bearing raw session material is committed in this evidence.
