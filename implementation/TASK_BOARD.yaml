@@ -89,7 +89,7 @@ milestones:
 
   M07:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m07--build-the-production-muse-processresult-adapter"
     checkpoint: null
     implementation_head: null
@@ -409,7 +409,7 @@ cards:
     title: "Build deterministic Muse process/result adapter"
     milestone: M07
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M05"
@@ -447,7 +447,7 @@ cards:
     exclusive_resources:
       - "live workstation Muse process/runtime artifacts"
       - "persistent /home/codex Muse runtime state"
-    lane_branch: "elmakus/codex-workflow:impl/m07-muse-process-result-adapter"
+    lane_branch: "elmakus/codex_workflow:impl/m07-muse-process-result-adapter"
     lane_base: null
     review_state: null
     review_subject: null
