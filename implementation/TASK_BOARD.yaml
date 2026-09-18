@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
   pr: 2
-  head: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
+  head: "afef9e799599e8c31539ed60689a3828be7728ea"
 
 milestones:
   M01:
@@ -20,12 +20,12 @@ milestones:
     execution_status: in_progress
     contract: "User-approved parallel Codex-LB and CLIProxyAPI routing in related fork elmakus/codex-chatgpt-web"
     checkpoint: null
-    implementation_head: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
+    implementation_head: "afef9e799599e8c31539ed60689a3828be7728ea"
     handoff: null
-    acceptance_evidence: "implementation/reviews/dual-native-upstreams-m01-independent-acceptance-review-2026-09-18.md"
-    review_state: red
-    review_subject: "elmakus/codex-chatgpt-web@eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
-    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-publication-failure-2026-09-18.md"
+    acceptance_evidence: "implementation/reviews/dual-native-upstreams-pr2-typecheck-correction-2026-09-18.md"
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@afef9e799599e8c31539ed60689a3828be7728ea"
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-typecheck-correction-2026-09-18.md"
 
 cards:
   - id: M01-T01
@@ -112,7 +112,7 @@ cards:
     title: "Make zstd regression helper typecheck clean"
     milestone: M01
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M01-T03"
@@ -131,9 +131,10 @@ cards:
     exclusive_resources: []
     lane_branch: "elmakus/codex-chatgpt-web:feat/dual-native-upstreams"
     lane_base: "eeb57d0855f7baffc3089f66c7c84d2c06c40ef6"
-    review_state: null
-    review_subject: null
-    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-publication-failure-2026-09-18.md"
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@afef9e799599e8c31539ed60689a3828be7728ea"
+    review_evidence: "implementation/reviews/dual-native-upstreams-pr2-typecheck-correction-2026-09-18.md"
+    result_commit: "afef9e799599e8c31539ed60689a3828be7728ea"
     result_pr: 2
-    evidence: "implementation/reviews/dual-native-upstreams-pr2-publication-failure-2026-09-18.md"
-    tests_summary: "PR #2 CI run 35298432101 failed macOS bun run verify during TypeScript typecheck at tests/native-passthrough.test.ts:36 because Buffer<ArrayBufferLike> is not assignable to BodyInit."
+    evidence: "implementation/reviews/dual-native-upstreams-pr2-typecheck-correction-2026-09-18.md"
+    tests_summary: "Corrective diff is one test file (+4/-2), converting the Bun zstd Buffer to an equal-length ArrayBuffer before Request construction. PR #2 run 35298637056 has bun run verify GREEN on macOS, Ubuntu, and Windows. macOS later fails only at the known PR-only unsigned codesign package check; prior PR #1 has the identical failure and base main@f8dc469 push CI is fully GREEN."
