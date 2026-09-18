@@ -1,6 +1,6 @@
 project: "chatgpt-ce-workstation"
 plan_revision: "planning/MASTER_PLAN.md@approved-2026-09-18"
-current_milestone: "M08"
+current_milestone: "M09"
 execution_mode: serial
 parallel_card_limit: 1
 
@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "050276aaee47d334f5453797e3746d01eb6b5487"
+  head: "28b48a858cdac6d3ed2317d0a49374e55d9f3f59"
 
 milestones:
   M01:
@@ -101,12 +101,12 @@ milestones:
 
   M08:
     decision_state: accepted
-    execution_status: blocked
+    execution_status: done
     contract: "planning/MASTER_PLAN.md#milestone-m08--verify-sequential-role-orchestration-and-red-repair"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
+    checkpoint: "elmakus/codex_workflow@b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
+    implementation_head: "b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
+    handoff: "project-handoffs/M08_HANDOFF.md"
+    acceptance_evidence: "implementation/evidence/M08_SEQUENTIAL_ORCHESTRATION_2026-09-18.md"
     review_state: null
     review_subject: null
     review_evidence: null
@@ -486,7 +486,7 @@ cards:
     title: "Validate sequential Muse-max orchestration and RED repair"
     milestone: M08
     decision_state: accepted
-    execution_status: blocked
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M07"
@@ -512,12 +512,13 @@ cards:
     lane_branch: "elmakus/codex_workflow:impl/m07-muse-process-result-adapter"
     lane_base: "elmakus/codex_workflow@b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
     authorization: "M08 live operations explicitly authorized by user on 2026-09-18."
-    blocker: "Live persistent Luna XHigh Companion creation/reuse cannot be executed from this normal ChatGPT executor: no internal Codex spawn/resume/wait surface is exposed and no standalone codex CLI exists in the workstation container. Muse-side M08 acceptance is GREEN. Remaining evidence must come from an actual Codex Main session with active muse-max, or capture the concrete quota/runtime failure."
+    blocker: null
+    deferred_gate: "Live GPT-5.6 Luna XHigh Companion creation/reuse remains mandatory under R3/D21 and is deferred by approved Master Plan R2 to the M09 hard pre-publication/pre-promotion gate. Quota/runtime rejection is non-passing; substitutes are forbidden."
     blocker_evidence: "implementation/evidence/M08_SEQUENTIAL_ORCHESTRATION_2026-09-18.md#companion-live-validation-blocker"
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "b87f4eb4e1611407a9a5aa1d31b16b2cc8f1974b"
     result_pr: null
     evidence: "implementation/evidence/M08_SEQUENTIAL_ORCHESTRATION_2026-09-18.md"
-    tests_summary: "Muse-side M08 GREEN: six Muse roles completed as fresh one-shot invocations; executor -> fresh Tester GREEN; deliberate RED -> focused findings -> fresh repair Executor -> fresh Tester GREEN; nine runs each had one completed terminal marker, 0700/0600 private artifacts, no raw marker in normalized results, no artifact refs in capsules, no observed spawn_agent/send_message/nested muse exec, no residual pilot process, disposable workspace cleaned. Card remains blocked only on live persistent internal Luna XHigh Companion creation/reuse from a real Codex Main session."
+    tests_summary: "M08 GREEN under approved Master Plan R2. Six Muse roles, executor -> fresh Tester GREEN, deliberate RED -> Main -> fresh repair Executor -> fresh Tester GREEN, raw-artifact isolation, leaf-worker checks and cleanup are durably GREEN. Active muse-max allocation renders one internal GPT-5.6 Luna XHigh Companion. Live Companion creation/reuse was not executed because the current ChatGPT surface lacks the internal Codex lifecycle; R2 explicitly defers only that unsatisfied R3/D21 proof to the M09 hard pre-publication/pre-promotion gate."
