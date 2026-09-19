@@ -269,6 +269,19 @@ Muse `session_id`, adapter `invocation_id`, session registry/bindings, leases, r
 
 A higher-level workflow MAY treat a Tester result as its formal independent-review verdict and MAY persist its own subject/attempt/evidence state, but that interpretation is outside `codex_workflow`.
 
+### R18 — Accepted M10 runtime is released and promoted exactly
+
+The independently accepted M10 stateful Muse runtime MUST be published through the normal `codex_workflow` release channel and promoted to the workstation production runtime.
+
+Release/promotion MUST preserve exact-subject lineage:
+- the accepted M10 behavioral source checkpoint is the only permitted behavioral base;
+- the release candidate may add only synchronized release/version material and any strictly version-coupled test/document literals required by the existing release contract;
+- any behavioral/runtime change after the accepted M10 checkpoint creates a new implementation subject and MUST return through the applicable independent review and live validation gates;
+- the exact published release commit MUST be the exact candidate that passed its release-stage review and live validation;
+- production MUST be updated only from that exact published release and verified by readback.
+
+Production acceptance MUST prove the active `muse-max` runtime uses the stateful logical-worker lifecycle while `plus`, `luna-xhigh`, and `pro-x5` retain their existing Codex-backed allocations and lifecycle behavior.
+
 ## Acceptance-level outcomes
 
 The Definition is satisfied when the implemented `muse-max` path can demonstrate all of the following:
@@ -284,6 +297,7 @@ The Definition is satisfied when the implemented `muse-max` path can demonstrate
 9. two caller-authorized non-overlapping lanes can execute concurrently with lane-local Executor/Tester sessions and no cross-lane reuse or artifact collision;
 10. `plus`, `luna-xhigh`, and `pro-x5` regressions remain unchanged;
 11. the runtime works without reading or mutating Project Workflow Task Board/review-policy state.
+12. the independently accepted M10 subject is released through an exact release candidate, published with commit identity preserved, installed on the workstation, and production readback/stateful Muse smoke are GREEN without changing the other compute profiles.
 
 ## Non-goals
 
