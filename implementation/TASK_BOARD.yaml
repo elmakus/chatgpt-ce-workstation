@@ -948,7 +948,7 @@ cards:
     title: "Revalidate corrected stateful Muse candidate live and freeze replacement review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M10-T03"
