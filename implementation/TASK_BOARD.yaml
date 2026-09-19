@@ -1,6 +1,6 @@
 project: "chatgpt-ce-workstation"
 plan_revision: "planning/MASTER_PLAN.md@R6-approved-2026-09-19"
-current_milestone: "M10"
+current_milestone: "M09"
 execution_mode: serial
 parallel_card_limit: 1
 
@@ -125,12 +125,12 @@ milestones:
 
   M10:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
-    checkpoint: null
+    checkpoint: "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
     implementation_head: "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
-    handoff: null
-    acceptance_evidence: "implementation/evidence/M10_T16_LIVE_NESTED_WORKSPACE_ISOLATION_REVALIDATION_2026-09-19.md"
+    handoff: "project-handoffs/M10_HANDOFF.md"
+    acceptance_evidence: "implementation/reviews/m10-final-stateful-muse-runtime-independent-review-2026-09-19.md"
     review_state: green
     review_subject: "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
     review_evidence: "implementation/reviews/m10-final-stateful-muse-runtime-independent-review-2026-09-19.md"
