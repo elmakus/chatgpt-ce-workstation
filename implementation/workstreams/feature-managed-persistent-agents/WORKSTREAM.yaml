@@ -1,6 +1,6 @@
 id: "feature-managed-persistent-agents"
 kind: "feature"
-status: "review"
+status: "done"
 
 branch: "feat/managed-persistent-agents"
 base_ref: "elmakus/chatgpt-ce-workstation@4c4da56e1c7db6d0cfc69e170ada3800db185c28"
@@ -39,4 +39,4 @@ branch_cleanup:
   evidence: null
 
 pr: 6
-result: null
+result: "elmakus/chatgpt-ce-workstation@63a6fa73410d0b9c9da6bf346736520927e02a0c"
