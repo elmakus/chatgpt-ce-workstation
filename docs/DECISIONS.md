@@ -314,3 +314,20 @@ Caller-authorized independent lanes may run concurrently against distinct non-ov
 `chatgpt-ce-workstation` owns installation, persistence and runtime availability of official Muse Code plus user authentication state. It does not own the worker scheduler or normalized worker lifecycle protocol.
 
 **Rationale:** live Muse Code 1.3.0 research on 2026-09-19 proved that separate headless `muse exec` processes can reuse the same durable session and preserve context across the exact A1 -> B1 -> A1 -> B1 cycle while keeping Executor and Tester sessions separate. The current one-shot behavior comes from the adapter conflating per-run artifact identity with Muse session identity, not from a Muse limitation. Keeping Project Workflow policy/state outside `codex_workflow` preserves reusable runtime semantics for any caller. See `research/MUSE_SESSION_RESUME_LIFECYCLE_2026-09-19.md`.
+
+## D22 — M10 production promotion uses an exact release-candidate lineage
+
+**Decision (2026-09-19):** publish and promote the accepted M10 stateful Muse runtime through a new exact `codex_workflow` release candidate derived from the independently GREEN M10 subject, rather than publishing that source checkpoint directly under stale release metadata.
+
+The release path must:
+
+- preserve the accepted M10 behavioral subject as the release candidate's behavioral base;
+- add only the synchronized release/version changes and strictly version-coupled test/document literals required by the existing release contract;
+- independently review the exact release candidate when required by the release plan;
+- live-validate the exact candidate before publication;
+- preserve commit identity from accepted release candidate through `main`, tag/release provenance and workstation installation;
+- fail closed to normal correction/review/revalidation if any behavioral change, incompatible `main` drift or release-lineage mismatch appears;
+- verify after production promotion that `muse-max` uses the accepted stateful lifecycle and that `plus`, `luna-xhigh`, and `pro-x5` remain unchanged.
+
+**Rationale:** the accepted M10 source still carries the prior production version metadata. A distinct exact release candidate preserves auditable source → review → live validation → publication → production identity and avoids silently treating release metadata mutation as if it were the already-reviewed M10 source subject.
+
