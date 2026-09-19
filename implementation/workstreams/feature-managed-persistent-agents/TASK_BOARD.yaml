@@ -6,7 +6,7 @@ current_milestone: "M02"
 execution_ref:
   branch: "feat/managed-persistent-agents"
   pr: 6
-  head: "00c32fa9f34229e2c227352f4891a7a64f119d35"
+  head: "8f9f4f22c0954811707ac4eb581f4d255af864cf"
 
 research_obligation: null
 
@@ -55,7 +55,7 @@ cards:
     title: "Prepare exact reviewed deployment candidate"
     milestone: M02
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     depends_on: ["M01-T01"]
     openspec_change: null
@@ -66,7 +66,7 @@ cards:
     result_commit: "8f9f4f22c0954811707ac4eb581f4d255af864cf"
     result_pr: 6
     evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M02_T01_DEPLOYMENT_READINESS_2026-09-20.md"
-    tests_summary: "GREEN preparation on exact reviewed source 00c32fa: source validation 9/9 + SOURCE_VALIDATION_GREEN; tracked build.sh exit 0; candidate image sha256:c1470837045e2a2c57523174f3f3d7527e00e978576a42cd7af27051a6c2b830; production container ade19cd953f9 stayed healthy on sha256:4a41e7ee1791; production AGENTS SHA stayed a24b186fbac9cba0897d21e28382ba42e91efb747d650c9be724da2ad903a0e4."
+    tests_summary: "GREEN preparation on exact reviewed source 00c32fa: source validation 9/9 + SOURCE_VALIDATION_GREEN; tracked build.sh exit 0; candidate image sha256:c1470837045e2a2c57523174f3f3d7527e00e978576a42cd7af27051a6c2b830; production baseline unchanged; independent review GREEN with candidate, rollback inputs, bounded live baseline and Compose identity verified."
   - id: M02-T02
     title: "Authorized production activation and live verification"
     milestone: M02
