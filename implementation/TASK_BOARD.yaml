@@ -1482,7 +1482,7 @@ cards:
     lane_base: "M11-T01 exact result subject"
     blocker: null
     blocker_evidence: null
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex_workflow@d285aa1a271258052d23e3a2d3b585117fc1e862"
     review_evidence: null
     result_commit: "elmakus/codex_workflow@d285aa1a271258052d23e3a2d3b585117fc1e862"
