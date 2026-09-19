@@ -131,9 +131,9 @@ milestones:
     implementation_head: "elmakus/codex_workflow@7f6f51fe9faf318fa90ce9414e6024c673ad9226"
     handoff: null
     acceptance_evidence: "implementation/evidence/M10_T06_LIVE_STALE_ACTIVE_CORRECTION_REVALIDATION_2026-09-19.md"
-    review_state: in_progress
+    review_state: red
     review_subject: "elmakus/codex_workflow@7f6f51fe9faf318fa90ce9414e6024c673ad9226"
-    review_evidence: null
+    review_evidence: "implementation/reviews/m10-stale-active-corrected-stateful-muse-runtime-independent-review-2026-09-19.md"
 
 cards:
   - id: M01-T01
