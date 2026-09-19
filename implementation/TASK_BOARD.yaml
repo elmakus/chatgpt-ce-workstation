@@ -128,9 +128,9 @@ milestones:
     execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
     checkpoint: null
-    implementation_head: "elmakus/codex_workflow@b225fad5ffa0497566ff9179ef684968a3d9be16"
+    implementation_head: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
     handoff: null
-    acceptance_evidence: "implementation/evidence/M10_T02_LIVE_STATEFUL_MUSE_VALIDATION_2026-09-19.md"
+    acceptance_evidence: "implementation/evidence/M10_T03_CLEANUP_CONFIRMATION_CORRECTION_2026-09-19.md"
     review_state: red
     review_subject: "elmakus/codex_workflow@b225fad5ffa0497566ff9179ef684968a3d9be16"
     review_evidence: "implementation/reviews/m10-stateful-muse-runtime-independent-review-2026-09-19.md"
@@ -912,7 +912,7 @@ cards:
     title: "Fail closed on unconfirmed Muse process-tree cleanup"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T02"
@@ -939,16 +939,16 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M10_T03_CLEANUP_CONFIRMATION_CORRECTION_2026-09-19.md"
+    tests_summary: "GREEN: runtime 90/90; Muse adapter 25/25 including forced cleanup-unconfirmed quarantine; muse-max profile 7/7; compile/validate/package build/archive verification/diff-check GREEN; remote changed blobs exactly match tested tree."
 
   - id: M10-T04
     title: "Revalidate corrected stateful Muse candidate live and freeze replacement review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: "chatgpt"
     depends_on:
       - "M10-T03"
@@ -960,7 +960,7 @@ cards:
       - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile"
       - "implementation/cards/M10-T02.md"
       - "implementation/reviews/m10-stateful-muse-runtime-independent-review-2026-09-19.md"
-      - "M10-T03 result"
+      - "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
     parallel_safe: false
     write_scope:
       - "isolated workstation corrected-candidate runtime/workspaces/private Muse session artifacts"
@@ -969,7 +969,7 @@ cards:
       - "isolated M10 corrected-candidate Muse runtime/auth state"
       - "M10 disposable validation workspaces"
     lane_branch: "elmakus/codex_workflow:impl/m10-stateful-muse-lifecycle"
-    lane_base: "M10-T03 exact result subject"
+    lane_base: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
     authorization: "R6 isolated real-Muse lifecycle/fault-injection validation explicitly authorized by user on 2026-09-19; production release/promotion is not authorized."
     blocker: null
     blocker_evidence: null
