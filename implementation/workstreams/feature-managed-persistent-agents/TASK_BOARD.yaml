@@ -1,0 +1,42 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "feature-managed-persistent-agents"
+plan_revision: "managed-persistent-agents-R1"
+current_milestone: "M01"
+
+execution_ref:
+  branch: "feat/managed-persistent-agents"
+  pr: null
+  head: null
+
+research_obligation: null
+
+milestones:
+  M01:
+    decision_state: accepted
+    execution_status: planned
+    contract: "planning/MANAGED_PERSISTENT_AGENTS_MASTER_PLAN.md#milestone-m01--managed-reconciliation-source"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: M01-T01
+    title: "Implement managed persistent AGENTS reconciliation"
+    milestone: M01
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/workstreams/feature-managed-persistent-agents/cards/M01-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
