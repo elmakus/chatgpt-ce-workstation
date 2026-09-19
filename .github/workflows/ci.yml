@@ -27,6 +27,13 @@ jobs:
       - name: Validate workstation source
         run: bash scripts/validate-source.sh
 
+      - name: Test noVNC desktop workarea semantics
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xvfb openbox tint2 xterm x11-utils wmctrl
+          TEST_DISPLAY_NUMBER=91 SCREEN_WIDTH=1280 SCREEN_HEIGHT=720 bash scripts/test-desktop-workarea.sh
+          TEST_DISPLAY_NUMBER=92 SCREEN_WIDTH=1920 SCREEN_HEIGHT=1080 bash scripts/test-desktop-workarea.sh
+
       - name: ShellCheck workstation scripts
         run: |
           sudo apt-get update

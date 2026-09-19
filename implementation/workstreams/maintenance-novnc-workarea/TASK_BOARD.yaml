@@ -1,0 +1,41 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "maintenance-novnc-workarea"
+plan_revision: "docs/IMPLEMENTATION_PLAN.md#phase-5"
+current_milestone: "M01"
+
+execution_ref:
+  branch: "fix/novnc-tint2-workarea"
+  pr: 3
+  head: "c13ae25d426ee282143765308406a04a122b1557"
+
+research_obligation: null
+
+milestones:
+  M01:
+    decision_state: accepted
+    execution_status: done
+    contract: "Restore correct full-screen Openbox workarea/maximize behavior while preserving the bottom Tint2 recovery panel."
+    checkpoint: "elmakus/chatgpt-ce-workstation@c13ae25d426ee282143765308406a04a122b1557"
+    implementation_head: "c13ae25d426ee282143765308406a04a122b1557"
+    handoff: null
+    acceptance_evidence: "implementation/workstreams/maintenance-novnc-workarea/evidence/M01_T01_WORKAREA_FIX_2026-09-19.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: "M01-T01"
+    title: "Correct Tint2/Openbox workarea reservation"
+    milestone: "M01"
+    decision_state: accepted
+    execution_status: done
+    executor: "chatgpt"
+    depends_on: []
+    contract: "implementation/workstreams/maintenance-novnc-workarea/cards/M01-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: "c13ae25d426ee282143765308406a04a122b1557"
+    result_pr: 3
+    evidence: "implementation/workstreams/maintenance-novnc-workarea/evidence/M01_T01_WORKAREA_FIX_2026-09-19.md"
+    tests_summary: "GREEN at code subject c13ae25: exact workstation Tint2 17.0.1/Openbox 3.6.1 isolated-display probes pass at 1280x720 and 1920x1080; old panel_dock=1 negative probe reproduces half-screen workarea; clean Ubuntu 24.04 runner-equivalent probes pass; source validation GREEN; PR #3 CI run 35409792819 source-validation/workarea/ShellCheck, Dockerfile check, and secret scan all GREEN."

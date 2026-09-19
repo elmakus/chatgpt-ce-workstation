@@ -120,7 +120,9 @@ grep -Fx 'longrun' rootfs/etc/s6-overlay/s6-rc.d/desktop/type >/dev/null || fail
 grep -F 'wait -n "$openbox_pid" "$x11vnc_pid" "$websockify_pid"' scripts/container/desktop-session-inner.sh >/dev/null || fail 'critical desktop processes are not supervised together'
 grep -F 'pids+=("$ce_pid")' scripts/container/desktop-session-inner.sh >/dev/null || fail 'CE is not cleaned up on desktop-service restart'
 grep -F 'pids+=("$codex_web_pid")' scripts/container/desktop-session-inner.sh >/dev/null || fail 'Codex Web GPT is not cleaned up on desktop-service restart'
-pass 'noVNC relaunch and desktop supervision surface'
+grep -Fx 'panel_dock = 0' rootfs/etc/xdg/tint2/tint2rc >/dev/null \
+  || fail 'Tint2 panel_dock must remain 0 to preserve full-width Openbox workarea under Xvfb'
+pass 'noVNC relaunch, full-width workarea and desktop supervision surface'
 
 echo
 echo '=== secret hygiene ==='
