@@ -114,6 +114,10 @@ for path in \
   [[ -s "$path" ]] || fail "missing $path"
 done
 grep -F 'tint2' Dockerfile >/dev/null || fail 'tint2 is not installed by Dockerfile'
+grep -F 'xdotool' Dockerfile >/dev/null || fail 'xdotool is not installed by Dockerfile'
+grep -F '## GUI automation' defaults/AGENTS.md >/dev/null || fail 'global agent GUI automation guidance missing'
+grep -F 'Do not install `ydotool`' defaults/AGENTS.md >/dev/null || fail 'global agent guidance no longer rejects ad-hoc ydotool'
+grep -F '/dev/uinput' defaults/AGENTS.md >/dev/null || fail 'global agent guidance no longer records uinput boundary'
 grep -F '/usr/local/bin/chatgpt-ce' rootfs/etc/xdg/openbox/menu.xml >/dev/null || fail 'Openbox CE launcher missing'
 grep -F '/usr/local/bin/codex-web-gpt' rootfs/etc/xdg/openbox/menu.xml >/dev/null || fail 'Openbox Codex Web GPT launcher missing'
 grep -Fx 'longrun' rootfs/etc/s6-overlay/s6-rc.d/desktop/type >/dev/null || fail 'desktop s6 service is not longrun'
@@ -122,7 +126,7 @@ grep -F 'pids+=("$ce_pid")' scripts/container/desktop-session-inner.sh >/dev/nul
 grep -F 'pids+=("$codex_web_pid")' scripts/container/desktop-session-inner.sh >/dev/null || fail 'Codex Web GPT is not cleaned up on desktop-service restart'
 grep -Fx 'panel_dock = 0' rootfs/etc/xdg/tint2/tint2rc >/dev/null \
   || fail 'Tint2 panel_dock must remain 0 to preserve full-width Openbox workarea under Xvfb'
-pass 'noVNC relaunch, full-width workarea and desktop supervision surface'
+pass 'noVNC relaunch, X11 automation guidance, full-width workarea and desktop supervision surface'
 
 echo
 echo '=== secret hygiene ==='
