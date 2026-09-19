@@ -128,12 +128,12 @@ milestones:
     execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
     checkpoint: null
-    implementation_head: "elmakus/codex_workflow@ad62ffa515026714a42a610c0310b1f6e92f47bd"
+    implementation_head: "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
     handoff: null
-    acceptance_evidence: "implementation/evidence/M10_T14_LIVE_ACTIVATION_RESERVATION_CORRECTION_REVALIDATION_2026-09-19.md"
-    review_state: red
-    review_subject: "elmakus/codex_workflow@ad62ffa515026714a42a610c0310b1f6e92f47bd"
-    review_evidence: "implementation/reviews/m10-nested-workspace-isolation-independent-review-2026-09-19.md"
+    acceptance_evidence: "implementation/evidence/M10_T16_LIVE_NESTED_WORKSPACE_ISOLATION_REVALIDATION_2026-09-19.md"
+    review_state: pending
+    review_subject: "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
+    review_evidence: null
 
 cards:
   - id: M01-T01
@@ -1376,7 +1376,7 @@ cards:
     title: "Revalidate nested-workspace isolation correction live and freeze next review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T15"
@@ -1403,8 +1403,8 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M10_T16_LIVE_NESTED_WORKSPACE_ISOLATION_REVALIDATION_2026-09-19.md"
+    tests_summary: "GREEN on exact cf4c01f3ef7f35c32fb5ad61c301eb90e1466655: T15 exact-subject regressions 33/33 Muse adapter, 90/90 runtime, 7/7 profile plus compile/diff/package GREEN; live Muse Code 1.3.0 A1/B1 RED-repair-full-recheck same-session reuse; timeout cleanup and same-session C1 recovery; concurrent two-lane Executor/Tester isolation; private 0700/0600 artifacts; 11 run dirs, 7 workers ready, zero residual candidate processes; production version/hash unchanged."
 
