@@ -1530,7 +1530,7 @@ cards:
     title: "Publish exact candidate with identity-preserving provenance"
     milestone: M11
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M11-T03"
@@ -1556,10 +1556,10 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@d285aa1a271258052d23e3a2d3b585117fc1e862"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M11_T04_IDENTITY_PRESERVING_PUBLICATION_2026-09-19.md"
+    tests_summary: "GREEN: final refresh proved clean 18-ahead/0-behind fast-forward; non-force main advance preserved exact d285aa1 identity; Release workflow run 35449274880 succeeded; main/tag/release target all resolve to d285aa1; published ZIP + SHA256SUMS verify; ZIP SHA-256 07ec6bb6df38cc8b5719249d54070f0e72ea0c9ec430a6b1c8dc51ab0c8a7197; production remained 1.1.17-private.11."
 
   - id: M11-T05
     title: "Promote exact published release and prove production acceptance"
