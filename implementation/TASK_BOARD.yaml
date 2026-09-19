@@ -1530,7 +1530,7 @@ cards:
     title: "Publish exact candidate with identity-preserving provenance"
     milestone: M11
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: null
     depends_on:
       - "M11-T03"
@@ -1550,7 +1550,7 @@ cards:
       - "codex_workflow main/release publication"
     lane_branch: null
     lane_base: "M11-T03 exact validated candidate"
-    authorization: "PENDING explicit user authorization for this exact M11 publication/main advance."
+    authorization: "AUTHORIZED by user on 2026-09-19 for this exact M11 publication/main advance and resulting release."
     blocker: null
     blocker_evidence: null
     review_state: null
