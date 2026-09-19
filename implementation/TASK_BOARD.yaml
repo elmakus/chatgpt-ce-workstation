@@ -130,10 +130,10 @@ milestones:
     checkpoint: null
     implementation_head: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
     handoff: null
-    acceptance_evidence: "implementation/evidence/M10_T03_CLEANUP_CONFIRMATION_CORRECTION_2026-09-19.md"
-    review_state: red
-    review_subject: "elmakus/codex_workflow@b225fad5ffa0497566ff9179ef684968a3d9be16"
-    review_evidence: "implementation/reviews/m10-stateful-muse-runtime-independent-review-2026-09-19.md"
+    acceptance_evidence: "implementation/evidence/M10_T04_LIVE_CORRECTED_STATEFUL_MUSE_REVALIDATION_2026-09-19.md"
+    review_state: pending
+    review_subject: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
+    review_evidence: null
 
 cards:
   - id: M01-T01
@@ -948,7 +948,7 @@ cards:
     title: "Revalidate corrected stateful Muse candidate live and freeze replacement review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T03"
@@ -976,8 +976,8 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M10_T04_LIVE_CORRECTED_STATEFUL_MUSE_REVALIDATION_2026-09-19.md"
+    tests_summary: "GREEN: exact b677854 corrected source package readback; Meta-backed A1/B1 RED-repair-full-S2-recheck reused distinct stable sessions; real adapter cancellation positively removed the child tree and exact-session recovery resumed safely; exact-subject cleanup-unconfirmed regression remains fail-closed; concurrent two-lane Executor/Tester validation GREEN with four disjoint sessions; private artifacts 0700/0600; zero residual candidate processes; production stayed byte-identical to v1.1.17-private.11 baseline and disposable T04 runtime was removed."
 
