@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/ydotool-ui-automation"
   pr: 5
-  head: "8559ce89ab267a38ff26a2529b9ac1ff964241b9"
+  head: "4e98f805b03f87aa3bdd5dc3e20c1e9c8e0c7be9"
 
 research_obligation: null
 
