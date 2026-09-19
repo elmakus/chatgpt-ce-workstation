@@ -840,7 +840,7 @@ cards:
     title: "Implement stateful Muse logical-worker runtime"
     milestone: M10
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on: []
     openspec_change: null
