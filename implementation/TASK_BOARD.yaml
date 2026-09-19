@@ -1460,8 +1460,8 @@ cards:
     title: "Verify exact candidate and freeze REQUIRED review subject"
     milestone: M11
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on:
       - "M11-T01"
     openspec_change: null
