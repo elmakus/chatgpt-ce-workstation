@@ -985,7 +985,7 @@ cards:
     title: "Fail closed on stale active Muse session state after unreconciled adapter exit"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T04"
@@ -1007,14 +1007,14 @@ cards:
     lane_base: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
     authorization: "Bounded corrective source work under approved R6/M10 authority; production release/promotion is not authorized."
     blocker: null
-    blocker_evidence: null
+    blocker_evidence: "implementation/evidence/M10_T05_STALE_ACTIVE_FAIL_CLOSED_CORRECTION_2026-09-19.md"
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@7f6f51fe9faf318fa90ce9414e6024c673ad9226"
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN on exact remote 7f6f51fe9faf318fa90ce9414e6024c673ad9226: runtime 90/90; Muse adapter 26/26 including cross-process quarantine-persistence failure leaving stale active; muse-max profile 7/7; compile/package build/archive verify/git diff --check GREEN; codex_workflow main and production unchanged."
 
   - id: M10-T06
     title: "Revalidate stale-active fail-closed correction live and freeze next review subject"
