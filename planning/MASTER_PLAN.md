@@ -1,6 +1,6 @@
 # Muse-max production runtime Master Plan
 
-Status: **draft**
+Status: **approved**
 Revision: **R6**
 Date: 2026-09-19
 Review requirement: **RECOMMENDED**
