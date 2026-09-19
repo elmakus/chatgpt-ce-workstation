@@ -1460,7 +1460,7 @@ cards:
     title: "Verify exact candidate and freeze REQUIRED review subject"
     milestone: M11
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: null
     depends_on:
       - "M11-T01"
