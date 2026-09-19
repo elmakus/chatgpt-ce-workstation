@@ -102,7 +102,7 @@ set -Eeuo pipefail
 [[ -r /run/workstation/keyring-password ]]
 [[ -s /home/codex/.config/workstation/vnc.pass ]]
 [[ -x /opt/muse-code/bin/muse ]]
-for cmd in chatgpt-ce codex-web-gpt muse openbox tint2 xterm google-chrome workstation-healthcheck; do
+for cmd in chatgpt-ce codex-web-gpt muse openbox tint2 xterm google-chrome workstation-healthcheck xdotool wmctrl; do
   command -v \"\$cmd\" >/dev/null
   echo \"OK command: \$cmd\"
 done
@@ -112,11 +112,13 @@ muse exec --help >/dev/null
 printf '%s\n' 'OK Muse CLI: version/help/exec-help'
 pgrep -x tint2 >/dev/null
 printf '%s\n' 'OK process: tint2'
+xdotool getmouselocation >/dev/null
+printf '%s\n' 'OK X11 automation: xdotool getmouselocation'
 touch '$canonical_root/.workstation-write-test'
 rm -f '$canonical_root/.workstation-write-test'
 bash /usr/local/bin/workstation-healthcheck
 "
-pass 'canonical pwd, launchers, Muse CLI surface, secrets, panel, write access and desktop health'
+pass 'canonical pwd, launchers, Muse CLI surface, X11 automation, secrets, panel, write access and desktop health'
 
 echo
 echo '=== persistent home ==='

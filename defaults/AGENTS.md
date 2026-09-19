@@ -38,6 +38,12 @@ Do not assume that editing files under `/home/codex/Documents/ChatGPT` synchroni
 - The `codex` user has passwordless sudo inside the dedicated workstation container, but does not have general authority over the Unraid host.
 - `/var/run/docker.sock` is intentionally not mounted.
 
+## GUI automation
+
+- The workstation desktop is Xvfb + Openbox on X11. For desktop pointer/keyboard automation, prefer the already-installed `xdotool`; use `wmctrl` for window-management operations.
+- Do not install `ydotool` as an ad-hoc substitute for workstation GUI control. This container intentionally does not expose `/dev/uinput` or a ydotool daemon; adding that substrate is an explicit architecture/deployment change, not a temporary-tool shortcut.
+- If the existing X11 tools cannot perform a required action, prefer an application-native/IPC mechanism when available or record the concrete missing capability before changing the container isolation boundary.
+
 ## Missing-tool workflow
 
 If a task needs a missing tool, it is acceptable to install it temporarily inside the running workstation to unblock the task, including with passwordless `sudo` where appropriate.

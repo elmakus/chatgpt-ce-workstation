@@ -1,0 +1,34 @@
+id: "issue-ydotool-ui-automation"
+kind: "issue"
+status: "review"
+
+branch: "fix/ydotool-ui-automation"
+base_ref: "elmakus/chatgpt-ce-workstation@77cd342c4ebffc57b84356fd6e224a1dc1afa5e3"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: "complete"
+  record: "implementation/workstreams/issue-ydotool-ui-automation/INTAKE.md"
+
+task_board: "implementation/workstreams/issue-ydotool-ui-automation/TASK_BOARD.yaml"
+
+authority:
+  requirements: null
+  decisions:
+    - "docs/DECISIONS.md#D12"
+    - "docs/DECISIONS.md#D13"
+  plan: null
+
+review:
+  requirement: "RECOMMENDED"
+  state: "green"
+  subject: "elmakus/chatgpt-ce-workstation@8559ce89ab267a38ff26a2529b9ac1ff964241b9"
+  evidence: "implementation/workstreams/issue-ydotool-ui-automation/evidence/MF_T01_INDEPENDENT_REVIEW_2026-09-19.md"
+  covered_by: "task_board:MF-T01"
+
+pr: 5
+result: null
