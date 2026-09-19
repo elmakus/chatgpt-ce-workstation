@@ -1,6 +1,6 @@
 id: "feature-muse-worker-orchestration"
 kind: "feature"
-status: "in_progress"
+status: "review"
 
 branch: "feat/muse-worker-orchestration"
 base_ref: "elmakus/chatgpt-ce-workstation@153a3bb337671fd6e742664710c5cc8e4d5c9a7a"
@@ -26,10 +26,10 @@ authority:
 
 review:
   requirement: "RECOMMENDED"
-  state: null
-  subject: null
-  evidence: null
+  state: "pending"
+  subject: "elmakus/chatgpt-ce-workstation@33472be2fb1991e38d0520500fd4af21f1080346"
+  evidence: "implementation/workstreams/feature-muse-worker-orchestration/evidence/LEGACY_BRANCH_FINALIZATION_MIGRATION_2026-09-19.md"
   covered_by: null
 
-pr: null
+pr: 4
 result: null
