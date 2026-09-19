@@ -1128,7 +1128,7 @@ cards:
     title: "Reserve resumed Muse workspace before session-lock acquisition"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T08"
@@ -1154,16 +1154,16 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@3a5d98b3c21fc37a527c3aa8eb0ed771e6428acb"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M10_T09_RESUME_RESERVATION_CORRECTION_2026-09-19.md"
+    tests_summary: "GREEN: Muse adapter 28/28; workflow runtime 90/90; muse profile 7/7; compile, diff-check, package build/verify and ZIP integrity GREEN; final remote blobs match tested local blobs."
 
   - id: M10-T10
     title: "Revalidate resume-reservation correction live and freeze next review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: "chatgpt"
     depends_on:
       - "M10-T09"
