@@ -14,7 +14,7 @@ intake:
   state: "complete"
   record: "implementation/workstreams/issue-ydotool-ui-automation/INTAKE.md"
 
-task_board: null
+task_board: "implementation/workstreams/issue-ydotool-ui-automation/TASK_BOARD.yaml"
 
 authority:
   requirements: null
@@ -24,7 +24,7 @@ authority:
   plan: null
 
 review:
-  requirement: null
+  requirement: "RECOMMENDED"
   state: null
   subject: null
   evidence: null
