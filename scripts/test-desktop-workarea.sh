@@ -101,7 +101,7 @@ panel_actual_height="$(awk -F: '/Height:/ {gsub(/ /, "", $2); print $2; exit}' <
 [[ "$panel_actual_height" == "$panel_height" ]]   || fail "Tint2 height=$panel_actual_height, expected $panel_height"
 
 probe_title="WORKAREA-PROBE-$$"
-DISPLAY="$display" xterm -T "$probe_title" >"$tmp_dir/xterm.log" 2>&1 &
+DISPLAY="$display" xterm -T "$probe_title" -e sh -c "sleep 30" >"$tmp_dir/xterm.log" 2>&1 &
 probe_pid=$!
 pids+=("$probe_pid")
 
