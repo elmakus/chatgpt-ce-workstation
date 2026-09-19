@@ -9,7 +9,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "c8cc35735d891e716952954f738e15f068c9d412"
+  head: "ed3ef34e1d9a1faa07afc00c02d592e25e4c5cfc"
 
 research_obligation: null
 
@@ -1478,17 +1478,17 @@ cards:
       - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration review state"
     exclusive_resources:
       - "M11 exact release-candidate review subject"
-    lane_branch: null
+    lane_branch: "elmakus/codex_workflow:release/m11-stateful-muse-candidate"
     lane_base: "M11-T01 exact result subject"
     blocker: null
     blocker_evidence: null
-    review_state: null
-    review_subject: null
+    review_state: pending
+    review_subject: "elmakus/codex_workflow@d285aa1a271258052d23e3a2d3b585117fc1e862"
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@d285aa1a271258052d23e3a2d3b585117fc1e862"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M11_T02_EXACT_CANDIDATE_VERIFICATION_2026-09-19.md"
+    tests_summary: "GREEN on exact d285aa1: Muse adapter 33/33, workflow runtime 90/90, muse-max/profile 7/7, 24 Python source compile, diff-check, package validate/build/verify, SHA256SUMS and ZIP integrity; exact delta is one release-only commit over cf4c01f changing only five version-coupled files; ZIP SHA-256 07ec6bb6df38cc8b5719249d54070f0e72ea0c9ec430a6b1c8dc51ab0c8a7197."
 
   - id: M11-T03
     title: "Live-validate the exact reviewed release candidate"
