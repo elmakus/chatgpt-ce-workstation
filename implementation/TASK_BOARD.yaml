@@ -131,9 +131,9 @@ milestones:
     implementation_head: "elmakus/codex_workflow@74a7588e5bab0a5b7a89549c4309486dc9e7ba4f"
     handoff: null
     acceptance_evidence: "implementation/evidence/M10_T08_LIVE_RESERVATION_RACE_CORRECTION_REVALIDATION_2026-09-19.md"
-    review_state: in_progress
+    review_state: red
     review_subject: "elmakus/codex_workflow@74a7588e5bab0a5b7a89549c4309486dc9e7ba4f"
-    review_evidence: null
+    review_evidence: "implementation/reviews/m10-reservation-race-corrected-stateful-muse-runtime-independent-review-2026-09-19.md"
 
 cards:
   - id: M01-T01
