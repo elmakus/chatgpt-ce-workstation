@@ -21,11 +21,6 @@ Normal ChatGPT is the fixed Task Card executor. Do not run the Capability Gate o
 - Workflow ref: current main
 - Normal ChatGPT entrypoint: CHATGPT.md
 
-## Active exploratory scope
-
-- Record: brainstorming/managed-persistent-agents.md
-- Subject: managed-persistent-agents@R1
-
 ## Project authority index
 
 - Accepted architecture decisions: docs/DECISIONS.md
