@@ -2,10 +2,13 @@
 from __future__ import annotations
 import importlib.util
 import os
+import hashlib
+import sys
 from pathlib import Path
 import tempfile
 import unittest
 
+sys.dont_write_bytecode = True
 REPO_ROOT = Path(__file__).resolve().parents[1]
 HELPER = REPO_ROOT / "scripts/container/reconcile-global-agents.py"
 SPEC = importlib.util.spec_from_file_location("reconcile_global_agents", HELPER)
@@ -22,6 +25,13 @@ def managed(payload: bytes) -> bytes:
     return mod._payload_block(payload)
 
 class ReconcileGlobalAgentsTests(unittest.TestCase):
+    def test_known_live_legacy_reference_is_frozen(self) -> None:
+        self.assertEqual(len(LEGACY[0]), 3170)
+        self.assertEqual(
+            hashlib.sha256(LEGACY[0]).hexdigest(),
+            "d6eb6be5954b6dbd7d747c20e47e3df5a4b4402a34eb32c7274a38d9c92b18c2",
+        )
+
     def setUp(self) -> None:
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
