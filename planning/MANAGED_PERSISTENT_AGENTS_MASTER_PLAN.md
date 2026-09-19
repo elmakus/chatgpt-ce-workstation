@@ -1,6 +1,6 @@
 # Managed persistent AGENTS Master Plan
 
-Status: **draft**
+Status: **approved**
 Plan revision: **managed-persistent-agents-R1**
 Date: 2026-09-19
 Independent plan review: **RECOMMENDED**
