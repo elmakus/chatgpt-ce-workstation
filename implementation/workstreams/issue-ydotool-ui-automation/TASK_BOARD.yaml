@@ -5,8 +5,8 @@ current_milestone: "micro-fix"
 
 execution_ref:
   branch: "fix/ydotool-ui-automation"
-  pr: null
-  head: "1682b3786766c628e8b45e38591133d3d9dd026b"
+  pr: 5
+  head: "8559ce89ab267a38ff26a2529b9ac1ff964241b9"
 
 research_obligation: null
 
@@ -21,10 +21,10 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-ydotool-ui-automation/cards/MF-T01.md"
-    review_state: null
-    review_subject: null
+    review_state: pending
+    review_subject: "elmakus/chatgpt-ce-workstation@8559ce89ab267a38ff26a2529b9ac1ff964241b9"
     review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "8559ce89ab267a38ff26a2529b9ac1ff964241b9"
+    result_pr: 5
+    evidence: "implementation/workstreams/issue-ydotool-ui-automation/evidence/MF_T01_YDOTOOL_UI_AUTOMATION_2026-09-19.md"
+    tests_summary: "GREEN on exact implementation subject 8559ce89: shell syntax GREEN; SOURCE_VALIDATION_GREEN; WORKSTATION_RUNTIME_GREEN; live xdotool getmouselocation GREEN. No production rebuild/recreate was performed."
