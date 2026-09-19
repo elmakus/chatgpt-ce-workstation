@@ -948,7 +948,7 @@ cards:
     title: "Revalidate corrected stateful Muse candidate live and freeze replacement review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: blocked
     executor: "chatgpt"
     depends_on:
       - "M10-T03"
@@ -971,8 +971,8 @@ cards:
     lane_branch: "elmakus/codex_workflow:impl/m10-stateful-muse-lifecycle"
     lane_base: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
     authorization: "R6 isolated real-Muse lifecycle/fault-injection validation explicitly authorized by user on 2026-09-19; production release/promotion is not authorized."
-    blocker: null
-    blocker_evidence: null
+    blocker: "Live workstation container chatgpt-ce-workstation exited cleanly during M10-T04 Refresh Gate and remains stopped. Isolated live Muse revalidation cannot proceed until the container is running; restart/recreate requires an explicit live runtime action."
+    blocker_evidence: "implementation/blockers/M10_T04_RUNTIME_CONTAINER_STOPPED_2026-09-19.md"
     review_state: null
     review_subject: null
     review_evidence: null
