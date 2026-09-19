@@ -128,7 +128,7 @@ milestones:
     execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
     checkpoint: null
-    implementation_head: "elmakus/codex_workflow@eb490ccfbe04bac0bd3ab7646eceffdea7cdde4e"
+    implementation_head: "elmakus/codex_workflow@ad62ffa515026714a42a610c0310b1f6e92f47bd"
     handoff: null
     acceptance_evidence: "implementation/evidence/M10_T12_LIVE_TERMINAL_LOCK_RACE_CORRECTION_REVALIDATION_2026-09-19.md"
     review_state: red
@@ -1270,7 +1270,7 @@ cards:
     title: "Reconcile activation-state persistence failure after session reservation"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T12"
@@ -1296,16 +1296,16 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@ad62ffa515026714a42a610c0310b1f6e92f47bd"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M10_T13_ACTIVATION_STATE_CORRECTION_2026-09-19.md"
+    tests_summary: "GREEN on exact remote ad62ffa515026714a42a610c0310b1f6e92f47bd: Muse adapter 31/31 including atomic acquisition and activation-persistence recovery; workflow runtime 90/90; muse-max profile 7/7; compile, diff-check, package build/verify and ZIP integrity GREEN; tested Tower tree matched final remote tree."
 
   - id: M10-T14
     title: "Revalidate activation-reservation correction live and freeze next review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: "chatgpt"
     depends_on:
       - "M10-T13"
