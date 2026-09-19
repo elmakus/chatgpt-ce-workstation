@@ -606,7 +606,7 @@ cards:
     title: "Close the deferred Luna XHigh Companion final acceptance gate"
     milestone: M09
     decision_state: accepted
-    execution_status: blocked
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M09-T08"
@@ -631,15 +631,15 @@ cards:
     lane_branch: null
     lane_base: null
     authorization: "M09 live operations explicitly authorized by user on 2026-09-18."
-    blocker: "Fresh 2026-09-19 readback confirms production v1.1.17-private.11 and active muse-max with Companion mapped to internal gpt-5.6-luna/xhigh. The remaining acceptance operation still requires one actual Codex Main session exposing the internal worker lifecycle. The current normal-ChatGPT surface cannot perform it: its Codex-native bridge requires a valid active outer-Codex turn token, and the direct native inventory attempt failed closed because this chat has no valid turn token. Container commands can verify allocation but cannot create/reuse the internal Companion. No substitute model/harness or configuration-only proof is GREEN."
-    blocker_evidence: "implementation/blockers/M09_T03_CODEX_MAIN_SESSION_REQUIRED_2026-09-19.md"
+    blocker: null
+    blocker_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M09_T03_LUNA_XHIGH_COMPANION_2026-09-19.md"
+    tests_summary: "GREEN: fresh production readback confirms v1.1.17-private.11 / muse-max / internal Codex gpt-5.6-luna xhigh; actual Codex Main session used Companion 01a0b912-6c17-7500-bfc2-a4dfe18fd53a twice in the same session with no substitute/fallback."
 
   - id: M09-T04
     title: "Cut exact next-version release candidate"
