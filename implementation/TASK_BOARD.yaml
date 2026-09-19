@@ -137,7 +137,7 @@ milestones:
 
   M11:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m11--cut-validate-publish-and-promote-the-stateful-muse-release"
     checkpoint: null
     implementation_head: null
@@ -1424,8 +1424,8 @@ cards:
     title: "Refresh release lineage and cut release-only candidate"
     milestone: M11
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on: []
     openspec_change: null
     contract: "implementation/cards/M11-T01.md"
