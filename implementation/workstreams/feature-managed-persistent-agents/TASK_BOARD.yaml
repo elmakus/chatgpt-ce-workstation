@@ -60,13 +60,13 @@ cards:
     depends_on: ["M01-T01"]
     openspec_change: null
     contract: "implementation/workstreams/feature-managed-persistent-agents/cards/M02-T01.md"
-    review_state: null
-    review_subject: null
-    review_evidence: null
-    result_commit: null
+    review_state: pending
+    review_subject: "elmakus/chatgpt-ce-workstation@8f9f4f22c0954811707ac4eb581f4d255af864cf"
+    review_evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M02_T01_DEPLOYMENT_READINESS_2026-09-20.md"
+    result_commit: "8f9f4f22c0954811707ac4eb581f4d255af864cf"
     result_pr: 6
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M02_T01_DEPLOYMENT_READINESS_2026-09-20.md"
+    tests_summary: "GREEN preparation on exact reviewed source 00c32fa: source validation 9/9 + SOURCE_VALIDATION_GREEN; tracked build.sh exit 0; candidate image sha256:c1470837045e2a2c57523174f3f3d7527e00e978576a42cd7af27051a6c2b830; production container ade19cd953f9 stayed healthy on sha256:4a41e7ee1791; production AGENTS SHA stayed a24b186fbac9cba0897d21e28382ba42e91efb747d650c9be724da2ad903a0e4."
   - id: M02-T02
     title: "Authorized production activation and live verification"
     milestone: M02
