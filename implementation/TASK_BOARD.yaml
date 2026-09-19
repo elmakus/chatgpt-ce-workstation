@@ -1128,7 +1128,7 @@ cards:
     title: "Reserve resumed Muse workspace before session-lock acquisition"
     milestone: M10
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M10-T08"
