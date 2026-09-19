@@ -235,7 +235,7 @@ RUN set -eux; \
 
 COPY rootfs/ /
 COPY scripts/container/ /opt/workstation/bin/
-COPY defaults/AGENTS.md /opt/workstation/defaults/AGENTS.md
+COPY defaults/ /opt/workstation/defaults/
 
 RUN chmod 0755 /opt/workstation/bin/*.sh \
     /usr/local/bin/chatgpt-ce \
