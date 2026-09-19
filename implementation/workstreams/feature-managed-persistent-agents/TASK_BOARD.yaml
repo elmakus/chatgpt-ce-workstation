@@ -24,7 +24,7 @@ milestones:
     review_evidence: null
   M02:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/MANAGED_PERSISTENT_AGENTS_MASTER_PLAN.md#milestone-m02--production-activation-and-live-verification"
     checkpoint: null
     implementation_head: null
@@ -55,7 +55,7 @@ cards:
     title: "Prepare exact reviewed deployment candidate"
     milestone: M02
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: chatgpt
     depends_on: ["M01-T01"]
     openspec_change: null
