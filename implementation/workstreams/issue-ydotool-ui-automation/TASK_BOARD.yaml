@@ -1,0 +1,30 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "issue-ydotool-ui-automation"
+plan_revision: "micro-fix"
+current_milestone: "micro-fix"
+
+execution_ref:
+  branch: "fix/ydotool-ui-automation"
+  pr: null
+  head: null
+
+research_obligation: null
+
+milestones: {}
+
+cards:
+  - id: "MF-T01"
+    title: "Prevent unsupported ydotool drift in GUI automation"
+    milestone: "micro-fix"
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: []
+    contract: "implementation/workstreams/issue-ydotool-ui-automation/cards/MF-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
