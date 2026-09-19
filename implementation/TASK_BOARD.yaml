@@ -1057,7 +1057,7 @@ cards:
     title: "Fail closed during pre-lock Muse session reservation"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T06"
@@ -1079,20 +1079,20 @@ cards:
     lane_base: "elmakus/codex_workflow@7f6f51fe9faf318fa90ce9414e6024c673ad9226"
     authorization: "Bounded corrective source work under approved R6/M10 authority; production release/promotion is not authorized."
     blocker: null
-    blocker_evidence: null
+    blocker_evidence: "implementation/evidence/M10_T07_RESERVATION_RACE_CORRECTION_2026-09-19.md"
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@74a7588e5bab0a5b7a89549c4309486dc9e7ba4f"
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN on exact remote 74a7588e5bab0a5b7a89549c4309486dc9e7ba4f: runtime 90/90; Muse adapter 27/27 including deterministic pre-lock reservation interleaving; muse-max profile 7/7; compile/package build/archive verify/git diff --check GREEN; codex_workflow main unchanged."
 
   - id: M10-T08
     title: "Revalidate reservation-race correction live and freeze next review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: "chatgpt"
     depends_on:
       - "M10-T07"
