@@ -1424,7 +1424,7 @@ cards:
     title: "Refresh release lineage and cut release-only candidate"
     milestone: M11
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on: []
     openspec_change: null
@@ -1443,7 +1443,7 @@ cards:
       - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
     exclusive_resources:
       - "M11 exact release-candidate identity"
-    lane_branch: null
+    lane_branch: "elmakus/codex_workflow:release/m11-stateful-muse-candidate"
     lane_base: "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
     authorization: "Release-candidate preparation explicitly authorized by user on 2026-09-19; publication/main/tag/release and workstation production mutation are not authorized by this Card."
     blocker: null
@@ -1451,10 +1451,10 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@d285aa1a271258052d23e3a2d3b585117fc1e862"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M11_T01_RELEASE_CANDIDATE_CUT_2026-09-19.md"
+    tests_summary: "GREEN: fresh main/release/tag/M10 lineage refresh; .12 unique; exact candidate d285aa1 is one direct child of cf4c01f and changes only five release/version-coupled files; synchronized metadata readback and exact-diff whitespace scan GREEN; no publication or production mutation."
 
   - id: M11-T02
     title: "Verify exact candidate and freeze REQUIRED review subject"
