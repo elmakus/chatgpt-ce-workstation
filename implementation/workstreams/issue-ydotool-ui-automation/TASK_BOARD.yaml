@@ -21,7 +21,7 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-ydotool-ui-automation/cards/MF-T01.md"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/chatgpt-ce-workstation@8559ce89ab267a38ff26a2529b9ac1ff964241b9"
     review_evidence: null
     result_commit: "8559ce89ab267a38ff26a2529b9ac1ff964241b9"
