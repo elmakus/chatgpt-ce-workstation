@@ -1,13 +1,16 @@
 # Muse-max production runtime Master Plan
 
-Status: **approved**
-Revision: **R5**
-Date: 2026-09-18
+Status: **draft**
+Revision: **R6**
+Date: 2026-09-19
 Review requirement: **RECOMMENDED**
 
 R4 replanning trigger: after R3 received independent GREEN and was approved, Execution Prep verified the actual `codex_workflow` release path and found an exact-subject publication mismatch that R3 had not modeled. The current published release `v1.1.17-private.10` already targets `elmakus/codex_workflow@f2b1811853a2c1da5a5af4bb735c84c3111a44d6`; the independently reviewed and live two-lane-validated M09 source checkpoint `f6603767115cf7f31ef7d8c3cb3a419a7f430aca` still carries version `1.1.17-private.10`, and PR #6 intentionally excluded a release/version bump. The normal release workflow requires `main`, refuses an existing tag/release, and publishes the checkout commit as release provenance. R4 therefore preserves `f660376...` as the accepted M09 source checkpoint but requires a new metadata-only release-candidate commit on top of it with the next unique synchronized release version; that exact new commit must itself receive independent review GREEN and live two-lane Muse validation GREEN before publication/promotion. The Luna XHigh Companion sequencing introduced by R3 is unchanged: publication/promotion may proceed while Companion quota is unavailable, but M09/project completion remains blocked until the actual Companion creation/reuse proof is GREEN on the exact promoted release.
 
 R5 replanning trigger: after R4 received independent GREEN and was approved, execution of M09-T04 proved that the repository's current release regression contract contains version-coupled expectations in `scripts/test_workflow_runtime.py`. A four-file `.10` -> `.11` metadata bump made the 90-test runtime suite fail only on those stale version literals; a disposable diagnostic that additionally synchronized exactly four release-version literals in that test file made the same suite 90/90 GREEN. GitHub readback of the prior `v1.1.17-private.10` release commit also shows the same test file being version-synchronized during release preparation. R5 therefore keeps the R4 exact-subject strategy unchanged but makes the release-candidate scope explicit: the direct child of `f660376...` may change the four release metadata files plus only the version-coupled assertions/fixture literal in `scripts/test_workflow_runtime.py`, with no test-semantic or runtime-semantic change. Evidence: `implementation/blockers/M09_T04_RELEASE_VERSION_TEST_SYNC_2026-09-18.md`. The blocked over-constrained M09-T04 contract must be superseded through Execution Prep after R5 approval; it must not be silently widened in place.
+
+
+R6 replanning trigger: on 2026-09-19 the user accepted the revised Muse lifecycle proven by `research/MUSE_SESSION_RESUME_LIFECYCLE_2026-09-19.md` and Project Definition/D21 were amended accordingly. The new target is stateful logical Muse workers with stable session identity and per-turn invocation identity, preferred `A1 -> B1 -> A1 repair -> B1 full recheck`, fail-closed explicit A2/B2 replacement, and a strict boundary in which `codex_workflow` owns runtime/orchestration semantics but never Project Workflow Task Board/review-policy state. R6 preserves completed historical M05-M09 evidence rather than rewriting it. It adds a follow-on M10 source/runtime milestone on top of published `elmakus/codex_workflow@4081cde7d4f71bcc2083c62cf69b7e3b845eefb8`. M10 source implementation and isolated live validation may proceed while M09-T03 remains quota-blocked because Companion behavior and the production runtime are not changed by M10. R6 does not authorize a new release or production promotion; that requires later explicit planning/authorization after the stateful implementation is independently reviewed.
 
 ## Authority
 
@@ -15,12 +18,14 @@ This plan organizes the accepted Muse-max Project Definition without changing it
 
 Canonical authority:
 - `requirements/MUSE_MAX_RUNTIME.md`;
-- `docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-codex_workflow-profile`;
-- `research/MUSE_MAX_RUNTIME_AUDIT_2026-09-18.md`.
+- `docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile`;
+- `research/MUSE_MAX_RUNTIME_AUDIT_2026-09-18.md`;
+- `research/MUSE_SESSION_RESUME_LIFECYCLE_2026-09-19.md`.
 
 Relevant implementation baselines:
-- `elmakus/codex_workflow@f2b1811853a2c1da5a5af4bb735c84c3111a44d6`;
-- workstation Muse installation/runtime baseline from completed M03 and current workstation `main`.
+- current published `elmakus/codex_workflow@4081cde7d4f71bcc2083c62cf69b7e3b845eefb8` / `v1.1.17-private.11`;
+- `implementation/evidence/M09_T08_PRODUCTION_PROMOTION_2026-09-18.md`;
+- workstation Muse Code 1.3.0 runtime used by the 2026-09-19 session-resume research.
 
 The earlier `planning/MUSE_DELEGATED_WORKERS_MASTER_PLAN.md` is superseded and is not execution authority.
 
@@ -32,8 +37,11 @@ Deliver a production-capable `muse-max` profile in `elmakus/codex_workflow` wher
 - one persistent internal Companion uses GPT-5.6 Luna XHigh;
 - the other six existing workflow roles use Muse Spark 1.3 Contributor / max through native Muse Code;
 - Muse execution is profile-aware, bounded, machine-readable, cancellable and context-isolated;
-- executor/tester/repair semantics remain independently grounded;
-- Project Workflow-authorized independent lanes can use safe bounded concurrency in isolated worktrees;
+- logical Muse workers can safely retain session context across bounded turns while each physical turn keeps a unique invocation/artifact identity;
+- Executor and Tester remain independent logical workers; ordinary RED prefers owning Executor repair plus the same independent Tester full recheck;
+- session loss/binding failure fails closed to explicit A2/B2 replacement rather than silent identity substitution;
+- caller-authorized independent lanes can use safe bounded concurrency in isolated workspaces without cross-lane session reuse;
+- `codex_workflow` remains agnostic to Project Workflow Task Board/review-policy state;
 - `plus`, `luna-xhigh`, and `pro-x5` are unchanged.
 
 ## Global invariants
@@ -41,13 +49,21 @@ Deliver a production-capable `muse-max` profile in `elmakus/codex_workflow` wher
 - Only `muse-max` behavior may change unless live evidence proves a workstation runtime correction is required.
 - Existing `agents/*.toml` remain the canonical role-semantic definitions; no parallel Muse role tree.
 - `compute_profiles.py` remains the authority for role → model/reasoning/harness allocation.
-- Muse workers are leaf one-shot invocations; no nested Muse agents and no direct Muse sibling messaging.
+- Muse workers are leaf logical sessions with sequential bounded turns; no nested Muse agents and no direct Muse sibling messaging.
+- Stable Muse session identity and per-turn invocation identity are separate runtime concepts.
+- Executor and Tester never share a logical/session identity; Tester never performs production repair.
+- A changed verification target does not automatically require a fresh Tester; freshness is driven only by controlling contract, unsafe/unavailable resume, or a material Main decision.
 - Main receives compact normalized results, not raw Muse trajectories.
-- Raw event/stderr artifacts stay outside project Git and ordinary Main context.
-- Project Workflow owns Task Card dependencies, ownership, `parallel_safe`, lane branches/worktrees and project state.
-- This project's current `chatgpt_only` implementation route remains serial even though the target `codex_workflow` feature will support Project Workflow-authorized parallel lanes for runtimes/policies that permit them.
+- Raw event/stderr/session artifacts stay outside project Git and ordinary Main context.
+- External callers own task dependencies, write ownership, lane/workspace authorization and any project-level state machine. `codex_workflow` treats task/lane identity as opaque runtime binding data and does not interpret Project Workflow policy/review state.
+- This project's current `chatgpt_only` implementation route remains serial even though the target `codex_workflow` runtime supports caller-authorized parallel lanes.
 - Exact Muse argv/event fields are not frozen before live evidence from the installed workstation build.
 - Live Unraid build/recreate/login/runtime mutation requires an explicit authorization gate.
+
+
+## Historical milestone preservation
+
+M05-M09 below remain authoritative history for the one-shot implementation/release that produced `v1.1.17-private.11`. Their completed evidence, review subjects and Card contracts are not retroactively rewritten to stateful semantics. Where their text conflicts with the amended 2026-09-19 Definition for future work, M10 below owns the changed lifecycle. M09-T03 remains a separate unresolved Companion acceptance gate on the already promoted release.
 
 ## Milestone M05 — Capture the live Muse runtime contract
 
@@ -325,104 +341,211 @@ Final integrated verification for R1–R16.
 
 ---
 
+
+---
+
+## Milestone M10 — Add stateful Muse logical-worker lifecycle and fail-closed recovery
+
+### Outcome
+
+An exact `codex_workflow` source subject implements the amended stateful `muse-max` lifecycle without importing Project Workflow state semantics: stable session identity per logical worker, unique invocation identity per physical turn, safe A1/B1 reuse, explicit A2/B2 fallback, process-safe session locking/binding, preserved structured results/artifacts, and caller-isolated parallel lanes. The exact subject is fixture-tested, live-tested on Meta-backed Muse Code 1.3.0, and independently reviewed.
+
+M10 does **not** publish a new release or modify the installed production `~/.codex/codex_workflow` runtime.
+
+### Requirement ownership
+
+Primary: amended R5, R7-R15, R17.
+
+Regression/compatibility: R1, R2, R4, R6, R10-R12.
+
+R3 Companion allocation/lifecycle and R16 workstation installation boundary are unchanged.
+
+### Dependencies
+
+- Approved amended `requirements/MUSE_MAX_RUNTIME.md` and D21.
+- `research/MUSE_SESSION_RESUME_LIFECYCLE_2026-09-19.md`.
+- Current `elmakus/codex_workflow@4081cde7d4f71bcc2083c62cf69b7e3b845eefb8` as source baseline.
+- Existing M09-T08 production evidence as regression baseline only.
+- M09-T03 Luna Companion quota blocker is **not** a dependency for M10 source implementation or isolated live Muse tests because M10 does not change Companion semantics or production deployment.
+- The user's 2026-09-19 instruction explicitly authorizes the requested isolated real-Muse lifecycle/fault-injection validation. It does not authorize production release/promotion.
+
+### Planned work packages
+
+- Refresh `codex_workflow` main and create one dedicated implementation branch from exact current main; do not modify the Project Workflow repository.
+- Update only `codex_workflow` runtime/orchestration contracts and implementation:
+  - preserve existing semantic worker TOMLs unless a concrete semantic contradiction is found;
+  - remove Muse-specific one-shot/fresh-follow-up wording from `heavy_route.md`, `delegation.md`, README/ownership docs;
+  - keep Project Workflow Task Board/review-policy concepts out of `codex_workflow`.
+- Refactor the Muse adapter/runtime so:
+  - one logical worker has a stable `session_id`;
+  - every physical turn gets a unique `invocation_id` and private artifact directory;
+  - a private runtime session registry binds logical worker identity to role, profile/allocation, canonical workspace and opaque caller task/lane scope;
+  - one session has at most one active turn through a process-safe lease/lock;
+  - cross-role, cross-workspace and cross-lane reuse is rejected.
+- Add create/resume primitives with fail-closed behavior:
+  - verify the exact prior Muse session exists/is usable before claiming resume;
+  - reject unavailable, binding-invalid, busy or resume-rejected sessions with normalized recovery failure;
+  - never auto-create a replacement while retaining the old logical identity;
+  - Main may then explicitly allocate A2/B2 and recover from durable workspace/evidence.
+- Preserve the current per-invocation structured-output contract, terminal-event validation, private raw event/stderr artifacts, retention limits, changed-path evidence and process-tree timeout/cancellation behavior.
+- Add deterministic regression coverage for:
+  - stable-session/new-invocation identity;
+  - successful same-worker resume;
+  - Executor/Tester session separation and Tester no-repair contract;
+  - session binding mismatch;
+  - one-active-turn lease conflict;
+  - unavailable/non-retained session;
+  - explicit replacement identity;
+  - no cross-lane reuse;
+  - concurrency against non-overlapping workspaces;
+  - normalized structured output and artifact retention;
+  - timeout/cancel child cleanup;
+  - unchanged `plus`, `luna-xhigh`, and `pro-x5` behavior.
+- On one exact committed source subject, run the real Meta-backed lifecycle:
+  `A1 implement S1 -> B1 full review S1 RED -> A1 resume repair S2 -> B1 resume full recheck S2 GREEN`.
+- On that same source subject, run the mandatory live interrupted-turn fault injection through the actual adapter process-control path:
+  - establish a real logical Muse session;
+  - start a later active turn;
+  - interrupt/cancel it through adapter cancellation/timeout mechanics;
+  - prove the process tree is gone;
+  - inspect partial workspace effects;
+  - probe exact session resumability;
+  - prove either safe same-session continuation or a normalized fail-closed condition followed by explicit new-worker recovery;
+  - prove no silent logical identity substitution.
+- Re-run a two-lane live regression with separate Executor/Tester session namespaces per lane and prove no cross-lane session/artifact collision.
+- Preserve raw Muse session/trajectory material outside Git/evidence; commit only bounded secret-safe evidence.
+- Run complete `codex_workflow` regression coverage and `git diff --check`.
+- Freeze the exact implementation source subject plus bounded live evidence for **REQUIRED independent implementation review**. Any corrective source commit becomes a new exact review subject and must receive a new review attempt.
+
+### Stable acceptance/checkpoint
+
+M10 is GREEN only when all are true:
+
+- stable logical session identity is demonstrably separate from unique per-turn invocation identity;
+- A1 and B1 are distinct sessions, and each is successfully reused in the full RED/repair/full-recheck cycle;
+- Tester never performs production repair and receives no Executor trajectory inheritance;
+- fail-closed resume refuses missing/unsafe/binding-invalid sessions without silently replacing identity;
+- explicit A2/B2 recovery is reproducible from durable workspace/evidence;
+- one-active-turn-per-session locking is proven;
+- interrupted-turn live Meta evidence proves complete process-tree cleanup and either safe resume or safe explicit fallback;
+- structured results, raw artifact isolation, timeout/cancel behavior and retention remain intact;
+- two isolated caller-authorized lanes have disjoint logical sessions and no cross-lane reuse;
+- full profile/runtime regressions are GREEN;
+- exact source subject receives REQUIRED independent review GREEN;
+- no Project Workflow Task Board/review-policy implementation or dependency appears in `codex_workflow`;
+- production `v1.1.17-private.11` runtime remains unchanged by M10.
+
+### Gates
+
+- Live Meta-backed interrupted-turn fault injection is mandatory; fixture evidence alone cannot satisfy stateful-default acceptance.
+- Independent implementation review is REQUIRED by the user's accepted scope.
+- A live failure that exposes a Definition contradiction routes back to Project Definition; a bounded implementation defect remains M10 corrective work.
+- Publication/release and production promotion of the stateful runtime are outside R6/M10 scope and require a later explicit plan/authorization.
+- M09-T03 remains separately blocked/closable according to its existing exact promoted-release Companion contract.
+
+### JIT trigger
+
+After R6 plan review GREEN and approval, Execution Prep may create only the currently knowable M10 Cards. It must bind the exact current `codex_workflow` main SHA and create a dedicated implementation branch before source mutation. Card decomposition may separate source implementation from live validation only if the serial Task Board and final exact-subject review remain coherent; the final review must cover the exact source subject used for the required live evidence.
+
 ## Requirement coverage
 
 | Requirement | Owning milestone(s) |
 | --- | --- |
-| R1 only muse-max changes | M06, M09 |
-| R2 Codex Main orchestrator | M06, M08, M09 |
+| R1 only muse-max changes | M06, M09, M10 |
+| R2 Codex Main orchestrator / runtime boundary | M06, M08, M10 |
 | R3 persistent Luna XHigh Companion | M06, M09 |
-| R4 six Muse roles | M06, M08 |
-| R5 shared role contracts | M06 |
-| R6 profile-aware adapter | M06, M07 |
-| R7 leaf one-shot Muse workers | M06, M07, M08 |
-| R8 separate executor/tester | M08 |
-| R9 RED repair through Main | M08 |
-| R10 compact normalized result | M07, M08 |
-| R11 raw log isolation | M07, M08 |
-| R12 machine-readable Muse lifecycle | M05, M07 |
-| R13 timeout/process-tree cancellation | M07 |
-| R14 failure classification | M07 |
-| R15 Project Workflow-owned parallelism | M09 |
+| R4 six Muse roles | M06, M08, M10 regression |
+| R5 shared role contracts + runtime-only overlay | M06, M10 |
+| R6 profile-aware adapter | M06, M07, M10 |
+| R7 stateful leaf logical Muse workers | M10 |
+| R8 separate Executor/Tester sessions | M08 historical, M10 amended target |
+| R9 RED repair through Main with A1/B1 reuse/fallback | M08 historical, M10 amended target |
+| R10 compact normalized result | M07, M08, M10 |
+| R11 raw log/session isolation | M07, M08, M10 |
+| R12 machine-readable Muse lifecycle/resume | M05, M07, M10 |
+| R13 timeout/cancel + interrupted-turn reconciliation | M07, M10 |
+| R14 failure/recovery classification | M07, M10 |
+| R15 caller-owned lane authority + runtime isolation | M09 historical, M10 amended target |
 | R16 workstation boundary | M05, M09 |
+| R17 policy/state-machine agnostic runtime | M10 |
 
-Every requirement has a milestone owner and an execution path. Exact M07 protocol Cards are intentionally deferred until M05 evidence exists; exact M09 concurrency Cards are intentionally deferred until M07/M08 evidence exists.
+Changed R7-R9/R13-R15 semantics are owned by M10; older milestone evidence remains historical and is not rewritten.
 
 ## System verification strategy
 
+Historical M05-M09 verification remains valid for the published one-shot baseline. R6 adds the following stateful path without upgrading historical evidence:
+
 ```text
-current source/baseline readback
-  -> M05 live CLI/auth/JSONL/sandbox evidence
-  -> M06 profile-allocation + other-profile regression tests
-  -> M07 deterministic process/protocol fixtures
-  -> M07 live single-worker smoke
-  -> M08 sequential executor/tester/RED-repair role pilot + Companion allocation readback
-  -> accepted source checkpoint f660376... with independent review + live two-lane GREEN
-  -> release-version synchronization cut of the next unique release candidate on top of that checkpoint
-  -> full codex_workflow regression on the exact release candidate
-  -> independent review of that exact release candidate
-  -> live two-lane Muse validation on that same exact release candidate
-  -> fast-forward main to that exact candidate + automated release of the exact commit
-  -> live workstation update/readback + Muse-side production smoke on the published release
-  -> live Luna XHigh Companion creation/reuse on exact promoted release
-  -> M09 final acceptance
+current codex_workflow main 4081cde...
+  -> source branch + deterministic session/binding/locking/fallback tests
+  -> exact committed stateful implementation subject
+  -> live Meta A1 -> B1 RED -> A1 repair -> B1 full recheck GREEN
+  -> live interrupted-turn fault injection on actual adapter path
+  -> live two-lane session-isolation regression
+  -> complete codex_workflow/profile regressions
+  -> bounded secret-safe evidence on the exact source subject
+  -> REQUIRED independent implementation review
+  -> M10 acceptance
 ```
 
-No passing claim may be upgraded from simulated/fixture evidence to live behavior without the corresponding live checkpoint.
+No passing claim may be upgraded from fixture evidence to live resume/recovery behavior without the corresponding real Muse checkpoint.
 
 ## Security, data integrity and idempotency
 
-- Do not commit Muse credentials/session state or raw user-home auth artifacts.
+- Do not commit Muse credentials, raw session state, exported trajectories or user-home auth artifacts.
 - Normalized results must not intentionally contain secrets.
-- Raw logs remain in persistent user runtime storage, not project Git or Task Board.
-- Retention is bounded so trajectories cannot grow indefinitely.
-- Each worker invocation has independent run identity/artifact files so concurrency cannot overwrite logs.
-- Workers receive an assigned workspace and do not change project-level Git/worktree ownership.
-- Failure/cancel does not advance Project Workflow state by itself.
-- Re-running a failed worker uses durable repository/worktree state plus a fresh invocation, not hidden Muse conversation continuity.
-- Profile switching/updates must preserve other profiles and existing user/project state according to current `codex_workflow` lifecycle contracts.
+- Raw run/session artifacts remain in persistent private runtime storage, not project Git or external workflow state.
+- Session registry/binding/lease files must be private and bounded; per-turn artifacts retain bounded age/count/size cleanup.
+- Session existence probing must not leak raw transcript/reasoning into Main or committed evidence.
+- Every invocation has a unique artifact identity even when reusing one stable Muse session.
+- Resume requires exact role/profile/workspace/opaque-scope binding and a single active lease.
+- Failures/cancellation do not advance any external workflow state by themselves.
+- Recovery never silently re-labels a newly created session as an old logical worker.
+- `codex_workflow` must not read or mutate Project Workflow Task Board/review-policy state.
+- Profile switching/updates must preserve other profiles and existing user/project state according to current lifecycle contracts.
 
 ## Rollback / recovery
 
-Before production promotion:
-- work remains isolated on implementation branches/checkpoints;
-- active users can stay on another existing compute profile;
-- a failed Muse invocation is recoverable from workspace state + compact/durable evidence with a fresh invocation.
+M10 is source/test-only:
 
-After release:
-- the prior `codex_workflow` release remains the rollback reference;
-- switching away from `muse-max` must preserve the existing `plus`, `luna-xhigh`, and `pro-x5` paths;
-- workstation image rollback is not the primary rollback mechanism unless M05/M09 evidence requires a workstation-source correction.
+- production remains on `v1.1.17-private.11`;
+- the stateful source branch can be discarded without changing installed production runtime;
+- disposable candidate runtimes/workspaces/session registries used for live testing must be isolated from production and removable after evidence capture;
+- an interrupted invocation first performs process cleanup and session/workspace reconciliation;
+- if the prior logical session is safely resumable, reuse it;
+- otherwise return a fail-closed recovery result and let Main explicitly create A2/B2 from durable workspace/evidence;
+- cross-lane recovery must never adopt another lane's session;
+- later publication/promotion, if authorized, must define its own release/rollback contract.
 
 ## JIT decomposition policy
 
-Execution Prep should create only currently knowable Cards.
+Historical M05-M09 JIT rules remain historical authority for their existing Cards/evidence.
 
-- M05 Cards may be prepared immediately from the current workstation runtime baseline, but execution stops at the explicit live authorization gate before live writes/actions.
-- M06 Cards may be prepared from current `codex_workflow` source and D21.
-- M07 parser/argv-specific Cards are created only after M05 evidence.
-- M08 role-pilot Cards are created only after M07 normalized adapter behavior is real.
-- M09 concurrency/source-review Cards are created after M07/M08 establish the actual adapter/orchestration shape.
-- After the accepted source checkpoint has independent review GREEN and live two-lane GREEN, Execution Prep may create a bounded release-preparation Card that cuts the next unique synchronized release-version material on top of that exact source checkpoint. The candidate may include only the four release metadata files and the version-coupled literals in `scripts/test_workflow_runtime.py` identified by the R5 blocker evidence; no other test/runtime change is authorized. Because this creates a new commit identity, the resulting release candidate must then receive its own independent review and live two-lane validation before publication.
-- After R5 approval, Execution Prep must supersede blocked M09-T04 and create a replacement release-candidate Card from this corrected scope rather than widening the already-started Card in place.
-- Publication/promotion Cards may become executable only after both gates are GREEN on the same exact release-candidate commit, even while the Luna XHigh Companion Card is quota-blocked.
-- The deferred live Luna XHigh Companion creation/reuse Card remains mandatory after production promotion and before M09 final acceptance/project completion.
+For M10:
 
-Do not create placeholder future Cards merely to fill the Task Board.
+- Execution Prep binds current `codex_workflow` main and creates a dedicated implementation branch before source mutation.
+- Do not modify `elmakus/chatgpt-codex-project-workflow`.
+- Create only enough serial Cards to implement/test the stateful runtime coherently; avoid placeholder Cards.
+- The exact session-registry format, process-safe lock primitive and native session-health probe are L1/L2 implementation choices provided they satisfy the amended Definition and installed Muse 1.3.0 evidence.
+- If JIT discovers that `muse exec --session-id` cannot provide the required safe lifecycle without `muse serve`/MSP or another strategic architecture change, route back to Project Definition instead of widening implementation.
+- The mandatory live Meta fault-injection must run on an exact committed source subject through the candidate adapter, not by manually bypassing it.
+- The final exact source subject used for live evidence requires REQUIRED independent implementation review.
+- No release/version bump, `main` publication or production runtime update is authorized by M10.
+- No OpenSpec is required at plan time because the accepted change is internal `codex_workflow` orchestration/runtime behavior with unchanged external CLI/profile allocation contracts; if JIT introduces a new public API/schema/cross-package contract, Execution Prep must materialize the appropriate contract before implementation.
 
 ## Planning audit
 
-GREEN.
+GREEN for planner self-audit; independent plan review remains RECOMMENDED and pending for R6.
 
-- Definition preconditions are complete and internally coherent.
-- Milestone order prevents guessed Muse CLI/protocol details from leaking into implementation.
-- Mixed-profile semantics are separated from provider-protocol implementation.
-- Sequential Muse-role correctness precedes concurrency.
-- The unavailable internal-Codex Companion live check is deferred across release/publication and production promotion by explicit user sequencing authority; R3/D21 remain unchanged and M09 final acceptance/project completion is hard-blocked until Luna XHigh creation/reuse is live GREEN on the exact promoted release.
-- The actual release mechanism is reconciled with exact-subject integrity: because `v1.1.17-private.10` already exists and `f660376...` intentionally contains no new version bump, R5 requires one direct-child next-version release candidate on top of the accepted source checkpoint. Its diff is limited to synchronized release-version material: the four release metadata files plus the four version-coupled literals in `scripts/test_workflow_runtime.py` proven necessary by the blocker diagnostic. The exact candidate then requires fresh independent review and live two-lane validation before it can advance to `main` and publish.
-- Concurrency remains subordinate to Project Workflow lane/worktree authority.
-- Other compute profiles have explicit regression protection.
-- Live authorization gates are explicit at both discovery and final deployment.
-- Security/log retention/process cancellation and rollback are covered.
-- No duplicate scheduler, role hierarchy or generic delegated-worker framework is introduced.
-- Remaining uncertainties are implementation-time evidence/JIT choices already classified by the approved Definition; none requires a new strategic user decision.
+- Amended Definition/D21 are approved and contain no unresolved product/architecture choice.
+- R6 cleanly separates `codex_workflow` runtime/orchestration semantics from Project Workflow policy/state semantics.
+- Historical M05-M09 evidence is preserved instead of being rewritten under the new contract.
+- M10 is isolated source/test work and does not disturb the quota-blocked M09-T03 Companion gate or production `v1.1.17-private.11`.
+- Stable `session_id` versus per-turn `invocation_id`, binding, one-active-turn locking and fail-closed A2/B2 recovery all have explicit acceptance paths.
+- B2 freshness is not tied automatically to subject size/materiality.
+- The required live Meta-backed interrupted-turn fault-injection is an explicit hard acceptance gate.
+- Parallel-lane regression requires lane-local Executor/Tester sessions and forbids cross-lane reuse.
+- Existing structured output, artifact isolation, timeout/cancel and other-profile regressions are preserved as mandatory checks.
+- Production release/promotion is explicitly outside scope, keeping rollback simple.
+- The final implementation subject has REQUIRED independent implementation review.
+- R6 materially changes execution strategy and lifecycle acceptance, so plan review classification is RECOMMENDED; the authoring chat cannot issue that verdict.
