@@ -1007,13 +1007,13 @@ cards:
     lane_base: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
     authorization: "Bounded corrective source work under approved R6/M10 authority; production release/promotion is not authorized."
     blocker: null
-    blocker_evidence: "implementation/evidence/M10_T05_STALE_ACTIVE_FAIL_CLOSED_CORRECTION_2026-09-19.md"
+    blocker_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
     result_commit: "elmakus/codex_workflow@7f6f51fe9faf318fa90ce9414e6024c673ad9226"
     result_pr: null
-    evidence: null
+    evidence: "implementation/evidence/M10_T05_STALE_ACTIVE_FAIL_CLOSED_CORRECTION_2026-09-19.md"
     tests_summary: "GREEN on exact remote 7f6f51fe9faf318fa90ce9414e6024c673ad9226: runtime 90/90; Muse adapter 26/26 including cross-process quarantine-persistence failure leaving stale active; muse-max profile 7/7; compile/package build/archive verify/git diff --check GREEN; codex_workflow main and production unchanged."
 
   - id: M10-T06
@@ -1044,11 +1044,11 @@ cards:
     lane_base: "M10-T05 exact result subject"
     authorization: "R6 isolated real-Muse lifecycle/fault-injection validation explicitly authorized by user on 2026-09-19; production release/promotion is not authorized."
     blocker: null
-    blocker_evidence: "implementation/evidence/M10_T06_LIVE_STALE_ACTIVE_CORRECTION_REVALIDATION_2026-09-19.md"
+    blocker_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
     result_commit: "elmakus/codex_workflow@7f6f51fe9faf318fa90ce9414e6024c673ad9226"
     result_pr: null
-    evidence: null
+    evidence: "implementation/evidence/M10_T06_LIVE_STALE_ACTIVE_CORRECTION_REVALIDATION_2026-09-19.md"
     tests_summary: "GREEN on exact 7f6f51fe9faf318fa90ce9414e6024c673ad9226: live Meta A1/B1 RED-repair-full-recheck reused distinct stable sessions with four unique invocation IDs and read-only Tester; actual adapter cancellation confirmed descendant-tree absence plus inspectable partial state and safe same-session resume; exact stale-active persistence-failure regression GREEN; concurrent two-lane Executor/Tester isolation GREEN with four distinct sessions; private runtime 0700/0600; zero residual candidate processes; production remained byte-identical to v1.1.17-private.11 baseline."
