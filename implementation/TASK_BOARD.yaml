@@ -137,12 +137,12 @@ milestones:
 
   M11:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/MASTER_PLAN.md#milestone-m11--cut-validate-publish-and-promote-the-stateful-muse-release"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
+    checkpoint: "elmakus/codex_workflow@d285aa1a271258052d23e3a2d3b585117fc1e862"
+    implementation_head: "elmakus/codex_workflow@d285aa1a271258052d23e3a2d3b585117fc1e862"
+    handoff: "project-handoffs/M11_HANDOFF.md"
+    acceptance_evidence: "implementation/evidence/M11_MILESTONE_ACCEPTANCE_2026-09-19.md"
     review_state: null
     review_subject: null
     review_evidence: null
