@@ -1,6 +1,6 @@
 id: "issue-ydotool-ui-automation"
 kind: "issue"
-status: "ready"
+status: "review"
 
 branch: "fix/ydotool-ui-automation"
 base_ref: "elmakus/chatgpt-ce-workstation@77cd342c4ebffc57b84356fd6e224a1dc1afa5e3"
@@ -30,5 +30,5 @@ review:
   evidence: null
   covered_by: null
 
-pr: null
+pr: 5
 result: null
