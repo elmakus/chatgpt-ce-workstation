@@ -50,3 +50,19 @@ The probe exited non-zero, proving it detects the exact reported regression.
 `bash scripts/validate-source.sh` completed with `SOURCE_VALIDATION_GREEN`.
 
 PR CI evidence is appended after the branch is pushed and the pull request checks finish.
+
+## Runner-equivalent and PR verification
+
+The final probe was also executed in a disposable Ubuntu 24.04 container with the same CI package set. Both 1280x720 and 1920x1080 cases returned `DESKTOP_WORKAREA_GREEN`.
+
+Two early PR runs exposed portability defects in the new regression harness itself (window-title/timing assumptions); those were corrected without changing the Tint2 product fix. The stabilized exact code subject is `c13ae25d426ee282143765308406a04a122b1557`.
+
+PR #3 CI run `35409792819` is GREEN on that subject:
+
+- source validation: GREEN;
+- noVNC desktop workarea probes at both resolutions: GREEN;
+- ShellCheck: GREEN;
+- Dockerfile static check: GREEN;
+- secret scan: GREEN.
+
+The integration target `main` remained at `201c8be8e5b337d22ab4b7adca133470fa6a8f94` through this verification, so no target reconciliation was needed. The production workstation desktop was not rebuilt or reconfigured; only isolated test X displays were created and cleaned up.

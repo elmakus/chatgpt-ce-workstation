@@ -1,6 +1,6 @@
 id: "maintenance-novnc-workarea"
 kind: "maintenance"
-status: "in_progress"
+status: "ready"
 
 branch: "fix/novnc-tint2-workarea"
 base_ref: "elmakus/chatgpt-ce-workstation@201c8be8e5b337d22ab4b7adca133470fa6a8f94"
@@ -29,5 +29,5 @@ review:
   evidence: null
   covered_by: null
 
-pr: null
-result: null
+pr: 3
+result: "elmakus/chatgpt-ce-workstation@c13ae25d426ee282143765308406a04a122b1557"
