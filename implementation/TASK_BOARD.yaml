@@ -130,10 +130,10 @@ milestones:
     checkpoint: null
     implementation_head: "elmakus/codex_workflow@ad62ffa515026714a42a610c0310b1f6e92f47bd"
     handoff: null
-    acceptance_evidence: "implementation/evidence/M10_T12_LIVE_TERMINAL_LOCK_RACE_CORRECTION_REVALIDATION_2026-09-19.md"
-    review_state: red
-    review_subject: "elmakus/codex_workflow@eb490ccfbe04bac0bd3ab7646eceffdea7cdde4e"
-    review_evidence: "implementation/reviews/m10-active-transition-reservation-independent-review-2026-09-19.md"
+    acceptance_evidence: "implementation/evidence/M10_T14_LIVE_ACTIVATION_RESERVATION_CORRECTION_REVALIDATION_2026-09-19.md"
+    review_state: pending
+    review_subject: "elmakus/codex_workflow@ad62ffa515026714a42a610c0310b1f6e92f47bd"
+    review_evidence: null
 
 cards:
   - id: M01-T01
@@ -1305,7 +1305,7 @@ cards:
     title: "Revalidate activation-reservation correction live and freeze next review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T13"
@@ -1332,7 +1332,7 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@ad62ffa515026714a42a610c0310b1f6e92f47bd"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M10_T14_LIVE_ACTIVATION_RESERVATION_CORRECTION_REVALIDATION_2026-09-19.md"
+    tests_summary: "GREEN on exact ad62ffa515026714a42a610c0310b1f6e92f47bd: dependency exact-subject regressions 90/90 runtime, 31/31 Muse adapter, 7/7 profile plus package/compile/diff GREEN; live Muse Code 1.3.0 A1/B1 RED-repair-full-recheck same-session reuse; timeout cleanup and same-session C1 recovery; concurrent two-lane Executor/Tester isolation; private 0700/0600 artifacts; 11 run dirs, 7 workers ready, zero residual processes; production version/hash unchanged."
