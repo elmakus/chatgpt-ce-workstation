@@ -1199,7 +1199,7 @@ cards:
     title: "Reconcile retained reservation after session-lock conflict"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T10"
@@ -1221,20 +1221,20 @@ cards:
     lane_base: "elmakus/codex_workflow@3a5d98b3c21fc37a527c3aa8eb0ed771e6428acb"
     authorization: "Bounded corrective source work under approved R6/M10 authority; production release/promotion is not authorized."
     blocker: null
-    blocker_evidence: null
+    blocker_evidence: "implementation/evidence/M10_T11_TERMINAL_LOCK_RACE_CORRECTION_2026-09-19.md"
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@eb490ccfbe04bac0bd3ab7646eceffdea7cdde4e"
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN on exact remote eb490ccfbe04bac0bd3ab7646eceffdea7cdde4e: Muse adapter 29/29 including terminal-state-before-unlock lock-conflict reconciliation; workflow runtime 90/90; muse-max profile 7/7; compile, diff-check, package build/verify and ZIP integrity GREEN; tested local tree matched final remote tree."
 
   - id: M10-T12
     title: "Revalidate terminal-lock-race correction live and freeze next review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: "chatgpt"
     depends_on:
       - "M10-T11"
