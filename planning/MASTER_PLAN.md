@@ -1,7 +1,7 @@
 # Muse-max production runtime Master Plan
 
-Status: **approved**
-Revision: **R6**
+Status: **draft**
+Revision: **R7**
 Date: 2026-09-19
 Review requirement: **RECOMMENDED**
 
@@ -11,6 +11,8 @@ R5 replanning trigger: after R4 received independent GREEN and was approved, exe
 
 
 R6 replanning trigger: on 2026-09-19 the user accepted the revised Muse lifecycle proven by `research/MUSE_SESSION_RESUME_LIFECYCLE_2026-09-19.md` and Project Definition/D21 were amended accordingly. The new target is stateful logical Muse workers with stable session identity and per-turn invocation identity, preferred `A1 -> B1 -> A1 repair -> B1 full recheck`, fail-closed explicit A2/B2 replacement, and a strict boundary in which `codex_workflow` owns runtime/orchestration semantics but never Project Workflow Task Board/review-policy state. R6 preserves completed historical M05-M09 evidence rather than rewriting it. It adds a follow-on M10 source/runtime milestone on top of published `elmakus/codex_workflow@4081cde7d4f71bcc2083c62cf69b7e3b845eefb8`. M10 source implementation and isolated live validation may proceed while M09-T03 remains quota-blocked because Companion behavior and the production runtime are not changed by M10. R6 does not authorize a new release or production promotion; that requires later explicit planning/authorization after the stateful implementation is independently reviewed.
+
+R7 planning trigger: M10 is now independently GREEN at `elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655`, M09 is fully closed, and on 2026-09-19 the user explicitly authorized continuing into a release candidate for production promotion. Project Definition added R18 and D22: the accepted M10 behavioral subject must be promoted through an exact release-candidate lineage, with other compute profiles unchanged. R7 preserves all completed M10 source/live/review evidence, adds one follow-on M11 release/promotion milestone, and does not reopen the accepted stateful runtime behavior unless release preparation discovers a real behavioral incompatibility.
 
 ## Authority
 
@@ -447,11 +449,81 @@ M10 is GREEN only when all are true:
 
 After R6 plan review GREEN and approval, Execution Prep may create only the currently knowable M10 Cards. It must bind the exact current `codex_workflow` main SHA and create a dedicated implementation branch before source mutation. Card decomposition may separate source implementation from live validation only if the serial Task Board and final exact-subject review remain coherent; the final review must cover the exact source subject used for the required live evidence.
 
+## Milestone M11 — Cut, validate, publish and promote the stateful Muse release
+
+### Outcome
+
+The independently accepted M10 stateful Muse runtime is carried into one exact next-version release candidate, verified without behavioral drift, published through the normal `codex_workflow` owner release path with commit identity preserved, installed on the workstation, and production-smoke validated as the active `muse-max` runtime.
+
+### Requirement ownership
+
+Primary: R18 and R16.
+
+Release-stage regression/compatibility: R1, R3-R7, R10-R15, R17.
+
+### Dependencies
+
+- M10 GREEN at exact source subject `elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655` with REQUIRED independent review GREEN and bounded live evidence.
+- M09 production baseline `v1.1.17-private.11` / `4081cde7d4f71bcc2083c62cf69b7e3b845eefb8` remains the rollback baseline until M11 production acceptance is GREEN.
+- Approved R18 and D22 exact release-candidate lineage.
+- User authorization to proceed with release-candidate preparation is explicit on 2026-09-19. Publication and production mutation remain separate live-write gates and must use the authorization state recorded by execution; do not infer them from source preparation alone.
+
+### Planned work packages
+
+- Refresh current `codex_workflow` `main`, tags/releases and the M10 implementation branch immediately before release preparation. Direct release preparation is allowed only while M10 remains a clean descendant of the current production/main release lineage with no incompatible target drift.
+- Choose the next unique private release version from fresh tag/release state; do not pre-bake a version number in this plan.
+- Create a dedicated release-candidate branch directly from exact accepted M10 subject `cf4c01f...`.
+- Make only synchronized release/version changes required by the existing release contract, including strictly version-coupled test/document literals when current repository tests require them. Do not change runtime behavior, worker allocation, lifecycle semantics or role contracts in the release-only commit.
+- Run complete `codex_workflow` regression coverage on the exact candidate, including Muse adapter/session tests, workflow runtime tests, `muse-max` profile tests, unchanged `plus` / `luna-xhigh` / `pro-x5` allocation checks, compile/diff/package build and archive verification.
+- Freeze the exact release candidate for **REQUIRED independent release-candidate review**. The review must verify that the candidate is the accepted M10 behavior plus release synchronization only, that no non-`muse-max` allocation/lifecycle drift exists, and that release provenance can preserve exact commit identity.
+- After exact-candidate review GREEN, run bounded live Muse validation on that same candidate. Reuse M10's exhaustive stateful/fault-injection evidence for unchanged behavioral blobs, but re-prove on the exact release candidate at least:
+  - stable logical Muse session reuse across two bounded turns with distinct invocation identities;
+  - distinct Executor/Tester session identities;
+  - one safe non-overlapping two-lane invocation batch or equivalent accepted lane-isolation smoke;
+  - clean process/artifact termination and no production mutation.
+- Publish only if the exact candidate remains a fast-forwardable descendant of current `main` and target refresh finds no behavioral conflict. Advance `main` to that exact candidate without merge/squash/rebase identity change and let the normal VERSION-triggered release workflow publish the exact next tag/assets. Verify tag/release provenance, checksums and release workflow success.
+- With explicit production live-write authorization, update the workstation persistent `~/.codex/codex_workflow` runtime from that exact published release through the existing owner update path.
+- Perform production readback and bounded stateful smoke:
+  - installed version/package provenance equals the published candidate;
+  - active profile remains `muse-max`;
+  - Companion remains internal GPT-5.6 Luna XHigh;
+  - six Muse roles retain Muse Spark 1.3 Contributor / max;
+  - one Muse logical worker successfully reuses its retained session across a later bounded turn with new invocation identity;
+  - installed profile authority still reports unchanged `plus`, `luna-xhigh`, and `pro-x5` Codex-backed allocations without switching the user's active profile;
+  - no residual candidate/validation process tree remains.
+- If any source/runtime behavior must change after `cf4c01f...`, stop the release-only path. That correction becomes a new implementation subject and must receive the applicable full regression/live/review cycle before publication.
+
+### Stable acceptance/checkpoint
+
+M11 is GREEN only when:
+
+- the release candidate is a direct release-only descendant of accepted M10 behavior;
+- complete exact-candidate regressions are GREEN;
+- REQUIRED independent review is GREEN on the exact release candidate;
+- bounded live stateful validation is GREEN on that exact candidate;
+- published `main`/tag/release provenance resolves to that same exact commit and package checksums verify;
+- workstation production installs that exact published release;
+- production stateful session reuse is demonstrated through the installed runtime;
+- active `muse-max` allocation is correct and the three Codex-backed profiles remain unchanged;
+- rollback baseline remains available until all production checks are GREEN;
+- no Project Workflow state semantics are introduced into `codex_workflow`.
+
+### Gates
+
+- Release-candidate preparation is authorized by the user's 2026-09-19 instruction.
+- Publishing/advancing `codex_workflow` `main` and mutating the workstation production runtime are material external/live writes and require their explicit execution-time authorization gate unless durable project authority already records it for this exact M11 action.
+- REQUIRED independent review must be GREEN before exact-candidate live validation proceeds to publication.
+- Any target drift that prevents exact fast-forward lineage, or any required behavioral correction, invalidates direct publication and routes through normal correction/review/revalidation.
+
+### JIT trigger
+
+After R7 independent plan review GREEN and approval, Execution Prep may materialize serial M11 Cards for: release-state refresh + candidate cut; exact-candidate verification/review boundary; exact-candidate live validation; publication; production promotion/smoke. It must bind fresh `main`/tag/release state before selecting the version and must not combine publication or production mutation into an earlier Card merely for convenience.
+
 ## Requirement coverage
 
 | Requirement | Owning milestone(s) |
 | --- | --- |
-| R1 only muse-max changes | M06, M09, M10 |
+| R1 only muse-max changes | M06, M09, M10, M11 release regression |
 | R2 Codex Main orchestrator / runtime boundary | M06, M08, M10 |
 | R3 persistent Luna XHigh Companion | M06, M09 |
 | R4 six Muse roles | M06, M08, M10 regression |
@@ -466,8 +538,9 @@ After R6 plan review GREEN and approval, Execution Prep may create only the curr
 | R13 timeout/cancel + interrupted-turn reconciliation | M07, M10 |
 | R14 failure/recovery classification | M07, M10 |
 | R15 caller-owned lane authority + runtime isolation | M09 historical, M10 amended target |
-| R16 workstation boundary | M05, M09 |
-| R17 policy/state-machine agnostic runtime | M10 |
+| R16 workstation boundary | M05, M09, M11 |
+| R17 policy/state-machine agnostic runtime | M10, M11 regression |
+| R18 exact release/promotion of accepted M10 | M11 |
 
 Changed R7-R9/R13-R15 semantics are owned by M10; older milestone evidence remains historical and is not rewritten.
 
@@ -489,6 +562,23 @@ current codex_workflow main 4081cde...
 ```
 
 No passing claim may be upgraded from fixture evidence to live resume/recovery behavior without the corresponding real Muse checkpoint.
+
+R7 adds the production release path:
+
+```text
+accepted M10 source cf4c01f...
+  -> fresh release-state/version readback
+  -> release-only exact candidate
+  -> complete exact-candidate regressions/package verification
+  -> REQUIRED independent release-candidate review
+  -> bounded live stateful smoke on the exact candidate
+  -> exact fast-forward main/tag/release publication
+  -> production owner-update install
+  -> production provenance/profile/stateful-reuse readback
+  -> M11 acceptance
+```
+
+The exhaustive M10 interrupted-turn/fail-closed evidence remains valid only while release-candidate behavioral blobs are unchanged; a behavioral correction reopens the full applicable live/review cycle.
 
 ## Security, data integrity and idempotency
 
@@ -517,6 +607,8 @@ M10 is source/test-only:
 - cross-lane recovery must never adopt another lane's session;
 - later publication/promotion, if authorized, must define its own release/rollback contract.
 
+For M11 production rollback, retain the known-good `v1.1.17-private.11` release identity and verified package provenance until the new production smoke is GREEN. If installation or smoke fails, do not mark M11 complete; use the existing owner release/install mechanism to restore the prior verified release or an equivalently verified transactional backup, then read back version/profile/runtime state before further attempts.
+
 ## JIT decomposition policy
 
 Historical M05-M09 JIT rules remain historical authority for their existing Cards/evidence.
@@ -533,9 +625,17 @@ For M10:
 - No release/version bump, `main` publication or production runtime update is authorized by M10.
 - No OpenSpec is required at plan time because the accepted change is internal `codex_workflow` orchestration/runtime behavior with unchanged external CLI/profile allocation contracts; if JIT introduces a new public API/schema/cross-package contract, Execution Prep must materialize the appropriate contract before implementation.
 
+For M11:
+
+- Bind fresh `codex_workflow` main/tag/release state before choosing the candidate version.
+- Release synchronization must remain behavior-neutral relative to accepted M10; unexpected behavioral edits route out of the release-only path.
+- Keep publication and production-promotion Cards distinct because each has its own external-write/readback gate.
+- Exact-candidate review is REQUIRED; the chat that cuts or behaviorally changes the candidate cannot independently review it.
+- No new OpenSpec is expected for release-only metadata/promotion; if execution discovers a new public behavior/schema contract, route to the appropriate authority before proceeding.
+
 ## Planning audit
 
-GREEN for planner self-audit; independent plan review is RECOMMENDED and GREEN for R6.
+GREEN for planner self-audit; independent plan review is RECOMMENDED and pending for R7.
 
 - Amended Definition/D21 are approved and contain no unresolved product/architecture choice.
 - R6 cleanly separates `codex_workflow` runtime/orchestration semantics from Project Workflow policy/state semantics.
@@ -548,4 +648,9 @@ GREEN for planner self-audit; independent plan review is RECOMMENDED and GREEN f
 - Existing structured output, artifact isolation, timeout/cancel and other-profile regressions are preserved as mandatory checks.
 - Production release/promotion is explicitly outside scope, keeping rollback simple.
 - The final implementation subject has REQUIRED independent implementation review.
-- R6 materially changes execution strategy and lifecycle acceptance, so plan review classification is RECOMMENDED; the authoring chat cannot issue that verdict.
+- R6 materially changed execution strategy and lifecycle acceptance and remains historical approved authority for M10.
+- R7 adds only the authorized release/promotion strategy for accepted M10 behavior, with exact-subject lineage, rollback baseline, other-profile preservation and external-write gates explicit.
+- M11 does not reopen M10 runtime architecture: release-only changes are constrained to synchronized metadata/version literals; behavioral drift forces a new implementation subject.
+- Exact-candidate regression, REQUIRED release-candidate review, bounded live validation, publication provenance and production stateful smoke form a complete end-to-end acceptance chain.
+- Publication and production mutation remain separated from source preparation so authorization/readback boundaries cannot be bypassed.
+- R7 is a material new milestone and execution strategy, so independent plan review classification remains RECOMMENDED; the authoring chat cannot issue that verdict.
