@@ -113,12 +113,12 @@ milestones:
 
   M09:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
+    checkpoint: "elmakus/codex_workflow@4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
+    implementation_head: "4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
+    handoff: "project-handoffs/M09_HANDOFF.md"
+    acceptance_evidence: "project-handoffs/M09_HANDOFF.md"
     review_state: null
     review_subject: null
     review_evidence: null
