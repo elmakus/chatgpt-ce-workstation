@@ -330,3 +330,18 @@ The release path must:
 - verify after production promotion that `muse-max` uses the accepted stateful lifecycle and that `plus`, `luna-xhigh`, and `pro-x5` remain unchanged.
 
 **Rationale:** the accepted M10 source still carries the prior production version metadata. A distinct exact release candidate preserves auditable source → review → live validation → publication → production identity and avoids silently treating release metadata mutation as if it were the already-reviewed M10 source subject.
+
+## D23 — Persistent global AGENTS uses workstation-owned reconciliation
+
+**Decision (2026-09-19):** replace the permanent seed-once model for workstation global Codex policy with an explicitly delimited workstation-owned block inside the persistent `~/.codex/AGENTS.md`.
+
+The workstation image/repository owns only that block. Container initialization reconciles it to the current image policy when global policy is enabled.
+
+Content outside the workstation block remains outside workstation ownership. In particular, the `codex_workflow` block delimited by `codex-workflow-user-managed-start` / `codex-workflow-user-managed-end` must be preserved unchanged by workstation reconciliation, as must unrelated user-authored content.
+
+Existing unmarked installations are migrated only when the old workstation-owned portion can be recognized conservatively from known repository-owned legacy content/layout. Ambiguous legacy files and malformed/duplicate workstation markers fail closed: the persistent file is left unchanged and a diagnostic is emitted instead of guessing.
+
+Fresh installations are seeded directly into the managed form, and repeated reconciliation against the same image must be idempotent.
+
+**Rationale:** the full home is intentionally persistent, so seed-once behavior leaves existing installations on stale workstation policy after image updates. Whole-file overwrite would violate D12 and can destroy independently managed or user-authored content. Explicit block ownership gives the image a safe update boundary while preserving the persistent file as a shared user configuration surface.
+
