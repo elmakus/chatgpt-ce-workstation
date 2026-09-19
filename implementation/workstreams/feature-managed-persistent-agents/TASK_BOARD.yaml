@@ -33,9 +33,9 @@ cards:
     depends_on: []
     openspec_change: null
     contract: "implementation/workstreams/feature-managed-persistent-agents/cards/M01-T01.md"
-    review_state: in_progress
+    review_state: green
     review_subject: "elmakus/chatgpt-ce-workstation@00c32fa9f34229e2c227352f4891a7a64f119d35"
-    review_evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M01_T01_MANAGED_AGENTS_2026-09-20.md"
+    review_evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M01_T01_INDEPENDENT_REVIEW_2026-09-20.md"
     result_commit: "00c32fa9f34229e2c227352f4891a7a64f119d35"
     result_pr: 6
     evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M01_T01_MANAGED_AGENTS_2026-09-20.md"
