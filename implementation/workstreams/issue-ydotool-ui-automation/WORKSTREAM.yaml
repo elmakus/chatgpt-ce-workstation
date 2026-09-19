@@ -25,10 +25,10 @@ authority:
 
 review:
   requirement: "RECOMMENDED"
-  state: null
-  subject: null
-  evidence: null
-  covered_by: null
+  state: "green"
+  subject: "elmakus/chatgpt-ce-workstation@8559ce89ab267a38ff26a2529b9ac1ff964241b9"
+  evidence: "implementation/workstreams/issue-ydotool-ui-automation/evidence/MF_T01_INDEPENDENT_REVIEW_2026-09-19.md"
+  covered_by: "task_board:MF-T01"
 
 pr: 5
 result: null
