@@ -535,7 +535,7 @@ For M10:
 
 ## Planning audit
 
-GREEN for planner self-audit; independent plan review remains RECOMMENDED and pending for R6.
+GREEN for planner self-audit; independent plan review is RECOMMENDED and GREEN for R6.
 
 - Amended Definition/D21 are approved and contain no unresolved product/architecture choice.
 - R6 cleanly separates `codex_workflow` runtime/orchestration semantics from Project Workflow policy/state semantics.
