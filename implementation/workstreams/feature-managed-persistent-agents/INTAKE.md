@@ -3,7 +3,7 @@
 Date: 2026-09-19
 Workstream ID: `feature-managed-persistent-agents`
 Kind: `feature`
-Status: active
+Status: complete
 
 ## Operator intent
 
@@ -17,6 +17,7 @@ Create a durable lifecycle for the workstation-wide persistent `~/.codex/AGENTS.
 - The current init path already contains one narrowly targeted stock-text migration for the historical `/workspace` path change, proving that persistent policy migration is an existing lifecycle concern.
 - Accepted D12 explicitly protects existing user changes from blind overwrite.
 - The recently integrated ydotool guidance changed the repository template, but an already-existing persistent AGENTS file is not updated by the seed-once behavior.
+- Live verification on the target workstation confirmed the persistent file is still the older workstation policy followed by a distinct `codex-workflow-user-managed` marker block; the current file has no workstation-managed markers yet.
 
 ## Base / dependency classification
 
@@ -44,4 +45,6 @@ Path: `brainstorming`
 
 Next route: `brainstorming:managed-persistent-agents@R1`
 
-The `#feature` directive does not authorize Project Definition promotion.
+Canonical exploratory record: `brainstorming/managed-persistent-agents.md`
+
+Definition promotion remains `pending`; the `#feature` directive does not authorize Project Definition promotion.
