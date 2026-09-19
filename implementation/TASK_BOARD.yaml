@@ -131,9 +131,9 @@ milestones:
     implementation_head: "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
     handoff: null
     acceptance_evidence: "implementation/evidence/M10_T16_LIVE_NESTED_WORKSPACE_ISOLATION_REVALIDATION_2026-09-19.md"
-    review_state: in_progress
+    review_state: green
     review_subject: "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
-    review_evidence: null
+    review_evidence: "implementation/reviews/m10-final-stateful-muse-runtime-independent-review-2026-09-19.md"
 
 cards:
   - id: M01-T01
