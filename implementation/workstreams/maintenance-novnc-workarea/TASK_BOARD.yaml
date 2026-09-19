@@ -1,0 +1,41 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "maintenance-novnc-workarea"
+plan_revision: "docs/IMPLEMENTATION_PLAN.md#phase-5"
+current_milestone: "M01"
+
+execution_ref:
+  branch: "fix/novnc-tint2-workarea"
+  pr: null
+  head: "201c8be8e5b337d22ab4b7adca133470fa6a8f94"
+
+research_obligation: null
+
+milestones:
+  M01:
+    decision_state: accepted
+    execution_status: in_progress
+    contract: "Restore correct full-screen Openbox workarea/maximize behavior while preserving the bottom Tint2 recovery panel."
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: "M01-T01"
+    title: "Correct Tint2/Openbox workarea reservation"
+    milestone: "M01"
+    decision_state: accepted
+    execution_status: in_progress
+    executor: "chatgpt"
+    depends_on: []
+    contract: "implementation/workstreams/maintenance-novnc-workarea/cards/M01-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
