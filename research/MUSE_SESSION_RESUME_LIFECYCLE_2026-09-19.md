@@ -185,8 +185,8 @@ Policy distinction matters:
 
 - under the currently accepted `chatgpt_only` route, Project Workflow's REQUIRED/RECOMMENDED implementation review boundary is still a fresh normal-ChatGPT boundary because that policy explicitly defines it that way;
 - a future `codex_only` policy may instead define the independent Tester worker as the formal Project Workflow reviewer. In that policy, B1's formal verdict/evidence can satisfy the review obligation directly, with no additional fresh normal-ChatGPT review, provided B1 remained independent of the implementation and the policy's review contract is satisfied;
-- reuse of B1 across S1 -> S2 is compatible with formal independent review when the correction is bounded and the acceptance/authority surface has not materially changed;
-- if scope, authority, acceptance, security, migration surface, or another material review boundary changes, Main may require a fresh independent Tester B2 even if B1 remains technically resumable.
+- reuse of B1 across S1 -> S2 is compatible with formal independent review whenever B1 did not implement or repair the subject, no controlling contract requires fresh context, and the same independent session remains safely resumable; the size/materiality of S2 alone does not require B2;
+- fresh B2 is required only when a controlling higher-level contract explicitly requires a fresh reviewer/context, B1 cannot be safely resumed, or Main has a material reason for a fresh independent context. A large or materially different S2 does not by itself destroy B1 independence.
 
 This research does not itself create or authorize `codex_only`. Current Project Workflow `main` has no dedicated `codex_only` route; the target semantics above must be established by that future policy before it can govern formal Project Workflow review.
 
@@ -265,23 +265,23 @@ Therefore the stateful design can preserve the existing Executor/Tester role con
 Recommended target behavior, subject to accepted authority updates and implementation review:
 
 ```text
-Main allocates lane
+Main/caller allocates an opaque task/lane/workspace scope
   |
   +-- create Executor A1 logical worker/session EA
   |     |
-  |     +-- invocation E1 -> exact implementation subject S1
+  |     +-- invocation E1 -> implementation target S1
   |
   +-- create independent Tester B1 logical worker/session TB
         |
-        +-- invocation T1 -> formal review attempt of S1 -> RED
+        +-- invocation T1 -> full verification of S1 -> RED
                |
-Main records RED + passes bounded findings
+Main routes bounded findings
                |
-EA resume -> invocation E2 repair -> exact subject S2
+EA resume -> invocation E2 repair -> changed target S2
                |
-TB resume -> invocation T2 -> full formal review attempt of S2 -> GREEN
+TB resume -> invocation T2 -> full independent verification of S2 -> GREEN
                |
-Main records formal verdict/evidence and continues
+Main/caller interprets and persists the result according to its own policy
 ```
 
 For an ordinary bounded repair, reuse of the owning Executor A1 and independent Tester B1 is preferred.
@@ -293,9 +293,9 @@ Fail-closed fallback:
 - if EA cannot be safely resumed, Main creates a new Executor A2/recovery session from durable evidence and records that logical-worker continuity was lost;
 - if TB cannot be safely resumed, Main creates a new independent Tester B2 from durable review authority/evidence and records replacement reviewer recovery;
 - a failed resume must never silently create a new physical/logical session while continuing to label it A1/B1;
-- a material scope/authority/acceptance/security/migration change may require B2 even when B1 is technically resumable.
+- a changed subject does not itself require B2; use B2 only when a controlling contract requires freshness, B1 is unavailable/unsafe to resume, or Main has a material reason for a fresh independent context.
 
-Project Workflow must own only the semantic review state: exact subject/attempt, verdict, evidence, authority and required review status. Muse `session_id`, adapter `invocation_id`, leases and resume probes remain private `codex_workflow` runtime/orchestration details and must not become Project Workflow state.
+`codex_workflow` owns only runtime/orchestration semantics and private session mechanics. It does not own any caller's review state machine. A higher-level workflow may map S1/S2 and Tester verdicts into its own immutable review-attempt/state model, but Muse `session_id`, adapter `invocation_id`, leases and resume probes remain private `codex_workflow` details.
 
 ## Required authority-change scope before implementation
 
@@ -324,7 +324,7 @@ The following accepted requirements currently encode one-shot/fresh behavior and
    - replace `fresh executor -> fresh tester -> fresh repair -> fresh tester` with the preferred `A1 -> B1 -> A1 -> B1` lifecycle;
    - each implementation change must create a new exact review subject/attempt;
    - B1 recheck of S2 must be a full review against the current acceptance surface;
-   - define Main's material-boundary rule for selecting fresh B2;
+   - define fresh B2 selection only for an explicit higher-level freshness requirement, unavailable/unsafe B1 resume, or a material Main decision for fresh independent context; subject size/change alone is not a freshness trigger;
    - define explicit A2/B2 recovery fallback when a durable session cannot be safely resumed.
 
 5. **R13 — Timeout and process-tree cancellation**
@@ -365,7 +365,7 @@ D21 must be revised consistently:
 - replace ordinary RED routing to fresh repair/fresh Tester with preferred `A1 -> B1 -> A1 -> B1`;
 - keep Main as the only orchestration bridge and keep Tester production-repair prohibition;
 - state that a changed implementation subject creates a new exact review attempt even when B1 is reused;
-- allow/require fresh B2 when the review surface materially changes;
+- allow fresh B2 only when a controlling contract requires freshness, B1 cannot be safely resumed, or Main has a material reason for a fresh independent context; do not tie freshness automatically to subject size/materiality;
 - require fail-closed A2/B2 replacement when session continuity cannot be safely recovered;
 - keep session/invocation identifiers outside Project Workflow state;
 - preserve lane/worktree ownership, profile allocations and all non-`muse-max` behavior.
@@ -377,9 +377,9 @@ A dedicated `codex_only` policy does not yet exist as an accepted route in curre
 - the formal implementation-review role may be executed by an independent `codex_workflow` Tester worker;
 - independence means the reviewer did not implement/repair the reviewed exact subject and receives only authorized review context/evidence, not Executor trajectory;
 - each changed subject S1 -> S2 creates a new immutable review attempt;
-- the same independent B1 may perform the S2 attempt after an ordinary bounded repair when the accepted review surface is materially unchanged;
+- the same independent B1 may perform the S2 attempt after any repair when B1 remained independent, no controlling contract requires freshness, and the session is safely resumable;
 - the recheck must be a full review of S2, not merely confirmation of prior findings;
-- material scope/authority/acceptance/security/migration changes may force a fresh B2;
+- a fresh B2 is required only by an explicit higher-level freshness rule, unavailable/unsafe B1 resume, or a material Main decision for fresh independent context;
 - reviewer/session loss uses an explicit fresh-worker recovery path from durable evidence;
 - Main persists the formal verdict/evidence into Project Workflow's canonical review state and then returns to the policy router;
 - Project Workflow must remain transport-agnostic: no Muse `session_id`, `invocation_id`, process id, lease or CLI resume mechanism in policy/state contracts.
