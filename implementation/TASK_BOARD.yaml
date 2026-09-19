@@ -131,9 +131,9 @@ milestones:
     implementation_head: "elmakus/codex_workflow@3a5d98b3c21fc37a527c3aa8eb0ed771e6428acb"
     handoff: null
     acceptance_evidence: "implementation/evidence/M10_T10_LIVE_RESUME_RESERVATION_CORRECTION_REVALIDATION_2026-09-19.md"
-    review_state: in_progress
+    review_state: red
     review_subject: "elmakus/codex_workflow@3a5d98b3c21fc37a527c3aa8eb0ed771e6428acb"
-    review_evidence: null
+    review_evidence: "implementation/reviews/m10-resume-terminal-lock-race-independent-review-2026-09-19.md"
 
 cards:
   - id: M01-T01
