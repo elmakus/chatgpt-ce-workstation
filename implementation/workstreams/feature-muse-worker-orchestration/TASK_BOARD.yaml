@@ -6,7 +6,7 @@ current_milestone: "M11"
 execution_ref:
   branch: "feat/muse-worker-orchestration"
   pr: null
-  head: "69d0c90875d5e97d518da6ee2120f92a919174c6"
+  head: "33f73ea09e5ecf3cd1acb1a9c27d8f08cbc68ba4"
 
 research_obligation: null
 

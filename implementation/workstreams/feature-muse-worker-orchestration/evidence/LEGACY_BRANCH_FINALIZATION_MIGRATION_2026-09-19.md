@@ -34,3 +34,18 @@ The subsequent integration refresh must preserve current main changes, including
 ## Review
 
 This topology reconciliation does not claim an independent final-integration verdict. The workstream manifest carries a distinct RECOMMENDED final-integration review gate to be resolved only after refresh against current main.
+
+## Integration refresh against current main
+
+- Namespacing checkpoint: elmakus/chatgpt-ce-workstation@f9e4a3e2a12252103b0f8a6578196c1ca21ee586
+- Current integration target re-read immediately before refresh: elmakus/chatgpt-ce-workstation@272d2e9cddda9f10ab92e4f9fdb73ca891410f0f
+- Technical refresh merge: elmakus/chatgpt-ce-workstation@33f73ea09e5ecf3cd1acb1a9c27d8f08cbc68ba4
+- The refresh merged the current main into the workstream with no textual conflicts.
+- Current main noVNC/default-state changes were preserved exactly.
+- git diff origin/main...HEAD across Dockerfile, compose.yaml, config/, rootfs/, scripts/ and .github/ reported no workstream-owned source/runtime/CI delta.
+- Root implementation/TASK_BOARD.yaml matches origin/main byte-for-byte.
+- bash scripts/validate-source.sh on the refreshed tree returned SOURCE_VALIDATION_GREEN.
+- The workstream's accepted Muse behavior/release subjects remain the already recorded exact codex_workflow/runtime subjects; the target refresh introduced no Muse behavioral change.
+- Existing Card/milestone independent reviews do not cover the whole migrated workstation workstream plus namespaced durable-state/integration surface, so they are not reused as the distinct final-integration review gate.
+
+The refreshed immutable integration subject is ready to be frozen for the manifest-owned RECOMMENDED final-integration review.
