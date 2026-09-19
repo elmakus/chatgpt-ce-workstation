@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/ydotool-ui-automation"
   pr: null
-  head: null
+  head: "1682b3786766c628e8b45e38591133d3d9dd026b"
 
 research_obligation: null
 
@@ -17,8 +17,8 @@ cards:
     title: "Prevent unsupported ydotool drift in GUI automation"
     milestone: "micro-fix"
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-ydotool-ui-automation/cards/MF-T01.md"
     review_state: null
