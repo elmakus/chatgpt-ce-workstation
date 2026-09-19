@@ -1,6 +1,6 @@
 id: "feature-managed-persistent-agents"
 kind: "feature"
-status: "ready"
+status: "in_progress"
 
 branch: "feat/managed-persistent-agents"
 base_ref: "elmakus/chatgpt-ce-workstation@4c4da56e1c7db6d0cfc69e170ada3800db185c28"
