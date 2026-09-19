@@ -1,0 +1,32 @@
+id: "issue-ydotool-ui-automation"
+kind: "issue"
+status: "discovery"
+
+branch: "fix/ydotool-ui-automation"
+base_ref: "elmakus/chatgpt-ce-workstation@77cd342c4ebffc57b84356fd6e224a1dc1afa5e3"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: "active"
+  record: "implementation/workstreams/issue-ydotool-ui-automation/INTAKE.md"
+
+task_board: null
+
+authority:
+  requirements: null
+  decisions: []
+  plan: null
+
+review:
+  requirement: null
+  state: null
+  subject: null
+  evidence: null
+  covered_by: null
+
+pr: null
+result: null
