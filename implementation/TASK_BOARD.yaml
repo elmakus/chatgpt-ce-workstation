@@ -1494,7 +1494,7 @@ cards:
     title: "Live-validate the exact reviewed release candidate"
     milestone: M11
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M11-T02"
@@ -1517,14 +1517,14 @@ cards:
     lane_base: "M11-T02 exact independently GREEN candidate"
     authorization: "Isolated exact-candidate live validation is part of authorized release-candidate preparation; workstation production mutation is excluded."
     blocker: null
-    blocker_evidence: null
+    blocker_evidence: "implementation/evidence/M11_T03_EXACT_CANDIDATE_LIVE_VALIDATION_2026-09-19.md"
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@d285aa1a271258052d23e3a2d3b585117fc1e862"
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN on exact d285aa1: live two-turn same-session reuse with distinct invocation IDs; distinct read-only Tester GREEN; two concurrent non-overlapping lanes GREEN with distinct sessions; 4 workers ready / 5 private run dirs at 0700/0600; zero residual candidate processes; candidate clean/exact; production remained 1.1.17-private.11 with unchanged muse_worker SHA-256 c199a458530d0e53ad64e40fe43c2f4072af5b9efe62af4144a03a4cb0570950."
 
   - id: M11-T04
     title: "Publish exact candidate with identity-preserving provenance"
