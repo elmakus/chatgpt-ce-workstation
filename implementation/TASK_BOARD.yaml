@@ -1,6 +1,6 @@
 project: "chatgpt-ce-workstation"
-plan_revision: "planning/MASTER_PLAN.md@R5-approved-2026-09-18"
-current_milestone: "M09"
+plan_revision: "planning/MASTER_PLAN.md@R6-approved-2026-09-19"
+current_milestone: "M10"
 execution_mode: serial
 parallel_card_limit: 1
 
@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "147368145ca36523aa3a3c20673b45ebdbf91caa"
+  head: "1d5f4215eb88bed651fff59126ab68a811b1fe32"
 
 milestones:
   M01:
@@ -115,6 +115,18 @@ milestones:
     decision_state: accepted
     execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m09--add-bounded-lane-concurrency-and-promote-the-complete-runtime"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  M10:
+    decision_state: accepted
+    execution_status: in_progress
+    contract: "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
     checkpoint: null
     implementation_head: null
     handoff: null
@@ -823,3 +835,76 @@ cards:
     result_pr: null
     evidence: "implementation/evidence/M09_T08_PRODUCTION_PROMOTION_2026-09-18.md"
     tests_summary: "GREEN: exact release/package/version/profile readback; required Muse Archivist; production Executor -> fresh Tester GREEN; managed two-lane concurrent Muse run GREEN; private artifact lifecycle/permissions GREEN; auth/hook preservation GREEN; no residual processes; disposable workspaces cleaned."
+
+  - id: M10-T01
+    title: "Implement stateful Muse logical-worker runtime"
+    milestone: M10
+    decision_state: accepted
+    execution_status: ready
+    executor: "chatgpt"
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/cards/M10-T01.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
+      - "planning/reviews/R6.md"
+      - "requirements/MUSE_MAX_RUNTIME.md"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile"
+      - "research/MUSE_SESSION_RESUME_LIFECYCLE_2026-09-19.md"
+      - "implementation/evidence/M09_T08_PRODUCTION_PROMOTION_2026-09-18.md"
+      - "elmakus/codex_workflow@4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex_workflow:impl/m10-stateful-muse-lifecycle"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "codex_workflow stateful Muse runtime source candidate"
+    lane_branch: "elmakus/codex_workflow:impl/m10-stateful-muse-lifecycle"
+    lane_base: "elmakus/codex_workflow@4081cde7d4f71bcc2083c62cf69b7e3b845eefb8"
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+  - id: M10-T02
+    title: "Validate exact stateful Muse candidate live and freeze review subject"
+    milestone: M10
+    decision_state: accepted
+    execution_status: pending
+    executor: "chatgpt"
+    depends_on:
+      - "M10-T01"
+    openspec_change: null
+    contract: "implementation/cards/M10-T02.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
+      - "planning/reviews/R6.md"
+      - "requirements/MUSE_MAX_RUNTIME.md"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile"
+      - "research/MUSE_SESSION_RESUME_LIFECYCLE_2026-09-19.md"
+      - "M10-T01 result"
+    parallel_safe: false
+    write_scope:
+      - "isolated workstation candidate runtime/workspaces/private Muse session artifacts"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "isolated M10 candidate Muse session registry/runtime"
+      - "live Muse Code 1.3.0 adapter fault-injection surface"
+    lane_branch: "elmakus/codex_workflow:impl/m10-stateful-muse-lifecycle"
+    lane_base: "M10-T01 exact result subject"
+    authorization: "R6 isolated real-Muse lifecycle/fault-injection validation explicitly authorized by user on 2026-09-19; production release/promotion is not authorized."
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
