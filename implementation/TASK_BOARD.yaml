@@ -128,12 +128,12 @@ milestones:
     execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
     checkpoint: null
-    implementation_head: "elmakus/codex_workflow@7f6f51fe9faf318fa90ce9414e6024c673ad9226"
+    implementation_head: "elmakus/codex_workflow@74a7588e5bab0a5b7a89549c4309486dc9e7ba4f"
     handoff: null
-    acceptance_evidence: "implementation/evidence/M10_T06_LIVE_STALE_ACTIVE_CORRECTION_REVALIDATION_2026-09-19.md"
-    review_state: red
-    review_subject: "elmakus/codex_workflow@7f6f51fe9faf318fa90ce9414e6024c673ad9226"
-    review_evidence: "implementation/reviews/m10-stale-active-corrected-stateful-muse-runtime-independent-review-2026-09-19.md"
+    acceptance_evidence: "implementation/evidence/M10_T08_LIVE_RESERVATION_RACE_CORRECTION_REVALIDATION_2026-09-19.md"
+    review_state: pending
+    review_subject: "elmakus/codex_workflow@74a7588e5bab0a5b7a89549c4309486dc9e7ba4f"
+    review_evidence: null
 
 cards:
   - id: M01-T01
@@ -1092,7 +1092,7 @@ cards:
     title: "Revalidate reservation-race correction live and freeze next review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T07"
@@ -1115,12 +1115,12 @@ cards:
     lane_base: "M10-T07 exact result subject"
     authorization: "R6 isolated real-Muse lifecycle/fault-injection validation explicitly authorized by user on 2026-09-19; production release/promotion is not authorized."
     blocker: null
-    blocker_evidence: null
+    blocker_evidence: "implementation/evidence/M10_T08_LIVE_RESERVATION_RACE_CORRECTION_REVALIDATION_2026-09-19.md"
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@74a7588e5bab0a5b7a89549c4309486dc9e7ba4f"
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN on exact 74a7588e5bab0a5b7a89549c4309486dc9e7ba4f: reservation/stale-active/cleanup-unconfirmed fail-closed regressions GREEN; live Meta A1/B1 RED-repair-full-recheck reused distinct stable sessions with read-only Tester; actual adapter cancellation confirmed tree absence, inspectable partial state and safe same-session resume; two-lane isolation GREEN; private runtime 0700/0600; zero residual processes; production remained v1.1.17-private.11 byte-identical to baseline."
 
