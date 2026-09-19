@@ -60,7 +60,7 @@ cards:
     depends_on: ["M01-T01"]
     openspec_change: null
     contract: "implementation/workstreams/feature-managed-persistent-agents/cards/M02-T01.md"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/chatgpt-ce-workstation@8f9f4f22c0954811707ac4eb581f4d255af864cf"
     review_evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M02_T01_DEPLOYMENT_READINESS_2026-09-20.md"
     result_commit: "8f9f4f22c0954811707ac4eb581f4d255af864cf"
