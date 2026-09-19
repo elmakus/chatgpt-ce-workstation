@@ -23,7 +23,7 @@ authority:
     - "docs/DECISIONS.md#D10"
     - "docs/DECISIONS.md#D12"
     - "docs/DECISIONS.md#D23"
-  plan: null
+  plan: "planning/MANAGED_PERSISTENT_AGENTS_MASTER_PLAN.md"
 
 review:
   requirement: null
