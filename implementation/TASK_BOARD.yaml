@@ -912,7 +912,7 @@ cards:
     title: "Fail closed on unconfirmed Muse process-tree cleanup"
     milestone: M10
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M10-T02"
