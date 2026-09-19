@@ -1565,8 +1565,8 @@ cards:
     title: "Promote exact published release and prove production acceptance"
     milestone: M11
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on:
       - "M11-T04"
     openspec_change: null
