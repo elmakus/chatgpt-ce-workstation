@@ -85,7 +85,7 @@ No formal research obligation is currently required. The relevant repository beh
 - Research still needed: none before Definition based on current evidence.
 - Open questions: implementation-level marker/versioning and diagnostics details listed above.
 - Next phase/action: `ready for definition`
-- Definition promotion authorization: `pending`
-- Definition promotion subject: `none`
+- Definition promotion authorization: `user_authorized`
+- Definition promotion subject: `managed-persistent-agents@R1`
 
 > Nothing in this file becomes accepted requirement/decision authority by itself. Project Definition owns promotion into canonical `requirements/` and `decisions/`. The `#feature` directive does not itself authorize phase promotion.
