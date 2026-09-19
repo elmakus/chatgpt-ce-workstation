@@ -1,6 +1,6 @@
 # Muse-max production runtime Master Plan
 
-Status: **draft**
+Status: **approved**
 Revision: **R7**
 Date: 2026-09-19
 Review requirement: **RECOMMENDED**
@@ -635,7 +635,7 @@ For M11:
 
 ## Planning audit
 
-GREEN for planner self-audit; independent plan review is RECOMMENDED and pending for R7.
+GREEN for planner self-audit; independent plan review is RECOMMENDED and GREEN for R7.
 
 - Amended Definition/D21 are approved and contain no unresolved product/architecture choice.
 - R6 cleanly separates `codex_workflow` runtime/orchestration semantics from Project Workflow policy/state semantics.
