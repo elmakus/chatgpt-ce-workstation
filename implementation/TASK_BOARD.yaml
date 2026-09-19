@@ -1494,7 +1494,7 @@ cards:
     title: "Live-validate the exact reviewed release candidate"
     milestone: M11
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: null
     depends_on:
       - "M11-T02"
