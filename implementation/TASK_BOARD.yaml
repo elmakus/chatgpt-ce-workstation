@@ -1565,7 +1565,7 @@ cards:
     title: "Promote exact published release and prove production acceptance"
     milestone: M11
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: null
     depends_on:
       - "M11-T04"
@@ -1586,7 +1586,7 @@ cards:
       - "workstation codex_workflow production runtime"
     lane_branch: null
     lane_base: "M11-T04 exact published release"
-    authorization: "PENDING explicit user authorization for this exact M11 workstation production promotion."
+    authorization: "AUTHORIZED by user on 2026-09-19 for exact workstation production promotion of v1.1.17-private.12."
     blocker: null
     blocker_evidence: null
     review_state: null
