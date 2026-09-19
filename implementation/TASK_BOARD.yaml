@@ -1124,3 +1124,74 @@ cards:
     evidence: "implementation/evidence/M10_T08_LIVE_RESERVATION_RACE_CORRECTION_REVALIDATION_2026-09-19.md"
     tests_summary: "GREEN on exact 74a7588e5bab0a5b7a89549c4309486dc9e7ba4f: reservation/stale-active/cleanup-unconfirmed fail-closed regressions GREEN; live Meta A1/B1 RED-repair-full-recheck reused distinct stable sessions with read-only Tester; actual adapter cancellation confirmed tree absence, inspectable partial state and safe same-session resume; two-lane isolation GREEN; private runtime 0700/0600; zero residual processes; production remained v1.1.17-private.11 byte-identical to baseline."
 
+  - id: M10-T09
+    title: "Reserve resumed Muse workspace before session-lock acquisition"
+    milestone: M10
+    decision_state: accepted
+    execution_status: ready
+    executor: "chatgpt"
+    depends_on:
+      - "M10-T08"
+    openspec_change: null
+    contract: "implementation/cards/M10-T09.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
+      - "requirements/MUSE_MAX_RUNTIME.md"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile"
+      - "implementation/reviews/m10-reservation-race-corrected-stateful-muse-runtime-independent-review-2026-09-19.md"
+      - "elmakus/codex_workflow@74a7588e5bab0a5b7a89549c4309486dc9e7ba4f"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex_workflow:impl/m10-stateful-muse-lifecycle"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "codex_workflow M10 stateful Muse candidate source"
+    lane_branch: "elmakus/codex_workflow:impl/m10-stateful-muse-lifecycle"
+    lane_base: "elmakus/codex_workflow@74a7588e5bab0a5b7a89549c4309486dc9e7ba4f"
+    authorization: "Bounded corrective source work under approved R6/M10 authority; production release/promotion is not authorized."
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+  - id: M10-T10
+    title: "Revalidate resume-reservation correction live and freeze next review subject"
+    milestone: M10
+    decision_state: accepted
+    execution_status: planned
+    executor: "chatgpt"
+    depends_on:
+      - "M10-T09"
+    openspec_change: null
+    contract: "implementation/cards/M10-T10.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
+      - "requirements/MUSE_MAX_RUNTIME.md"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile"
+      - "implementation/reviews/m10-reservation-race-corrected-stateful-muse-runtime-independent-review-2026-09-19.md"
+      - "M10-T09 result"
+    parallel_safe: false
+    write_scope:
+      - "isolated workstation corrected-candidate runtime/workspaces/private Muse session artifacts"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "isolated M10 corrected-candidate Muse runtime/auth state"
+      - "M10 disposable validation workspaces"
+    lane_branch: "elmakus/codex_workflow:impl/m10-stateful-muse-lifecycle"
+    lane_base: "M10-T09 exact result subject"
+    authorization: "R6 isolated real-Muse lifecycle/fault-injection validation explicitly authorized by user on 2026-09-19; production release/promotion is not authorized."
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
