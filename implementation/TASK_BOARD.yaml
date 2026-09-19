@@ -131,7 +131,7 @@ milestones:
     implementation_head: "elmakus/codex_workflow@ad62ffa515026714a42a610c0310b1f6e92f47bd"
     handoff: null
     acceptance_evidence: "implementation/evidence/M10_T14_LIVE_ACTIVATION_RESERVATION_CORRECTION_REVALIDATION_2026-09-19.md"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex_workflow@ad62ffa515026714a42a610c0310b1f6e92f47bd"
     review_evidence: null
 
