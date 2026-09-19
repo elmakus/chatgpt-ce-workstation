@@ -1,9 +1,6 @@
 project: "chatgpt-ce-workstation"
-plan_revision: "planning/MASTER_PLAN.md@R6-approved-2026-09-19"
-current_milestone: "M09"
-execution_mode: serial
-parallel_card_limit: 1
-
+plan_revision: "planning/MASTER_PLAN.md@R7-approved-2026-09-19"
+current_milestone: "M11"
 
 chatgpt_control_chat:
   name: null
@@ -12,7 +9,9 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "97fd0643f6b4ae98f46efdcf81ba80ee4ee14a48"
+  head: "c8cc35735d891e716952954f738e15f068c9d412"
+
+research_obligation: null
 
 milestones:
   M01:
@@ -134,6 +133,19 @@ milestones:
     review_state: green
     review_subject: "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
     review_evidence: "implementation/reviews/m10-final-stateful-muse-runtime-independent-review-2026-09-19.md"
+
+
+  M11:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/MASTER_PLAN.md#milestone-m11--cut-validate-publish-and-promote-the-stateful-muse-release"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
 
 cards:
   - id: M01-T01
@@ -1408,3 +1420,179 @@ cards:
     evidence: "implementation/evidence/M10_T16_LIVE_NESTED_WORKSPACE_ISOLATION_REVALIDATION_2026-09-19.md"
     tests_summary: "GREEN on exact cf4c01f3ef7f35c32fb5ad61c301eb90e1466655: T15 exact-subject regressions 33/33 Muse adapter, 90/90 runtime, 7/7 profile plus compile/diff/package GREEN; live Muse Code 1.3.0 A1/B1 RED-repair-full-recheck same-session reuse; timeout cleanup and same-session C1 recovery; concurrent two-lane Executor/Tester isolation; private 0700/0600 artifacts; 11 run dirs, 7 workers ready, zero residual candidate processes; production version/hash unchanged."
 
+  - id: M11-T01
+    title: "Refresh release lineage and cut release-only candidate"
+    milestone: M11
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/cards/M11-T01.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m11--cut-validate-publish-and-promote-the-stateful-muse-release"
+      - "planning/reviews/R7.md"
+      - "requirements/MUSE_MAX_RUNTIME.md#r18--accepted-m10-runtime-is-released-and-promoted-exactly"
+      - "docs/DECISIONS.md#d22--m10-production-promotion-uses-an-exact-release-candidate-lineage"
+      - "implementation/reviews/m10-final-stateful-muse-runtime-independent-review-2026-09-19.md"
+      - "project-handoffs/M09_HANDOFF.md"
+      - "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex_workflow dedicated M11 release-candidate branch"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "M11 exact release-candidate identity"
+    lane_branch: null
+    lane_base: "elmakus/codex_workflow@cf4c01f3ef7f35c32fb5ad61c301eb90e1466655"
+    authorization: "Release-candidate preparation explicitly authorized by user on 2026-09-19; publication/main/tag/release and workstation production mutation are not authorized by this Card."
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+  - id: M11-T02
+    title: "Verify exact candidate and freeze REQUIRED review subject"
+    milestone: M11
+    decision_state: accepted
+    execution_status: planned
+    executor: null
+    depends_on:
+      - "M11-T01"
+    openspec_change: null
+    contract: "implementation/cards/M11-T02.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m11--cut-validate-publish-and-promote-the-stateful-muse-release"
+      - "requirements/MUSE_MAX_RUNTIME.md"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile"
+      - "docs/DECISIONS.md#d22--m10-production-promotion-uses-an-exact-release-candidate-lineage"
+      - "M11-T01 result"
+    parallel_safe: false
+    write_scope:
+      - "M11 exact candidate verification/evidence"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration review state"
+    exclusive_resources:
+      - "M11 exact release-candidate review subject"
+    lane_branch: null
+    lane_base: "M11-T01 exact result subject"
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+  - id: M11-T03
+    title: "Live-validate the exact reviewed release candidate"
+    milestone: M11
+    decision_state: accepted
+    execution_status: planned
+    executor: null
+    depends_on:
+      - "M11-T02"
+    openspec_change: null
+    contract: "implementation/cards/M11-T03.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m11--cut-validate-publish-and-promote-the-stateful-muse-release"
+      - "requirements/MUSE_MAX_RUNTIME.md"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile"
+      - "docs/DECISIONS.md#d22--m10-production-promotion-uses-an-exact-release-candidate-lineage"
+      - "M11-T02 REQUIRED independent review GREEN"
+      - "implementation/reviews/m10-final-stateful-muse-runtime-independent-review-2026-09-19.md"
+    parallel_safe: false
+    write_scope:
+      - "isolated workstation candidate runtime/workspaces/private Muse session artifacts"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "isolated M11 candidate Muse runtime/session state"
+    lane_branch: null
+    lane_base: "M11-T02 exact independently GREEN candidate"
+    authorization: "Isolated exact-candidate live validation is part of authorized release-candidate preparation; workstation production mutation is excluded."
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+  - id: M11-T04
+    title: "Publish exact candidate with identity-preserving provenance"
+    milestone: M11
+    decision_state: accepted
+    execution_status: planned
+    executor: null
+    depends_on:
+      - "M11-T03"
+    openspec_change: null
+    contract: "implementation/cards/M11-T04.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m11--cut-validate-publish-and-promote-the-stateful-muse-release"
+      - "requirements/MUSE_MAX_RUNTIME.md#r18--accepted-m10-runtime-is-released-and-promoted-exactly"
+      - "docs/DECISIONS.md#d22--m10-production-promotion-uses-an-exact-release-candidate-lineage"
+      - "M11-T03 result"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex_workflow:main"
+      - "M11 codex_workflow tag/release/assets"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "codex_workflow main/release publication"
+    lane_branch: null
+    lane_base: "M11-T03 exact validated candidate"
+    authorization: "PENDING explicit user authorization for this exact M11 publication/main advance."
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+  - id: M11-T05
+    title: "Promote exact published release and prove production acceptance"
+    milestone: M11
+    decision_state: accepted
+    execution_status: planned
+    executor: null
+    depends_on:
+      - "M11-T04"
+    openspec_change: null
+    contract: "implementation/cards/M11-T05.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m11--cut-validate-publish-and-promote-the-stateful-muse-release"
+      - "requirements/MUSE_MAX_RUNTIME.md"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile"
+      - "docs/DECISIONS.md#d22--m10-production-promotion-uses-an-exact-release-candidate-lineage"
+      - "M11-T04 exact published release"
+      - "project-handoffs/M09_HANDOFF.md"
+    parallel_safe: false
+    write_scope:
+      - "workstation persistent ~/.codex/codex_workflow production runtime"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "workstation codex_workflow production runtime"
+    lane_branch: null
+    lane_base: "M11-T04 exact published release"
+    authorization: "PENDING explicit user authorization for this exact M11 workstation production promotion."
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
