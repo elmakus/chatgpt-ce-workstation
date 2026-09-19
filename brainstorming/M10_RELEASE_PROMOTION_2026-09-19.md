@@ -69,7 +69,7 @@ No product-level question blocks Definition. Exact release number and detailed C
 - Research still needed: none.
 - Open questions: none that block Definition.
 - Next phase/action: `ready for definition`
-- Definition promotion authorization: `pending`
-- Definition promotion subject: `none`
+- Definition promotion authorization: `user_authorized`
+- Definition promotion subject: `m10-release-promotion@R1`
 
 > Nothing in this file becomes accepted requirement/decision authority by itself. Project Definition owns promotion into canonical `requirements/` and `decisions/`. When the selected policy requires explicit user phase promotion, only an explicit user instruction may set `Definition promotion authorization: user_authorized`, and the authorization must name the exact current `<scope-id>@<revision>`. Any material change to the exploratory scope before Definition starts creates a new revision and resets authorization to `pending`.
