@@ -128,12 +128,12 @@ milestones:
     execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
     checkpoint: null
-    implementation_head: "elmakus/codex_workflow@3a5d98b3c21fc37a527c3aa8eb0ed771e6428acb"
+    implementation_head: "elmakus/codex_workflow@eb490ccfbe04bac0bd3ab7646eceffdea7cdde4e"
     handoff: null
-    acceptance_evidence: "implementation/evidence/M10_T10_LIVE_RESUME_RESERVATION_CORRECTION_REVALIDATION_2026-09-19.md"
-    review_state: red
-    review_subject: "elmakus/codex_workflow@3a5d98b3c21fc37a527c3aa8eb0ed771e6428acb"
-    review_evidence: "implementation/reviews/m10-resume-terminal-lock-race-independent-review-2026-09-19.md"
+    acceptance_evidence: "implementation/evidence/M10_T12_LIVE_TERMINAL_LOCK_RACE_CORRECTION_REVALIDATION_2026-09-19.md"
+    review_state: pending
+    review_subject: "elmakus/codex_workflow@eb490ccfbe04bac0bd3ab7646eceffdea7cdde4e"
+    review_evidence: null
 
 cards:
   - id: M01-T01
@@ -1234,7 +1234,7 @@ cards:
     title: "Revalidate terminal-lock-race correction live and freeze next review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T11"
@@ -1257,12 +1257,12 @@ cards:
     lane_base: "M10-T11 exact result subject"
     authorization: "R6 isolated real-Muse lifecycle/fault-injection validation explicitly authorized by user on 2026-09-19; production release/promotion is not authorized."
     blocker: null
-    blocker_evidence: null
+    blocker_evidence: "implementation/evidence/M10_T12_LIVE_TERMINAL_LOCK_RACE_CORRECTION_REVALIDATION_2026-09-19.md"
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@eb490ccfbe04bac0bd3ab7646eceffdea7cdde4e"
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN on exact eb490ccfbe04bac0bd3ab7646eceffdea7cdde4e: exact-subject Muse adapter 29/29; live A1/B1 RED-repair-GREEN same-session reuse; timeout cleanup and same-session C1 recovery; concurrent two-lane Executor/Tester isolation; private 0700/0600 artifacts; no residual candidate processes; production version/hash unchanged."
 
