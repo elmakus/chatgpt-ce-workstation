@@ -23,6 +23,8 @@ Normal ChatGPT is the fixed Task Card executor. Do not run the Capability Gate o
 
 ## Project authority index
 
+- Active exploratory scope: `brainstorming/M10_RELEASE_PROMOTION_2026-09-19.md`
+
 - Accepted architecture decisions: `docs/DECISIONS.md`
 - Approved workstation implementation/deployment plan: `docs/IMPLEMENTATION_PLAN.md`
 - Active Muse-max Project Definition: `requirements/MUSE_MAX_RUNTIME.md`
