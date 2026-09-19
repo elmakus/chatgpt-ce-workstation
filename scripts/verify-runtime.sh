@@ -113,7 +113,14 @@ printf '%s\n' 'OK Muse CLI: version/help/exec-help'
 pgrep -x tint2 >/dev/null
 printf '%s\n' 'OK process: tint2'
 xdotool getmouselocation >/dev/null
-printf '%s\n' 'OK X11 automation: xdotool getmouselocation'
+printf '%s\\n' 'OK X11 automation: xdotool getmouselocation'
+if [[ "\${INSTALL_GLOBAL_AGENTS:-0}" == "1" ]]; then
+  python3 /opt/workstation/bin/reconcile-global-agents.py \
+    --check \
+    --target /home/codex/.codex/AGENTS.md \
+    --payload /opt/workstation/defaults/AGENTS.md
+  printf '%s\\n' 'OK managed global AGENTS: current workstation block'
+fi
 touch '$canonical_root/.workstation-write-test'
 rm -f '$canonical_root/.workstation-write-test'
 bash /usr/local/bin/workstation-healthcheck
@@ -122,13 +129,8 @@ pass 'canonical pwd, launchers, Muse CLI surface, X11 automation, secrets, panel
 
 echo
 echo '=== persistent home ==='
-agents="$appdata_root/home/.codex/AGENTS.md"
-if [[ -f "$agents" ]] && grep -nF '/workspace' "$agents"; then
-  echo 'WARN: persistent global AGENTS still contains /workspace; review the lines above.' >&2
-else
-  pass 'no /workspace in persistent global AGENTS (or file not present)'
-fi
-
+# Global AGENTS state is checked inside the container through the bounded
+# workstation-owned marker/payload verifier above; do not dump unrelated content.
 mapfile -t backups < <(find "$appdata_root/home/Documents" -maxdepth 1 -type d -name 'ChatGPT.pre-*' -print 2>/dev/null | sort)
 if (( ${#backups[@]} > 0 )); then
   echo 'WARN: preserved pre-migration project backup(s) exist:' >&2
