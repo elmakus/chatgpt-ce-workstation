@@ -26,10 +26,10 @@ milestones:
     decision_state: accepted
     execution_status: in_progress
     contract: "planning/MANAGED_PERSISTENT_AGENTS_MASTER_PLAN.md#milestone-m02--production-activation-and-live-verification"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
+    checkpoint: "4fe493daef212b82e9099439c1bb04065942e624"
+    implementation_head: "00c32fa9f34229e2c227352f4891a7a64f119d35"
+    handoff: "implementation/workstreams/feature-managed-persistent-agents/handoffs/M02_HANDOFF.md"
+    acceptance_evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M02_T02_PRODUCTION_ACTIVATION_2026-09-20.md"
     review_state: null
     review_subject: null
     review_evidence: null
