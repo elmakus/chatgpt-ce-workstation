@@ -1565,7 +1565,7 @@ cards:
     title: "Promote exact published release and prove production acceptance"
     milestone: M11
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M11-T04"
@@ -1592,7 +1592,7 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@d285aa1a271258052d23e3a2d3b585117fc1e862"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M11_T05_PRODUCTION_PROMOTION_2026-09-19.md"
+    tests_summary: "GREEN: exact published v1.1.17-private.12 promoted through owner update path with verified .11 rollback readiness and transactional backup; installed validator/check-update/profile GREEN; immutable runtime payload matches release; plus/luna-xhigh/pro-x5 unchanged; production default_executor reused session a3df4e65... across two turns with distinct invocation IDs; no residual Muse/smoke process."
