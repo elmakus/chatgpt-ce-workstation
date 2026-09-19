@@ -1,7 +1,7 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "feature-managed-persistent-agents"
 plan_revision: "managed-persistent-agents-R1"
-current_milestone: "M01"
+current_milestone: "M02"
 
 execution_ref:
   branch: "feat/managed-persistent-agents"
@@ -19,6 +19,17 @@ milestones:
     implementation_head: "00c32fa9f34229e2c227352f4891a7a64f119d35"
     handoff: "implementation/workstreams/feature-managed-persistent-agents/handoffs/M01_HANDOFF.md"
     acceptance_evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M01_T01_INDEPENDENT_REVIEW_2026-09-20.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+  M02:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/MANAGED_PERSISTENT_AGENTS_MASTER_PLAN.md#milestone-m02--production-activation-and-live-verification"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
@@ -40,3 +51,35 @@ cards:
     result_pr: 6
     evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M01_T01_MANAGED_AGENTS_2026-09-20.md"
     tests_summary: "GREEN on exact implementation subject 00c32fa: 9/9 managed-AGENTS fixtures, shell syntax, SOURCE_VALIDATION_GREEN, Dockerfile buildx check, CI run #62 success, exact live-copy migration/idempotency with codex_workflow suffix preserved, and production AGENTS SHA unchanged."
+  - id: M02-T01
+    title: "Prepare exact reviewed deployment candidate"
+    milestone: M02
+    decision_state: accepted
+    execution_status: ready
+    executor: chatgpt
+    depends_on: ["M01-T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-managed-persistent-agents/cards/M02-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: 6
+    evidence: null
+    tests_summary: null
+  - id: M02-T02
+    title: "Authorized production activation and live verification"
+    milestone: M02
+    decision_state: accepted
+    execution_status: planned
+    executor: chatgpt
+    depends_on: ["M02-T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-managed-persistent-agents/cards/M02-T02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: 6
+    evidence: null
+    tests_summary: null
