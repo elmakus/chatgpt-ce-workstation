@@ -71,7 +71,7 @@ cards:
     title: "Authorized production activation and live verification"
     milestone: M02
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     depends_on: ["M02-T01"]
     openspec_change: null
@@ -79,7 +79,7 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "4fe493daef212b82e9099439c1bb04065942e624"
     result_pr: 6
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M02_T02_PRODUCTION_ACTIVATION_2026-09-20.md"
+    tests_summary: "GREEN authorized live activation on exact candidate sha256:c1470837: rollback copy/image retained; two tracked recreates healthy; verify-runtime WORKSTATION_RUNTIME_GREEN twice; one current workstation block; codex_workflow suffix byte-identical; full AGENTS SHA c31f5cd8 unchanged across idempotency cycle."
