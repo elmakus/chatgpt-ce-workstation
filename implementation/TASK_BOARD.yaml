@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "bc751e6d930f9b578b04d6019e4c8814bbfebd38"
+  head: "c4e97f4a292a7752de45f82bf36de3fa609968f1"
 
 milestones:
   M01:
@@ -130,10 +130,10 @@ milestones:
     checkpoint: null
     implementation_head: "elmakus/codex_workflow@b225fad5ffa0497566ff9179ef684968a3d9be16"
     handoff: null
-    acceptance_evidence: null
-    review_state: null
-    review_subject: null
-    review_evidence: null
+    acceptance_evidence: "implementation/evidence/M10_T02_LIVE_STATEFUL_MUSE_VALIDATION_2026-09-19.md"
+    review_state: pending
+    review_subject: "elmakus/codex_workflow@b225fad5ffa0497566ff9179ef684968a3d9be16"
+    review_evidence: "implementation/evidence/M10_T02_LIVE_STATEFUL_MUSE_VALIDATION_2026-09-19.md"
 
 cards:
   - id: M01-T01
@@ -875,7 +875,7 @@ cards:
     title: "Validate exact stateful Muse candidate live and freeze review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T01"
@@ -903,8 +903,8 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@b225fad5ffa0497566ff9179ef684968a3d9be16"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/evidence/M10_T02_LIVE_STATEFUL_MUSE_VALIDATION_2026-09-19.md"
+    tests_summary: "GREEN: exact immutable candidate validated live through Meta-backed Muse Code 1.3.0; A1/B1 RED-repair-full-recheck reused distinct stable sessions with unique turn identities; real cancellation cleaned the descendant tree and same-session probe/resume recovered safely; exact-subject negative-path regression proves fail-closed explicit replacement; two concurrent lanes used four disjoint Executor/Tester sessions; private artifacts remained 0700/0600; production stayed v1.1.17-private.11."
 
