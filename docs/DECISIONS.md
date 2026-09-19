@@ -246,3 +246,87 @@ Unexpected pre-bind data under the old persistent-home project target is preserv
 The earlier hold on merging before live validation is superseded by the user's explicit 2026-09-18 decision. The purpose is operational simplicity: the next workstation build should be runnable directly from `main`, and any installer/runtime defects discovered during live Muse validation will be corrected on normal follow-up branches/PRs.
 
 This does not waive the live validation itself. Muse authentication persistence, `muse exec` headless behavior, model/effort controls, timeout/cancellation, sandbox behavior, and orchestrator worker integration remain unvalidated until tested on the live workstation.
+
+## D20 — ChatGPT-owned delegated Muse workers behind a normalized harness — SUPERSEDED
+
+**Status:** superseded on 2026-09-18 by D21 after the `muse-max` runtime audit established that internal worker orchestration belongs in `elmakus/codex_workflow`, not in generic `chatgpt_only` workflow semantics.
+
+**Historical decision:** add an opt-in delegated-worker capability under the existing `chatgpt_only` policy. ChatGPT remains the formal Task Card executor/control plane; Muse Code is a bounded leaf worker used initially for `executor` and `tester` roles.
+
+The workflow repository will define only generic delegated-worker semantics: ownership, wait/return behavior, bounded result expectations and authority boundaries. It will not embed Muse-specific CLI syntax.
+
+The workstation repository will own a stable Muse adapter (working name: `muse-worker`) that:
+- launches one Muse process for one assigned worker task;
+- awaits process completion instead of requiring the main agent to poll;
+- drains and stores raw Muse output outside the main context;
+- parses the installed Muse machine-readable output;
+- validates and emits one compact normalized final result;
+- enforces timeout and process-tree cancellation.
+
+For normal GREEN execution, the main ChatGPT agent consumes the normalized result, not the full Muse transcript. Raw logs are escalation/debug evidence only.
+
+A tester receives the accepted task/review contract plus actual repository/worktree state, not the executor transcript. This makes review independently grounded and prevents executor context from being recopied through the orchestrator.
+
+Muse-native nested fan-out remains disabled by default. Fan-out ownership stays with the ChatGPT orchestrator.
+
+The initial rollout is opt-in so existing `chatgpt_only` behavior remains backward compatible while the Muse path is validated.
+
+**Rationale:** current external harnesses converge on the same separation: a small CLI/subprocess runner localizes volatile backend contracts, the orchestrator awaits completion, structured results are schema-normalized, and full trajectories/logs remain separate from parent-facing context. See `research/muse-delegated-worker-orchestration-2026-09-18.md`.
+
+**Rejected for the first implementation:**
+- teaching the main agent to call raw `muse exec` flags directly;
+- periodic polling as the standard completion mechanism;
+- injecting the worker JSONL/transcript into the main context;
+- interactive steering/MSP as a prerequisite;
+- allowing Muse to create its own subagent tree by default.
+
+
+## D21 — `muse-max` is a mixed-harness, stateful-worker `codex_workflow` profile
+
+**Decision (amended 2026-09-19):** define Muse workers only through the existing `elmakus/codex_workflow` worker-role system. Do not add Muse runtime semantics to Project Workflow and do not create a second Muse orchestration layer in `chatgpt-ce-workstation`.
+
+The `muse-max` profile is the only profile changed by this work. `plus`, `luna-xhigh`, and `pro-x5` must preserve their current model allocations and lifecycle behavior.
+
+Under `muse-max`:
+
+- Main remains the user-selected Codex model and owns worker orchestration, routing and integration inside `codex_workflow`.
+- `companion` runs as one persistent internal Codex worker on GPT-5.6 Luna XHigh.
+- `micro_executor`, `default_executor`, `senior_executor`, `tester`, `investigator`, and `archivist` run through native Muse Code using Muse Spark 1.3 Contributor with `max` reasoning.
+- existing worker TOMLs remain the canonical semantic role contracts; do not create parallel `muse_*.toml` definitions.
+- Muse-specific session/process behavior belongs to the `muse-max` runtime/orchestration layer in `codex_workflow`, not to provider-specific copies of role semantics.
+- a logical Muse worker may persist across multiple bounded turns through one stable Muse session; every physical turn/process has its own unique invocation/artifact identity.
+- logical session identity is bound to role, active allocation, assigned workspace and opaque caller scope/lane identity. One session may have at most one active invocation and may not be reused across roles, workspaces or lanes.
+- Muse workers remain leaf workers: no nested Muse worker tree and no direct sibling Muse messaging.
+- Executor and Tester are distinct logical workers/sessions. Tester receives the verification capsule plus current repository/workspace state and relevant evidence, not the Executor trajectory, and Tester never performs production repair.
+- ordinary RED routes through Main: focused Tester findings return to the owning Executor; the owning Executor is resumed for repair when safe; the independent Tester is resumed for a full verification of the changed target when safe.
+- a changed implementation target does not by itself require a fresh Tester. Fresh A2/B2 replacement is required only when a controlling contract requires freshness, the previous session is unavailable/unsafe/binding-invalid, or Main has a material reason for a fresh independent context.
+- resume/fallback is fail-closed. A failed resume must never silently mint a new session while continuing to present it as the old logical worker.
+- raw Muse event streams/stdout/stderr remain outside ordinary Main context. Main receives compact normalized results plus bounded evidence/artifact references.
+- the Muse runtime adapter validates active profile and per-role harness through `compute_profiles.py`; it must not hard-code a drifting role/model allocation.
+- exact Muse lifecycle mechanics are bound from installed-build evidence. Stateful-default promotion requires live Meta-backed interrupted-turn fault-injection proving process-tree cleanup and either safe resume or explicit safe replacement.
+
+**Repository/responsibility boundary:** `codex_workflow` owns only worker runtime/orchestration semantics: role separation, session/invocation lifecycle, binding, locking, resume/fallback, result normalization and Muse process control. It must not own or interpret Project Workflow execution policy, Task Board lifecycle, review-state transitions or immutable review-attempt bookkeeping. `session_id`, `invocation_id`, leases and resume mechanics are private runtime details.
+
+A higher-level caller — future Project Workflow `codex_only`, another workflow, or a standalone Codex task — may supply opaque task/lane/workspace authority and may interpret Tester output according to its own state machine. `codex_workflow` must not need to know which higher-level system is calling it.
+
+Caller-authorized independent lanes may run concurrently against distinct non-overlapping workspaces. Each lane has its own Executor/Tester sessions, and cross-lane session reuse is forbidden.
+
+`chatgpt-ce-workstation` owns installation, persistence and runtime availability of official Muse Code plus user authentication state. It does not own the worker scheduler or normalized worker lifecycle protocol.
+
+**Rationale:** live Muse Code 1.3.0 research on 2026-09-19 proved that separate headless `muse exec` processes can reuse the same durable session and preserve context across the exact A1 -> B1 -> A1 -> B1 cycle while keeping Executor and Tester sessions separate. The current one-shot behavior comes from the adapter conflating per-run artifact identity with Muse session identity, not from a Muse limitation. Keeping Project Workflow policy/state outside `codex_workflow` preserves reusable runtime semantics for any caller. See `research/MUSE_SESSION_RESUME_LIFECYCLE_2026-09-19.md`.
+
+## D22 — M10 production promotion uses an exact release-candidate lineage
+
+**Decision (2026-09-19):** publish and promote the accepted M10 stateful Muse runtime through a new exact `codex_workflow` release candidate derived from the independently GREEN M10 subject, rather than publishing that source checkpoint directly under stale release metadata.
+
+The release path must:
+
+- preserve the accepted M10 behavioral subject as the release candidate's behavioral base;
+- add only the synchronized release/version changes and strictly version-coupled test/document literals required by the existing release contract;
+- independently review the exact release candidate when required by the release plan;
+- live-validate the exact candidate before publication;
+- preserve commit identity from accepted release candidate through `main`, tag/release provenance and workstation installation;
+- fail closed to normal correction/review/revalidation if any behavioral change, incompatible `main` drift or release-lineage mismatch appears;
+- verify after production promotion that `muse-max` uses the accepted stateful lifecycle and that `plus`, `luna-xhigh`, and `pro-x5` remain unchanged.
+
+**Rationale:** the accepted M10 source still carries the prior production version metadata. A distinct exact release candidate preserves auditable source → review → live validation → publication → production identity and avoids silently treating release metadata mutation as if it were the already-reviewed M10 source subject.
