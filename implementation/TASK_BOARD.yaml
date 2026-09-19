@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "a62a1428cc3e6b1aea8cf526611c7dc4ecf550b7"
+  head: "97fd0643f6b4ae98f46efdcf81ba80ee4ee14a48"
 
 milestones:
   M01:
@@ -128,12 +128,12 @@ milestones:
     execution_status: in_progress
     contract: "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
     checkpoint: null
-    implementation_head: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
+    implementation_head: "elmakus/codex_workflow@7f6f51fe9faf318fa90ce9414e6024c673ad9226"
     handoff: null
-    acceptance_evidence: "implementation/evidence/M10_T04_LIVE_CORRECTED_STATEFUL_MUSE_REVALIDATION_2026-09-19.md"
-    review_state: red
-    review_subject: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
-    review_evidence: "implementation/reviews/m10-corrected-stateful-muse-runtime-independent-review-2026-09-19.md"
+    acceptance_evidence: "implementation/evidence/M10_T06_LIVE_STALE_ACTIVE_CORRECTION_REVALIDATION_2026-09-19.md"
+    review_state: pending
+    review_subject: "elmakus/codex_workflow@7f6f51fe9faf318fa90ce9414e6024c673ad9226"
+    review_evidence: null
 
 cards:
   - id: M01-T01
@@ -1020,7 +1020,7 @@ cards:
     title: "Revalidate stale-active fail-closed correction live and freeze next review subject"
     milestone: M10
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "M10-T05"
@@ -1044,11 +1044,11 @@ cards:
     lane_base: "M10-T05 exact result subject"
     authorization: "R6 isolated real-Muse lifecycle/fault-injection validation explicitly authorized by user on 2026-09-19; production release/promotion is not authorized."
     blocker: null
-    blocker_evidence: null
+    blocker_evidence: "implementation/evidence/M10_T06_LIVE_STALE_ACTIVE_CORRECTION_REVALIDATION_2026-09-19.md"
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex_workflow@7f6f51fe9faf318fa90ce9414e6024c673ad9226"
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN on exact 7f6f51fe9faf318fa90ce9414e6024c673ad9226: live Meta A1/B1 RED-repair-full-recheck reused distinct stable sessions with four unique invocation IDs and read-only Tester; actual adapter cancellation confirmed descendant-tree absence plus inspectable partial state and safe same-session resume; exact stale-active persistence-failure regression GREEN; concurrent two-lane Executor/Tester isolation GREEN with four distinct sessions; private runtime 0700/0600; zero residual candidate processes; production remained byte-identical to v1.1.17-private.11 baseline."
