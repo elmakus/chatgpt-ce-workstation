@@ -1199,7 +1199,7 @@ cards:
     title: "Reconcile retained reservation after session-lock conflict"
     milestone: M10
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "M10-T10"
