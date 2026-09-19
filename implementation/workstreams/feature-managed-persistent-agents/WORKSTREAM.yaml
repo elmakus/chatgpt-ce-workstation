@@ -27,7 +27,7 @@ authority:
 
 review:
   requirement: "RECOMMENDED"
-  state: "pending"
+  state: "in_progress"
   subject: "elmakus/chatgpt-ce-workstation@2c98036912e62c09db48fd0f06a819313d842aaa"
   evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/FINAL_INTEGRATION_REFRESH_2026-09-20.md"
   covered_by: null
