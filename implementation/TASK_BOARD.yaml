@@ -131,9 +131,9 @@ milestones:
     implementation_head: "elmakus/codex_workflow@eb490ccfbe04bac0bd3ab7646eceffdea7cdde4e"
     handoff: null
     acceptance_evidence: "implementation/evidence/M10_T12_LIVE_TERMINAL_LOCK_RACE_CORRECTION_REVALIDATION_2026-09-19.md"
-    review_state: in_progress
+    review_state: red
     review_subject: "elmakus/codex_workflow@eb490ccfbe04bac0bd3ab7646eceffdea7cdde4e"
-    review_evidence: null
+    review_evidence: "implementation/reviews/m10-active-transition-reservation-independent-review-2026-09-19.md"
 
 cards:
   - id: M01-T01
