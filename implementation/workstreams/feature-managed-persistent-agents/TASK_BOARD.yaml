@@ -13,12 +13,12 @@ research_obligation: null
 milestones:
   M01:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/MANAGED_PERSISTENT_AGENTS_MASTER_PLAN.md#milestone-m01--managed-reconciliation-source"
-    checkpoint: null
+    checkpoint: "00c32fa9f34229e2c227352f4891a7a64f119d35"
     implementation_head: "00c32fa9f34229e2c227352f4891a7a64f119d35"
-    handoff: null
-    acceptance_evidence: null
+    handoff: "implementation/workstreams/feature-managed-persistent-agents/handoffs/M01_HANDOFF.md"
+    acceptance_evidence: "implementation/workstreams/feature-managed-persistent-agents/evidence/M01_T01_INDEPENDENT_REVIEW_2026-09-20.md"
     review_state: null
     review_subject: null
     review_evidence: null
