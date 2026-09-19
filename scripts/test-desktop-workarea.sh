@@ -104,8 +104,6 @@ probe_title="WORKAREA-PROBE-$$"
 DISPLAY="$display" xterm -T "$probe_title" >"$tmp_dir/xterm.log" 2>&1 &
 probe_pid=$!
 pids+=("$probe_pid")
-sleep 0.3
-DISPLAY="$display" wmctrl -r "$probe_title" -b add,maximized_vert,maximized_horz
 
 probe_line=""
 for _ in $(seq 1 50); do
@@ -113,10 +111,18 @@ for _ in $(seq 1 50); do
   [[ -n "$probe_line" ]] && break
   sleep 0.1
 done
-[[ -n "$probe_line" ]] || fail "maximized probe window did not appear"
+[[ -n "$probe_line" ]] || fail "probe window did not appear"
+DISPLAY="$display" wmctrl -r "$probe_title" -b add,maximized_vert,maximized_horz || fail "could not maximize probe window"
 
-read -r _window_id _desktop probe_x _probe_y probe_width _probe_height _rest <<<"$probe_line"
+for _ in $(seq 1 50); do
+  probe_line="$(DISPLAY="$display" wmctrl -lG | grep -F "$probe_title" || true)"
+  read -r _window_id _desktop probe_x _probe_y probe_width _probe_height _rest <<<"$probe_line"
+  if [[ "$probe_x" == "0" && "$probe_width" == "$screen_width" ]]; then
+    break
+  fi
+  sleep 0.1
+done
 [[ "$probe_x" == "0" ]] || fail "maximized window x=$probe_x, expected 0"
-[[ "$probe_width" == "$screen_width" ]]   || fail "maximized window width=$probe_width, expected $screen_width"
+[[ "$probe_width" == "$screen_width" ]] || fail "maximized window width=$probe_width, expected $screen_width"
 
 echo "DESKTOP_WORKAREA_GREEN ${screen_width}x${screen_height} panel=${panel_height}"
