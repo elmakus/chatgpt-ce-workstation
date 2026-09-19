@@ -12,7 +12,7 @@ chatgpt_control_chat:
 execution_ref:
   branch: "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration"
   pr: null
-  head: "c4e97f4a292a7752de45f82bf36de3fa609968f1"
+  head: "a62a1428cc3e6b1aea8cf526611c7dc4ecf550b7"
 
 milestones:
   M01:
@@ -981,3 +981,74 @@ cards:
     evidence: "implementation/evidence/M10_T04_LIVE_CORRECTED_STATEFUL_MUSE_REVALIDATION_2026-09-19.md"
     tests_summary: "GREEN: exact b677854 corrected source package readback; Meta-backed A1/B1 RED-repair-full-S2-recheck reused distinct stable sessions; real adapter cancellation positively removed the child tree and exact-session recovery resumed safely; exact-subject cleanup-unconfirmed regression remains fail-closed; concurrent two-lane Executor/Tester validation GREEN with four disjoint sessions; private artifacts 0700/0600; zero residual candidate processes; production stayed byte-identical to v1.1.17-private.11 baseline and disposable T04 runtime was removed."
 
+  - id: M10-T05
+    title: "Fail closed on stale active Muse session state after unreconciled adapter exit"
+    milestone: M10
+    decision_state: accepted
+    execution_status: ready
+    executor: "chatgpt"
+    depends_on:
+      - "M10-T04"
+    openspec_change: null
+    contract: "implementation/cards/M10-T05.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
+      - "requirements/MUSE_MAX_RUNTIME.md"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile"
+      - "implementation/reviews/m10-corrected-stateful-muse-runtime-independent-review-2026-09-19.md"
+      - "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
+    parallel_safe: false
+    write_scope:
+      - "elmakus/codex_workflow:impl/m10-stateful-muse-lifecycle"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "codex_workflow M10 stateful Muse candidate source"
+    lane_branch: "elmakus/codex_workflow:impl/m10-stateful-muse-lifecycle"
+    lane_base: "elmakus/codex_workflow@b67785486ba5e2e996b8c6feaf1a163816a49d47"
+    authorization: "Bounded corrective source work under approved R6/M10 authority; production release/promotion is not authorized."
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
+  - id: M10-T06
+    title: "Revalidate stale-active fail-closed correction live and freeze next review subject"
+    milestone: M10
+    decision_state: accepted
+    execution_status: planned
+    executor: "chatgpt"
+    depends_on:
+      - "M10-T05"
+    openspec_change: null
+    contract: "implementation/cards/M10-T06.md"
+    authority_refs:
+      - "planning/MASTER_PLAN.md#milestone-m10--add-stateful-muse-logical-worker-lifecycle-and-fail-closed-recovery"
+      - "requirements/MUSE_MAX_RUNTIME.md"
+      - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile"
+      - "implementation/cards/M10-T04.md"
+      - "implementation/reviews/m10-corrected-stateful-muse-runtime-independent-review-2026-09-19.md"
+      - "M10-T05 result"
+    parallel_safe: false
+    write_scope:
+      - "isolated workstation corrected-candidate runtime/workspaces/private Muse session artifacts"
+      - "elmakus/chatgpt-ce-workstation:feat/muse-worker-orchestration evidence/state"
+    exclusive_resources:
+      - "isolated M10 corrected-candidate Muse runtime/auth state"
+      - "M10 disposable validation workspaces"
+    lane_branch: "elmakus/codex_workflow:impl/m10-stateful-muse-lifecycle"
+    lane_base: "M10-T05 exact result subject"
+    authorization: "R6 isolated real-Muse lifecycle/fault-injection validation explicitly authorized by user on 2026-09-19; production release/promotion is not authorized."
+    blocker: null
+    blocker_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
