@@ -1,6 +1,6 @@
 # M02 handoff — production activation and live verification
 
-Status: **GREEN acceptance / final integration pending**
+Status: **GREEN acceptance / final integration review GREEN / merge pending**
 Workstream: `feature-managed-persistent-agents`
 Milestone: `M02`
 
@@ -14,7 +14,8 @@ M02 operational result is durably recorded by:
 
 - deployment-readiness evidence: `implementation/workstreams/feature-managed-persistent-agents/evidence/M02_T01_DEPLOYMENT_READINESS_2026-09-20.md`;
 - independent M02-T01 review: GREEN, `implementation/workstreams/feature-managed-persistent-agents/evidence/M02_T01_INDEPENDENT_REVIEW_2026-09-20.md`;
-- authorized production activation evidence: `implementation/workstreams/feature-managed-persistent-agents/evidence/M02_T02_PRODUCTION_ACTIVATION_2026-09-20.md`.
+- authorized production activation evidence: `implementation/workstreams/feature-managed-persistent-agents/evidence/M02_T02_PRODUCTION_ACTIVATION_2026-09-20.md`;
+- final-integration independent review: GREEN, `implementation/workstreams/feature-managed-persistent-agents/evidence/FINAL_INTEGRATION_INDEPENDENT_REVIEW_2026-09-20.md`.
 
 ## Achieved state
 
@@ -33,6 +34,8 @@ Final live verification proved:
 - image-owned X11/ydotool guidance present;
 - container isolation/runtime verification remained GREEN.
 
+The final-integration reviewer independently re-read the same live image/health/managed-state hashes and current-block verification without mutating production.
+
 Rollback image/tag and the pre-migration `cp -a` AGENTS copy remain available.
 
 ## Authority in force
@@ -48,10 +51,10 @@ Rollback image/tag and the pre-migration `cp -a` AGENTS copy remain available.
 
 The workstream integration target is `main`.
 
-At the M02 close refresh, current `main` is still exactly the workstream base `4c4da56e1c7db6d0cfc69e170ada3800db185c28`; no target reconciliation/rebase is required.
+At final-integration review, current `main` remained exactly the workstream base `4c4da56e1c7db6d0cfc69e170ada3800db185c28`; no target reconciliation/rebase was required.
 
-The distinct manifest-owned final-integration review is still required by the workstream contract before PR #6 may be integrated.
+The distinct manifest-owned final-integration review for subject `2c98036912e62c09db48fd0f06a819313d842aaa` is GREEN. Commits after that subject are limited to review/closure bookkeeping and do not change workstation behavior or the accepted workstream acceptance surface.
 
 ## Next durable starting point
 
-Complete the manifest-owned independent final-integration review for the exact refreshed immutable workstream subject. After GREEN, re-read `main`; if it is unchanged or compatibility remains GREEN, continue Close through PR finalization and target-side terminal reconciliation.
+Immediately re-read `main` and PR #6, verify the final-integration review coverage remains valid for the unchanged workstream behavior/acceptance surface, then integrate into `main`. After the actual merge, reconcile only merge-result-dependent manifest/Task Board/handoff fields from target-side state and verify the terminal namespaced workstream package.
