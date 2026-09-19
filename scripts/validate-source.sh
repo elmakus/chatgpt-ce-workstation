@@ -28,6 +28,20 @@ done
 pass "bash -n (${#shell_files[@]} files)"
 
 echo
+echo '=== managed global AGENTS reconciliation ==='
+[[ -s scripts/container/reconcile-global-agents.py ]] || fail 'managed AGENTS reconciliation helper missing'
+[[ -s defaults/AGENTS.legacy-pre-managed.md ]] || fail 'current known legacy AGENTS reference missing'
+[[ -s defaults/AGENTS.legacy-workspace.md ]] || fail 'historical /workspace AGENTS reference missing'
+grep -F 'reconcile-global-agents.py' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
+  || fail 'container init does not reconcile managed global AGENTS'
+grep -F 'COPY defaults/ /opt/workstation/defaults/' Dockerfile >/dev/null \
+  || fail 'Dockerfile does not install managed AGENTS payload and exact legacy references'
+grep -F 'reconcile-global-agents.py' scripts/verify-runtime.sh >/dev/null \
+  || fail 'runtime verification does not validate managed global AGENTS'
+python3 scripts/test-managed-global-agents.py || fail 'managed global AGENTS fixture tests'
+pass 'managed global AGENTS reconciliation fixtures and wiring'
+
+echo
 echo '=== compose ==='
 command -v docker >/dev/null || fail 'docker is required for compose validation'
 docker compose version >/dev/null || fail 'Docker Compose v2 is required'
