@@ -1115,12 +1115,12 @@ cards:
     lane_base: "M10-T07 exact result subject"
     authorization: "R6 isolated real-Muse lifecycle/fault-injection validation explicitly authorized by user on 2026-09-19; production release/promotion is not authorized."
     blocker: null
-    blocker_evidence: "implementation/evidence/M10_T08_LIVE_RESERVATION_RACE_CORRECTION_REVALIDATION_2026-09-19.md"
+    blocker_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
     result_commit: "elmakus/codex_workflow@74a7588e5bab0a5b7a89549c4309486dc9e7ba4f"
     result_pr: null
-    evidence: null
+    evidence: "implementation/evidence/M10_T08_LIVE_RESERVATION_RACE_CORRECTION_REVALIDATION_2026-09-19.md"
     tests_summary: "GREEN on exact 74a7588e5bab0a5b7a89549c4309486dc9e7ba4f: reservation/stale-active/cleanup-unconfirmed fail-closed regressions GREEN; live Meta A1/B1 RED-repair-full-recheck reused distinct stable sessions with read-only Tester; actual adapter cancellation confirmed tree absence, inspectable partial state and safe same-session resume; two-lane isolation GREEN; private runtime 0700/0600; zero residual processes; production remained v1.1.17-private.11 byte-identical to baseline."
 
