@@ -5,7 +5,10 @@ panel_size = 100% 38
 panel_position = bottom center horizontal
 panel_layer = top
 panel_monitor = all
-panel_dock = 1
+# panel_dock=1 miscomputes _NET_WORKAREA under Tint2 17/Openbox/Xvfb,
+# reserving the left half of a single-head display. Keep EWMH dock/strut semantics
+# while letting Tint2 place the panel normally at the configured bottom edge.
+panel_dock = 0
 wm_menu = 1
 
 launcher_icon_size = 24
