@@ -181,6 +181,12 @@ verify_runtime() {
   fi
 }
 
+verify_rollback_runtime() {
+  local expected_image_id="$1"
+  trace_line "verify-rollback:$ACTIVE_IMAGE_ID:expected:$expected_image_id"
+  [[ "$ACTIVE_IMAGE_ID" == "$expected_image_id" ]]
+}
+
 restore_keyring_migration_backup() {
   trace_line "keyring-restore"
 }

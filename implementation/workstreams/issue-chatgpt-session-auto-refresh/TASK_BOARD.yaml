@@ -1,0 +1,30 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "issue-chatgpt-session-auto-refresh"
+plan_revision: "micro-fix"
+current_milestone: "micro-fix"
+
+execution_ref:
+  branch: "fix/chatgpt-session-auto-refresh"
+  pr: null
+  head: "ee90b4d76a82e2e629832afb23bf5d620b8abd73"
+
+research_obligation: null
+
+milestones: {}
+
+cards:
+  - id: "MF-T01"
+    title: "Auto-verify due ChatGPT Web sessions"
+    milestone: "micro-fix"
+    decision_state: superseded
+    execution_status: superseded
+    executor: "chatgpt"
+    depends_on: []
+    contract: "implementation/workstreams/issue-chatgpt-session-auto-refresh/cards/MF-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: "implementation/workstreams/issue-chatgpt-session-auto-refresh/evidence/SUPERSEDED_2026-09-20.md"
+    tests_summary: "Superseded by explicit operator decision before independent review or integration. Related codex-chatgpt-web PR #10 was closed unmerged at 5dac53d039d38460b4b3132e35688f4bd28ac629."

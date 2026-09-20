@@ -12,7 +12,7 @@ Review evidence: GREEN — the exact immutable plan subject preserves D25/R11-R1
 Independently review the exact immutable plan subject above against:
 
 - approved `requirements/SMART_UPSTREAM_UPDATES.md`, especially R7-R8, R11-R12 and R17-R24;
-- accepted `docs/DECISIONS.md#D25` and `#D27`;
+- accepted `docs/DECISIONS.md#D25` and `#D28`;
 - the current `scripts/update.sh` and `scripts/test-update-orchestration.sh` baseline materially referenced by the plan;
 - GitHub issue #11 only as provenance for the authorized scope.
 

@@ -25,7 +25,7 @@ authority:
   requirements: "requirements/SMART_UPSTREAM_UPDATES.md"
   decisions:
     - "docs/DECISIONS.md#D25"
-    - "docs/DECISIONS.md#D27"
+    - "docs/DECISIONS.md#D28"
   plan: "planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md"
 
 review:

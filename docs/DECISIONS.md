@@ -420,9 +420,29 @@ The target state is:
 
 **Rationale:** this workstation is a dedicated always-on headless container whose keyring is expected to be available automatically. A separate keyring password adds prompt/unlock failure modes without providing useful interactive authentication in the normal operating model. Preventing accidental secondary D-Bus/keyring sessions remains independently valuable and is retained.
 
+## D27 — noVNC recovery desktop is intentionally passwordless on trusted networks
 
+**Decision (2026-09-20):** remove VNC-password authentication from the Workstation noVNC recovery path.
 
-## D27 — Bound workstation Docker image and build-cache retention
+The target state is:
+
+- opening the published noVNC endpoint does not require a VNC/noVNC password;
+- Workstation setup, Compose, container initialization and validation do not require or create a `novnc-password` runtime secret or persistent `vnc.pass` authentication file;
+- raw x11vnc remains bound only to container loopback and is never host-published directly;
+- only websockify/noVNC remains published;
+- the published noVNC endpoint is intentionally unauthenticated at the VNC layer and must remain reachable only from trusted networks unless a separately authenticated ingress is deliberately placed in front of it;
+- obsolete noVNC secret/auth files left by an older installation may remain on disk, but current runtime behavior must not depend on them;
+- unrelated Docker isolation, desktop lifecycle, CE/Remote authentication and GNOME Keyring behavior remain unchanged.
+
+**Security consequence accepted by the operator:** any client that can reach the published noVNC endpoint can control the recovery desktop without presenting a VNC password. Network reachability therefore becomes the access-control boundary for this endpoint, and broader/untrusted exposure requires a separate authenticated ingress.
+
+**Supersedes:** the VNC-password portion of D14's statement that VNC and keyring passwords are supplied from Unraid-side secret files. D26 already superseded the keyring-password portion. D14's trusted-network restriction, raw-VNC loopback binding, noVNC-only publication and no-secrets-in-Git rules remain in force.
+
+**Rationale:** this workstation is operated as a dedicated recovery desktop on a trusted network. The operator explicitly prefers passwordless noVNC access and accepts shifting access control from a VNC credential to the surrounding network boundary.
+
+## D28 — Bound workstation Docker image and build-cache retention
+
+**Integration reconciliation note (2026-09-20):** this retention decision was originally numbered D27 on the isolated workstream. Current main already owns D27 for passwordless noVNC, so the retention decision is renumbered to D28 without changing its accepted content.
 
 **Decision (2026-09-20):** extend the D25 smart-update lifecycle with bounded post-success garbage collection for workstation Docker artifacts.
 

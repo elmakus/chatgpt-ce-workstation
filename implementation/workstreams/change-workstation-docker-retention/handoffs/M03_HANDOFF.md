@@ -35,7 +35,7 @@ M03 independently verifies the integrated M01-M03 retention behavior before any 
 - `requirements/SMART_UPSTREAM_UPDATES.md#R12`
 - `requirements/SMART_UPSTREAM_UPDATES.md#R16` through `#R24`
 - `docs/DECISIONS.md#D25`
-- `docs/DECISIONS.md#D27`
+- `docs/DECISIONS.md#D28`
 
 ## Next durable starting point
 

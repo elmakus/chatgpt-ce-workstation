@@ -10,12 +10,12 @@ local_share="$local_root/share"
 applications_dir="$local_share/applications"
 documents_root="$home/Documents"
 ce_projects_path="$documents_root/ChatGPT"
-vnc_auth_file="$config_dir/vnc.pass"
-vnc_secret_file=/run/secrets/novnc-password
 keyring_secret_file=/run/secrets/keyring-password
 runtime_secret_dir=/run/workstation
 runtime_keyring_secret="$runtime_secret_dir/keyring-migration-password"
-keyring_marker="$config_dir/keyring-passwordless-v1"
+keyring_marker="$config_dir/keyring-passwordless-v2"
+keyring_dir="$local_share/keyrings"
+keyring_backup="$local_share/keyrings.pre-passwordless-v2"
 
 # These directories are created by root during container init, but the persistent
 # home is a normal user home. Explicitly hand every root-created parent back to
@@ -32,6 +32,15 @@ chown codex:"$codex_group" \
   "$runtime_secret_dir" 2>/dev/null || true
 chmod 0700 "$config_dir" "$runtime_secret_dir"
 
+# D26 v2 repair: legacy root-owned keyring files can be unreadable to the codex
+# desktop after historical secondary root keyring sessions. Preserve the exact
+# pre-attempt directory before repairing active ownership.
+# shellcheck disable=SC1091
+source /opt/workstation/bin/keyring-migration-lib.sh
+prepare_keyring_passwordless_v2 \
+  "$home" "$(id -u codex)" "$codex_group" \
+  "$keyring_marker" "$keyring_dir" "$keyring_backup"
+
 # PROJECTS_ROOT is mounted directly at CE's native Create Project location.
 # There is intentionally no /workspace alias or symlink: this path is the single
 # canonical project root both for CE and for shell/Remote tasks.
@@ -45,24 +54,9 @@ if ! runuser -u codex -- test -w "$ce_projects_path"; then
   exit 1
 fi
 
-if [[ -r "$vnc_secret_file" ]]; then
-  password="$(cat "$vnc_secret_file")"
-  if [[ -z "$password" ]]; then
-    echo "[init] $vnc_secret_file is empty" >&2
-    exit 1
-  fi
-  x11vnc -storepasswd "$password" "$vnc_auth_file" >/dev/null
-  chown codex:"$codex_group" "$vnc_auth_file"
-  chmod 0600 "$vnc_auth_file"
-elif [[ ! -f "$vnc_auth_file" ]]; then
-  echo "[init] no VNC password available." >&2
-  echo "[init] mount /run/secrets/novnc-password or restore $vnc_auth_file from persistent home." >&2
-  exit 1
-fi
-
-# D26 makes the persistent keyring passwordless. A legacy non-empty secret is
-# accepted only as a one-time migration credential while the versioned marker is
-# absent. Fresh/passwordless installations do not require or stage a password.
+# D26 makes the persistent keyring passwordless. V2 deliberately ignores any
+# stale v1 completion marker from the failed production path. A legacy non-empty
+# secret remains a one-time migration credential until v2 succeeds.
 rm -f "$runtime_keyring_secret"
 if [[ ! -f "$keyring_marker" && -s "$keyring_secret_file" ]]; then
   install -m 0400 -o codex -g "$codex_group" "$keyring_secret_file" "$runtime_keyring_secret"

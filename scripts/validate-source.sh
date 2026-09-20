@@ -26,9 +26,19 @@ for file in "${shell_files[@]}"; do
   bash -n "$file" || fail "shell syntax: $file"
 done
 pass "bash -n (${#shell_files[@]} files)"
-python3 -m py_compile scripts/container/keyring-passwordless.py \
-  || fail 'passwordless keyring helper Python compile check'
-pass 'passwordless keyring helper Python compile'
+python3 -m py_compile \
+  scripts/container/keyring-passwordless.py \
+  scripts/test-keyring-passwordless.py \
+  || fail 'passwordless keyring Python compile check'
+python3 scripts/test-keyring-passwordless.py \
+  || fail 'passwordless keyring helper regression tests'
+bash scripts/test-keyring-migration-prep.sh \
+  || fail 'keyring migration preparation regression tests'
+bash scripts/test-keyring-session-readiness.sh \
+  || fail 'keyring session readiness regression tests'
+bash scripts/test-keyring-runtime-lock-check.sh \
+  || fail 'keyring runtime lock-check regression tests'
+pass 'passwordless keyring v2 helper/preparation/readiness/runtime-verifier tests'
 
 echo
 echo '=== managed global AGENTS reconciliation ==='
@@ -102,6 +112,14 @@ grep -F 'resolve_upstreams' scripts/update.sh >/dev/null || fail 'update.sh does
 grep -F 'host_preflight' scripts/update.sh >/dev/null || fail 'update.sh does not run host preflight'
 grep -F 'candidate_readback' scripts/update.sh >/dev/null || fail 'update.sh does not read back candidate provenance'
 grep -F 'rollback_after_failure' scripts/update.sh >/dev/null || fail 'update.sh has no rollback path'
+[[ -s scripts/verify-rollback-runtime.sh ]] || fail 'rollback-compatible runtime verifier missing'
+grep -F 'verify_rollback_runtime' scripts/update.sh >/dev/null \
+  || fail 'update rollback does not use the rollback-compatible verifier'
+grep -F 'expected_image_id' scripts/verify-rollback-runtime.sh >/dev/null \
+  || fail 'rollback verifier does not bind the exact previous image identity'
+if grep -E 'DBUS_SESSION_BUS_ADDRESS|keyring-passwordless|gnome-keyring|docker exec' scripts/verify-rollback-runtime.sh >/dev/null; then
+  fail 'rollback verifier contains candidate-only runtime invariants'
+fi
 grep -F -- '--no-build workstation' scripts/update.sh >/dev/null || fail 'promotion is not constrained to an already-built exact image'
 grep -F 'update_failed_rolled_back' scripts/update.sh >/dev/null || fail 'successful rollback is not distinguished from update success'
 grep -F 'rollback_failed' scripts/update.sh >/dev/null || fail 'rollback failure is not explicitly represented'
@@ -217,14 +235,40 @@ echo '=== container boundary ==='
 grep -F 'restart: unless-stopped' compose.yaml >/dev/null || fail 'restart policy is not unless-stopped'
 grep -F 'source: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/home' compose.yaml >/dev/null || fail 'persistent-home source is unexpected'
 grep -F 'source: ${PROJECTS_ROOT:-/mnt/user/projects}' compose.yaml >/dev/null || fail 'project source is unexpected'
-grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/novnc-password' compose.yaml >/dev/null || fail 'noVNC secret wiring missing'
 grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/keyring-password' compose.yaml >/dev/null || fail 'keyring secret wiring missing'
 grep -F 'CODEX_CHATGPT_WEB_NATIVE_UPSTREAM: ${CODEX_CHATGPT_WEB_NATIVE_UPSTREAM:-}' compose.yaml >/dev/null || fail 'optional native upstream setting missing'
 grep -F '/usr/local/bin/workstation-healthcheck' compose.yaml >/dev/null || fail 'desktop-aware healthcheck missing'
 if grep -Eq '^[[:space:]]*privileged:[[:space:]]*true|SYS_ADMIN|/var/run/docker\.sock' compose.yaml; then
   fail 'compose.yaml weakens the Docker isolation boundary'
 fi
-pass 'restart, binds, secrets, optional native upstream, healthcheck and isolation boundary'
+pass 'restart, binds, keyring secret, optional native upstream, healthcheck and isolation boundary'
+
+echo
+echo '=== passwordless noVNC boundary ==='
+if grep -F 'novnc_password' compose.yaml >/dev/null \
+  || grep -F '/secrets/novnc-password' compose.yaml >/dev/null; then
+  fail 'legacy noVNC password secret wiring is present'
+fi
+if grep -F ':5900' compose.yaml >/dev/null; then
+  fail 'raw VNC port 5900 is published by Compose'
+fi
+grep -Fx '  -localhost \' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'x11vnc is no longer loopback-only'
+grep -Fx '  -nopw \' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'x11vnc is not explicitly passwordless'
+if grep -Eq -- '-rfbauth|VNC_AUTH_FILE|vnc\.pass' scripts/container/desktop-session-inner.sh; then
+  fail 'desktop session still depends on VNC authentication state'
+fi
+if grep -Eq 'novnc-password|vnc\.pass|x11vnc[[:space:]]+-storepasswd' rootfs/etc/cont-init.d/10-workstation-init; then
+  fail 'container init still creates or requires VNC authentication state'
+fi
+if grep -Eq 'novnc-password|noVNC/VNC password' scripts/init-unraid.sh; then
+  fail 'host initialization still creates or prompts for a noVNC password'
+fi
+if grep -F 'novnc-password' scripts/preflight-host.sh >/dev/null; then
+  fail 'host preflight still requires a noVNC password secret'
+fi
+pass 'passwordless noVNC, loopback-only raw VNC and no legacy auth dependency'
 
 echo
 echo '=== passwordless keyring + desktop session isolation ==='
@@ -243,16 +287,28 @@ grep -F 'keyring-passwordless.py' scripts/container/desktop-session-inner.sh >/d
   || fail 'desktop session does not enforce passwordless keyring state'
 grep -Fx 'runtime_keyring_secret="$runtime_secret_dir/keyring-migration-password"' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
   || fail 'container init keyring runtime-secret assignment is malformed'
-grep -Fx 'keyring_marker="$config_dir/keyring-passwordless-v1"' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
+grep -Fx 'keyring_marker="$config_dir/keyring-passwordless-v2"' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
   || fail 'container init keyring marker assignment is malformed'
 grep -Fx 'keyring_migration_password_file="${KEYRING_MIGRATION_PASSWORD_FILE:-/run/workstation/keyring-migration-password}"' scripts/container/desktop-session-inner.sh >/dev/null \
   || fail 'desktop session migration-password assignment is malformed'
-grep -Fx 'keyring_marker="${KEYRING_PASSWORDLESS_MARKER:-/home/codex/.config/workstation/keyring-passwordless-v1}"' scripts/container/desktop-session-inner.sh >/dev/null \
+grep -Fx 'keyring_marker="${KEYRING_PASSWORDLESS_MARKER:-/home/codex/.config/workstation/keyring-passwordless-v2}"' scripts/container/desktop-session-inner.sh >/dev/null \
   || fail 'desktop session keyring marker assignment is malformed'
-grep -Fx 'keyring_backup="${KEYRING_PASSWORDLESS_BACKUP:-/home/codex/.local/share/keyrings.pre-passwordless-v1}"' scripts/container/desktop-session-inner.sh >/dev/null \
+grep -Fx 'keyring_backup="${KEYRING_PASSWORDLESS_BACKUP:-/home/codex/.local/share/keyrings.pre-passwordless-v2}"' scripts/container/desktop-session-inner.sh >/dev/null \
   || fail 'desktop session keyring backup assignment is malformed'
-grep -F 'keyring-passwordless-v1' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
-  || fail 'container init does not honor passwordless migration marker'
+grep -Fx 'keyring_ready="${KEYRING_SESSION_READY:-/run/workstation/keyring-session-ready}"' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session keyring readiness assignment is malformed'
+grep -F 'rm -f "$keyring_ready"' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session does not clear stale per-session keyring readiness'
+grep -F "printf 'keyring-session-ready\\n' > \"\$keyring_ready\"" scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session does not publish readiness after keyring helper success'
+grep -F 'test -f "$keyring_session_ready"' rootfs/usr/local/bin/workstation-healthcheck >/dev/null \
+  || fail 'workstation healthcheck does not wait for session-local keyring readiness'
+grep -F 'keyring-passwordless-v2' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
+  || fail 'container init does not honor passwordless v2 migration marker'
+grep -F 'prepare_keyring_passwordless_v2' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
+  || fail 'container init does not prepare/backup keyring v2 before desktop startup'
+grep -F 'keyrings.pre-passwordless-v2' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
+  || fail 'container init does not bind the v2 migration backup'
 grep -F 'keyring-migration-password' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
   || fail 'container init does not stage a bounded legacy migration credential'
 if grep -F 'GNOME keyring password:' scripts/init-unraid.sh >/dev/null; then
@@ -264,6 +320,14 @@ grep -F 'restore_keyring_migration_backup' scripts/update.sh >/dev/null \
   || fail 'update rollback does not restore pre-migration keyring state'
 grep -F 'finalize_keyring_passwordless_migration' scripts/update.sh >/dev/null \
   || fail 'successful update does not retire keyring migration artifacts'
+grep -F 'keyring-passwordless-v2' scripts/verify-runtime.sh >/dev/null \
+  || fail 'strict runtime verifier does not require the v2 marker'
+grep -F 'ReadAlias "$alias"' scripts/verify-runtime.sh >/dev/null \
+  || fail 'strict runtime verifier does not compare login/default aliases'
+grep -F 'scripts/check-keyring-unlocked.sh' scripts/verify-runtime.sh >/dev/null \
+  || fail 'strict runtime verifier does not use the format-correct keyring lock check'
+grep -F 'dbus-send --session --print-reply' scripts/check-keyring-unlocked.sh >/dev/null \
+  || fail 'keyring lock check is not bound to dbus-send boolean output'
 grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/keyring-password' compose.yaml >/dev/null \
   || fail 'legacy keyring migration secret channel is missing'
 pass 'passwordless keyring migration and fail-closed desktop D-Bus contract'

@@ -12,7 +12,7 @@ Extend the accepted Smart Upstream Updates lifecycle so normal successful update
 Authority:
 - `requirements/SMART_UPSTREAM_UPDATES.md`, especially R7-R8, R11-R12 and R17-R24;
 - `docs/DECISIONS.md#D25`;
-- `docs/DECISIONS.md#D27`;
+- `docs/DECISIONS.md#D28`;
 - GitHub issue #11 as provenance for the authorized change.
 
 The fixed target state is: after a verified successful update, retain the exact current production image and exactly one immediately previous known-working rollback image; clean only older workstation-owned image/tag artifacts; apply a separate bounded workstation-scoped BuildKit cache policy; never use global prune; never touch persistent user data; and report cleanup failure separately from production success.
@@ -247,7 +247,7 @@ Execution Prep may decide inside accepted authority:
 - exact BuildKit builder/filter/GC command and bounded age/size thresholds after M02 backend verification;
 - whether a dedicated workstation builder/cache namespace is technically required to achieve safe scope.
 
-If backend evidence shows the accepted workstation-only cache scope cannot be achieved without a material architecture change, open Research/Planning/Definition as routed rather than weakening D27.
+If backend evidence shows the accepted workstation-only cache scope cannot be achieved without a material architecture change, open Research/Planning/Definition as routed rather than weakening D28.
 
 ## Planning audit
 

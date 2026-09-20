@@ -33,7 +33,7 @@ Evidence:
 - `requirements/SMART_UPSTREAM_UPDATES.md#R17` through `R19`
 - `requirements/SMART_UPSTREAM_UPDATES.md#R21` through `R23`
 - `docs/DECISIONS.md#D25`
-- `docs/DECISIONS.md#D27`
+- `docs/DECISIONS.md#D28`
 
 ## Next durable starting point
 

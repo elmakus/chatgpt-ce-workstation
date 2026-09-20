@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ensure the workstation Secret Service uses a passwordless persistent collection."""
+"""Ensure the workstation Secret Service uses a passwordless persistent login collection."""
 
 from __future__ import annotations
 
@@ -17,6 +17,7 @@ SERVICE_IFACE = "org.freedesktop.Secret.Service"
 INTERNAL_IFACE = "org.gnome.keyring.InternalUnsupportedGuiltRiddenInterface"
 COLLECTION_IFACE = "org.freedesktop.Secret.Collection"
 PROPERTIES_IFACE = "org.freedesktop.DBus.Properties"
+MARKER_PAYLOAD = "passwordless-v2\n"
 
 
 def parse_args() -> argparse.Namespace:
@@ -49,7 +50,7 @@ def read_password(path: str | None) -> bytes | None:
 def atomic_marker(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_name(path.name + ".tmp")
-    tmp.write_text("passwordless-v1\n", encoding="utf-8")
+    tmp.write_text(MARKER_PAYLOAD, encoding="utf-8")
     os.chmod(tmp, 0o600)
     os.replace(tmp, path)
 
@@ -60,10 +61,129 @@ def backup_keyrings(source: Path, backup: Path) -> None:
     shutil.copytree(source, backup, symlinks=True)
 
 
-def locked(bus: dbus.SessionBus, collection: object) -> bool:
+def collection_properties(bus: dbus.SessionBus, collection: object) -> object:
     obj = bus.get_object(BUS_NAME, str(collection))
-    props = dbus.Interface(obj, PROPERTIES_IFACE)
+    return dbus.Interface(obj, PROPERTIES_IFACE)
+
+
+def collection_locked(bus: dbus.SessionBus, collection: object) -> bool:
+    props = collection_properties(bus, collection)
     return bool(props.Get(COLLECTION_IFACE, "Locked"))
+
+
+def collection_metadata(bus: dbus.SessionBus, collection: object) -> tuple[str, int]:
+    props = collection_properties(bus, collection)
+    label = str(props.Get(COLLECTION_IFACE, "Label"))
+    items = props.Get(COLLECTION_IFACE, "Items")
+    return label, len(items)
+
+
+def service_collections(service_object: object) -> list[str]:
+    props = dbus.Interface(service_object, PROPERTIES_IFACE)
+    return [str(path) for path in props.Get(SERVICE_IFACE, "Collections")]
+
+
+def choose_collection(
+    login_alias: str,
+    default_alias: str,
+    candidates: list[tuple[str, str, int]],
+    migration_mode: bool,
+) -> str:
+    selected = login_alias if login_alias != "/" else default_alias
+    if not migration_mode:
+        return selected
+
+    login_candidates = [
+        (item_count, path)
+        for path, label, item_count in candidates
+        if path != "/" and not path.endswith("/session") and label.casefold() == "login"
+    ]
+    if not login_candidates:
+        return selected
+
+    login_candidates.sort(reverse=True)
+    best_count, best_path = login_candidates[0]
+    selected_count = next(
+        (count for path, _label, count in candidates if path == selected),
+        -1,
+    )
+    if selected == "/" or best_count > selected_count:
+        return best_path
+    return selected
+
+
+def ensure_passwordless(
+    bus: dbus.SessionBus,
+    service_object: object,
+    service: object,
+    internal: object,
+    marker: Path,
+    backup: Path,
+    keyring_dir: Path,
+    old_password: bytes | None,
+) -> object:
+    login_alias = str(service.ReadAlias("login"))
+    default_alias = str(service.ReadAlias("default"))
+
+    metadata: list[tuple[str, str, int]] = []
+    for path in service_collections(service_object):
+        if path.endswith("/session"):
+            continue
+        try:
+            label, count = collection_metadata(bus, path)
+        except dbus.DBusException:
+            continue
+        metadata.append((path, label, count))
+
+    collection = choose_collection(
+        login_alias,
+        default_alias,
+        metadata,
+        migration_mode=(old_password is not None and not marker.exists()),
+    )
+
+    _, session = service.OpenSession("plain", b"")
+    empty = secret(session, b"")
+
+    if str(collection) == "/":
+        if marker.exists():
+            raise RuntimeError("passwordless marker exists but persistent login collection is missing")
+        attrs = dbus.Dictionary(
+            {"org.freedesktop.Secret.Collection.Label": dbus.String("login", variant_level=1)},
+            signature="sv",
+        )
+        collection = internal.CreateWithMasterPassword(attrs, empty)
+    elif not marker.exists():
+        backup_keyrings(keyring_dir, backup)
+
+        if old_password is not None:
+            old = secret(session, old_password)
+            if collection_locked(bus, collection):
+                internal.UnlockWithMasterPassword(collection, old)
+            internal.ChangeWithMasterPassword(collection, old, empty)
+        else:
+            if collection_locked(bus, collection):
+                internal.UnlockWithMasterPassword(collection, empty)
+            internal.ChangeWithMasterPassword(collection, empty, empty)
+
+    if collection_locked(bus, collection):
+        internal.UnlockWithMasterPassword(collection, empty)
+    if collection_locked(bus, collection):
+        raise RuntimeError("passwordless keyring remained locked after migration")
+
+    # GNOME keyring exposes "login" as a natural/reserved alias derived from
+    # the canonical login collection; this implementation only permits writing
+    # the "default" alias. Preserve/prove the natural login alias and converge
+    # default onto the same collection.
+    service.SetAlias("default", collection)
+
+    if str(service.ReadAlias("login")) != str(collection):
+        raise RuntimeError("login alias did not converge on migrated collection")
+    if str(service.ReadAlias("default")) != str(collection):
+        raise RuntimeError("default alias did not converge on migrated collection")
+
+    atomic_marker(marker)
+    return collection
 
 
 def main() -> int:
@@ -74,43 +194,20 @@ def main() -> int:
     old_password = read_password(args.password_file)
 
     bus = dbus.SessionBus()
-    obj = bus.get_object(BUS_NAME, SERVICE_PATH)
-    service = dbus.Interface(obj, SERVICE_IFACE)
-    internal = dbus.Interface(obj, INTERNAL_IFACE)
+    service_object = bus.get_object(BUS_NAME, SERVICE_PATH)
+    service = dbus.Interface(service_object, SERVICE_IFACE)
+    internal = dbus.Interface(service_object, INTERNAL_IFACE)
 
-    collection = service.ReadAlias("default")
-    if str(collection) == "/":
-        login_alias = service.ReadAlias("login")
-        if str(login_alias) != "/":
-            collection = login_alias
-
-    _, session = service.OpenSession("plain", b"")
-    empty = secret(session, b"")
-
-    if str(collection) == "/":
-        attrs = dbus.Dictionary(
-            {"org.freedesktop.Secret.Collection.Label": dbus.String("Login", variant_level=1)},
-            signature="sv",
-        )
-        collection = internal.CreateWithMasterPassword(attrs, empty)
-        service.SetAlias("default", collection)
-    elif locked(bus, collection):
-        try:
-            internal.UnlockWithMasterPassword(collection, empty)
-        except dbus.DBusException:
-            if old_password is None:
-                raise RuntimeError(
-                    "existing keyring is encrypted and no migration password is available"
-                )
-            backup_keyrings(keyring_dir, backup)
-            old = secret(session, old_password)
-            internal.UnlockWithMasterPassword(collection, old)
-            internal.ChangeWithMasterPassword(collection, old, empty)
-
-    if locked(bus, collection):
-        raise RuntimeError("passwordless keyring remained locked after migration")
-
-    atomic_marker(marker)
+    collection = ensure_passwordless(
+        bus,
+        service_object,
+        service,
+        internal,
+        marker,
+        backup,
+        keyring_dir,
+        old_password,
+    )
     print(str(collection))
     return 0
 

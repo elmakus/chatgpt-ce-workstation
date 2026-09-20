@@ -33,7 +33,6 @@ fi
 APPDATA_ROOT="${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}"
 PROJECTS_ROOT="${PROJECTS_ROOT:-/mnt/user/projects}"
 CONTAINER_NAME="${CONTAINER_NAME:-chatgpt-ce-workstation}"
-VNC_SECRET_FILE="$APPDATA_ROOT/secrets/novnc-password"
 KEYRING_SECRET_FILE="$APPDATA_ROOT/secrets/keyring-password"
 CE_PROJECT_TARGET="$APPDATA_ROOT/home/Documents/ChatGPT"
 
@@ -44,9 +43,8 @@ pass 'Docker/Compose available and compose.yaml resolves'
 
 [[ -d "$APPDATA_ROOT/home" ]] || fail "persistent home does not exist: $APPDATA_ROOT/home"
 [[ -d "$PROJECTS_ROOT" ]] || fail "project root does not exist: $PROJECTS_ROOT"
-[[ -s "$VNC_SECRET_FILE" ]] || fail "missing/empty noVNC secret: $VNC_SECRET_FILE"
 [[ -s "$KEYRING_SECRET_FILE" ]] || fail "missing/empty keyring secret: $KEYRING_SECRET_FILE"
-pass 'persistent home, project root and both runtime secrets exist'
+pass 'persistent home, project root and keyring migration credential state are ready'
 
 if docker inspect "$CONTAINER_NAME" >/dev/null 2>&1; then
   running="$(docker inspect --format='{{.State.Running}}' "$CONTAINER_NAME")"
