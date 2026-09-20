@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/keyring-auto-unlock-prompts"
   pr: 9
-  head: "92d99732276c470d13165d8b5d14961bcb77cbeb"
+  head: "c2ffeaf847514885ea7a706385ecefa569bfaf69"
 
 research_obligation: null
 
@@ -37,11 +37,11 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-auto-unlock-prompts/cards/MF-T02.md"
-    review_state: null
-    review_subject: null
+    review_state: pending
+    review_subject: "elmakus/chatgpt-ce-workstation@7be2eeb9cb39f7e84b01d5e30822dfa42784d34f"
     review_evidence: null
-    result_commit: null
+    result_commit: "7be2eeb9cb39f7e84b01d5e30822dfa42784d34f"
     result_pr: 9
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/issue-keyring-auto-unlock-prompts/evidence/MF_T02_PASSWORDLESS_KEYRING_2026-09-20.md"
+    tests_summary: "GREEN: full SOURCE_VALIDATION_GREEN; update rollback/finalize fixtures GREEN; isolated temporary-HOME encrypted->passwordless migration preserved stored secret across restart; fresh passwordless initialization preserved stored secret across restart; real keyring not mutated."
 
