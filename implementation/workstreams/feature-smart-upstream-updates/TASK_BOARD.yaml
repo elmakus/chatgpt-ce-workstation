@@ -163,7 +163,7 @@ cards:
     title: "Activate accepted updater on production and run post-update regressions"
     milestone: M04
     decision_state: accepted
-    execution_status: blocked
+    execution_status: in_progress
     executor: chatgpt
     depends_on: ["M03-T02"]
     openspec_change: null
@@ -174,7 +174,7 @@ cards:
     result_commit: null
     result_pr: 7
     evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-live-regression-2.md"
-    tests_summary: "PARTIAL LIVE ACCEPTANCE: second authorized smart update GREEN on exact image sha256:e11e3f473ee45c25585f79f7b891e18f359a0a133d9b3e37359e7514233a4972 / resolution 604ed5c8904bc55cbf3b8c10a718acc837c6795792f1d31b8dbee2fa1f2e371b with v5.0.11 provenance and runtime/isolation GREEN; Codex Web GPT doctor RED because current Codex normalized the bridge-owned Compatibility V1 multi_agent line to literal multi_agent = true, stripping only the managed comment. Bounded C02 correction required; controlled rollback not started."
+    tests_summary: "RESUMED after REQUIRED M04-T01-C02 independent review GREEN on exact related-repository subject 9317954b0e9391bb0def278c54e04084b1699465; prior live update/runtime acceptance remains valid evidence, corrected release publication and production revalidation now in progress; controlled rollback not started."
 
   - id: M04-T01-C01
     title: "Make Codex Web GPT interrupt-hook ownership compatible with native enabled normalization"
