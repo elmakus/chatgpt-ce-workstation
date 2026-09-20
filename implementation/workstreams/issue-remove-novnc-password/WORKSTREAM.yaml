@@ -1,6 +1,6 @@
 id: "issue-remove-novnc-password"
 kind: "issue"
-status: "planning"
+status: "implementation"
 
 branch: "fix/remove-novnc-password"
 base_ref: "elmakus/chatgpt-ce-workstation@e796e2fef00e348e2329be1a4856da335dff6842"
@@ -19,7 +19,7 @@ routing:
   research_obligation: null
   plan_review: null
 
-task_board: null
+task_board: "implementation/workstreams/issue-remove-novnc-password/TASK_BOARD.yaml"
 
 authority:
   requirements: "requirements/NOVNC_PASSWORDLESS_ACCESS.md"
