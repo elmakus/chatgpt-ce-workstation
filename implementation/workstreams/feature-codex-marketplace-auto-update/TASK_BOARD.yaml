@@ -72,7 +72,7 @@ cards:
       - "requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md"
       - "docs/DECISIONS.md#d24--global-codex-marketplace-refresh-uses-one-persistent-s6-timer"
       - "implementation/workstreams/feature-codex-marketplace-auto-update/handoffs/CMAU-M01_HANDOFF.md"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/chatgpt-ce-workstation@51d9cf2463c03c15dde6ae0c09965fc6ba572ab8"
     review_evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M02-T01-implementation.md"
     result_commit: "51d9cf2463c03c15dde6ae0c09965fc6ba572ab8"
