@@ -189,6 +189,11 @@ run_case() (
     fi
     return 0
   }
+  verify_rollback_runtime() {
+    local expected_image_id="$1"
+    trace_line "verify-rollback:$active_image_id:expected:$expected_image_id"
+    [[ "$active_image_id" == "$expected_image_id" ]]
+  }
   write_evidence() {
     trace_line "evidence:$1:$2"
     if [[ "$1" == rollback_failed ]]; then
@@ -272,8 +277,11 @@ run_case() (
       ;;
     runtime_fail)
       assert_trace "recreate:candidate-test"
+      assert_trace "verify:$fixture_candidate_id"
       assert_trace "keyring-restore"
       assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "verify-rollback:$fixture_old_id:expected:$fixture_old_id"
+      assert_no_trace_prefix "verify:$fixture_old_id"
       assert_trace "evidence:update_failed_rolled_back:candidate_runtime_verification_failed"
       ;;
     rollback_fail)
@@ -353,5 +361,49 @@ PY
 )
 
 test_recovery_evidence_serialization
+
+test_marker_cleanup_without_backup() (
+  local tmp home
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  mkdir -p "$home/.config/workstation"
+  : > "$home/.config/workstation/keyring-passwordless-v1"
+  : > "$home/.config/workstation/keyring-passwordless-v2"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  restore_keyring_migration_backup
+
+  test ! -e "$home/.config/workstation/keyring-passwordless-v1"
+  test ! -e "$home/.config/workstation/keyring-passwordless-v2"
+)
+
+test_v2_backup_restore() (
+  local tmp home
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  mkdir -p "$home/.local/share/keyrings" "$home/.local/share/keyrings.pre-passwordless-v2" "$home/.config/workstation"
+  printf 'candidate-state' > "$home/.local/share/keyrings/state"
+  printf 'pre-attempt-state' > "$home/.local/share/keyrings.pre-passwordless-v2/state"
+  : > "$home/.config/workstation/keyring-passwordless-v2"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  docker() {
+    [[ "$1" == compose && "$2" == stop && "$3" == workstation ]]
+  }
+  restore_keyring_migration_backup
+
+  grep -Fx 'pre-attempt-state' "$home/.local/share/keyrings/state" >/dev/null
+  test ! -d "$home/.local/share/keyrings.pre-passwordless-v2"
+  test ! -e "$home/.config/workstation/keyring-passwordless-v2"
+)
+
+test_marker_cleanup_without_backup
+test_v2_backup_restore
 
 echo "UPDATE_ORCHESTRATION_TESTS_GREEN"
