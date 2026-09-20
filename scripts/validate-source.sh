@@ -94,6 +94,7 @@ echo '=== safe updater orchestration ==='
 [[ -s scripts/test-update-orchestration.sh ]] || fail 'update orchestration tests missing'
 [[ -s scripts/buildkit-cache.sh ]] || fail 'BuildKit cache helper missing'
 [[ -s scripts/test-buildkit-cache.sh ]] || fail 'BuildKit cache helper tests missing'
+[[ -s scripts/test-retention-multicycle.sh ]] || fail 'multi-cycle retention harness missing'
 if grep -F 'UPSTREAM_REFRESH' scripts/update.sh >/dev/null; then
   fail 'legacy timestamp upstream refresh remains in update.sh'
 fi
@@ -106,6 +107,7 @@ grep -F 'update_failed_rolled_back' scripts/update.sh >/dev/null || fail 'succes
 grep -F 'rollback_failed' scripts/update.sh >/dev/null || fail 'rollback failure is not explicitly represented'
 bash scripts/test-update-orchestration.sh || fail 'isolated update orchestration tests'
 bash scripts/test-buildkit-cache.sh || fail 'dedicated BuildKit cache helper tests'
+bash scripts/test-retention-multicycle.sh || fail 'multi-cycle retention lifecycle tests'
 grep -F -- '--builder "$builder_name"' scripts/build.sh >/dev/null \
   || fail 'candidate build does not explicitly select the dedicated Workstation builder'
 grep -F 'docker buildx create --name "$name" --driver "$WORKSTATION_BUILDER_DRIVER"' scripts/buildkit-cache.sh >/dev/null \
