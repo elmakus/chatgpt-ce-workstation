@@ -58,9 +58,10 @@ run_case() (
   # shellcheck disable=SC1091
   source "$REPO_ROOT/scripts/update.sh"
 
-  local fixture_old_id fixture_candidate_id fixture_resolution_sha
+  local fixture_old_id fixture_candidate_id fixture_wrong_id fixture_resolution_sha
   fixture_old_id="sha256:1111111111111111111111111111111111111111111111111111111111111111"
   fixture_candidate_id="sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  fixture_wrong_id="sha256:3333333333333333333333333333333333333333333333333333333333333333"
   fixture_resolution_sha="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   active_image_id="$fixture_old_id"
 
@@ -128,7 +129,14 @@ run_case() (
   recreate_with_tag() {
     trace_line "recreate:$1"
     if [[ "$1" == candidate-test ]]; then
-      active_image_id="$fixture_candidate_id"
+      if [[ "$scenario" == promotion_fail ]]; then
+        return 1
+      fi
+      if [[ "$scenario" == promoted_mismatch ]]; then
+        active_image_id="$fixture_wrong_id"
+      else
+        active_image_id="$fixture_candidate_id"
+      fi
       return 0
     fi
     if [[ "$scenario" == rollback_fail ]]; then
@@ -171,24 +179,56 @@ run_case() (
     exit 1
   }
 
-  assert_order "source-validation" "host-preflight"
-  if [[ "$scenario" != source_fail && "$scenario" != resolver_fail && "$scenario" != preflight_fail ]]; then
-    assert_order "host-preflight" "build"
-  fi
-
+  assert_trace "source-validation"
   case "$scenario" in
-    success)
-      assert_trace "recreate:candidate-test"
-      assert_trace "evidence:success:"
-      assert_no_trace_prefix 'recreate:rollback-'
+    source_fail)
+      assert_trace "evidence:pre_promotion_failed:source_validation_failed"
+      assert_no_trace_prefix 'resolve$'
+      assert_no_trace_prefix 'host-preflight$'
+      assert_no_trace_prefix 'build$'
+      assert_no_trace_prefix 'recreate:'
+      ;;
+    resolver_fail)
+      assert_order "source-validation" "resolve"
+      assert_trace "evidence:pre_promotion_failed:upstream_resolution_failed"
+      assert_no_trace_prefix 'host-preflight$'
+      assert_no_trace_prefix 'build$'
+      assert_no_trace_prefix 'recreate:'
+      ;;
+    preflight_fail)
+      assert_order "source-validation" "host-preflight"
+      assert_trace "evidence:pre_promotion_failed:host_preflight_failed"
+      assert_no_trace_prefix 'build$'
+      assert_no_trace_prefix 'recreate:'
       ;;
     build_fail)
+      assert_order "source-validation" "host-preflight"
+      assert_order "host-preflight" "build"
       assert_trace "evidence:pre_promotion_failed:candidate_build_failed"
       assert_no_trace_prefix 'recreate:'
       ;;
     readback_fail)
+      assert_order "source-validation" "host-preflight"
+      assert_order "host-preflight" "build"
       assert_trace "evidence:pre_promotion_failed:candidate_readback_failed"
       assert_no_trace_prefix 'recreate:'
+      ;;
+    success)
+      assert_order "source-validation" "host-preflight"
+      assert_order "host-preflight" "build"
+      assert_trace "recreate:candidate-test"
+      assert_trace "evidence:success:"
+      assert_no_trace_prefix 'recreate:rollback-'
+      ;;
+    promotion_fail)
+      assert_trace "recreate:candidate-test"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:update_failed_rolled_back:promotion_failed"
+      ;;
+    promoted_mismatch)
+      assert_trace "recreate:candidate-test"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:update_failed_rolled_back:promoted_image_mismatch"
       ;;
     health_fail)
       assert_trace "recreate:candidate-test"
@@ -212,9 +252,14 @@ run_case() (
   esac
 )
 
-run_case success 0
+run_case source_fail 1
+run_case resolver_fail 1
+run_case preflight_fail 1
 run_case build_fail 1
 run_case readback_fail 1
+run_case success 0
+run_case promotion_fail 1
+run_case promoted_mismatch 1
 run_case health_fail 1
 run_case runtime_fail 1
 run_case rollback_fail 2
