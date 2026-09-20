@@ -345,3 +345,27 @@ Fresh installations are seeded directly into the managed form, and repeated reco
 
 **Rationale:** the full home is intentionally persistent, so seed-once behavior leaves existing installations on stale workstation policy after image updates. Whole-file overwrite would violate D12 and can destroy independently managed or user-authored content. Explicit block ownership gives the image a safe update boundary while preserving the persistent file as a shared user configuration surface.
 
+## D24 — Workstation updates resolve latest stable identities before build
+
+**Decision (2026-09-20):** replace timestamp-driven upstream refresh as the normal workstation update model with a `resolve -> freeze -> build -> validate -> promote` lifecycle.
+
+Normal update policy is:
+
+- keep the operating-system family on Ubuntu 24.04 LTS while following the current `ubuntu:24.04` image and supported package set;
+- follow the latest trusted stable/current supported channel for image-managed upstreams rather than maintaining permanent stale pins;
+- resolve each moving upstream to the strongest practical immutable identity before building one candidate;
+- use those real identities as build/cache inputs so unchanged upstreams do not rebuild merely because time passed;
+- treat the CE Git revision and the official OpenAI ChatGPT stable Linux package as separate freshness inputs while preserving CE's signed-package validation authority;
+- keep `scripts/update.sh` as the one normal user-facing update operation;
+- keep `scripts/build.sh` as a lower-level development/exact-build primitive that does not itself mean "advance all upstreams";
+- validate a candidate before production recreation and retain the prior known-working image for deterministic rollback if post-promotion health/runtime verification fails;
+- keep runtime application self-updaters disabled.
+
+The image may use multi-stage/build-stage isolation where that materially improves cache reuse, but the architecture does not promise impossible layer reuse after changed base dependencies.
+
+Expert pins/overrides remain permissible only as explicit recovery/debug/compatibility controls and must not replace the default latest-stable policy silently.
+
+**Rationale:** the former `UPSTREAM_REFRESH=<timestamp>` mechanism guarantees some remote layers rerun but invalidates cache even when nothing changed and does not coherently refresh the earliest Ubuntu package layer. Resolving trusted immutable identities first gives both freshness and reproducibility, while candidate validation plus rollback prevents the updater from treating a broken rebuild as a successful production update.
+
+**Consequences for earlier decisions:** D24 supersedes the permanent-version-pin aspect of D6 for ordinary s6-overlay updates while preserving s6-overlay as the accepted supervisor. D5's disabled CE self-updater, D10's image-owned application state, D11's Codex Web GPT image management, D15's validation discipline and D16's Compose deployment authority remain in force.
+
