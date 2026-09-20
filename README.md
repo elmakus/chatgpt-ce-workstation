@@ -108,6 +108,8 @@ The Tint2 panel provides launchers for ChatGPT CE, Codex Web GPT and a terminal.
 
 If ChatGPT CE is closed with **Quit**, the noVNC desktop remains alive. Relaunch CE from the panel, the Openbox menu, or `/usr/local/bin/chatgpt-ce`.
 
+The published noVNC endpoint is intentionally **passwordless at the VNC layer**. Network reachability is therefore the access-control boundary: expose it only on a trusted network, or place a separately authenticated ingress in front of it before any broader/untrusted exposure. Raw VNC remains container-loopback-only and is never published directly.
+
 Openbox/x11vnc/websockify are treated as critical desktop-substrate processes. If one exits, the s6 longrun is restarted cleanly. CE itself is deliberately **not** part of Docker health, so intentionally quitting CE does not make the workstation unhealthy.
 
 ## Fresh deployment
@@ -121,7 +123,7 @@ bash scripts/build.sh
 bash scripts/run.sh
 ```
 
-Then open noVNC on the host port configured in Compose / `.env` (default `6080`). `scripts/run.sh` prints the published binding.
+Then open noVNC on the host port configured in Compose / `.env` (default `6080`). `scripts/run.sh` prints the published binding. The desktop should open without a VNC/noVNC password prompt.
 
 ## Existing installation: migrate to the canonical project bind
 
@@ -138,7 +140,7 @@ The one-shot migration is intentionally defensive. It:
 1. requires a clean `main` checkout;
 2. fast-forwards `main` again with `git pull --ff-only` and re-execs itself if that pull advanced the source;
 3. runs `scripts/validate-source.sh`;
-4. runs non-mutating `scripts/preflight-host.sh` to verify Compose, persistent paths and both secrets before downtime;
+4. runs non-mutating `scripts/preflight-host.sh` to verify Compose, persistent paths and keyring migration state before downtime;
 5. asks for confirmation;
 6. builds the replacement image **before** stopping the current workstation;
 7. stops the stack;
@@ -163,7 +165,7 @@ The verifier checks:
 - unprivileged/no-`SYS_ADMIN` container boundary;
 - restart policy;
 - canonical working directory and project write access;
-- keyring/VNC runtime state;
+- passwordless noVNC and keyring runtime state;
 - desktop launchers and Tint2 panel;
 - noVNC desktop health.
 
