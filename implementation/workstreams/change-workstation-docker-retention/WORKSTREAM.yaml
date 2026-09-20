@@ -1,6 +1,6 @@
 id: "change-workstation-docker-retention"
 kind: "change"
-status: "definition"
+status: "planning"
 
 branch: "work/workstation-docker-retention"
 base_ref: "e796e2fef00e348e2329be1a4856da335dff6842"
@@ -25,6 +25,7 @@ authority:
   requirements: "requirements/SMART_UPSTREAM_UPDATES.md"
   decisions:
     - "docs/DECISIONS.md#D25"
+    - "docs/DECISIONS.md#D27"
   plan: null
 
 review:
