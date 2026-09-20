@@ -149,6 +149,12 @@ verify_runtime() {
   bash scripts/verify-runtime.sh
 }
 
+require_tools() {
+  command -v docker >/dev/null || { fail "docker is required"; return 1; }
+  docker compose version >/dev/null || { fail "Docker Compose v2 is required"; return 1; }
+  command -v python3 >/dev/null || { fail "python3 is required"; return 1; }
+}
+
 write_evidence() {
   local status="$1"
   local reason="$2"
@@ -225,9 +231,7 @@ rollback_after_failure() {
 }
 
 main() {
-  command -v docker >/dev/null || { fail "docker is required"; return 1; }
-  docker compose version >/dev/null || { fail "Docker Compose v2 is required"; return 1; }
-  command -v python3 >/dev/null || { fail "python3 is required"; return 1; }
+  require_tools || return 1
 
   load_local_env
 
