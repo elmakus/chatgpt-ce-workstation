@@ -203,6 +203,20 @@ fi
 pass 'restart, binds, secrets, optional native upstream, healthcheck and isolation boundary'
 
 echo
+echo '=== desktop keyring session isolation ==='
+grep -F 'DBUS_SESSION_BUS_ADDRESS=unix:path=/run/workstation/no-session-bus' Dockerfile >/dev/null \
+  || fail 'image default does not block out-of-session D-Bus autolaunch'
+grep -F 'dbus-run-session -- /opt/workstation/bin/desktop-session-inner.sh' scripts/container/desktop-session.sh >/dev/null \
+  || fail 'desktop session no longer owns an explicit D-Bus session'
+grep -F 'gnome-keyring-daemon --login --components=secrets' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session no longer performs login-keyring password handoff'
+grep -F 'gnome-keyring-daemon --start --components=secrets' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session no longer completes keyring startup'
+grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/keyring-password' compose.yaml >/dev/null \
+  || fail 'keyring password secret wiring changed'
+pass 'fail-closed non-desktop D-Bus default with canonical desktop keyring session'
+
+echo
 echo '=== Codex policy, CE features and image-managed applications ==='
 grep -F 'approval_policy = "never"' rootfs/etc/codex/config.toml >/dev/null || fail 'Codex approval policy changed'
 grep -F 'sandbox_mode = "danger-full-access"' rootfs/etc/codex/config.toml >/dev/null || fail 'Codex sandbox default changed'
