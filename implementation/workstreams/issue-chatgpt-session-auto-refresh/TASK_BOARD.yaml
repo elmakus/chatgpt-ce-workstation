@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/chatgpt-session-auto-refresh"
   pr: null
-  head: "81ddf4d5da79d399e79aec1e6724dafb1879e626"
+  head: "213cec8510c30c62c4ee5357425b3c11207ec593"
 
 research_obligation: null
 
@@ -17,8 +17,8 @@ cards:
     title: "Auto-verify due ChatGPT Web sessions"
     milestone: "micro-fix"
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-chatgpt-session-auto-refresh/cards/MF-T01.md"
     review_state: null

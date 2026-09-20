@@ -1,6 +1,6 @@
 id: "issue-chatgpt-session-auto-refresh"
 kind: "issue"
-status: "ready"
+status: "in_progress"
 
 branch: "fix/chatgpt-session-auto-refresh"
 base_ref: "e796e2fef00e348e2329be1a4856da335dff6842"
