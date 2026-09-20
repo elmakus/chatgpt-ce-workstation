@@ -26,10 +26,10 @@ authority:
 
 review:
   requirement: "REQUIRED"
-  state: null
-  subject: null
-  evidence: null
-  covered_by: null
+  state: "green"
+  subject: "elmakus/chatgpt-ce-workstation@1addd26a736b1bd64126b1b14daadddf75a2b867"
+  evidence: "implementation/workstreams/issue-keyring-auto-unlock-prompts/evidence/MF_T02_INDEPENDENT_REVIEW_GREEN_2026-09-20.md"
+  covered_by: "task_board:MF-T02"
 
 branch_cleanup:
   state: null
