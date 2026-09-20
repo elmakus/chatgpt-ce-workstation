@@ -21,10 +21,10 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-live-migration-rollback/cards/MF-T01.md"
-    review_state: in_progress
+    review_state: red
     review_subject: "41949c8fdf374c9c3ac21117db38fc90254c7853"
-    review_evidence: null
+    review_evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_REVIEW_3_2026-09-20.md"
     result_commit: "41949c8fdf374c9c3ac21117db38fc90254c7853"
     result_pr: 13
     evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_ALIAS_CORRECTION_2026-09-20.md"
-    tests_summary: "Exact corrected source 41949c8fdf374c9c3ac21117db38fc90254c7853: Tower detached-worktree helper tests 6/6 GREEN, migration prep GREEN, updater orchestration GREEN, SOURCE_VALIDATION_GREEN. Production-derived disposable-copy retest remains pending; no production mutation."
+    tests_summary: "Exact corrected source 41949c8fdf374c9c3ac21117db38fc90254c7853: Tower detached-worktree helper tests 6/6 GREEN, migration prep GREEN, updater orchestration GREEN, SOURCE_VALIDATION_GREEN. Production-derived disposable-copy retest GREEN; no production mutation. Independent review attempt 3 RED: interrupted initial v2 backup can leave a partial canonical backup that is trusted on retry."
