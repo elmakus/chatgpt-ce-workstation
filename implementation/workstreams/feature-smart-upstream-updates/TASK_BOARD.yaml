@@ -1,12 +1,12 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "feature-smart-upstream-updates"
 plan_revision: "smart-upstream-updates-R2"
-current_milestone: "M03"
+current_milestone: "M04"
 
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
+  head: "f87d3fc355c70bf89b6481fb0c472bb6546d46ac"
 
 research_obligation: null
 
@@ -43,6 +43,18 @@ milestones:
     implementation_head: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
     handoff: "implementation/workstreams/feature-smart-upstream-updates/handoffs/M03_HANDOFF.md"
     acceptance_evidence: "GREEN on exact M03 subject ffe39dfcb6ac5584af9410feee5eab5f81b008cc: CI #162 and exact candidate build #27 GREEN; REQUIRED independent M03-T02 corrected-subject review GREEN at implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T02-correction-review.md; no production updater invocation or recreate/write occurred."
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  M04:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m04--production-activation-and-live-fault-injection-verification"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: "Explicit user deployment/live-write authorization granted on 2026-09-20 for M04 production recreate/write and controlled rollback testing; execution not yet started."
     review_state: null
     review_subject: null
     review_evidence: null
@@ -146,3 +158,37 @@ cards:
     result_pr: 7
     evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T02-correction-implementation.md"
     tests_summary: "GREEN on exact corrected M03 subject ffe39dfcb6ac5584af9410feee5eab5f81b008cc: CI #162 GREEN with UPDATE_ORCHESTRATION_TESTS_GREEN/SOURCE_VALIDATION_GREEN, noVNC, ShellCheck, Dockerfile and secret scan; exact candidate build #27 GREEN with resolution/image provenance readback; rollback-failure recovery-state fixtures cover candidate-present/unhealthy, container-missing and wrong-image states; no real production updater invocation or recreate/write occurred."
+
+  - id: M04-T01
+    title: "Activate accepted updater on production and run post-update regressions"
+    milestone: M04
+    decision_state: accepted
+    execution_status: ready
+    executor: chatgpt
+    depends_on: ["M03-T02"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M04-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: 7
+    evidence: null
+    tests_summary: null
+
+  - id: M04-T02
+    title: "Exercise bounded live rollback and prove stable no-change updates"
+    milestone: M04
+    decision_state: accepted
+    execution_status: planned
+    executor: chatgpt
+    depends_on: ["M04-T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M04-T02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: 7
+    evidence: null
+    tests_summary: null
