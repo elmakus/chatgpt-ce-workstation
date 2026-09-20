@@ -21,9 +21,9 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-live-migration-rollback/cards/MF-T01.md"
-    review_state: in_progress
+    review_state: green
     review_subject: "789fc358139a73a8bed8aaa38813157853df8b75"
-    review_evidence: null
+    review_evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_REVIEW_6_2026-09-20.md"
     result_commit: "789fc358139a73a8bed8aaa38813157853df8b75"
     result_pr: 13
     evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_SESSION_READINESS_CORRECTION_2026-09-20.md"
