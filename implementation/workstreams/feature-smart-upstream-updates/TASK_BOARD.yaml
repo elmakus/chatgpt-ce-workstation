@@ -6,7 +6,7 @@ current_milestone: "M04"
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "f87d3fc355c70bf89b6481fb0c472bb6546d46ac"
+  head: "f58a0f16fadec8cc7b5c1fd04491c4d329a4748d"
 
 research_obligation: null
 
