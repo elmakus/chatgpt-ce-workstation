@@ -2,10 +2,10 @@
 
 Plan revision: workstation-docker-retention-R1
 Review requirement: RECOMMENDED
-Review state: pending
+Review state: in_progress
 Review subject: elmakus/chatgpt-ce-workstation@c25b88ca2cfda38f05bc3455de70f63e923faeba
 Reviewed plan: planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md
-Review evidence: pending
+Review evidence: in progress
 
 ## Review scope
 
