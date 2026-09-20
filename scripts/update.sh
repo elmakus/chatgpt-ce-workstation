@@ -5,6 +5,14 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
 UPDATE_EVIDENCE_FILE="${UPDATE_EVIDENCE_FILE:-$REPO_ROOT/.workstation-update/last-update.json}"
+UPDATE_WORK_DIR=""
+
+cleanup_update_work_dir() {
+  if [[ -n "${UPDATE_WORK_DIR:-}" ]]; then
+    rm -rf "$UPDATE_WORK_DIR"
+    UPDATE_WORK_DIR=""
+  fi
+}
 
 fail() {
   echo "FAIL: $*" >&2
@@ -238,11 +246,12 @@ main() {
   local work_dir resolution_file env_file staged_resolution
   local resolution_sha candidate_tag candidate_ref candidate_id
   local previous_container previous_image_id rollback_ref repository
-  work_dir="$(mktemp -d /tmp/workstation-update.XXXXXX)"
+  UPDATE_WORK_DIR="$(mktemp -d /tmp/workstation-update.XXXXXX)"
+  work_dir="$UPDATE_WORK_DIR"
   resolution_file="$work_dir/upstream-resolution.json"
   env_file="$work_dir/build-env.sh"
   staged_resolution="$work_dir/canonical-upstream-resolution.json"
-  trap 'rm -rf "${work_dir:-}"' EXIT HUP INT TERM
+  trap cleanup_update_work_dir EXIT HUP INT TERM
 
   echo '=== source validation ==='
   if ! source_validate; then
