@@ -180,7 +180,7 @@ cards:
     title: "Make Codex Web GPT interrupt-hook ownership compatible with native enabled normalization"
     milestone: M04
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     depends_on: ["M03-T02"]
     openspec_change: null
@@ -191,7 +191,7 @@ cards:
     result_commit: "9dd258be18605f9ca2d9fdbd76edd437cf0e12a4"
     result_pr: 4
     evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-C01-implementation.md"
-    tests_summary: "GREEN on exact related-repository subject 9dd258be18605f9ca2d9fdbd76edd437cf0e12a4: PR #4 CI run 35488714398 GREEN on Linux/Windows/macOS plus actionlint; targeted enabled=true normalization test PASS; Linux full runtime suite 736 pass / 0 fail; exact synthetic merge tree identical to frozen subject; no corrected release or production write performed."
+    tests_summary: "GREEN on reviewed related-repository subject 9dd258be18605f9ca2d9fdbd76edd437cf0e12a4 and published v5.0.11: PR #4 independently reviewed GREEN then merged to main; release commit c612b007ec8be0057a17c14e403a12b9b75533ad passed Linux/macOS/Windows CI and Fork Linux Release, published checksummed AppImage sha256:0dc9b30e8256b6ea3c6d1cda3bbca73a8a012eee2120fb7f2b2e1591712b3f86, and PR #5 merged release metadata to main."
 
   - id: M04-T02
     title: "Exercise bounded live rollback and prove stable no-change updates"
