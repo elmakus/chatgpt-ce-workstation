@@ -9,6 +9,8 @@ This repository defines and maintains the Docker-native ChatGPT Community Editio
 
 Mutable implementation/review state is authoritative only in the state context selected by current chatgpt_only routing: the root Task Board for the legacy/default context, or the exact Task Board selected by a validated branch-isolated workstream manifest.
 
+Active research obligation: research/MUSE_CROSS_HARNESS_CAPABILITY_PATTERNS_2026-09-20.md
+
 ## Execution policy
 
 chatgpt_only
