@@ -2,10 +2,10 @@
 
 Plan revision: smart-upstream-updates-R2
 Review requirement: RECOMMENDED
-Review state: in_progress
+Review state: green
 Review subject: elmakus/chatgpt-ce-workstation@2d2f5f5b5d472eef1e194e97747874131fdf2e37
 Reviewed plan: planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md
-Review evidence: in progress
+Review evidence: GREEN — exact R2 subject independently checked against approved R1-R16, D2/D4/D5/D6/D10/D11/D15/D16/D24, the frozen source baseline, and materially relevant upstream trust/resolution evidence. R2 closes the prior D15/D4 regression-order gap and requires the Ubuntu 24.04 base to be resolved/frozen to an immutable identity before candidate build execution. CE Git and signed OpenAI package freshness remain separate; timestamp-only invalidation is removed without promising impossible Docker cache reuse; update.sh/build.sh roles, fail-closed pre-promotion behavior, exact candidate provenance, deterministic previous-image rollback, self-updater/isolation constraints, and the explicit M04 live-write authorization gate are all preserved. No P0/P1 planning defect or missing accepted authority found. External feasibility checks: Docker buildx imagetools exposes registry image digests before build; CE upstream documents signed InRelease -> Packages digest -> package SHA-256 verification and machine-readable upstream package metadata.
 
 ## Review scope
 
@@ -33,6 +33,10 @@ Audit especially whether the plan:
 - places real workstation recreate/fault injection behind explicit deployment/live-write authorization;
 - covers all approved requirements without freezing vendor-specific mechanisms prematurely.
 
-R1 review record `planning/reviews/smart-upstream-updates-R1.md` is historical evidence only. R2 must be judged from this immutable subject and current authority, not by assuming the R1 corrections are sufficient.
+R1 review record `planning/reviews/smart-upstream-updates-R1.md` is historical evidence only. R2 was judged from this immutable subject and current authority.
 
-A GREEN verdict means the R2 plan may be approved and routed to Execution Prep for M01. A RED verdict must identify whether correction belongs to Planning, Project Definition or Research.
+## Verdict
+
+GREEN
+
+R2 may be approved and routed to Execution Prep for M01.
