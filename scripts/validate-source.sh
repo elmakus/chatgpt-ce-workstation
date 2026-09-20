@@ -86,6 +86,23 @@ grep -F 'docker image inspect' scripts/build.sh >/dev/null \
 pass 'frozen upstream resolution and exact build-input contracts'
 
 echo
+echo '=== safe updater orchestration ==='
+[[ -s scripts/update.sh ]] || fail 'update orchestrator missing'
+[[ -s scripts/test-update-orchestration.sh ]] || fail 'update orchestration tests missing'
+if grep -F 'UPSTREAM_REFRESH' scripts/update.sh >/dev/null; then
+  fail 'legacy timestamp upstream refresh remains in update.sh'
+fi
+grep -F 'resolve_upstreams' scripts/update.sh >/dev/null || fail 'update.sh does not resolve a frozen upstream set'
+grep -F 'host_preflight' scripts/update.sh >/dev/null || fail 'update.sh does not run host preflight'
+grep -F 'candidate_readback' scripts/update.sh >/dev/null || fail 'update.sh does not read back candidate provenance'
+grep -F 'rollback_after_failure' scripts/update.sh >/dev/null || fail 'update.sh has no rollback path'
+grep -F -- '--no-build workstation' scripts/update.sh >/dev/null || fail 'promotion is not constrained to an already-built exact image'
+grep -F 'update_failed_rolled_back' scripts/update.sh >/dev/null || fail 'successful rollback is not distinguished from update success'
+grep -F 'rollback_failed' scripts/update.sh >/dev/null || fail 'rollback failure is not explicitly represented'
+bash scripts/test-update-orchestration.sh || fail 'isolated update orchestration tests'
+pass 'exact updater promotion, verification and rollback contracts'
+
+echo
 echo '=== compose ==='
 command -v docker >/dev/null || fail 'docker is required for compose validation'
 docker compose version >/dev/null || fail 'Docker Compose v2 is required'
