@@ -64,6 +64,9 @@ run_case() (
   fixture_wrong_id="sha256:3333333333333333333333333333333333333333333333333333333333333333"
   fixture_resolution_sha="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   active_image_id="$fixture_old_id"
+  container_present=1
+  active_running_state=true
+  active_health_state=healthy
 
   require_tools() { trace_line "tools"; }
   load_local_env() { trace_line "env"; }
@@ -108,15 +111,16 @@ run_case() (
   }
   current_container_id() {
     trace_line "container-id"
+    [[ "$container_present" == 1 ]] || return 0
     printf '%s\n' "container-test"
   }
-  container_running() {
-    trace_line "container-running"
-    return 0
+  container_running_state() {
+    trace_line "container-running-state"
+    printf '%s\n' "$active_running_state"
   }
-  container_healthy() {
-    trace_line "container-healthy"
-    return 0
+  container_health_state() {
+    trace_line "container-health-state"
+    printf '%s\n' "$active_health_state"
   }
   container_image_id() {
     trace_line "container-image"
@@ -142,14 +146,24 @@ run_case() (
     if [[ "$scenario" == rollback_fail ]]; then
       return 1
     fi
+    if [[ "$scenario" == rollback_missing ]]; then
+      container_present=0
+      active_running_state=false
+      active_health_state=none
+      active_image_id=""
+      return 1
+    fi
     active_image_id="$fixture_old_id"
+    active_running_state=true
+    active_health_state=healthy
   }
   wait_healthy() {
     trace_line "wait:$active_image_id"
     if [[ "$scenario" == health_fail && "$active_image_id" == "$fixture_candidate_id" ]]; then
       return 1
     fi
-    if [[ "$scenario" == rollback_fail && "$active_image_id" == "$fixture_candidate_id" ]]; then
+    if [[ ( "$scenario" == rollback_fail || "$scenario" == rollback_missing ) && "$active_image_id" == "$fixture_candidate_id" ]]; then
+      active_health_state=unhealthy
       return 1
     fi
     return 0
@@ -163,6 +177,9 @@ run_case() (
   }
   write_evidence() {
     trace_line "evidence:$1:$2"
+    if [[ "$1" == rollback_failed ]]; then
+      trace_line "recovery-evidence:${8:-}:${9:-}:${10:-}:${11:-}:${12:-}"
+    fi
   }
 
   UPDATE_EVIDENCE_FILE="$tmp/evidence.json"
@@ -244,6 +261,13 @@ run_case() (
       assert_trace "recreate:candidate-test"
       assert_trace "recreate:rollback-1111111111111111"
       assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:complete:container-test:true:unhealthy:$fixture_candidate_id"
+      ;;
+    rollback_missing)
+      assert_trace "recreate:candidate-test"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:container_missing::missing:missing:missing"
       ;;
     *)
       echo "unknown scenario: $scenario" >&2
@@ -263,5 +287,42 @@ run_case promoted_mismatch 1
 run_case health_fail 1
 run_case runtime_fail 1
 run_case rollback_fail 2
+run_case rollback_missing 2
+
+test_recovery_evidence_serialization() (
+  local tmp
+  tmp="$(mktemp -d /tmp/workstation-update-evidence-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  UPDATE_EVIDENCE_FILE="$tmp/evidence.json"
+  write_evidence \
+    "rollback_failed" "candidate_health_failed" \
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
+    "example/workstation:candidate-test" \
+    "sha256:2222222222222222222222222222222222222222222222222222222222222222" \
+    "sha256:1111111111111111111111111111111111111111111111111111111111111111" \
+    "example/workstation:rollback-1111111111111111" \
+    "complete" "container-test" "true" "unhealthy" \
+    "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+
+  python3 - "$UPDATE_EVIDENCE_FILE" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+assert payload["status"] == "rollback_failed"
+assert payload["recovery_state"] == {
+    "readback": "complete",
+    "container_id": "container-test",
+    "running": "true",
+    "health": "unhealthy",
+    "image_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+}
+PY
+)
+
+test_recovery_evidence_serialization
 
 echo "UPDATE_ORCHESTRATION_TESTS_GREEN"
