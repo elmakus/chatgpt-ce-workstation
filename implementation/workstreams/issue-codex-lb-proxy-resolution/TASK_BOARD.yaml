@@ -1,0 +1,30 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "issue-codex-lb-proxy-resolution"
+plan_revision: "micro-fix"
+current_milestone: "micro-fix"
+
+execution_ref:
+  branch: "fix/codex-lb-proxy-resolution"
+  pr: null
+  head: "b081b854b08fec1734d7e90809716e62825bfc93"
+
+research_obligation: null
+
+milestones: {}
+
+cards:
+  - id: "MF-T01"
+    title: "Fix Codex-LB launcher proxy resolution"
+    milestone: "micro-fix"
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: []
+    contract: "implementation/workstreams/issue-codex-lb-proxy-resolution/cards/MF-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
