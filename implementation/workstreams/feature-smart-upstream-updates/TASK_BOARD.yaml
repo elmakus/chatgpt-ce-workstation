@@ -1,12 +1,12 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "feature-smart-upstream-updates"
 plan_revision: "smart-upstream-updates-R2"
-current_milestone: "M01"
+current_milestone: "M02"
 
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "9bcbcbcb6c7ba7b494c1262d066c799003a1fcd8"
+  head: "d10c6ebd9c024569857fcaf25ae17ba5e0f1ea8"
 
 research_obligation: null
 
@@ -19,6 +19,18 @@ milestones:
     implementation_head: "b337578fd3bad298cd96ec69d82ae2ebc3b5c6f0"
     handoff: "implementation/workstreams/feature-smart-upstream-updates/handoffs/M01_HANDOFF.md"
     acceptance_evidence: "CI run #102 GREEN on exact M01 subject b337578; full resolver tests plus source/desktop/shell/dockerfile/secret validation; no production write."
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  M02:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m02--exact-candidate-build--cache-semantics"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
@@ -56,3 +68,36 @@ cards:
     result_pr: 7
     evidence: null
     tests_summary: "GREEN on exact M01 completion subject b337578: full resolver fixture/unit suite for Ubuntu base/APT, CE/OpenAI, Agent Workspace, s6-overlay, Codex Web GPT, Muse, Chrome and Rust; validate-source, noVNC regression, ShellCheck, Dockerfile static check and secret scan all passed in CI run #102; no production recreate/write performed."
+
+  - id: M02-T01
+    title: "Wire the frozen resolution set into an exact candidate build"
+    milestone: M02
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: ["M01-T02"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M02-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+  - id: M02-T02
+    title: "Prove exact candidate provenance/cache semantics and freeze integrated M01-M02 review subject"
+    milestone: M02
+    decision_state: accepted
+    execution_status: planned
+    executor: null
+    depends_on: ["M02-T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M02-T02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
