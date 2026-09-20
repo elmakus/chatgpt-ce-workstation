@@ -36,7 +36,9 @@ bash scripts/test-keyring-migration-prep.sh \
   || fail 'keyring migration preparation regression tests'
 bash scripts/test-keyring-session-readiness.sh \
   || fail 'keyring session readiness regression tests'
-pass 'passwordless keyring v2 helper/preparation/readiness tests'
+bash scripts/test-keyring-runtime-lock-check.sh \
+  || fail 'keyring runtime lock-check regression tests'
+pass 'passwordless keyring v2 helper/preparation/readiness/runtime-verifier tests'
 
 echo
 echo '=== managed global AGENTS reconciliation ==='
@@ -275,6 +277,10 @@ grep -F 'keyring-passwordless-v2' scripts/verify-runtime.sh >/dev/null \
   || fail 'strict runtime verifier does not require the v2 marker'
 grep -F 'ReadAlias "$alias"' scripts/verify-runtime.sh >/dev/null \
   || fail 'strict runtime verifier does not compare login/default aliases'
+grep -F 'scripts/check-keyring-unlocked.sh' scripts/verify-runtime.sh >/dev/null \
+  || fail 'strict runtime verifier does not use the format-correct keyring lock check'
+grep -F 'dbus-send --session --print-reply' scripts/check-keyring-unlocked.sh >/dev/null \
+  || fail 'keyring lock check is not bound to dbus-send boolean output'
 grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/keyring-password' compose.yaml >/dev/null \
   || fail 'legacy keyring migration secret channel is missing'
 pass 'passwordless keyring migration and fail-closed desktop D-Bus contract'
