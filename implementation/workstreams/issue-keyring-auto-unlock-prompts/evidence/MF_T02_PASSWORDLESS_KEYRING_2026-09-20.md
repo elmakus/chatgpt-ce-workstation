@@ -3,7 +3,7 @@
 Date: 2026-09-20
 Workstream: `issue-keyring-auto-unlock-prompts`
 Card: `MF-T02`
-Implementation subject: `elmakus/chatgpt-ce-workstation@7be2eeb9cb39f7e84b01d5e30822dfa42784d34f`
+Implementation subject: `elmakus/chatgpt-ce-workstation@1addd26a736b1bd64126b1b14daadddf75a2b867`
 
 ## Result
 
@@ -36,6 +36,19 @@ Exact branch source passed:
 - Compose/canonical-path/container-boundary checks GREEN;
 - passwordless-keyring + desktop-session isolation static contract GREEN;
 - existing CE/Muse/desktop/secret-hygiene checks GREEN.
+
+## Independent-review correction
+
+The first frozen subject `7be2eeb9cb39f7e84b01d5e30822dfa42784d34f` received RED because two shell wrappers contained literal `\\n` text between keyring variable assignments. Bash syntax validation accepted that form, but it joined assignments and left later variables unset under `set -u`.
+
+Correction on the current subject:
+
+- restored real line breaks in `rootfs/etc/cont-init.d/10-workstation-init`;
+- restored real line breaks in `scripts/container/desktop-session-inner.sh`;
+- added exact-line regression assertions to `scripts/validate-source.sh` so this malformed-assignment class is rejected deterministically;
+- GitHub CI run `35501459367` completed GREEN on the corrected subject, including `Validate workstation source`, noVNC desktop workarea semantics, ShellCheck, Dockerfile checks, and repository secret scan.
+
+The correction does not change the keyring migration helper or the previously verified temporary-HOME migration behavior.
 
 ## Isolated keyring integration verification
 
