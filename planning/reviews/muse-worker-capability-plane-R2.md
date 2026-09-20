@@ -2,10 +2,10 @@
 
 Plan revision: muse-worker-capability-plane-R2
 Review requirement: RECOMMENDED
-Review state: in_progress
+Review state: green
 Review subject: elmakus/chatgpt-ce-workstation@ac3ea34a889b4949f345f7bbf08846054a41bcbd
 Reviewed plan: planning/MUSE_WORKER_CAPABILITY_PLANE_PLAN.md
-Review evidence: pending
+Review evidence: GREEN — exact subject `elmakus/chatgpt-ce-workstation@ac3ea34a889b4949f345f7bbf08846054a41bcbd` is consistent with the approved workstation Definition, D21/D25/D26, the referenced Muse capability research, and accepted `elmakus/muse-capability-admin@8aecaa42d0ffd40efa2342b5bbace85fcc976d7e` authority. R2 keeps Workstation ownership to Muse installation/persistent-home/deployment substrate plus only evidence-proven workstation secret-delivery gaps; consumes the external `MuseCapabilityHints` contract instead of reimplementing it; keeps rare administration in `muse-capability-admin` rather than global `AGENTS.md`; preserves Muse-owned MCP/auth/tool execution and D21 Executor/Tester/session independence; separates mutation authority from credential availability; makes missing required capabilities fail-visible without granting installation authority; validates per-invocation replace/resume semantics including an empty current hint set; gates M02/M03 on exact dependency/JIT refresh evidence; bounds live mutation with authorization, least-privilege and rollback/removal checks; preserves capability-free Muse dispatch and non-`muse-max` behavior; and maps workstation R1-R12 to workstation-owned execution or explicit external dependencies without scope leakage. No blocking false assumption, missing requirement, milestone-order/dependency defect, security/rollback gap, or premature implementation freeze was found.
 
 ## Review scope
 
