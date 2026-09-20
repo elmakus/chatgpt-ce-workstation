@@ -17,7 +17,7 @@ intake:
 routing:
   exploratory_scope: null
   research_obligation: null
-  plan_review: null
+  plan_review: "planning/reviews/workstation-docker-retention-R1.md"
 
 task_board: null
 
@@ -26,7 +26,7 @@ authority:
   decisions:
     - "docs/DECISIONS.md#D25"
     - "docs/DECISIONS.md#D27"
-  plan: null
+  plan: "planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md"
 
 review:
   requirement: null
