@@ -6,7 +6,7 @@ current_milestone: "CMAU-M01"
 execution_ref:
   branch: "feat/codex-marketplace-auto-update"
   pr: null
-  head: "82337521b64219e888b58c7caabe78712e16e1e0"
+  head: "b769cf49e8e9dd3a5780c6b333e1990974bc6b31"
 
 research_obligation: null
 
@@ -37,10 +37,10 @@ cards:
       - "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m01--deterministic-scheduler-core"
       - "requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md"
       - "docs/DECISIONS.md#d24--global-codex-marketplace-refresh-uses-one-persistent-s6-timer"
-    review_state: null
-    review_subject: null
-    review_evidence: null
-    result_commit: null
+    review_state: pending
+    review_subject: "elmakus/chatgpt-ce-workstation@b769cf49e8e9dd3a5780c6b333e1990974bc6b31"
+    review_evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M01-T01-implementation.md"
+    result_commit: "b769cf49e8e9dd3a5780c6b333e1990974bc6b31"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M01-T01-implementation.md"
+    tests_summary: "GREEN: Python compile check and 13/13 deterministic scheduler tests passed; exact source/test/validation wiring read back from GitHub. Full repository source validation was unavailable on the current execution surface; no PR workflow run exists for the subject."
