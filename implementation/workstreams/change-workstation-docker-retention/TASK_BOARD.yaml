@@ -6,7 +6,7 @@ current_milestone: "M03"
 execution_ref:
   branch: "work/workstation-docker-retention"
   pr: null
-  head: "a6a580fced3573b3e4a9912a02430ab62c04d153"
+  head: "15f2bf8c97947ca505da9466f3ff18dad59ada6a"
 
 research_obligation: null
 
@@ -37,8 +37,8 @@ milestones:
 
   M03:
     decision_state: accepted
-    execution_status: planned
-    contract: "planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md#Milestone-M03--Multi-cycle-retention-harness-and-pre-live-proof"
+    execution_status: ready
+    contract: "planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md#Milestone-M03--Multi-cycle-orchestration-and-retention-evidence"
     checkpoint: null
     implementation_head: null
     handoff: null
@@ -86,6 +86,20 @@ cards:
     evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M02-T02.md"
     tests_summary: "Exact subject a6a580f GREEN: bash -n changed shell files; BUILDKIT_CACHE_TESTS_GREEN; UPDATE_ORCHESTRATION_TESTS_GREEN; SOURCE_VALIDATION_GREEN; git diff --check and prohibited global/default cleanup guards GREEN; no live Docker/BuildKit mutation"
     independent_review: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  - id: "M03-T01"
+    contract: "implementation/workstreams/change-workstation-docker-retention/cards/M03-T01.md"
+    execution_status: ready
+    dependencies: ["M02-T02"]
+    executor: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    independent_review: RECOMMENDED
     review_state: null
     review_subject: null
     review_evidence: null
