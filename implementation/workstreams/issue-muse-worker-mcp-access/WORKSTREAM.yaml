@@ -14,6 +14,11 @@ intake:
   state: complete
   record: "implementation/workstreams/issue-muse-worker-mcp-access/INTAKE.md"
 
+routing:
+  exploratory_scope: null
+  research_obligation: null
+  plan_review: "planning/reviews/muse-worker-capability-plane-R2.md"
+
 task_board: null
 
 authority:
