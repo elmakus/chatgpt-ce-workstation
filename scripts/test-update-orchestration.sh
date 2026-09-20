@@ -152,6 +152,19 @@ run_case() (
     fi
     return 0
   }
+  cleanup_workstation_build_cache() {
+    BUILD_CACHE_CLEANUP_BUILDER="chatgpt-ce-workstation"
+    BUILD_CACHE_CLEANUP_MAX_USED_SPACE="24gb"
+    BUILD_CACHE_CLEANUP_RESERVED_SPACE="8gb"
+    if [[ "$scenario" == cache_cleanup_fail ]]; then
+      BUILD_CACHE_CLEANUP_STATUS="warning"
+      trace_line "cache-cleanup:warning"
+      return 1
+    fi
+    BUILD_CACHE_CLEANUP_STATUS="success"
+    trace_line "cache-cleanup:success"
+    return 0
+  }
   restore_keyring_migration_backup() {
     trace_line "keyring-restore"
     return 0
@@ -225,6 +238,10 @@ run_case() (
       while IFS= read -r cleanup_ref; do
         [[ -n "$cleanup_ref" ]] && trace_line "cleanup-failed:$cleanup_ref"
       done <<< "${IMAGE_CLEANUP_FAILED_REFS:-}"
+      trace_line "cache-status:${BUILD_CACHE_CLEANUP_STATUS:-}"
+      trace_line "cache-builder:${BUILD_CACHE_CLEANUP_BUILDER:-}"
+      trace_line "cache-max:${BUILD_CACHE_CLEANUP_MAX_USED_SPACE:-}"
+      trace_line "cache-reserved:${BUILD_CACHE_CLEANUP_RESERVED_SPACE:-}"
     fi
     if [[ "$1" == rollback_failed ]]; then
       trace_line "recovery-evidence:${8:-}:${9:-}:${10:-}:${11:-}:${12:-}"
@@ -292,6 +309,11 @@ run_case() (
       assert_trace "cleanup-removed:example/workstation:candidate-old"
       assert_trace "cleanup-removed:example/workstation:rollback-4444444444444444"
       assert_no_trace_prefix 'remove-ref:example/other:'
+      assert_order "cleanup-inventory:example/workstation" "cache-cleanup:success"
+      assert_trace "cache-status:success"
+      assert_trace "cache-builder:chatgpt-ce-workstation"
+      assert_trace "cache-max:24gb"
+      assert_trace "cache-reserved:8gb"
       assert_trace "evidence:success:"
       assert_no_trace_prefix 'recreate:rollback-'
       ;;
@@ -301,6 +323,16 @@ run_case() (
       assert_trace "cleanup-status:warning"
       assert_trace "cleanup-removed:example/workstation:candidate-old"
       assert_trace "cleanup-failed:example/workstation:rollback-4444444444444444"
+      assert_trace "cache-cleanup:success"
+      assert_trace "cache-status:success"
+      assert_trace "evidence:success:"
+      assert_no_trace_prefix 'recreate:rollback-'
+      ;;
+    cache_cleanup_fail)
+      assert_trace "recreate:candidate-test"
+      assert_order "verify:$fixture_candidate_id" "cache-cleanup:warning"
+      assert_trace "cleanup-status:success"
+      assert_trace "cache-status:warning"
       assert_trace "evidence:success:"
       assert_no_trace_prefix 'recreate:rollback-'
       ;;
@@ -355,9 +387,10 @@ run_case() (
       ;;
   esac
 
-  if [[ "$scenario" != success && "$scenario" != cleanup_fail ]]; then
+  if [[ "$scenario" != success && "$scenario" != cleanup_fail && "$scenario" != cache_cleanup_fail ]]; then
     assert_no_trace_prefix 'cleanup-inventory:'
     assert_no_trace_prefix 'remove-ref:'
+    assert_no_trace_prefix 'cache-cleanup:'
   fi
 )
 
@@ -368,6 +401,7 @@ run_case build_fail 1
 run_case readback_fail 1
 run_case success 0
 run_case cleanup_fail 0
+run_case cache_cleanup_fail 0
 run_case promotion_fail 1
 run_case promoted_mismatch 1
 run_case health_fail 1
@@ -423,6 +457,10 @@ test_retention_evidence_serialization() (
   IMAGE_CLEANUP_RETAINED_REFS="$(printf '%s\n%s' "example/workstation:candidate-test" "example/workstation:rollback-1111111111111111")"
   IMAGE_CLEANUP_REMOVED_REFS="example/workstation:candidate-old"
   IMAGE_CLEANUP_FAILED_REFS="example/workstation:rollback-4444444444444444"
+  BUILD_CACHE_CLEANUP_STATUS="warning"
+  BUILD_CACHE_CLEANUP_BUILDER="chatgpt-ce-workstation"
+  BUILD_CACHE_CLEANUP_MAX_USED_SPACE="24gb"
+  BUILD_CACHE_CLEANUP_RESERVED_SPACE="8gb"
 
   write_evidence \
     "success" "" \
@@ -449,14 +487,34 @@ assert cleanup["retained"]["count"] == 2
 assert cleanup["removed"]["refs"] == ["example/workstation:candidate-old"]
 assert cleanup["failed"]["refs"] == ["example/workstation:rollback-4444444444444444"]
 assert cleanup["retained"]["truncated"] is False
+build_cache = retention["build_cache_cleanup"]
+assert build_cache == {
+    "status": "warning",
+    "builder": "chatgpt-ce-workstation",
+    "driver": "docker-container",
+    "max_used_space": "24gb",
+    "reserved_space": "8gb",
+}
 PY
 )
 
 test_no_global_image_prune_or_force_delete() {
-  if grep -Eq 'docker[[:space:]]+(system|image)[[:space:]]+prune' "$REPO_ROOT/scripts/update.sh"; then
+  if grep -Eq 'docker[[:space:]]+(system|image)[[:space:]]+prune' "$REPO_ROOT/scripts/update.sh" "$REPO_ROOT/scripts/buildkit-cache.sh"; then
     echo "global Docker prune is forbidden" >&2
     exit 1
   fi
+  if grep -Eq 'docker[[:space:]]+builder[[:space:]]+prune' "$REPO_ROOT/scripts/update.sh" "$REPO_ROOT/scripts/buildkit-cache.sh"; then
+    echo "default Docker builder prune is forbidden" >&2
+    exit 1
+  fi
+  if grep -Eq 'docker[[:space:]]+buildx[[:space:]]+use' "$REPO_ROOT/scripts/build.sh" "$REPO_ROOT/scripts/buildkit-cache.sh"; then
+    echo "global Buildx builder selection is forbidden" >&2
+    exit 1
+  fi
+  grep -F 'docker buildx prune' "$REPO_ROOT/scripts/buildkit-cache.sh" >/dev/null \
+    || { echo "scoped Buildx prune is missing" >&2; exit 1; }
+  grep -F -- '--builder "$name"' "$REPO_ROOT/scripts/buildkit-cache.sh" >/dev/null \
+    || { echo "Buildx prune is not explicitly builder-scoped" >&2; exit 1; }
   if grep -Eq 'docker[[:space:]]+image[[:space:]]+rm[^#]*(--force|[[:space:]]-f([[:space:]]|$))' "$REPO_ROOT/scripts/update.sh"; then
     echo "forced Docker image deletion is forbidden" >&2
     exit 1
