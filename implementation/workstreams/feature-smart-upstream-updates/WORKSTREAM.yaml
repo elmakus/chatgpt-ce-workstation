@@ -1,6 +1,6 @@
 id: "feature-smart-upstream-updates"
 kind: "feature"
-status: "discovery"
+status: "planning"
 
 branch: "feat/smart-upstream-updates"
 base_ref: "elmakus/chatgpt-ce-workstation@04fb32a47b5bcfbfcf16f6fb77bffbe2a7282acf"
@@ -17,7 +17,7 @@ intake:
 task_board: null
 
 authority:
-  requirements: null
+  requirements: "requirements/SMART_UPSTREAM_UPDATES.md"
   decisions:
     - "docs/DECISIONS.md#D2"
     - "docs/DECISIONS.md#D4"
@@ -27,6 +27,7 @@ authority:
     - "docs/DECISIONS.md#D11"
     - "docs/DECISIONS.md#D15"
     - "docs/DECISIONS.md#D16"
+    - "docs/DECISIONS.md#D24"
   plan: null
 
 review:
