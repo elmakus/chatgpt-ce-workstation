@@ -1,0 +1,41 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "issue-muse-worker-mcp-access"
+plan_revision: "muse-worker-capability-plane-R2"
+current_milestone: "M01"
+
+execution_ref:
+  branch: "fix/muse-worker-mcp-access"
+  pr: null
+  head: null
+
+research_obligation: null
+
+milestones:
+  M01:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/MUSE_WORKER_CAPABILITY_PLANE_PLAN.md#milestone-m01--workstation-side-capability-substrate-contract"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: "M01-T01"
+    title: "Reconcile Muse capability substrate and persistence guards"
+    milestone: "M01"
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: []
+    contract: "implementation/workstreams/issue-muse-worker-mcp-access/cards/M01-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null

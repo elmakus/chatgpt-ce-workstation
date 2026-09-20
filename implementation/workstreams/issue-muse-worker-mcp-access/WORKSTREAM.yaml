@@ -1,6 +1,6 @@
 id: "issue-muse-worker-mcp-access"
 kind: "issue"
-status: "planning"
+status: "ready"
 
 branch: "fix/muse-worker-mcp-access"
 base_ref: "04440574afb2d85790301c915e9d7f8c90721021"
@@ -19,7 +19,7 @@ routing:
   research_obligation: null
   plan_review: null
 
-task_board: null
+task_board: "implementation/workstreams/issue-muse-worker-mcp-access/TASK_BOARD.yaml"
 
 authority:
   requirements: "requirements/MUSE_WORKER_EXTERNAL_TOOL_ACCESS.md"
@@ -29,7 +29,7 @@ authority:
   plan: "planning/MUSE_WORKER_CAPABILITY_PLANE_PLAN.md"
 
 review:
-  requirement: null
+  requirement: "RECOMMENDED"
   state: null
   subject: null
   evidence: null
