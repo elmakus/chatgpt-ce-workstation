@@ -134,7 +134,7 @@ run_case() (
   }
   restore_keyring_migration_backup() {
     trace_line "keyring-restore"
-    return 0
+    [[ "$scenario" != keyring_restore_fail ]]
   }
   finalize_keyring_passwordless_migration() {
     trace_line "keyring-finalize"
@@ -183,6 +183,10 @@ run_case() (
   wait_healthy() {
     trace_line "wait:$active_image_id"
     if [[ "$scenario" == health_fail && "$active_image_id" == "$fixture_candidate_id" ]]; then
+      return 1
+    fi
+    if [[ "$scenario" == keyring_restore_fail && "$active_image_id" == "$fixture_candidate_id" ]]; then
+      active_health_state=unhealthy
       return 1
     fi
     if [[ "$scenario" == persistence_health_fail && "$active_image_id" == "$fixture_candidate_id" && "$candidate_recreate_count" -eq 2 ]]; then
@@ -334,6 +338,13 @@ run_case() (
       assert_trace "evidence:update_failed_rolled_back:persistence_runtime_verification_failed"
       assert_no_trace_prefix 'keyring-finalize$'
       ;;
+    keyring_restore_fail)
+      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "evidence:rollback_failed:keyring_restore_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:complete:container-test:true:unhealthy:$fixture_candidate_id"
+      assert_no_trace_prefix 'recreate:rollback-'
+      ;;
     rollback_fail)
       assert_trace "recreate:candidate-test"
       assert_trace "keyring-restore"
@@ -376,6 +387,7 @@ run_case persistence_recreate_fail 1
 run_case persistence_image_mismatch 1
 run_case persistence_health_fail 1
 run_case persistence_runtime_fail 1
+run_case keyring_restore_fail 2
 run_case rollback_fail 2
 run_case rollback_missing 2
 run_case rollback_mismatch 2
@@ -457,7 +469,76 @@ test_v2_backup_restore() (
   test ! -e "$home/.config/workstation/keyring-passwordless-v2"
 )
 
+test_v2_backup_restore_stop_failure_is_fail_closed() (
+  local tmp home keyrings backup marker
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  keyrings="$home/.local/share/keyrings"
+  backup="$home/.local/share/keyrings.pre-passwordless-v2"
+  marker="$home/.config/workstation/keyring-passwordless-v2"
+  mkdir -p "$keyrings" "$backup" "$(dirname "$marker")"
+  printf 'candidate-state' > "$keyrings/state"
+  printf 'pre-attempt-state' > "$backup/state"
+  : > "$marker"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  docker() {
+    [[ "$1" == compose && "$2" == stop && "$3" == workstation ]]
+    return 1
+  }
+
+  if restore_keyring_migration_backup; then
+    echo "expected keyring restore to fail when workstation stop fails" >&2
+    return 1
+  fi
+
+  grep -Fx 'candidate-state' "$keyrings/state" >/dev/null
+  grep -Fx 'pre-attempt-state' "$backup/state" >/dev/null
+  test -e "$marker"
+)
+
+test_v2_backup_restore_filesystem_failure_is_fail_closed() (
+  local tmp home keyrings backup marker
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  keyrings="$home/.local/share/keyrings"
+  backup="$home/.local/share/keyrings.pre-passwordless-v2"
+  marker="$home/.config/workstation/keyring-passwordless-v2"
+  mkdir -p "$keyrings" "$backup" "$(dirname "$marker")"
+  printf 'candidate-state' > "$keyrings/state"
+  printf 'pre-attempt-state' > "$backup/state"
+  : > "$marker"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  docker() {
+    [[ "$1" == compose && "$2" == stop && "$3" == workstation ]]
+  }
+  rm() {
+    if [[ "$1" == -rf && "$2" == -- && "$3" == "$keyrings" ]]; then
+      return 1
+    fi
+    command rm "$@"
+  }
+
+  if restore_keyring_migration_backup; then
+    echo "expected keyring restore to fail when candidate keyring removal fails" >&2
+    return 1
+  fi
+
+  grep -Fx 'candidate-state' "$keyrings/state" >/dev/null
+  grep -Fx 'pre-attempt-state' "$backup/state" >/dev/null
+  test ! -e "$marker"
+)
+
 test_marker_cleanup_without_backup
 test_v2_backup_restore
+test_v2_backup_restore_stop_failure_is_fail_closed
+test_v2_backup_restore_filesystem_failure_is_fail_closed
 
 echo "UPDATE_ORCHESTRATION_TESTS_GREEN"
