@@ -41,6 +41,8 @@ class FakeService:
         return self.aliases[name]
 
     def SetAlias(self, name, collection):
+        if name == "login":
+            raise FakeDBusException("Only the default alias is supported")
         self.aliases[name] = str(collection)
         self.set_calls.append((name, str(collection)))
 
@@ -49,12 +51,15 @@ class FakeService:
 
 
 class FakeInternal:
-    def __init__(self):
+    def __init__(self, service=None):
         self.calls: list[tuple] = []
         self.created = "/fresh"
+        self.service = service
 
-    def CreateWithMasterPassword(self, _attrs, _master):
-        self.calls.append(("create",))
+    def CreateWithMasterPassword(self, attrs, _master):
+        self.calls.append(("create", attrs["org.freedesktop.Secret.Collection.Label"]))
+        if self.service is not None and attrs["org.freedesktop.Secret.Collection.Label"] == "login":
+            self.service.aliases["login"] = self.created
         return self.created
 
     def UnlockWithMasterPassword(self, collection, _secret):
@@ -100,7 +105,7 @@ class HelperTests(unittest.TestCase):
             marker.write_text(helper.MARKER_PAYLOAD, encoding="utf-8")
 
         service = FakeService(*aliases)
-        internal = FakeInternal()
+        internal = FakeInternal(service)
 
         helper.service_collections = lambda _obj: ["/login", "/default", "/session"]
         helper.collection_metadata = lambda _bus, path: (
@@ -148,7 +153,7 @@ class HelperTests(unittest.TestCase):
         self.addCleanup(td.cleanup)
         root = pathlib.Path(td.name)
         service = FakeService("/", "/")
-        internal = FakeInternal()
+        internal = FakeInternal(service)
         helper.service_collections = lambda _obj: ["/session"]
         helper.collection_locked = lambda _bus, _collection: False
         result = helper.ensure_passwordless(
@@ -163,6 +168,9 @@ class HelperTests(unittest.TestCase):
         )
         self.assertEqual(result, "/fresh")
         self.assertEqual(service.aliases, {"login": "/fresh", "default": "/fresh"})
+        self.assertNotIn(("login", "/fresh"), service.set_calls)
+        self.assertIn(("default", "/fresh"), service.set_calls)
+        self.assertIn(("create", "login"), internal.calls)
 
 
 if __name__ == "__main__":
