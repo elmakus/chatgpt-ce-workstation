@@ -1,7 +1,7 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "feature-smart-upstream-updates"
 plan_revision: "smart-upstream-updates-R2"
-current_milestone: "M02"
+current_milestone: "M03"
 
 execution_ref:
   branch: "feat/smart-upstream-updates"
@@ -31,6 +31,18 @@ milestones:
     implementation_head: "35e979542815451079fbeb6f6398b70066c5a962"
     handoff: "implementation/workstreams/feature-smart-upstream-updates/handoffs/M02_HANDOFF.md"
     acceptance_evidence: "GREEN on exact integrated M01-M02 subject 35e979542815451079fbeb6f6398b70066c5a962: CI #141 and exact non-production candidate build/readback #11 GREEN; fresh independent M02-T02 review GREEN with evidence at implementation/workstreams/feature-smart-upstream-updates/evidence/M02-T02-review.md; no production write/recreate occurred."
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  M03:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m03--safe-promoteverifyrollback-updater"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
@@ -101,3 +113,36 @@ cards:
     result_pr: 7
     evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M02-T02-implementation.md"
     tests_summary: "GREEN on exact integrated M01-M02 subject 35e979542815451079fbeb6f6398b70066c5a962: CI #141 GREEN and exact candidate build #11 GREEN; candidate image sha256:ef4b0c22c261356fd1c5f1a2b9f17b935160042663149aba0e6debe83686d5a5 read back label + embedded manifest matching frozen resolution SHA-256 837043af65bd6f13793af245c6a32cc2ad6e142504afd9e9cd2b47fbc7d246d8; no production write/recreate occurred."
+
+  - id: M03-T01
+    title: "Implement exact promote/verify/rollback orchestration"
+    milestone: M03
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: ["M02-T02"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M03-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: 7
+    evidence: null
+    tests_summary: null
+  - id: M03-T02
+    title: "Prove M03 failure safety and freeze the production-activation subject"
+    milestone: M03
+    decision_state: accepted
+    execution_status: planned
+    executor: null
+    depends_on: ["M03-T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M03-T02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: 7
+    evidence: null
+    tests_summary: null
