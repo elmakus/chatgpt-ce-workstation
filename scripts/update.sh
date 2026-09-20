@@ -7,6 +7,11 @@ cd "$REPO_ROOT"
 UPDATE_EVIDENCE_FILE="${UPDATE_EVIDENCE_FILE:-$REPO_ROOT/.workstation-update/last-update.json}"
 UPDATE_WORK_DIR=""
 
+IMAGE_CLEANUP_STATUS=""
+IMAGE_CLEANUP_RETAINED_REFS=""
+IMAGE_CLEANUP_REMOVED_REFS=""
+IMAGE_CLEANUP_FAILED_REFS=""
+
 cleanup_update_work_dir() {
   if [[ -n "${UPDATE_WORK_DIR:-}" ]]; then
     rm -rf "$UPDATE_WORK_DIR"
@@ -152,6 +157,105 @@ tag_image() {
   docker image tag "$1" "$2"
 }
 
+list_image_refs() {
+  local repository="$1"
+  docker image ls "$repository" --format '{{.Repository}}|{{.Tag}}'
+}
+
+remove_image_ref() {
+  docker image rm "$1" >/dev/null
+}
+
+append_image_cleanup_ref() {
+  local var_name="$1"
+  local ref="$2"
+  local existing="${!var_name:-}"
+  local line
+
+  while IFS= read -r line; do
+    [[ "$line" == "$ref" ]] && return 0
+  done <<< "$existing"
+
+  if [[ -n "$existing" ]]; then
+    printf -v "$var_name" '%s\n%s' "$existing" "$ref"
+  else
+    printf -v "$var_name" '%s' "$ref"
+  fi
+}
+
+cleanup_workstation_image_refs() {
+  local repository="$1"
+  local current_ref="$2"
+  local current_id="$3"
+  local rollback_ref="$4"
+  local rollback_id="$5"
+  local resolved inventory repo tag ref ref_id
+  local failed=0
+
+  IMAGE_CLEANUP_STATUS="success"
+  IMAGE_CLEANUP_RETAINED_REFS=""
+  IMAGE_CLEANUP_REMOVED_REFS=""
+  IMAGE_CLEANUP_FAILED_REFS=""
+
+  resolved="$(image_id "$current_ref" || true)"
+  if [[ "$resolved" != "$current_id" ]]; then
+    IMAGE_CLEANUP_STATUS="warning"
+    append_image_cleanup_ref IMAGE_CLEANUP_FAILED_REFS "protected-current:$current_ref"
+    return 1
+  fi
+
+  resolved="$(image_id "$rollback_ref" || true)"
+  if [[ "$resolved" != "$rollback_id" ]]; then
+    IMAGE_CLEANUP_STATUS="warning"
+    append_image_cleanup_ref IMAGE_CLEANUP_FAILED_REFS "protected-rollback:$rollback_ref"
+    return 1
+  fi
+
+  append_image_cleanup_ref IMAGE_CLEANUP_RETAINED_REFS "$current_ref"
+  append_image_cleanup_ref IMAGE_CLEANUP_RETAINED_REFS "$rollback_ref"
+
+  if ! inventory="$(list_image_refs "$repository")"; then
+    IMAGE_CLEANUP_STATUS="warning"
+    append_image_cleanup_ref IMAGE_CLEANUP_FAILED_REFS "inventory:$repository"
+    return 1
+  fi
+
+  while IFS='|' read -r repo tag; do
+    [[ -n "$repo" && -n "$tag" ]] || continue
+    [[ "$repo" == "$repository" ]] || continue
+    case "$tag" in
+      candidate-*|rollback-*) ;;
+      *) continue ;;
+    esac
+
+    ref="$repo:$tag"
+    ref_id="$(image_id "$ref" || true)"
+    if [[ "$ref_id" != sha256:* ]]; then
+      append_image_cleanup_ref IMAGE_CLEANUP_FAILED_REFS "inspect:$ref"
+      failed=1
+      continue
+    fi
+
+    if [[ "$ref_id" == "$current_id" || "$ref_id" == "$rollback_id" ]]; then
+      append_image_cleanup_ref IMAGE_CLEANUP_RETAINED_REFS "$ref"
+      continue
+    fi
+
+    if remove_image_ref "$ref"; then
+      append_image_cleanup_ref IMAGE_CLEANUP_REMOVED_REFS "$ref"
+    else
+      append_image_cleanup_ref IMAGE_CLEANUP_FAILED_REFS "$ref"
+      failed=1
+    fi
+  done <<< "$inventory"
+
+  if [[ "$failed" == 1 ]]; then
+    IMAGE_CLEANUP_STATUS="warning"
+    return 1
+  fi
+  return 0
+}
+
 recreate_with_tag() {
   local tag="$1"
   IMAGE_TAG="$tag" docker compose up -d --force-recreate --no-build workstation
@@ -215,12 +319,17 @@ write_evidence() {
   local recovery_running="${10:-}"
   local recovery_health="${11:-}"
   local recovery_image_id="${12:-}"
+  local image_cleanup_status="${IMAGE_CLEANUP_STATUS:-}"
+  local image_cleanup_retained="${IMAGE_CLEANUP_RETAINED_REFS:-}"
+  local image_cleanup_removed="${IMAGE_CLEANUP_REMOVED_REFS:-}"
+  local image_cleanup_failed="${IMAGE_CLEANUP_FAILED_REFS:-}"
 
   mkdir -p "$(dirname "$UPDATE_EVIDENCE_FILE")"
   python3 - "$UPDATE_EVIDENCE_FILE" "$status" "$reason" "$resolution_sha" \
     "$candidate_ref" "$candidate_id" "$previous_id" "$rollback_ref" \
     "$recovery_readback" "$recovery_container_id" "$recovery_running" \
-    "$recovery_health" "$recovery_image_id" <<'PY'
+    "$recovery_health" "$recovery_image_id" "$image_cleanup_status" \
+    "$image_cleanup_retained" "$image_cleanup_removed" "$image_cleanup_failed" <<'PY'
 import json
 import os
 import pathlib
@@ -244,6 +353,28 @@ if any(recovery_values):
         "running": recovery_values[2] or None,
         "health": recovery_values[3] or None,
         "image_id": recovery_values[4] or None,
+    }
+
+cleanup_values = sys.argv[14:18]
+if any(cleanup_values):
+    def bounded_refs(raw, limit=64):
+        refs = [line for line in raw.splitlines() if line]
+        return {
+            "count": len(refs),
+            "refs": refs[:limit],
+            "truncated": len(refs) > limit,
+        }
+
+    payload["retention"] = {
+        "current_image_id": payload["candidate_image_id"],
+        "rollback_image_id": payload["previous_image_id"],
+        "rollback_image": payload["rollback_image"],
+        "image_cleanup": {
+            "status": cleanup_values[0] or None,
+            "retained": bounded_refs(cleanup_values[1]),
+            "removed": bounded_refs(cleanup_values[2]),
+            "failed": bounded_refs(cleanup_values[3]),
+        },
     }
 tmp = path.with_name(path.name + ".tmp")
 tmp.write_text(json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
@@ -512,6 +643,12 @@ main() {
 
   if ! finalize_keyring_passwordless_migration; then
     echo "WARNING: candidate is healthy but keyring migration cleanup was incomplete." >&2
+  fi
+
+  echo
+  echo '=== retain workstation images ==='
+  if ! cleanup_workstation_image_refs "$repository" "$candidate_ref" "$candidate_id" "$rollback_ref" "$previous_image_id"; then
+    echo "WARNING: production is verified but workstation image retention cleanup was incomplete." >&2
   fi
 
   write_evidence "success" "" "$resolution_sha" "$candidate_ref" "$candidate_id"     "$previous_image_id" "$rollback_ref"
