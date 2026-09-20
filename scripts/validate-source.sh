@@ -38,7 +38,14 @@ bash scripts/test-keyring-session-readiness.sh \
   || fail 'keyring session readiness regression tests'
 bash scripts/test-keyring-runtime-lock-check.sh \
   || fail 'keyring runtime lock-check regression tests'
-pass 'passwordless keyring v2 helper/preparation/readiness/runtime-verifier tests'
+bash scripts/test-preflight-keyring-state.sh \
+  || fail 'passwordless keyring host-preflight regression tests'
+grep -F '[[ -f "$KEYRING_SECRET_FILE" ]]' scripts/preflight-host.sh >/dev/null \
+  || fail 'host preflight does not accept the D26 empty keyring placeholder'
+if grep -F '[[ -s "$KEYRING_SECRET_FILE" ]]' scripts/preflight-host.sh >/dev/null; then
+  fail 'host preflight still requires a non-empty D26 keyring migration credential'
+fi
+pass 'passwordless keyring v2 helper/preparation/readiness/runtime-verifier/preflight tests'
 
 echo
 echo '=== managed global AGENTS reconciliation ==='
