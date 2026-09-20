@@ -522,6 +522,39 @@ main() {
     return 2
   fi
 
+  echo
+  echo '=== verify passwordless persistence after recreate ==='
+  if ! recreate_with_tag "$candidate_tag"; then
+    if rollback_after_failure "persistence_recreate_failed" "$resolution_sha" "$candidate_ref" "$candidate_id" "$previous_image_id" "$rollback_ref"; then
+      return 1
+    fi
+    return 2
+  fi
+
+  promoted_container="$(current_container_id || true)"
+  promoted_image=""
+  [[ -n "$promoted_container" ]] && promoted_image="$(container_image_id "$promoted_container" || true)"
+  if [[ "$promoted_image" != "$candidate_id" ]]; then
+    if rollback_after_failure "persistence_image_mismatch" "$resolution_sha" "$candidate_ref" "$candidate_id" "$previous_image_id" "$rollback_ref"; then
+      return 1
+    fi
+    return 2
+  fi
+
+  if ! wait_healthy; then
+    if rollback_after_failure "persistence_health_failed" "$resolution_sha" "$candidate_ref" "$candidate_id" "$previous_image_id" "$rollback_ref"; then
+      return 1
+    fi
+    return 2
+  fi
+
+  if ! verify_runtime; then
+    if rollback_after_failure "persistence_runtime_verification_failed" "$resolution_sha" "$candidate_ref" "$candidate_id" "$previous_image_id" "$rollback_ref"; then
+      return 1
+    fi
+    return 2
+  fi
+
   if ! finalize_keyring_passwordless_migration; then
     echo "WARNING: candidate is healthy but keyring migration cleanup was incomplete." >&2
   fi
