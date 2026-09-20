@@ -6,7 +6,7 @@ current_milestone: "M04"
 execution_ref:
   branch: "work/workstation-docker-retention"
   pr: null
-  head: "e4b0570adc975b6cd18d9e1ccf49bc74cb0a4662"
+  head: "f19c906ee92dbdf966bd1eff3bb125853b876ac8"
 
 research_obligation: null
 
@@ -121,14 +121,14 @@ cards:
     execution_status: in_progress
     dependencies: ["M03-T01"]
     executor: chatgpt
-    result_commit: null
+    result_commit: "f19c906ee92dbdf966bd1eff3bb125853b876ac8"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M04-T01.md"
+    tests_summary: "Exact combined subject f19c906 GREEN: RETENTION_MULTICYCLE_TESTS_GREEN; BUILDKIT_CACHE_TESTS_GREEN; UPDATE_ORCHESTRATION_TESTS_GREEN; SOURCE_VALIDATION_GREEN; bash -n, refresh diff-check vs current main and forbidden global/default prune/buildx-use/no-cache scan GREEN; no live Docker/BuildKit/keyring mutation"
     independent_review: REQUIRED
-    review_state: null
-    review_subject: null
-    review_evidence: null
+    review_state: pending
+    review_subject: "f19c906ee92dbdf966bd1eff3bb125853b876ac8"
+    review_evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M04-T01.md"
 
   - id: "M04-T02"
     contract: "implementation/workstreams/change-workstation-docker-retention/cards/M04-T02.md"
