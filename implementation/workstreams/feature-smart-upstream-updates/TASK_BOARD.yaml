@@ -5,8 +5,8 @@ current_milestone: "M01"
 
 execution_ref:
   branch: "feat/smart-upstream-updates"
-  pr: null
-  head: "f2f1630ffc6a96027bd0fbf6da89d71d447fcfa2"
+  pr: 7
+  head: "302a8b8438ff513dcd96c03b4a9262d2b34dc633"
 
 research_obligation: null
 
@@ -28,7 +28,7 @@ cards:
     title: "Build frozen-resolution framework and critical trust identities"
     milestone: M01
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     depends_on: []
     openspec_change: null
@@ -36,10 +36,10 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
-    result_pr: null
+    result_commit: "302a8b8438ff513dcd96c03b4a9262d2b34dc633"
+    result_pr: 7
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN on exact T01 subject 302a8b8: resolver fixture/unit tests through validate-source, noVNC desktop regression, ShellCheck, Dockerfile buildx static check and secret scan all passed in CI run #95; no production recreate/write performed."
   - id: M01-T02
     title: "Complete managed-upstream resolution and M01 acceptance"
     milestone: M01
