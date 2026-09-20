@@ -37,12 +37,12 @@ milestones:
 
   M03:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md#Milestone-M03--Multi-cycle-orchestration-and-retention-evidence"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
+    checkpoint: "e4b0570adc975b6cd18d9e1ccf49bc74cb0a4662"
+    implementation_head: "e4b0570adc975b6cd18d9e1ccf49bc74cb0a4662"
+    handoff: "implementation/workstreams/change-workstation-docker-retention/handoffs/M03_HANDOFF.md"
+    acceptance_evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M03-T01.md"
     review_state: null
     review_subject: null
     review_evidence: null
