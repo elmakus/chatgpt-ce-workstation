@@ -1,7 +1,7 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "change-workstation-docker-retention"
 plan_revision: "workstation-docker-retention-R1"
-current_milestone: "M03"
+current_milestone: "M04"
 
 execution_ref:
   branch: "work/workstation-docker-retention"
@@ -43,6 +43,18 @@ milestones:
     implementation_head: "e4b0570adc975b6cd18d9e1ccf49bc74cb0a4662"
     handoff: "implementation/workstreams/change-workstation-docker-retention/handoffs/M03_HANDOFF.md"
     acceptance_evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M03-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  M04:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md#Milestone-M04--Live-Unraid-verification"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
@@ -103,3 +115,32 @@ cards:
     review_state: green
     review_subject: "e4b0570adc975b6cd18d9e1ccf49bc74cb0a4662"
     review_evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M03-T01.md"
+
+  - id: "M04-T01"
+    contract: "implementation/workstreams/change-workstation-docker-retention/cards/M04-T01.md"
+    execution_status: ready
+    dependencies: ["M03-T01"]
+    executor: chatgpt
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    independent_review: REQUIRED
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  - id: "M04-T02"
+    contract: "implementation/workstreams/change-workstation-docker-retention/cards/M04-T02.md"
+    execution_status: planned
+    dependencies: ["M04-T01"]
+    executor: chatgpt
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    independent_review: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
