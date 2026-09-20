@@ -2,6 +2,7 @@
 set -Eeuo pipefail
 
 export DISPLAY="${DISPLAY:-:1}"
+keyring_session_ready="${KEYRING_SESSION_READY:-/run/workstation/keyring-session-ready}"
 
 curl -fsS --max-time 3 http://127.0.0.1:6080/vnc.html >/dev/null
 xdpyinfo -display "$DISPLAY" >/dev/null 2>&1
