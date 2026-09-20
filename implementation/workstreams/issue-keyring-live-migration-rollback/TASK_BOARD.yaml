@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/keyring-live-migration-rollback"
   pr: 13
-  head: "ef5a4b1ee0d72c2ea6a95363e90fce7fa813a417"
+  head: "8191cbbebe120b842f77b767979ee4f2202ed636"
 
 research_obligation: null
 
@@ -21,10 +21,10 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-live-migration-rollback/cards/MF-T01.md"
-    review_state: red
-    review_subject: "ef5a4b1ee0d72c2ea6a95363e90fce7fa813a417"
-    review_evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_REVIEW_4_2026-09-20.md"
-    result_commit: "ef5a4b1ee0d72c2ea6a95363e90fce7fa813a417"
+    review_state: pending
+    review_subject: "8191cbbebe120b842f77b767979ee4f2202ed636"
+    review_evidence: null
+    result_commit: "8191cbbebe120b842f77b767979ee4f2202ed636"
     result_pr: 13
-    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_ATOMIC_BACKUP_CORRECTION_2026-09-20.md"
-    tests_summary: "Exact frozen subject ef5a4b1ee0d72c2ea6a95363e90fce7fa813a417 (zero-file-diff checkpoint above tested abbca2a425fded9ef17e96a42a3d02a9aca882d4): migration prep GREEN including failed/interrupted backup retry, updater orchestration GREEN, keyring helper 6/6 GREEN, SOURCE_VALIDATION_GREEN; exact checkpoint git diff --check, bash -n changed scripts and docker buildx --check GREEN. GitHub hosted CI did not create a run after the normal PR push, so no hosted-CI result is claimed. No production mutation."
+    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_FAILCLOSED_ROLLBACK_CORRECTION_2026-09-20.md"
+    tests_summary: "Exact corrected subject 8191cbbebe120b842f77b767979ee4f2202ed636: fail-closed rollback correction + regressions; Tower detached-worktree updater orchestration GREEN, migration prep GREEN, helper 6/6 GREEN, SOURCE_VALIDATION_GREEN, git diff --check, bash -n and docker buildx --check GREEN; GitHub Actions run 35509724696 / CI #282 GREEN on exact head with source-validation, ShellCheck, desktop workarea, dockerfile-check and secret-scan all successful. No production mutation."
