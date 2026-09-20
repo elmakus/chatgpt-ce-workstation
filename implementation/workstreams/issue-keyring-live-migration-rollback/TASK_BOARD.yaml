@@ -8,7 +8,7 @@ execution_ref:
   pr: 13
   head: "35d1b9dd91287c2953c56824f91716a77c59afd7"
 
-research_obligation: null
+research_obligation: "implementation/workstreams/issue-keyring-live-migration-rollback/research/R2.md"
 
 milestones: {}
 
@@ -21,9 +21,9 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-live-migration-rollback/cards/MF-T01.md"
-    review_state: in_progress
+    review_state: red
     review_subject: "35d1b9dd91287c2953c56824f91716a77c59afd7"
-    review_evidence: null
+    review_evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_REVIEW_2_2026-09-20.md"
     result_commit: "35d1b9dd91287c2953c56824f91716a77c59afd7"
     result_pr: 13
     evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_CORRECTION_2026-09-20.md"
