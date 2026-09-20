@@ -10,7 +10,7 @@ Base: `3f117a7a69895ba305e1355e3d0a81c8c8f8892d`
 
 The workstation repeatedly asks for a GNOME keyring password even though the desktop session is intended to unlock the persistent keyring automatically when the container starts. Make the normal workstation path non-interactive without losing the persistent CE/login secret store.
 
-The operator also questioned whether a separate keyring password is needed at all. This issue does **not** remove the password/secret: accepted D14 remains in force. The password protects the persistent login keyring at rest; the defect is that additional sessions can bypass the already-unlocked desktop Secret Service and ask again.
+The operator explicitly decided on 2026-09-20 that the workstation should keep GNOME Keyring / Secret Service but use a passwordless login keyring. Decision D26 supersedes only D14's requirement for an Unraid-side keyring password. The secondary-session defect remains in scope independently.
 
 ## Baseline evidence
 
@@ -18,7 +18,7 @@ The operator also questioned whether a separate keyring password is needed at al
 - `rootfs/etc/cont-init.d/10-workstation-init` stages that secret to `/run/workstation/keyring-password` for user `codex`.
 - `scripts/container/desktop-session-inner.sh` emulates PAM login by piping the password to `gnome-keyring-daemon --login --components=secrets`, then calls `--start`.
 - Accepted D8 persists the full user home.
-- Accepted D14 requires keyring passwords to be supplied from Unraid-side secret files.
+- D26 now requires a passwordless persistent login keyring, in-place migration of existing encrypted state without deleting items or forcing a fresh CE login, and retention of one canonical desktop Secret Service session.
 
 ## Live diagnostic evidence — Tower, 2026-09-20
 
@@ -56,11 +56,11 @@ Parent dependency: none.
 
 ## Micro-fix qualification
 
-- **Root cause and intended behavior are concrete:** canonical keyring unlock works; secondary root-context D-Bus/keyring sessions are the defect. Root-context commands must not autolaunch a user-facing Secret Service against the codex persistent home/display.
-- **Bounded and low strategic risk:** fix only environment/session isolation for privileged/root execution paths; do not alter CE authentication, persistent-home topology, or container privilege boundary.
-- **No accepted requirement/architecture/product decision changes:** retain D8 persistent home and D14 Unraid-side keyring password.
-- **Acceptance is direct:** after the fix, the canonical codex login collection remains unlocked after startup and root-context non-desktop commands cannot create a second user-facing keyring session against `/home/codex`.
-- **No substantial migration/deployment strategy:** normal image rebuild/recreate is sufficient; existing keyring data/password remain valid.
+- **Root cause and intended behavior are concrete:** the canonical desktop Secret Service must remain the only user-facing keyring session; its persistent login keyring must become passwordless under D26.
+- **Bounded change:** preserve D8 persistent home, CE authentication data and Docker isolation; change only keyring master-password lifecycle, one-time migration and D-Bus session isolation.
+- **Accepted authority is explicit:** D26 records the operator's security trade-off and supersedes only the keyring-password clause of D14.
+- **Acceptance is direct:** existing keyring items survive an in-place migration to an empty master password; fresh installations never ask for a keyring password; the canonical login collection is available without unlock prompts; non-desktop/root processes cannot autolaunch a competing Secret Service.
+- **Migration is bounded:** one versioned, fail-closed migration with backup/recovery evidence is sufficient; no schema or project-data migration is involved.
 
 Path: `micro_fix`
 Next route: `execution_prep:micro_fix`
