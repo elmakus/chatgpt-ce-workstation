@@ -5,7 +5,7 @@ current_milestone: "CMAU-M03"
 
 execution_ref:
   branch: "feat/codex-marketplace-auto-update"
-  pr: null
+  pr: 8
   head: "d63d9a337262a2b821ecfdbebdf6a91fc1113993"
 
 research_obligation: null
