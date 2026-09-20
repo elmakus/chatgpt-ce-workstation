@@ -204,5 +204,254 @@ class ResolverTests(unittest.TestCase):
         )
 
 
+    def test_apt_metadata_uses_signed_ubuntu_indexes_and_chrome_package_hash(self):
+        ubuntu = {
+            "family": "ubuntu:24.04",
+            "identity": "sha256:" + "8" * 64,
+        }
+        output = """__UBUNTU_INRELEASE__
+archive_InRelease\taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+security_InRelease\tbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+__CHROME_KEY__
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+__CHROME_CANDIDATE__
+145.0.7632.75-1
+__CHROME_RECORDS__
+Package: google-chrome-stable
+Version: 145.0.7632.75-1
+Architecture: amd64
+Filename: pool/main/g/google-chrome-stable/google-chrome-stable_145.0.7632.75-1_amd64.deb
+Size: 123456789
+SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+"""
+        calls = []
+
+        def fake_runner(argv):
+            calls.append(list(argv))
+            return output
+
+        ubuntu_packages, chrome = resolver.resolve_apt_metadata(
+            ubuntu, fake_runner
+        )
+        self.assertEqual(
+            calls[0][4], "ubuntu:24.04@sha256:" + "8" * 64
+        )
+        self.assertEqual(
+            ubuntu_packages["provenance"], "ubuntu-apt-signed-inrelease"
+        )
+        self.assertEqual(chrome["version"], "145.0.7632.75-1")
+        self.assertEqual(chrome["package_sha256"], "d" * 64)
+        self.assertEqual(chrome["signing_key_sha256"], "c" * 64)
+
+    def test_agent_workspace_uses_latest_npm_integrity(self):
+        payload = {
+            "dist-tags": {"latest": "0.3.3"},
+            "versions": {
+                "0.3.3": {
+                    "dist": {
+                        "integrity": "sha512-AbCdEf==",
+                        "shasum": "a" * 40,
+                    }
+                }
+            },
+        }
+
+        def fetcher(_url):
+            return json.dumps(payload).encode()
+
+        result = resolver.resolve_agent_workspace(None, fetcher)
+        self.assertEqual(result["version"], "0.3.3")
+        self.assertEqual(result["identity"], "0.3.3@sha512-AbCdEf==")
+        self.assertFalse(result["override"])
+
+    def test_agent_workspace_override_is_explicit(self):
+        payload = {
+            "dist-tags": {"latest": "0.3.3"},
+            "versions": {
+                "0.3.2": {
+                    "dist": {
+                        "integrity": "sha512-Override==",
+                        "shasum": "b" * 40,
+                    }
+                }
+            },
+        }
+        result = resolver.resolve_agent_workspace(
+            "0.3.2", lambda _url: json.dumps(payload).encode()
+        )
+        self.assertEqual(result["version"], "0.3.2")
+        self.assertTrue(result["override"])
+
+    def test_s6_release_binds_both_asset_hashes(self):
+        release = {
+            "tag_name": "v3.2.3.2",
+            "draft": False,
+            "prerelease": False,
+            "assets": [
+                {
+                    "name": "s6-overlay-noarch.tar.xz",
+                    "digest": "sha256:" + "1" * 64,
+                    "browser_download_url": "https://example.invalid/noarch",
+                },
+                {
+                    "name": "s6-overlay-x86_64.tar.xz",
+                    "digest": "sha256:" + "2" * 64,
+                    "browser_download_url": "https://example.invalid/x86",
+                },
+            ],
+        }
+        result = resolver.resolve_s6_overlay(
+            None, lambda _url: json.dumps(release).encode()
+        )
+        self.assertEqual(result["version"], "3.2.3.2")
+        self.assertEqual(
+            result["assets"]["s6-overlay-noarch.tar.xz"], "1" * 64
+        )
+        self.assertFalse(result["override"])
+
+    def test_codex_web_gpt_uses_upstream_checksums_contract(self):
+        version = "9.9.9"
+        asset = f"codex-web-gpt-{version}-linux-x64.AppImage"
+        release = {
+            "tag_name": f"v{version}",
+            "draft": False,
+            "prerelease": False,
+            "assets": [
+                {
+                    "name": asset,
+                    "browser_download_url": "https://example.invalid/app",
+                },
+                {
+                    "name": "checksums.txt",
+                    "browser_download_url": "https://example.invalid/checksums",
+                },
+            ],
+        }
+
+        def fetcher(url):
+            if url.endswith("/releases/latest"):
+                return json.dumps(release).encode()
+            if url == "https://example.invalid/checksums":
+                return f'{"3" * 64}  {asset}\n'.encode()
+            raise AssertionError(url)
+
+        result = resolver.resolve_codex_web_gpt(None, fetcher)
+        self.assertEqual(result["version"], version)
+        self.assertEqual(result["package_sha256"], "3" * 64)
+        self.assertEqual(
+            result["provenance"], "github-stable-release-checksums"
+        )
+
+    def test_muse_uses_stable_channel_and_installer_hash(self):
+        installer = b"#!/bin/sh\necho muse\n"
+        channel = {
+            "channel": "muse-stable",
+            "version": "1.1.1-R2514.1",
+            "state": "public",
+        }
+
+        def fetcher(url):
+            if url == resolver.DEFAULT_MUSE_INSTALLER_URL:
+                return installer
+            if url == resolver.DEFAULT_MUSE_CHANNEL_URL:
+                return json.dumps(channel).encode()
+            raise AssertionError(url)
+
+        result = resolver.resolve_muse_code(
+            resolver.DEFAULT_MUSE_INSTALLER_URL, None, fetcher
+        )
+        self.assertEqual(result["version"], "1.1.1-R2514.1")
+        self.assertEqual(
+            result["installer_sha256"], resolver.sha256_bytes(installer)
+        )
+        self.assertFalse(result["override"])
+
+    def test_muse_installer_override_must_match(self):
+        installer = b"installer"
+        channel = {
+            "channel": "muse-stable",
+            "version": "1.2.3-R4.5",
+            "state": "public",
+        }
+
+        def fetcher(url):
+            if url == resolver.DEFAULT_MUSE_INSTALLER_URL:
+                return installer
+            return json.dumps(channel).encode()
+
+        with self.assertRaises(resolver.ResolutionError):
+            resolver.resolve_muse_code(
+                resolver.DEFAULT_MUSE_INSTALLER_URL,
+                "0" * 64,
+                fetcher,
+            )
+
+    def test_rust_stable_verifies_manifest_checksum_and_exact_version(self):
+        manifest = b'''manifest-version = "2"\ndate = "2026-09-20"\n\n[pkg.rust]\nversion = "1.90.0 (abcdef123 2026-09-18)"\n'''
+        digest = resolver.sha256_bytes(manifest)
+        installer = b"rustup installer"
+
+        def fetcher(url):
+            if url == resolver.DEFAULT_RUST_MANIFEST_URL:
+                return manifest
+            if url == resolver.DEFAULT_RUST_MANIFEST_URL + ".sha256":
+                return f"{digest}  channel-rust-stable.toml\n".encode()
+            if url == resolver.DEFAULT_RUST_INSTALLER_URL:
+                return installer
+            raise AssertionError(url)
+
+        result = resolver.resolve_rust_stable(fetcher)
+        self.assertEqual(result["version"], "1.90.0")
+        self.assertEqual(result["channel_manifest_sha256"], digest)
+        self.assertEqual(
+            result["installer_sha256"], resolver.sha256_bytes(installer)
+        )
+
+    def test_all_component_overrides_are_listed_and_component_changes_are_local(self):
+        ubuntu = {
+            "family": "ubuntu:24.04",
+            "identity": "sha256:" + "4" * 64,
+            "override": True,
+            "provenance": "explicit-override",
+        }
+        ce = {
+            "repository": "https://example.invalid/ce.git",
+            "ref": "main",
+            "identity": "5" * 40,
+            "override": False,
+            "provenance": "git-ls-remote",
+        }
+        openai = {
+            "identity": "1.0@sha256:" + "6" * 64,
+            "override": False,
+        }
+        extras = {
+            "agent_workspace": {
+                "identity": "0.3.3@sha512-x",
+                "override": True,
+            },
+            "rust": {
+                "identity": "1.90.0@sha256:" + "7" * 64,
+                "override": False,
+            },
+        }
+        first = resolver.build_resolution(ubuntu, ce, openai, extras)
+        self.assertEqual(
+            first["overrides"], ["agent_workspace", "ubuntu_base"]
+        )
+        changed_extras = json.loads(json.dumps(extras))
+        changed_extras["rust"]["identity"] = "1.91.0@sha256:" + "8" * 64
+        second = resolver.build_resolution(
+            ubuntu, ce, openai, changed_extras
+        )
+        self.assertEqual(
+            first["components"]["agent_workspace"],
+            second["components"]["agent_workspace"],
+        )
+        self.assertNotEqual(
+            first["components"]["rust"], second["components"]["rust"]
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
