@@ -92,7 +92,7 @@ cards:
 
   - id: "M03-T01"
     contract: "implementation/workstreams/change-workstation-docker-retention/cards/M03-T01.md"
-    execution_status: in_progress
+    execution_status: done
     dependencies: ["M02-T02"]
     executor: chatgpt
     result_commit: "e4b0570adc975b6cd18d9e1ccf49bc74cb0a4662"
