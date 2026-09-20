@@ -9,7 +9,9 @@ export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/runtime-codex}"
 
 vnc_auth_file="${VNC_AUTH_FILE:-/home/codex/.config/workstation/vnc.pass}"
 novnc_port="${NOVNC_PORT:-6080}"
-keyring_migration_password_file="${KEYRING_MIGRATION_PASSWORD_FILE:-/run/workstation/keyring-migration-password}"\nkeyring_marker="${KEYRING_PASSWORDLESS_MARKER:-/home/codex/.config/workstation/keyring-passwordless-v1}"\nkeyring_backup="${KEYRING_PASSWORDLESS_BACKUP:-/home/codex/.local/share/keyrings.pre-passwordless-v1}"
+keyring_migration_password_file="${KEYRING_MIGRATION_PASSWORD_FILE:-/run/workstation/keyring-migration-password}"
+keyring_marker="${KEYRING_PASSWORDLESS_MARKER:-/home/codex/.config/workstation/keyring-passwordless-v1}"
+keyring_backup="${KEYRING_PASSWORDLESS_BACKUP:-/home/codex/.local/share/keyrings.pre-passwordless-v1}"
 
 pids=()
 cleanup() {
