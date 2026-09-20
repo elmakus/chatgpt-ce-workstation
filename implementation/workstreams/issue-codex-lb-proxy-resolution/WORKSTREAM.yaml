@@ -1,0 +1,42 @@
+id: "issue-codex-lb-proxy-resolution"
+kind: "issue"
+status: "in_progress"
+
+branch: "fix/codex-lb-proxy-resolution"
+base_ref: "elmakus/chatgpt-ce-workstation@04440574afb2d85790301c915e9d7f8c90721021"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: "complete"
+  record: "implementation/workstreams/issue-codex-lb-proxy-resolution/INTAKE.md"
+
+task_board: "implementation/workstreams/issue-codex-lb-proxy-resolution/TASK_BOARD.yaml"
+
+authority:
+  requirements: null
+  decisions:
+    - "docs/DECISIONS.md#D10"
+    - "docs/DECISIONS.md#D11"
+    - "docs/DECISIONS.md#D15"
+    - "docs/DECISIONS.md#D25"
+  plan: null
+
+review:
+  requirement: "RECOMMENDED"
+  state: "green"
+  subject: "elmakus/codex-chatgpt-web@0b2336dd01520c7a33699a6d90a290b108bebd42"
+  evidence: "implementation/workstreams/issue-codex-lb-proxy-resolution/evidence/MF_T01_INDEPENDENT_REVIEW_2026-09-20.md"
+  covered_by: "task_board:MF-T01"
+
+branch_cleanup:
+  state: null
+  ref: null
+  verified_head: null
+  evidence: null
+
+pr: 10
+result: null
