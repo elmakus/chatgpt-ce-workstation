@@ -197,7 +197,7 @@ cards:
     title: "Accept native multi_agent normalization without weakening ownership"
     milestone: M04
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     depends_on: ["M04-T01-C01"]
     openspec_change: null
