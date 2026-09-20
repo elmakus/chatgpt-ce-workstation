@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "fix/muse-worker-mcp-access"
   pr: null
-  head: "8d03396a69ba41025ac3fd309f153fa747a8844a"
+  head: "f175bbdcab094c8daa9d3a27ce05bd3caeff231d"
 
 research_obligation: null
 
@@ -16,7 +16,7 @@ milestones:
     execution_status: in_progress
     contract: "planning/MUSE_WORKER_CAPABILITY_PLANE_PLAN.md#milestone-m01--workstation-side-capability-substrate-contract"
     checkpoint: null
-    implementation_head: null
+    implementation_head: "f175bbdcab094c8daa9d3a27ce05bd3caeff231d"
     handoff: null
     acceptance_evidence: null
     review_state: null
@@ -32,10 +32,10 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-muse-worker-mcp-access/cards/M01-T01.md"
-    review_state: null
-    review_subject: null
+    review_state: pending
+    review_subject: "elmakus/chatgpt-ce-workstation@f175bbdcab094c8daa9d3a27ce05bd3caeff231d"
     review_evidence: null
-    result_commit: null
+    result_commit: "f175bbdcab094c8daa9d3a27ce05bd3caeff231d"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/issue-muse-worker-mcp-access/evidence/M01_T01_CAPABILITY_SUBSTRATE_2026-09-20.md"
+    tests_summary: "GREEN on exact implementation subject f175bbdcab094c8daa9d3a27ce05bd3caeff231d: bash -n validate/runtime scripts; git diff --check; SOURCE_VALIDATION_GREEN including 9/9 managed-AGENTS fixtures and 14/14 marketplace-updater tests; targeted readback confirms persistent /home/codex, Muse wrapper HOME inheritance, runtime HOME assertion, capability-owner docs, and no Muse admin runbook in global AGENTS. No live Muse capability/auth/user-skill or production mutation."
