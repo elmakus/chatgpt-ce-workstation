@@ -94,9 +94,9 @@ cards:
     depends_on: ["M02-T01"]
     openspec_change: null
     contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M02-T02.md"
-    review_state: in_progress
+    review_state: green
     review_subject: "35e979542815451079fbeb6f6398b70066c5a962"
-    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M02-T02-implementation.md"
+    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M02-T02-review.md"
     result_commit: "35e979542815451079fbeb6f6398b70066c5a962"
     result_pr: 7
     evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M02-T02-implementation.md"
