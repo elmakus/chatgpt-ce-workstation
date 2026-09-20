@@ -7,7 +7,17 @@ Review subject: elmakus/chatgpt-ce-workstation@8c626fa8add01eed45c018aec6f17fbf3
 Reviewed plan: planning/MUSE_WORKER_CAPABILITY_PLANE_PLAN.md
 Review evidence: pending
 
-## Review scope
+## Disposition
+
+This review subject was superseded **before independent review began**.
+
+No GREEN/RED verdict was issued.
+
+The accepted cross-repository architecture subsequently established structured per-invocation `MuseCapabilityHints` owned by `elmakus/codex_workflow`, making the R1 execution assumption about text-only task-capsule guidance stale.
+
+Active planning moved to `muse-worker-capability-plane-R2`. This R1 record is retained as historical evidence of the abandoned review handoff and must not be used as the active plan-review locator.
+
+## Original review scope
 
 Independently review the exact immutable plan subject above against:
 
@@ -17,17 +27,4 @@ Independently review the exact immutable plan subject above against:
 - `research/MUSE_WORKER_SKILL_PLANE_2026-09-20.md`;
 - existing Workstation persistence/security boundaries only as needed to validate feasibility and safety.
 
-Audit especially whether the plan:
-
-- keeps Muse MCP/auth state in the Muse harness rather than fabricating Main inheritance;
-- preserves the secret boundary and real least-privilege enforcement;
-- uses one shared persistent skill catalog without weakening Executor/Tester independence;
-- avoids unnecessary per-role homes/catalogs and avoids an unnecessary Main capability broker;
-- avoids silently expanding this Workstation issue into an untracked `codex_workflow` API change;
-- keeps arbitrary third-party skills out of the image unless separately accepted;
-- provides a practical live validation path for direct MCP reuse and shared-skill use;
-- keeps live persistent-user/auth changes behind explicit user authorization;
-- preserves D21 worker/session behavior and non-`muse-max` profiles;
-- maps all approved requirements to executable milestones without freezing secrets/private endpoints or premature implementation detail.
-
-A GREEN verdict allows the plan to be approved and routed to Execution Prep for M01. A RED verdict must identify whether correction belongs to Planning, Project Definition or Research.
+The original R1 scope is historical only. Review the active R2 record instead.
