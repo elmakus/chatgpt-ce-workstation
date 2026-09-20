@@ -1,7 +1,7 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "feature-codex-marketplace-auto-update"
 plan_revision: "CMAU-R1"
-current_milestone: "CMAU-M01"
+current_milestone: "CMAU-M02"
 
 execution_ref:
   branch: "feat/codex-marketplace-auto-update"
@@ -19,6 +19,18 @@ milestones:
     implementation_head: "15b399ad0bdaf7ed843039be7e402cd75796352b"
     handoff: "implementation/workstreams/feature-codex-marketplace-auto-update/handoffs/CMAU-M01_HANDOFF.md"
     acceptance_evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M01-acceptance.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  CMAU-M02:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m02--s6image-integration"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
@@ -44,3 +56,26 @@ cards:
     result_pr: null
     evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M01-T01-implementation-2.md"
     tests_summary: "GREEN: Python compile check and 14/14 deterministic scheduler tests passed, including post-replace directory-fsync commit-point regression; immutable GitHub source/test/validation wiring read back. Full repository source validation remains unavailable on this execution surface."
+
+  - id: CMAU-M02-T01
+    title: "s6/image integration for marketplace updater"
+    milestone: CMAU-M02
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on:
+      - "CMAU-M01-T01"
+    openspec_change: null
+    contract: "implementation/workstreams/feature-codex-marketplace-auto-update/cards/CMAU-M02-T01.md"
+    authority_refs:
+      - "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m02--s6image-integration"
+      - "requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md"
+      - "docs/DECISIONS.md#d24--global-codex-marketplace-refresh-uses-one-persistent-s6-timer"
+      - "implementation/workstreams/feature-codex-marketplace-auto-update/handoffs/CMAU-M01_HANDOFF.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
