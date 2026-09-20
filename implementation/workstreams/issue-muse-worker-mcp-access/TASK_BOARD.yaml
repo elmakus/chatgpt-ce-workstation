@@ -32,7 +32,7 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-muse-worker-mcp-access/cards/M01-T01.md"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/chatgpt-ce-workstation@f175bbdcab094c8daa9d3a27ce05bd3caeff231d"
     review_evidence: null
     result_commit: "f175bbdcab094c8daa9d3a27ce05bd3caeff231d"
