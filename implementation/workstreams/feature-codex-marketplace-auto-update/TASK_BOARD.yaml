@@ -6,14 +6,14 @@ current_milestone: "CMAU-M01"
 execution_ref:
   branch: "feat/codex-marketplace-auto-update"
   pr: null
-  head: null
+  head: "82337521b64219e888b58c7caabe78712e16e1e0"
 
 research_obligation: null
 
 milestones:
   CMAU-M01:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m01--deterministic-scheduler-core"
     checkpoint: null
     implementation_head: null
@@ -28,8 +28,8 @@ cards:
     title: "Deterministic marketplace updater core"
     milestone: CMAU-M01
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on: []
     openspec_change: null
     contract: "implementation/workstreams/feature-codex-marketplace-auto-update/cards/CMAU-M01-T01.md"
