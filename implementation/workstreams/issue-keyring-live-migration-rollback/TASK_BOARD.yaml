@@ -8,7 +8,7 @@ execution_ref:
   pr: 13
   head: "789fc358139a73a8bed8aaa38813157853df8b75"
 
-research_obligation: null
+research_obligation: "implementation/workstreams/issue-keyring-live-migration-rollback/research/R3.md"
 
 milestones: {}
 
@@ -26,5 +26,5 @@ cards:
     review_evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_REVIEW_6_2026-09-20.md"
     result_commit: "789fc358139a73a8bed8aaa38813157853df8b75"
     result_pr: 13
-    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_SESSION_READINESS_CORRECTION_2026-09-20.md"
-    tests_summary: "Exact corrected subject 789fc358139a73a8bed8aaa38813157853df8b75: keyring per-session readiness regression GREEN, migration prep GREEN, helper 6/6 GREEN, updater orchestration GREEN, SOURCE_VALIDATION_GREEN, git diff --check, bash -n and docker buildx --check GREEN; GitHub Actions run 35511110522 / CI #283 GREEN on exact subject with source-validation/noVNC/ShellCheck, dockerfile-check and secret-scan successful. Prior authorized Tower retry of 8191cbb... failed strict keyring runtime verification but rollback restored exact prior image with ROLLBACK_RUNTIME_GREEN; no second production retry after correction."
+    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_LIVE_RETRY_2_FAILURE_2026-09-20.md"
+    tests_summary: "Exact reviewed subject 789fc358139a73a8bed8aaa38813157853df8b75 remained source/CI GREEN. Explicitly authorized Tower retry 2 built/promoted exact candidate c4f4028d...; Docker health reached healthy but strict runtime verification again failed because canonical login collection was locked. Automatic rollback restored exact prior image ea264b43... with ROLLBACK_RUNTIME_GREEN. Acceptance 10 remains unmet; Research R3 owns diagnosis before another correction/retry."
