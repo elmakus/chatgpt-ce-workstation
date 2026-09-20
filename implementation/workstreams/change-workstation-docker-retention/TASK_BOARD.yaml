@@ -1,0 +1,36 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "change-workstation-docker-retention"
+plan_revision: "workstation-docker-retention-R1"
+current_milestone: "M01"
+
+execution_ref:
+  branch: "work/workstation-docker-retention"
+  pr: null
+  head: null
+
+research_obligation: null
+
+milestones:
+  M01:
+    execution_status: ready
+    result_commit: null
+    evidence: null
+    tests_summary: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: "M01-T01"
+    contract: "implementation/workstreams/change-workstation-docker-retention/cards/M01-T01.md"
+    execution_status: ready
+    dependencies: []
+    executor: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    independent_review: RECOMMENDED
+    review_state: null
+    review_subject: null
+    review_evidence: null
