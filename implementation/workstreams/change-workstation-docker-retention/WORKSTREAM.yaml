@@ -29,7 +29,7 @@ authority:
   plan: "planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md"
 
 review:
-  requirement: null
+  requirement: RECOMMENDED
   state: null
   subject: null
   evidence: null
