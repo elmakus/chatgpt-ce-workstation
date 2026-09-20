@@ -6,86 +6,62 @@ Date: 2026-09-20
 
 ## Problem
 
-Muse workers in `muse-max` are separate Muse Code sessions. They do not automatically inherit the Codex Main session's MCP servers, ChatGPT connectors, authenticated app sessions, or tool authorization context.
+Muse workers in `muse-max` are separate Muse Code sessions. They do not inherit the Codex Main session's live MCP/connectors/tool objects.
 
-This becomes material when a Muse `investigator`, Executor, or Tester needs evidence or an operation from an external system such as GitHub, Home Assistant, another remote MCP server, or a private service.
+This becomes material when a Muse investigator, Executor, or Tester needs GitHub, Home Assistant or another external service.
 
 ## Verified baseline
 
 - Accepted D21 keeps Codex Main as orchestrator and Muse workers as leaf logical sessions.
-- Current `elmakus/codex_workflow@main:codex_workflow/runtime/muse_worker.py` launches `muse exec` with a bounded task capsule, workspace, output schema, and Muse session identity. It has no Main-to-Muse connector/MCP inheritance contract.
-- Muse Code 1.3.0 can load MCP servers from user `settings.json` and trusted-project `.mcp.json`.
-- Muse Code can authenticate streamable-HTTP MCP servers with its own OAuth store.
-- Muse Code 1.3.0 accepts `enabled_tools` / `disabled_tools` fields but does not enforce them, so native per-tool filtering cannot currently be treated as a security boundary.
-- Current worker invocation uses `--trust-workspace`; therefore repository `.mcp.json` is eligible for Muse loading when present.
-- Muse MCP credentials are Muse-side state. They are not the same authenticated session as Codex/ChatGPT connectors and must not be assumed to be transferable.
+- Current `elmakus/codex_workflow@main:codex_workflow/runtime/muse_worker.py` launches a separate `muse exec` process with task capsule, workspace, schema and Muse session identity.
+- Cross-harness orchestrators in the ecosystem normally treat the callee CLI as an independently configured/authenticated runtime rather than attempting to inherit the caller's tool session.
+- Muse Code 1.3.0 supports persistent user MCP configuration in `~/.config/muse/settings.json`, trusted-project `.mcp.json`, and its own OAuth grants via `muse mcp login`.
+- New `muse exec` processes load that Muse-owned MCP configuration automatically.
+- Muse `enabled_tools` / `disabled_tools` fields are not an enforceable tool-security boundary in 1.3.0.
+- Hard least privilege can instead be provided by the MCP server or credential itself; for example GitHub MCP supports server-side read-only/toolset restrictions, while Home Assistant can restrict exposed entities and whether control is enabled.
 
-## Existing invariants that remain authoritative
+Research: `research/MUSE_CROSS_HARNESS_CAPABILITY_PATTERNS_2026-09-20.md`.
 
-1. Main remains the orchestration and integration authority.
-2. Muse workers remain bounded leaf workers and do not become a second project-level control plane.
-3. Caller/Main owns task authorization, write ownership, workspace assignment, and strategic escalation.
-4. `codex_workflow` remains agnostic to Project Workflow Task Board/review semantics.
-5. Secrets, auth tokens, raw Muse session state, and credentials must not be copied into normal worker results, task capsules, or project Git.
-6. Executor and Tester independence must remain intact.
+## Existing invariants
 
-## Capability problem to solve
+1. Main remains orchestration/integration authority.
+2. Muse remains a bounded leaf worker harness, not a second project control plane.
+3. Caller/Main owns task authorization, workspace assignment and strategic escalation.
+4. `codex_workflow` remains Project-Workflow-state agnostic.
+5. Secrets and auth material are not copied into task capsules, normalized results or Git.
+6. Executor and Tester independence remains intact.
 
-The runtime needs an explicit model for external capabilities. The model must distinguish at least:
+## Refined architecture choices
 
-- repository-local filesystem/test tools already available inside the assigned workspace;
-- Muse-native MCP servers configured independently for Muse;
-- Main-native connectors/tools that Muse cannot inherit directly;
-- read-only versus mutating external operations;
-- capabilities that are available but not authorized for the current role/task;
-- capabilities that are authorized but unavailable due to auth/runtime failure.
+### A — Muse-owned external capability plane
 
-A worker must never silently act as though Main's connected tools are available when they are not.
+Treat Muse exactly like other external worker CLIs are commonly treated.
 
-## Candidate architecture choices
+- Configure/authenticate required MCP servers once in the Muse runtime.
+- Every `muse exec` worker launched under that Muse user/config root gets the same configured capability plane.
+- The orchestrator passes task/workspace/runtime constraints, not connector sessions or credentials.
+- OAuth/token lifecycle belongs to Muse/MCP configuration and persistent workstation state.
+- Security-sensitive restrictions must be enforced by the MCP server, credential scope, endpoint or another hard runtime boundary rather than by prompt convention.
 
-### A — Direct Muse-native MCP
+This does not require per-worker credential duplication or a Main round-trip for ordinary tool calls.
 
-Configure the required GitHub/Home Assistant/other MCP servers directly for Muse through user `settings.json`, project `.mcp.json`, or an equivalent Muse-supported session surface.
+### B — Main-mediated broker only
 
-Advantages:
-- worker can investigate and act without round trips through Main;
-- natural Muse tool-calling path;
-- good fit for long investigator/executor turns.
+Muse receives no authenticated external tools and returns capability requests to Main, which performs each external operation and resumes Muse.
 
-Costs/risks:
-- separate credentials/OAuth lifecycle from Main;
-- duplicate configuration for services already connected to Codex;
-- difficult per-tool least-privilege enforcement in Muse 1.3.0 because tool allow/deny fields are not enforced;
-- a broad user-level MCP config may become available to more Muse sessions than intended.
+This centralizes auth but adds orchestration protocol, latency and Main-context traffic.
 
-### B — Main-mediated capability broker only
+### C — Per-dispatch generated capability plane
 
-Muse never receives external authenticated MCP/connector access directly. When it needs an external fact/action, it returns a bounded structured capability request to Main; Main performs the operation with its native tool/connector and resumes the same Muse worker with the result.
+The orchestrator constructs a dedicated MCP configuration/environment for each Muse invocation or logical worker.
 
-Advantages:
-- one credential/auth boundary;
-- Main retains exact authorization and write control;
-- works for ChatGPT/Codex-native connectors that cannot be transplanted into Muse.
+This can provide stronger per-task least privilege, but is substantially more machinery than the common persistent-harness model and requires secure temporary credential/config lifecycle.
 
-Costs/risks:
-- extra turn/latency and Main context usage;
-- investigator autonomy is reduced;
-- orchestration protocol must support bounded request/resume cycles cleanly.
+## Definition question requiring user authority
 
-### C — Hybrid explicit capability grants
+Choose the desired capability ownership model:
+- A: Muse-owned persistent external capability plane;
+- B: Main broker only;
+- C: per-dispatch generated capability plane.
 
-Keep Main-mediated access as the universal fallback/control plane, while permitting selected Muse-native MCP servers when the capability is explicitly configured and safe for the task/role.
-
-A direct Muse capability must be independently authenticated/configured and treated as a separate capability from a similarly named Main connector. Sensitive or unsupported capabilities remain brokered through Main.
-
-Because Muse 1.3.0 does not enforce native per-tool allow/deny lists, a secure direct path would need either:
-- server-level separation with only the allowed tools exposed;
-- a capability-filtering MCP gateway/proxy;
-- or another runtime-enforced session surface proven to enforce the grant.
-
-## Definition questions requiring user authority
-
-The architecture choice A/B/C materially changes credential ownership, security boundaries, latency, autonomy, and implementation scope. It is not safe to infer from the existing Muse runtime definition.
-
-See `brainstorming/MUSE_WORKER_MCP_ACCESS_OPEN_QUESTIONS.md`.
+The ecosystem research makes A the closest match to common cross-harness CLI orchestration, but Research itself does not make the product decision.

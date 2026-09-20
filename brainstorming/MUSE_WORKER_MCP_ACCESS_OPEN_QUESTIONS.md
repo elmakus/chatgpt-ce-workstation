@@ -6,21 +6,18 @@ Date: 2026-09-20
 
 ## Decision required
 
-Which capability model should become the accepted target for Muse workers?
+Which capability ownership model should become the accepted target?
 
-- **A — Direct Muse-native MCP:** Muse receives its own configured/authenticated MCP servers and uses them directly.
-- **B — Main broker only:** Muse never receives external authenticated tools; it requests bounded external operations/evidence from Main and is resumed with the result.
-- **C — Hybrid:** Main broker is always available as fallback/control plane, while explicitly approved Muse-native MCP servers may be granted directly when a real least-privilege boundary can be enforced.
-
-## Consequences that depend on the choice
-
-The answer determines:
-- whether credentials/OAuth are duplicated into Muse-side state;
-- whether `codex_workflow` needs a structured capability-request/resume protocol;
-- whether a filtered MCP gateway is needed for direct Muse access;
-- whether GitHub/Home Assistant can be called by a worker directly or only through Main;
-- the verification/security acceptance surface.
+- **A — Muse-owned persistent capability plane:** configure/authenticate MCP servers once for Muse; all Muse workers use that harness-owned config directly.
+- **B — Main broker only:** Muse has no external authenticated tools; Main performs requested external operations.
+- **C — Per-dispatch generated capability plane:** Main/runtime creates a restricted MCP/config environment for each worker/task.
 
 ## Evidence
 
-Muse Code 1.3.0 supports configured MCP servers and OAuth, but its documented `enabled_tools` / `disabled_tools` fields are not enforced. Therefore direct access cannot currently rely on native per-tool filtering as a security control.
+Cross-harness systems that launch Codex/Claude/Gemini-style CLIs normally keep authentication and external-tool configuration inside the worker CLI itself. They pass task/workspace/sandbox/config constraints across the process boundary rather than transferring the orchestrator's live MCP session.
+
+Muse 1.3.0 supports exactly this worker-owned pattern through persistent settings, project MCP files and stored OAuth grants.
+
+Hard least privilege should be enforced at the MCP server/credential/runtime boundary where required; Muse's current `enabled_tools` / `disabled_tools` fields are not sufficient as a security boundary.
+
+See `research/MUSE_CROSS_HARNESS_CAPABILITY_PATTERNS_2026-09-20.md`.
