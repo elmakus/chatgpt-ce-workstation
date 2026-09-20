@@ -213,6 +213,38 @@ class MarketplaceUpdaterTests(unittest.TestCase):
             [],
         )
 
+    def test_directory_fsync_failure_after_replace_keeps_committed_success(self) -> None:
+        self.write_state(10.0)
+        real_fsync = updater.os.fsync
+        fsync_calls = 0
+        times = iter([100_000.0, 100_123.0])
+
+        def fail_directory_fsync(fd):
+            nonlocal fsync_calls
+            fsync_calls += 1
+            if fsync_calls == 2:
+                raise OSError("simulated directory fsync failure")
+            return real_fsync(fd)
+
+        with mock.patch.object(updater.os, "fsync", side_effect=fail_directory_fsync):
+            result = updater.run_cycle(
+                state_path=self.state_path,
+                clock=lambda: next(times),
+                runner=lambda command: completed(success_json(["one"], ["root"])),
+                retry_interval_seconds=99.0,
+            )
+
+        self.assertEqual(
+            result,
+            updater.CycleResult("success", updater.UPDATE_INTERVAL_SECONDS),
+        )
+        self.assertEqual(self.read_state(), 100_123.0)
+        self.assertEqual(fsync_calls, 2)
+        self.assertEqual(
+            list(self.state_path.parent.glob(f".{self.state_path.name}.*.tmp")),
+            [],
+        )
+
     def test_success_records_completion_time(self) -> None:
         times = iter([100.0, 123.5])
 
