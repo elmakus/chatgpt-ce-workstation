@@ -6,7 +6,7 @@ current_milestone: "M04"
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "9e56e3e"
+  head: "c4ba05b1d3f7fc01cd83379c8125c97a899c4fda"
 
 research_obligation: null
 
@@ -214,7 +214,7 @@ cards:
     title: "Exercise bounded live rollback and prove stable no-change updates"
     milestone: M04
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     depends_on: ["M04-T01"]
     openspec_change: null
@@ -222,7 +222,7 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "c4ba05b1d3f7fc01cd83379c8125c97a899c4fda"
     result_pr: 7
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T02-live-rollback.md"
+    tests_summary: "GREEN live acceptance: real updater promoted exact ea264b43 candidate then a bounded injected post-promotion runtime failure triggered automatic rollback to exact prior e11e3f47, health/full runtime verification passed and evidence status was update_failed_rolled_back; persistence sentinels survived rollback/restoration; normal restore returned exact accepted ea264b43 and D15/D4 regressions GREEN; fresh no-change resolution remained 27a9929c4cb4da99... and a subsequent normal update reused the same image with 24 BuildKit CACHED markers and status success."
