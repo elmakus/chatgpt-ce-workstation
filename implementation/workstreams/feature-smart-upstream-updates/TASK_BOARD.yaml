@@ -6,7 +6,7 @@ current_milestone: "M04"
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "0fb42d3c4b3ae916157853c3bff96f81e2c4f6c5"
+  head: "9a7e838"
 
 research_obligation: null
 
@@ -214,7 +214,7 @@ cards:
     title: "Exercise bounded live rollback and prove stable no-change updates"
     milestone: M04
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: chatgpt
     depends_on: ["M04-T01"]
     openspec_change: null
