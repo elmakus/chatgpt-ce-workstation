@@ -1,6 +1,6 @@
 id: "issue-chatgpt-session-auto-refresh"
 kind: "issue"
-status: "discovery"
+status: "ready"
 
 branch: "fix/chatgpt-session-auto-refresh"
 base_ref: "e796e2fef00e348e2329be1a4856da335dff6842"
@@ -19,7 +19,7 @@ routing:
   research_obligation: null
   plan_review: null
 
-task_board: null
+task_board: "implementation/workstreams/issue-chatgpt-session-auto-refresh/TASK_BOARD.yaml"
 
 authority:
   requirements: null
@@ -30,7 +30,7 @@ authority:
   plan: null
 
 review:
-  requirement: null
+  requirement: "REQUIRED"
   state: null
   subject: null
   evidence: null
