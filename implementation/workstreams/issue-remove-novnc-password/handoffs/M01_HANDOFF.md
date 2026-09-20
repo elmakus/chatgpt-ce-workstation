@@ -2,7 +2,7 @@
 
 Workstream: `issue-remove-novnc-password`
 Milestone: `M01`
-Status: `integration_ready`
+Status: `done`
 
 ## Completed checkpoint
 
@@ -32,6 +32,8 @@ The isolated candidate build/runtime smoke was GREEN for the NPA scope. The full
 
 No live production Workstation deployment/recreate/restart was performed. The explicit production deployment gate remains separate from source integration.
 
-## Publication state
+## Integration result
 
-PR `#14` targets `main`. Before merge, re-read the target and PR head; if the target remains current and no behavioral drift is present, integrate and reconcile only merge-result-dependent manifest/Task Board/handoff fields from target-side state.
+PR `#14` was merged into `main` as `1bdbb4e9016c346653b9331c04ed89b3dd362361`. Target-side readback confirmed the namespaced workstream package is present, and GitHub automatically removed the source branch.
+
+No production Workstation deployment/recreate/restart was performed; that remains a separate explicit operator action.
