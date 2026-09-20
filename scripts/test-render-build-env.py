@@ -16,6 +16,10 @@ SPEC.loader.exec_module(bridge)
 
 
 def manifest():
+    ubuntu_index_name = "archive.ubuntu.com_ubuntu_dists_noble_InRelease"
+    ubuntu_index_sha = "9" * 64
+    ubuntu_rows = f"{ubuntu_index_name}\t{ubuntu_index_sha}\n"
+    ubuntu_identity = "sha256:" + hashlib.sha256(ubuntu_rows.encode()).hexdigest()
     return {
         "components": {
             "agent_workspace": {"identity":"0.3.3@sha512-x","integrity":"sha512-x","override":False,"package":"@agent-sh/agent-workspace-linux","provenance":"npm-registry","shasum":"a"*40,"version":"0.3.3"},
@@ -27,7 +31,7 @@ def manifest():
             "rust": {"channel_manifest_sha256":"2"*64,"identity":"1@sha256:"+"2"*64,"installer_sha256":"3"*64,"override":False,"provenance":"rust-static-stable-manifest","version":"1.90.0"},
             "s6_overlay": {"assets":{"s6-overlay-noarch.tar.xz":"4"*64,"s6-overlay-x86_64.tar.xz":"5"*64},"identity":"3.2@sha256:"+"6"*64,"override":False,"provenance":"github-stable-release-assets","repository":"just-containers/s6-overlay","version":"3.2.3.2"},
             "ubuntu_base": {"family":"ubuntu:24.04","identity":"sha256:"+"7"*64,"override":False,"provenance":"docker-registry-manifest"},
-            "ubuntu_packages": {"identity":"sha256:"+"8"*64,"indexes":[{"name":"archive_InRelease","sha256":"9"*64}],"override":False,"provenance":"ubuntu-apt-signed-inrelease"},
+            "ubuntu_packages": {"identity":ubuntu_identity,"indexes":[{"name":ubuntu_index_name,"sha256":ubuntu_index_sha}],"override":False,"provenance":"ubuntu-apt-signed-inrelease"},
         },
         "overrides": [],
         "policy": {"channel":"latest-trusted-stable-current","ubuntu_family":"ubuntu:24.04"},
@@ -47,6 +51,10 @@ class BuildEnvTests(unittest.TestCase):
         self.assertEqual(values["CE_COMMIT"], "b"*40)
         self.assertEqual(values["OPENAI_PACKAGE_SHA256"], "1"*64)
         self.assertEqual(values["S6_OVERLAY_NOARCH_SHA256"], "4"*64)
+        self.assertEqual(
+            values["UBUNTU_APT_INDEXES"],
+            "archive.ubuntu.com_ubuntu_dists_noble_InRelease=" + "9"*64,
+        )
         self.assertEqual(values["CANDIDATE_IMAGE_TAG"], f"candidate-{expected_digest[:16]}")
 
     def test_unknown_fields_are_rejected_before_manifest_embedding(self):
@@ -100,11 +108,7 @@ class BuildEnvTests(unittest.TestCase):
                 {"version": "1.91.0", "identity": "1.91@sha256:" + "a"*64},
                 {"RUST_VERSION"},
             ),
-            (
-                "ubuntu_packages",
-                {"identity": "sha256:" + "a"*64},
-                {"UBUNTU_APT_IDENTITY"},
-            ),
+
         ]
         for component, updates, expected in cases:
             with self.subTest(component=component):
@@ -114,6 +118,27 @@ class BuildEnvTests(unittest.TestCase):
                 second = bridge.build_inputs(changed)
                 differing = {key for key in first if first[key] != second[key]}
                 self.assertEqual(differing, expected)
+
+    def test_ubuntu_index_change_reaches_identity_and_exact_index_set(self):
+        first = bridge.build_inputs(manifest())
+        changed = manifest()
+        index = changed["components"]["ubuntu_packages"]["indexes"][0]
+        index["sha256"] = "a"*64
+        rows = f'{index["name"]}\t{index["sha256"]}\n'
+        changed["components"]["ubuntu_packages"]["identity"] = (
+            "sha256:" + hashlib.sha256(rows.encode()).hexdigest()
+        )
+        second = bridge.build_inputs(changed)
+        differing = {key for key in first if first[key] != second[key]}
+        self.assertEqual(
+            differing, {"UBUNTU_APT_IDENTITY", "UBUNTU_APT_INDEXES"}
+        )
+
+    def test_inconsistent_ubuntu_index_identity_is_rejected(self):
+        changed = manifest()
+        changed["components"]["ubuntu_packages"]["identity"] = "sha256:" + "a"*64
+        with self.assertRaises(bridge.ManifestError):
+            bridge.build_inputs(changed)
 
     def test_s6_asset_change_reaches_only_that_frozen_asset_input(self):
         first = bridge.build_inputs(manifest())
