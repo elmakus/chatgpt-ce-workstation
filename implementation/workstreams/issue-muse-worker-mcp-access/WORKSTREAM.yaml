@@ -1,6 +1,6 @@
 id: "issue-muse-worker-mcp-access"
 kind: "issue"
-status: "discovery"
+status: "definition"
 
 branch: "fix/muse-worker-mcp-access"
 base_ref: "04440574afb2d85790301c915e9d7f8c90721021"
@@ -11,13 +11,13 @@ parent_branch: null
 parent_dependency: null
 
 intake:
-  state: active
+  state: complete
   record: "implementation/workstreams/issue-muse-worker-mcp-access/INTAKE.md"
 
 task_board: null
 
 authority:
-  requirements: null
+  requirements: "requirements/MUSE_WORKER_EXTERNAL_TOOL_ACCESS.md"
   decisions: []
   plan: null
 
