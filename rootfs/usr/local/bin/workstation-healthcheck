@@ -10,4 +10,6 @@ pgrep -x openbox >/dev/null
 pgrep -x x11vnc >/dev/null
 pgrep -f 'websockify.*6080.*127\.0\.0\.1:5900' >/dev/null
 
+test -f "$keyring_session_ready"
+
 exit 0
