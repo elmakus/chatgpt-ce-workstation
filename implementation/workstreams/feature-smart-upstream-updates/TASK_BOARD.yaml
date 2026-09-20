@@ -42,7 +42,7 @@ milestones:
     checkpoint: null
     implementation_head: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
     handoff: null
-    acceptance_evidence: "Automated M03 acceptance GREEN on exact reconciled subject 83e77ed669a2d58da248e052896c6c44a90f8972: CI #154 and exact non-production candidate build #19 GREEN; isolated orchestration/validate-source/Dockerfile/ShellCheck/Gitleaks verification GREEN; no production updater invocation or recreate/write occurred; M03-T02 independent review pending."
+    acceptance_evidence: "Corrected M03 automated acceptance GREEN on exact subject ffe39dfcb6ac5584af9410feee5eab5f81b008cc: CI #162 GREEN including rollback recovery-state fixtures, noVNC, ShellCheck, Dockerfile and secret scan; exact non-production candidate build #27/provenance readback GREEN; prior M03-T02 RED finding corrected; no production updater invocation or recreate/write occurred; fresh M03-T02 independent review pending."
     review_state: null
     review_subject: null
     review_evidence: null
