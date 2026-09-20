@@ -1,0 +1,46 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "feature-codex-marketplace-auto-update"
+plan_revision: "CMAU-R1"
+current_milestone: "CMAU-M01"
+
+execution_ref:
+  branch: "feat/codex-marketplace-auto-update"
+  pr: null
+  head: null
+
+research_obligation: null
+
+milestones:
+  CMAU-M01:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m01--deterministic-scheduler-core"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: CMAU-M01-T01
+    title: "Deterministic marketplace updater core"
+    milestone: CMAU-M01
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/workstreams/feature-codex-marketplace-auto-update/cards/CMAU-M01-T01.md"
+    authority_refs:
+      - "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m01--deterministic-scheduler-core"
+      - "requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md"
+      - "docs/DECISIONS.md#d24--global-codex-marketplace-refresh-uses-one-persistent-s6-timer"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
