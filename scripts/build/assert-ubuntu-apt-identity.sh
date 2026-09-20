@@ -21,16 +21,7 @@ done
   exit 1
 }
 
-actual="$(printf '%s' "$rows" | python3 -c '
-import hashlib, json, sys
-items = []
-for line in sys.stdin:
-    name, digest = line.rstrip("\n").split("\t", 1)
-    items.append({"name": name, "sha256": digest})
-items.sort(key=lambda item: item["name"])
-payload = json.dumps(items, sort_keys=True, separators=(",", ":")).encode()
-print("sha256:" + hashlib.sha256(payload).hexdigest())
-')"
+actual="sha256:$(printf '%s' "$rows" | LC_ALL=C sort | sha256sum | awk '{print $1}')"
 
 [[ "$actual" == "$expected" ]] || {
   echo "Ubuntu APT identity mismatch" >&2
