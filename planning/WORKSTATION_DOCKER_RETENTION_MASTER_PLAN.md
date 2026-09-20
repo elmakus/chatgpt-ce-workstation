@@ -1,9 +1,9 @@
 # Workstation Docker retention Master Plan
 
-Status: **draft**
+Status: **approved**
 Plan revision: **workstation-docker-retention-R1**
 Date: 2026-09-20
-Independent plan review: **RECOMMENDED**
+Independent plan review: **GREEN** — `planning/reviews/workstation-docker-retention-R1.md`
 
 ## Goal and authority
 
