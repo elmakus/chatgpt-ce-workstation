@@ -153,6 +153,12 @@ run_case() (
       active_image_id=""
       return 1
     fi
+    if [[ "$scenario" == rollback_mismatch ]]; then
+      active_image_id="$fixture_wrong_id"
+      active_running_state=true
+      active_health_state=healthy
+      return 0
+    fi
     active_image_id="$fixture_old_id"
     active_running_state=true
     active_health_state=healthy
@@ -162,7 +168,7 @@ run_case() (
     if [[ "$scenario" == health_fail && "$active_image_id" == "$fixture_candidate_id" ]]; then
       return 1
     fi
-    if [[ ( "$scenario" == rollback_fail || "$scenario" == rollback_missing ) && "$active_image_id" == "$fixture_candidate_id" ]]; then
+    if [[ ( "$scenario" == rollback_fail || "$scenario" == rollback_missing || "$scenario" == rollback_mismatch ) && "$active_image_id" == "$fixture_candidate_id" ]]; then
       active_health_state=unhealthy
       return 1
     fi
@@ -269,6 +275,12 @@ run_case() (
       assert_trace "evidence:rollback_failed:candidate_health_failed"
       assert_trace "recovery-evidence:container_missing::missing:missing:missing"
       ;;
+    rollback_mismatch)
+      assert_trace "recreate:candidate-test"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:complete:container-test:true:healthy:$fixture_wrong_id"
+      ;;
     *)
       echo "unknown scenario: $scenario" >&2
       exit 1
@@ -288,6 +300,7 @@ run_case health_fail 1
 run_case runtime_fail 1
 run_case rollback_fail 2
 run_case rollback_missing 2
+run_case rollback_mismatch 2
 
 test_recovery_evidence_serialization() (
   local tmp
