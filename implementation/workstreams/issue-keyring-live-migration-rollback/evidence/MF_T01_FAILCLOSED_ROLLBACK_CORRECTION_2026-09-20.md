@@ -47,6 +47,20 @@ GREEN checks on that exact commit:
 
 The detached worktree was cleaned up after validation.
 
+## Exact hosted CI
+
+The corrected immutable subject was frozen as `8191cbbebe120b842f77b767979ee4f2202ed636`, an empty checkpoint above the evidence/correction tree.
+
+GitHub Actions run `35509724696` / CI #282 completed `success` with `head_sha=8191cbbebe120b842f77b767979ee4f2202ed636`.
+
+All jobs were GREEN:
+
+- `source-validation`: source validation, noVNC desktop workarea semantics and ShellCheck all succeeded;
+- `dockerfile-check`: Dockerfile static/buildx check succeeded;
+- `secret-scan`: repository-history secret scan succeeded.
+
+PR #13 could not emit a normal pull-request run because its current target `main` has advanced and the PR is presently conflict-marked. A temporary CI-only PR #16 used the immutable original workstream base `e796e2fef00e348e2329be1a4856da335dff6842`, making the PR merge tree equivalent to the exact head tree for this subject. After run #282 completed GREEN, PR #16 was closed and its temporary base branch was deleted. The workstream branch and exact review subject were not changed by that cleanup.
+
 ## External state
 
 No production updater run, candidate promotion, live keyring mutation, credential cleanup, or container recreation was performed.
