@@ -3,6 +3,8 @@ set -Eeuo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
+# shellcheck disable=SC1091
+source "$REPO_ROOT/scripts/buildkit-cache.sh"
 
 UPDATE_EVIDENCE_FILE="${UPDATE_EVIDENCE_FILE:-$REPO_ROOT/.workstation-update/last-update.json}"
 UPDATE_WORK_DIR=""
@@ -11,6 +13,11 @@ IMAGE_CLEANUP_STATUS=""
 IMAGE_CLEANUP_RETAINED_REFS=""
 IMAGE_CLEANUP_REMOVED_REFS=""
 IMAGE_CLEANUP_FAILED_REFS=""
+
+BUILD_CACHE_CLEANUP_STATUS=""
+BUILD_CACHE_CLEANUP_BUILDER=""
+BUILD_CACHE_CLEANUP_MAX_USED_SPACE=""
+BUILD_CACHE_CLEANUP_RESERVED_SPACE=""
 
 cleanup_update_work_dir() {
   if [[ -n "${UPDATE_WORK_DIR:-}" ]]; then
@@ -30,6 +37,8 @@ load_local_env() {
   local tracked=(
     APPDATA_ROOT PROJECTS_ROOT NOVNC_BIND_IP NOVNC_PORT TZ_VALUE SHM_SIZE
     IMAGE_NAME IMAGE_TAG CONTAINER_NAME CODEX_UID CODEX_GID
+    WORKSTATION_BUILDER_NAME WORKSTATION_BUILD_CACHE_MAX_USED_SPACE
+    WORKSTATION_BUILD_CACHE_RESERVED_SPACE
     CE_REPOSITORY CE_REF UPSTREAM_CE_COMMIT UPSTREAM_UBUNTU_IMAGE
     UPSTREAM_UBUNTU_BASE_DIGEST UPSTREAM_OPENAI_METADATA_FILE UPSTREAM_ARCH
     AGENT_WORKSPACE_VERSION S6_OVERLAY_VERSION CODEX_CHATGPT_WEB_VERSION
@@ -256,6 +265,19 @@ cleanup_workstation_image_refs() {
   return 0
 }
 
+cleanup_workstation_build_cache() {
+  BUILD_CACHE_CLEANUP_BUILDER="$(workstation_builder_name)"
+  BUILD_CACHE_CLEANUP_MAX_USED_SPACE="$(workstation_build_cache_max_used_space)"
+  BUILD_CACHE_CLEANUP_RESERVED_SPACE="$(workstation_build_cache_reserved_space)"
+  BUILD_CACHE_CLEANUP_STATUS="success"
+
+  if ! prune_workstation_build_cache; then
+    BUILD_CACHE_CLEANUP_STATUS="warning"
+    return 1
+  fi
+  return 0
+}
+
 recreate_with_tag() {
   local tag="$1"
   IMAGE_TAG="$tag" docker compose up -d --force-recreate --no-build workstation
@@ -323,13 +345,19 @@ write_evidence() {
   local image_cleanup_retained="${IMAGE_CLEANUP_RETAINED_REFS:-}"
   local image_cleanup_removed="${IMAGE_CLEANUP_REMOVED_REFS:-}"
   local image_cleanup_failed="${IMAGE_CLEANUP_FAILED_REFS:-}"
+  local build_cache_cleanup_status="${BUILD_CACHE_CLEANUP_STATUS:-}"
+  local build_cache_cleanup_builder="${BUILD_CACHE_CLEANUP_BUILDER:-}"
+  local build_cache_cleanup_max="${BUILD_CACHE_CLEANUP_MAX_USED_SPACE:-}"
+  local build_cache_cleanup_reserved="${BUILD_CACHE_CLEANUP_RESERVED_SPACE:-}"
 
   mkdir -p "$(dirname "$UPDATE_EVIDENCE_FILE")"
   python3 - "$UPDATE_EVIDENCE_FILE" "$status" "$reason" "$resolution_sha" \
     "$candidate_ref" "$candidate_id" "$previous_id" "$rollback_ref" \
     "$recovery_readback" "$recovery_container_id" "$recovery_running" \
     "$recovery_health" "$recovery_image_id" "$image_cleanup_status" \
-    "$image_cleanup_retained" "$image_cleanup_removed" "$image_cleanup_failed" <<'PY'
+    "$image_cleanup_retained" "$image_cleanup_removed" "$image_cleanup_failed" \
+    "$build_cache_cleanup_status" "$build_cache_cleanup_builder" \
+    "$build_cache_cleanup_max" "$build_cache_cleanup_reserved" <<'PY'
 import json
 import os
 import pathlib
@@ -356,7 +384,8 @@ if any(recovery_values):
     }
 
 cleanup_values = sys.argv[14:18]
-if any(cleanup_values):
+build_cache_values = sys.argv[18:22]
+if any(cleanup_values) or any(build_cache_values):
     def bounded_refs(raw, limit=64):
         refs = [line for line in raw.splitlines() if line]
         return {
@@ -369,13 +398,22 @@ if any(cleanup_values):
         "current_image_id": payload["candidate_image_id"],
         "rollback_image_id": payload["previous_image_id"],
         "rollback_image": payload["rollback_image"],
-        "image_cleanup": {
+    }
+    if any(cleanup_values):
+        payload["retention"]["image_cleanup"] = {
             "status": cleanup_values[0] or None,
             "retained": bounded_refs(cleanup_values[1]),
             "removed": bounded_refs(cleanup_values[2]),
             "failed": bounded_refs(cleanup_values[3]),
-        },
-    }
+        }
+    if any(build_cache_values):
+        payload["retention"]["build_cache_cleanup"] = {
+            "status": build_cache_values[0] or None,
+            "builder": build_cache_values[1] or None,
+            "driver": "docker-container",
+            "max_used_space": build_cache_values[2] or None,
+            "reserved_space": build_cache_values[3] or None,
+        }
 tmp = path.with_name(path.name + ".tmp")
 tmp.write_text(json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
 os.replace(tmp, path)
@@ -649,6 +687,12 @@ main() {
   echo '=== retain workstation images ==='
   if ! cleanup_workstation_image_refs "$repository" "$candidate_ref" "$candidate_id" "$rollback_ref" "$previous_image_id"; then
     echo "WARNING: production is verified but workstation image retention cleanup was incomplete." >&2
+  fi
+
+  echo
+  echo '=== retain workstation build cache ==='
+  if ! cleanup_workstation_build_cache; then
+    echo "WARNING: production is verified but workstation BuildKit cache retention cleanup was incomplete." >&2
   fi
 
   write_evidence "success" "" "$resolution_sha" "$candidate_ref" "$candidate_id"     "$previous_image_id" "$rollback_ref"
