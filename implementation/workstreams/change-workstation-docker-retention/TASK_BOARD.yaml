@@ -6,7 +6,7 @@ current_milestone: "M02"
 execution_ref:
   branch: "work/workstation-docker-retention"
   pr: null
-  head: "d51d3fa0bba632bfb13421c40ebe3c5cb0cf7fa2"
+  head: "a6a580fced3573b3e4a9912a02430ab62c04d153"
 
 research_obligation: null
 
@@ -66,13 +66,13 @@ cards:
 
   - id: "M02-T02"
     contract: "implementation/workstreams/change-workstation-docker-retention/cards/M02-T02.md"
-    execution_status: in_progress
+    execution_status: done
     dependencies: ["M02-T01"]
     executor: chatgpt
-    result_commit: null
+    result_commit: "a6a580fced3573b3e4a9912a02430ab62c04d153"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M02-T02.md"
+    tests_summary: "Exact subject a6a580f GREEN: bash -n changed shell files; BUILDKIT_CACHE_TESTS_GREEN; UPDATE_ORCHESTRATION_TESTS_GREEN; SOURCE_VALIDATION_GREEN; git diff --check and prohibited global/default cleanup guards GREEN; no live Docker/BuildKit mutation"
     independent_review: none
     review_state: null
     review_subject: null
