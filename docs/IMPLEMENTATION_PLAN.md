@@ -110,7 +110,7 @@ Current checks include:
 - canonical `/home/codex/Documents/ChatGPT` working directory and project bind;
 - absence of active `/workspace` runtime wiring;
 - expected persistent-home/project mount declarations;
-- restart policy, secret wiring and desktop healthcheck;
+- restart policy, passwordless noVNC/keyring-secret wiring and desktop healthcheck;
 - no `privileged`, `SYS_ADMIN` or Docker-socket wiring in Compose;
 - Codex `never` / `danger-full-access` policy and requirements;
 - required CE feature set and exclusion of `shallow-repository-watches`;
@@ -141,7 +141,6 @@ It is deliberately non-mutating. It checks:
 - root execution on Unraid;
 - Docker/Compose availability and config parsing;
 - persistent-home and project-root existence;
-- non-empty noVNC secret;
 - non-empty keyring secret;
 - current container presence/running state;
 - current underlying `Documents/ChatGPT` target shape (legacy symlink, empty directory, non-empty directory, etc.).
@@ -176,7 +175,7 @@ The verifier checks the actual running container rather than only source text:
 - container is not privileged and lacks `SYS_ADMIN`;
 - in-container `pwd` is the canonical project root;
 - `/workspace` and Docker socket are absent inside the container;
-- runtime keyring secret and generated VNC password file are readable by `codex`;
+- runtime keyring state is healthy and x11vnc is passwordless, loopback-only, with no legacy noVNC secret mounted;
 - CE, Codex Web GPT, Openbox, Tint2, xterm, Chrome and healthcheck launchers are present;
 - Tint2 is actually running;
 - the project root is writable;
@@ -188,7 +187,7 @@ The verifier checks the actual running container rather than only source text:
 
 ## Phase 5 — Verify noVNC recovery desktop
 
-Open noVNC on the configured host port (default `6080`).
+Open noVNC on the configured host port (default `6080`). The endpoint is intentionally passwordless at the VNC layer, so it must remain reachable only from a trusted network unless a separately authenticated ingress is deliberately added. Raw VNC remains container-loopback-only and is not host-published.
 
 Expected desktop components:
 
@@ -204,13 +203,14 @@ Codex Web GPT
 
 Manual smoke:
 
-1. Confirm CE and Codex Web GPT both start automatically.
-2. Confirm the Tint2 panel is visible.
-3. Quit ChatGPT CE from the application.
-4. Confirm noVNC/Openbox/Tint2 remain alive.
-5. Relaunch CE from the panel.
-6. Quit CE again and relaunch from the Openbox right-click menu.
-7. Confirm terminal launcher works.
+1. Confirm noVNC reaches the desktop without a VNC/noVNC password prompt.
+2. Confirm CE and Codex Web GPT both start automatically.
+3. Confirm the Tint2 panel is visible.
+4. Quit ChatGPT CE from the application.
+5. Confirm noVNC/Openbox/Tint2 remain alive.
+6. Relaunch CE from the panel.
+7. Quit CE again and relaunch from the Openbox right-click menu.
+8. Confirm terminal launcher works.
 
 CE intentionally is not part of Docker health. Critical Openbox/x11vnc/websockify exits end the desktop longrun so s6 restarts the desktop session as one clean unit.
 
