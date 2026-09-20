@@ -1,6 +1,6 @@
 id: "change-workstation-docker-retention"
 kind: "change"
-status: "discovery"
+status: "definition"
 
 branch: "work/workstation-docker-retention"
 base_ref: "e796e2fef00e348e2329be1a4856da335dff6842"
@@ -11,7 +11,7 @@ parent_branch: null
 parent_dependency: null
 
 intake:
-  state: active
+  state: complete
   record: "implementation/workstreams/change-workstation-docker-retention/INTAKE.md"
 
 routing:
@@ -22,8 +22,9 @@ routing:
 task_board: null
 
 authority:
-  requirements: null
-  decisions: []
+  requirements: "requirements/SMART_UPSTREAM_UPDATES.md"
+  decisions:
+    - "docs/DECISIONS.md#D25"
   plan: null
 
 review:
