@@ -71,6 +71,16 @@ grep -F 'io.chatgpt-ce-workstation.upstream-resolution-sha256' Dockerfile >/dev/
 if grep -F 'UPSTREAM_REFRESH' Dockerfile compose.yaml scripts/build.sh .env.example >/dev/null; then
   fail 'timestamp-style UPSTREAM_REFRESH remains in exact candidate build path'
 fi
+if grep -F -- '--no-cache' Dockerfile compose.yaml scripts/build.sh >/dev/null; then
+  fail 'exact candidate build path uses global --no-cache invalidation'
+fi
+if grep -F 'resolve-upstreams.py' scripts/build.sh >/dev/null; then
+  fail 'build.sh must consume a frozen resolution, not resolve latest itself'
+fi
+grep -F 'UPSTREAM_RESOLUTION_FILE' scripts/build.sh >/dev/null \
+  || fail 'build.sh does not require an explicit frozen resolution file'
+grep -F 'docker image inspect' scripts/build.sh >/dev/null \
+  || fail 'build.sh does not read back candidate provenance label'
 pass 'frozen upstream resolution and exact build-input contracts'
 
 echo
