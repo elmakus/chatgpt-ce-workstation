@@ -20,7 +20,7 @@ cards:
   - id: "M01-T01"
     contract: "implementation/workstreams/issue-remove-novnc-password/cards/M01-T01.md"
     dependencies: []
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     result_commit: "a13757a8611201a15784dd4d0250ac1c35068cb6"
     result_pr: null
