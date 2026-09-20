@@ -61,7 +61,7 @@ cards:
     title: "s6/image integration for marketplace updater"
     milestone: CMAU-M02
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on:
       - "CMAU-M01-T01"
