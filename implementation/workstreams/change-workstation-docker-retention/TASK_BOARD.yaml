@@ -23,7 +23,7 @@ milestones:
 cards:
   - id: "M01-T01"
     contract: "implementation/workstreams/change-workstation-docker-retention/cards/M01-T01.md"
-    execution_status: in_progress
+    execution_status: done
     dependencies: []
     executor: chatgpt
     result_commit: "a3f15c251c4a31787249b6bd5fc69a7e97e4a285"
