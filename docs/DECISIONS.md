@@ -439,3 +439,26 @@ The target state is:
 **Supersedes:** the VNC-password portion of D14's statement that VNC and keyring passwords are supplied from Unraid-side secret files. D26 already superseded the keyring-password portion. D14's trusted-network restriction, raw-VNC loopback binding, noVNC-only publication and no-secrets-in-Git rules remain in force.
 
 **Rationale:** this workstation is operated as a dedicated recovery desktop on a trusted network. The operator explicitly prefers passwordless noVNC access and accepts shifting access control from a VNC credential to the surrounding network boundary.
+
+## D28 — Bound workstation Docker image and build-cache retention
+
+**Integration reconciliation note (2026-09-20):** this retention decision was originally numbered D27 on the isolated workstream. Current main already owns D27 for passwordless noVNC, so the retention decision is renumbered to D28 without changing its accepted content.
+
+**Decision (2026-09-20):** extend the D25 smart-update lifecycle with bounded post-success garbage collection for workstation Docker artifacts.
+
+After an update candidate has been promoted and has passed the required workstation health and runtime verification:
+
+- retain the exact current verified production image;
+- retain exactly one immediately previous known-working workstation image as the deterministic rollback baseline;
+- remove older workstation-specific candidate/rollback tags or images when they are no longer required by either protected identity or another live Docker reference;
+- treat BuildKit/build cache as a separate resource class with its own bounded workstation-scoped retention policy;
+- preserve useful identity-driven cache reuse rather than disabling cache or forcing clean rebuilds;
+- never use an unscoped/global Docker prune that can remove unrelated Unraid project artifacts;
+- never touch persistent home, projects, secrets, keyring or other bind-mounted user data;
+- report retention cleanup separately from production verification, so cleanup failure after a verified promotion is a cleanup warning/failure rather than a false update/rollback failure.
+
+Cleanup is forbidden before the new production image has passed the D25/R12 success gate. Any failed promotion, health check or runtime verification must preserve the image required for deterministic rollback.
+
+The exact Docker/BuildKit filtering, builder identity and age/size/GC mechanism are implementation details to be selected only after verifying the target Unraid backend. They must preserve the workstation-only scope and bounded-retention outcome.
+
+**Rationale:** D25 intentionally retains a previous known-working image and uses BuildKit cache for efficient repeated updates, but without an explicit lifecycle older candidate/rollback artifacts and historical cache can accumulate indefinitely on bounded Unraid Docker storage. Keeping only the current image plus one rollback baseline preserves deterministic recovery while separating safe image retention from bounded cache reuse.

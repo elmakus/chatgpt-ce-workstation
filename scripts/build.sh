@@ -3,6 +3,8 @@ set -Eeuo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
+# shellcheck disable=SC1091
+source "$REPO_ROOT/scripts/buildkit-cache.sh"
 
 case "$(uname -m)" in
   x86_64|amd64) ;;
@@ -14,6 +16,7 @@ esac
 
 command -v docker >/dev/null || { echo "docker is required" >&2; exit 1; }
 docker compose version >/dev/null || { echo "Docker Compose v2 is required" >&2; exit 1; }
+docker buildx version >/dev/null || { echo "Docker Buildx is required" >&2; exit 1; }
 command -v python3 >/dev/null || { echo "python3 is required" >&2; exit 1; }
 
 resolution_file="${UPSTREAM_RESOLUTION_FILE:-${1:-}}"
@@ -33,7 +36,9 @@ trap cleanup EXIT HUP INT TERM
 rm -rf "$stage_dir"
 mkdir -p "$stage_dir"
 
-python3 scripts/render-build-env.py   --resolution "$resolution_file"   --stage "$stage_dir/upstream-resolution.json" > "$env_file"
+python3 scripts/render-build-env.py \
+  --resolution "$resolution_file" \
+  --stage "$stage_dir/upstream-resolution.json" > "$env_file"
 # The renderer emits only a fixed allowlist of shell-quoted, non-secret values.
 # shellcheck disable=SC1090
 source "$env_file"
@@ -43,13 +48,18 @@ export IMAGE_TAG="${IMAGE_TAG:-$CANDIDATE_IMAGE_TAG}"
 echo "Validating workstation source"
 bash scripts/validate-source.sh
 
-echo "Building exact candidate $IMAGE_TAG through compose.yaml"
-docker compose build --pull workstation
+builder_name="$(workstation_builder_name)"
+echo "Ensuring dedicated Workstation builder: $builder_name"
+ensure_workstation_builder
+
+echo "Building exact candidate $IMAGE_TAG through compose.yaml with builder $builder_name"
+docker compose build --builder "$builder_name" --pull workstation
 
 image_ref="$(docker compose config --images | sed -n '1p')"
 [[ -n "$image_ref" ]] || { echo "could not resolve candidate image reference" >&2; exit 1; }
 actual_resolution_sha="$(
-  docker image inspect "$image_ref"     --format '{{ index .Config.Labels "io.chatgpt-ce-workstation.upstream-resolution-sha256" }}'
+  docker image inspect "$image_ref" \
+    --format '{{ index .Config.Labels "io.chatgpt-ce-workstation.upstream-resolution-sha256" }}'
 )"
 [[ "$actual_resolution_sha" == "$UPSTREAM_RESOLUTION_SHA256" ]] || {
   echo "candidate provenance label mismatch" >&2

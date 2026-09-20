@@ -159,6 +159,81 @@ Automated source/integration tests MUST cover at least:
 
 Live validation MUST include at least one successful update cycle on the target workstation and a bounded failure/rollback exercise that does not require deliberately damaging persistent user data.
 
+### R17 — Retention cleanup runs only after verified promotion
+
+Workstation artifact cleanup MUST run only after the exact promoted candidate has passed the required health and runtime verification from R12.
+
+No image/tag/cache cleanup belonging to the retention policy may run on pre-promotion failure, promotion failure, promoted-image mismatch, failed health verification or failed runtime verification.
+
+The image required for deterministic rollback MUST remain available throughout every failure path.
+
+### R18 — Retain current production plus exactly one previous known-working image
+
+After a successful verified update, the workstation MUST retain:
+
+1. the exact current verified production image needed for normal recreation; and
+2. exactly one immediately previous known-working workstation image as the deterministic rollback baseline.
+
+Older workstation-specific `candidate-*` and `rollback-*` image/tag artifacts that are no longer required by those two retained identities MUST be eligible for removal after verification.
+
+Retention logic MUST use exact image identity/reference evidence rather than age alone to decide which production and rollback images are protected.
+
+### R19 — Image cleanup is workstation-scoped and reference-safe
+
+Image/tag cleanup MUST be restricted to artifacts owned by this workstation update lifecycle.
+
+The updater MUST NOT invoke an unscoped/global image or system prune that can remove images or layers belonging to unrelated Unraid containers/projects.
+
+Cleanup MUST NOT remove an image or layer still required by the current production image, the retained rollback baseline, or another live Docker reference that makes deletion unsafe.
+
+### R20 — Build cache has a separate bounded workstation-scoped policy
+
+BuildKit/build cache retention MUST be treated separately from image/tag retention.
+
+The workstation MUST define and apply a bounded retention mechanism for build cache attributable to this workstation's build path. The policy SHOULD preserve cache that remains useful/shared for likely future builds while preventing indefinite historical growth.
+
+The exact supported mechanism MAY use scoped builder/cache records, age, size or equivalent BuildKit GC/prune semantics after the target Unraid Docker/BuildKit backend is verified. It MUST NOT rely on an unscoped/global prune that can evict unrelated projects' cache.
+
+The policy MUST preserve the identity-driven cache semantics from R7-R8; a repeated no-change update may still execute the build path and benefit from BuildKit cache.
+
+### R21 — Post-success cleanup failure is reported separately
+
+Once the new production image has passed all success verification from R12, a later retention/cleanup failure MUST NOT falsely convert that already-verified production promotion into an update/rollback failure.
+
+The updater MUST report cleanup status distinctly and persist enough evidence to identify what cleanup succeeded, what failed and which production/rollback identities remain protected.
+
+### R22 — Persistent data is outside retention cleanup scope
+
+The retention implementation MUST NOT delete, rewrite or prune persistent workstation home, projects, secrets, keyring data or other bind-mounted user state.
+
+This cleanup policy applies only to workstation-owned Docker image/tag artifacts and its bounded build-cache scope.
+
+### R23 — Retention evidence records protected identities and cleanup result
+
+Durable update evidence for a successful update MUST identify at least:
+
+- the current verified production image identity/reference;
+- the retained previous known-working rollback image identity/reference;
+- the image/tag cleanup result and removed/retained workstation artifact identities at a bounded level;
+- the build-cache cleanup policy/result at a bounded level;
+- any cleanup warning/failure distinct from production verification status.
+
+Evidence MUST NOT contain secrets.
+
+### R24 — Validation covers multi-cycle retention and failure ordering
+
+Automated source/integration tests MUST cover at least three sequential successful update cycles and prove that workstation candidate/rollback artifacts do not grow without bound.
+
+Tests MUST also prove that:
+
+- exactly the current production image and one immediately previous known-working rollback baseline remain protected after a successful cycle;
+- an older workstation rollback/candidate artifact becomes removable only after the newer production candidate is fully verified;
+- cleanup is not invoked on pre-promotion or post-promotion verification failure paths;
+- rollback after a failed candidate still uses the exact retained previous image and verifies GREEN;
+- cleanup failure after production verification is surfaced distinctly without reporting the verified production update as failed;
+- cleanup operations are workstation-scoped and do not use a global Docker prune;
+- the build-cache policy is bounded without disabling useful unchanged-input cache reuse.
+
 ## Acceptance-level outcomes
 
 The feature is accepted when all of the following are true:
@@ -173,6 +248,12 @@ The feature is accepted when all of the following are true:
 8. post-promotion health/runtime failure follows the deterministic rollback path and never reports false success;
 9. runtime self-updaters remain disabled and the container isolation boundary is unchanged;
 10. source/integration tests and target-host live verification are GREEN.
+11. repeated successful updates retain the current verified production image plus exactly one immediately previous known-working rollback image without unbounded historical candidate/rollback growth;
+12. rollback to the retained previous image remains deterministic and verifies GREEN after later successful update cycles;
+13. workstation-specific image cleanup cannot prune unrelated Unraid image artifacts or persistent user data;
+14. BuildKit/build cache uses a documented bounded workstation-scoped retention mechanism while preserving useful identity-driven cache reuse;
+15. cleanup is ordered strictly after successful live verification and never removes the rollback baseline needed by a failed update;
+16. update evidence distinguishes production success from retention cleanup status and identifies the protected current/rollback image identities.
 
 ## Non-goals
 
@@ -183,9 +264,15 @@ The feature is accepted when all of the following are true:
 - making the running workstation mutate its own image from inside the container;
 - using arbitrary `--no-cache` rebuilds as the normal freshness model;
 - changing the CE feature set or broader workstation product behavior unrelated to update mechanics.
+- using `docker system prune` or another unscoped/global cleanup operation as the retention mechanism;
+- deleting persistent home/projects/secrets/keyring data as part of Docker artifact cleanup;
+- disabling BuildKit cache or forcing clean rebuilds merely to control storage growth;
+- retaining more than one historical known-working workstation image as part of the normal deterministic rollback contract.
 
 ## Definition notes
 
 Exact resolver implementation, manifest format, Docker stage layout, package-metadata probe mechanics, candidate tag naming and rollback command structure are implementation/planning details as long as the requirements above are preserved.
 
 The implementation may use bounded technical research to determine the strongest practical identity source for Muse, Ubuntu/Chrome APT metadata and the OpenAI package freshness probe. No unresolved product/system choice blocks Planning.
+
+For artifact retention, the exact Docker/BuildKit commands, builder identity/filtering mechanism and concrete age/size thresholds are implementation/planning details. Bounded technical research MAY verify what the target Unraid Docker/BuildKit backend supports, but the retained-image count, cleanup ordering, workstation-only scope, non-fatal post-success cleanup reporting and bounded-cache outcome are fixed requirements.

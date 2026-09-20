@@ -38,7 +38,14 @@ bash scripts/test-keyring-session-readiness.sh \
   || fail 'keyring session readiness regression tests'
 bash scripts/test-keyring-runtime-lock-check.sh \
   || fail 'keyring runtime lock-check regression tests'
-pass 'passwordless keyring v2 helper/preparation/readiness/runtime-verifier tests'
+bash scripts/test-preflight-keyring-state.sh \
+  || fail 'passwordless keyring host-preflight regression tests'
+grep -F '[[ -f "$KEYRING_SECRET_FILE" ]]' scripts/preflight-host.sh >/dev/null \
+  || fail 'host preflight does not accept the D26 empty keyring placeholder'
+if grep -F '[[ -s "$KEYRING_SECRET_FILE" ]]' scripts/preflight-host.sh >/dev/null; then
+  fail 'host preflight still requires a non-empty D26 keyring migration credential'
+fi
+pass 'passwordless keyring v2 helper/preparation/readiness/runtime-verifier/preflight tests'
 
 echo
 echo '=== managed global AGENTS reconciliation ==='
@@ -102,6 +109,9 @@ echo
 echo '=== safe updater orchestration ==='
 [[ -s scripts/update.sh ]] || fail 'update orchestrator missing'
 [[ -s scripts/test-update-orchestration.sh ]] || fail 'update orchestration tests missing'
+[[ -s scripts/buildkit-cache.sh ]] || fail 'BuildKit cache helper missing'
+[[ -s scripts/test-buildkit-cache.sh ]] || fail 'BuildKit cache helper tests missing'
+[[ -s scripts/test-retention-multicycle.sh ]] || fail 'multi-cycle retention harness missing'
 if grep -F 'UPSTREAM_REFRESH' scripts/update.sh >/dev/null; then
   fail 'legacy timestamp upstream refresh remains in update.sh'
 fi
@@ -121,7 +131,25 @@ grep -F -- '--no-build workstation' scripts/update.sh >/dev/null || fail 'promot
 grep -F 'update_failed_rolled_back' scripts/update.sh >/dev/null || fail 'successful rollback is not distinguished from update success'
 grep -F 'rollback_failed' scripts/update.sh >/dev/null || fail 'rollback failure is not explicitly represented'
 bash scripts/test-update-orchestration.sh || fail 'isolated update orchestration tests'
-pass 'exact updater promotion, verification and rollback contracts'
+bash scripts/test-buildkit-cache.sh || fail 'dedicated BuildKit cache helper tests'
+bash scripts/test-retention-multicycle.sh || fail 'multi-cycle retention lifecycle tests'
+grep -F -- '--builder "$builder_name"' scripts/build.sh >/dev/null \
+  || fail 'candidate build does not explicitly select the dedicated Workstation builder'
+grep -F 'docker buildx create --name "$name" --driver "$WORKSTATION_BUILDER_DRIVER"' scripts/buildkit-cache.sh >/dev/null \
+  || fail 'Workstation builder is not created with an explicit isolated driver'
+grep -F 'docker buildx prune' scripts/buildkit-cache.sh >/dev/null \
+  || fail 'scoped BuildKit cache pruning is missing'
+grep -F -- '--builder "$name"' scripts/buildkit-cache.sh >/dev/null \
+  || fail 'BuildKit cache pruning is not bound to the exact Workstation builder'
+grep -F -- '--max-used-space "$max_used"' scripts/buildkit-cache.sh >/dev/null \
+  || fail 'BuildKit cache pruning has no finite max-used-space bound'
+grep -F -- '--reserved-space "$reserved"' scripts/buildkit-cache.sh >/dev/null \
+  || fail 'BuildKit cache pruning has no reserved-space policy'
+if grep -Eq 'docker[[:space:]]+builder[[:space:]]+prune|docker[[:space:]]+system[[:space:]]+prune|docker[[:space:]]+buildx[[:space:]]+use' \
+  scripts/build.sh scripts/buildkit-cache.sh scripts/update.sh; then
+  fail 'global/default BuildKit cleanup or global builder selection detected'
+fi
+pass 'exact updater promotion, verification, rollback and scoped BuildKit retention contracts'
 
 echo
 echo '=== Codex marketplace updater ==='
