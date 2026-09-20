@@ -79,6 +79,7 @@ if [[ -s "$keyring_migration_password_file" ]]; then
   keyring_args+=(--password-file "$keyring_migration_password_file")
 fi
 python3 /opt/workstation/bin/keyring-passwordless.py "${keyring_args[@]}"
+rm -f "$keyring_migration_password_file"
 
 # codex-chatgpt-web is part of the workstation desktop and should come up with
 # every desktop session. If it is closed, it can be relaunched from the panel or
