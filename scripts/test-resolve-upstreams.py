@@ -234,7 +234,7 @@ SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
             ubuntu, fake_runner
         )
         self.assertEqual(
-            calls[0][4], "ubuntu:24.04@sha256:" + "8" * 64
+            calls[0][3], "ubuntu:24.04@sha256:" + "8" * 64
         )
         self.assertEqual(
             ubuntu_packages["provenance"], "ubuntu-apt-signed-inrelease"
