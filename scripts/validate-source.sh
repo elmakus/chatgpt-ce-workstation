@@ -89,7 +89,7 @@ env \
   AGENT_WORKSPACE_VERSION=0.0.0 AGENT_WORKSPACE_INTEGRITY="sha512-fixture" \
   CODEX_CHATGPT_WEB_VERSION=0.0.0 CODEX_CHATGPT_WEB_SHA256="${fixture_sha}" \
   MUSE_INSTALLER_URL=https://dev.meta.ai/install.sh MUSE_INSTALLER_SHA256="${fixture_sha}" MUSE_EXPECTED_VERSION=0.0.0-R0.0 \
-  CHROME_VERSION=1.0.0-1 CHROME_PACKAGE_SHA256="${fixture_sha}" GOOGLE_LINUX_SIGNING_KEY_SHA256="${fixture_sha}" \
+  CHROME_VERSION=1.0.0-1 CHROME_PACKAGE_SHA256="${fixture_sha}" GOOGLE_LINUX_SIGNING_KEY_DIGEST_SHA256="${fixture_sha}" \
   RUST_VERSION=1.90.0 RUST_STABLE_MANIFEST_SHA256="${fixture_sha}" RUSTUP_INSTALLER_SHA256="${fixture_sha}" \
   UPSTREAM_RESOLUTION_SHA256="${fixture_sha}" \
   docker compose config >/dev/null || fail 'docker compose config'
