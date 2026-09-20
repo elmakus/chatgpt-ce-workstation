@@ -37,9 +37,9 @@ cards:
       - "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m01--deterministic-scheduler-core"
       - "requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md"
       - "docs/DECISIONS.md#d24--global-codex-marketplace-refresh-uses-one-persistent-s6-timer"
-    review_state: in_progress
+    review_state: green
     review_subject: "elmakus/chatgpt-ce-workstation@15b399ad0bdaf7ed843039be7e402cd75796352b"
-    review_evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M01-T01-implementation-2.md"
+    review_evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M01-T01-review-2.md"
     result_commit: "15b399ad0bdaf7ed843039be7e402cd75796352b"
     result_pr: null
     evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M01-T01-implementation-2.md"
