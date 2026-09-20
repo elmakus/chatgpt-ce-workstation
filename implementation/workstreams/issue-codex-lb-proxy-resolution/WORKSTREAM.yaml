@@ -1,6 +1,6 @@
 id: "issue-codex-lb-proxy-resolution"
 kind: "issue"
-status: "in_progress"
+status: "done"
 
 branch: "fix/codex-lb-proxy-resolution"
 base_ref: "elmakus/chatgpt-ce-workstation@04440574afb2d85790301c915e9d7f8c90721021"
@@ -39,4 +39,4 @@ branch_cleanup:
   evidence: null
 
 pr: 10
-result: null
+result: "1171e8535dd61ab84138d6da6f37bffdf8d3b276"
