@@ -126,7 +126,7 @@ cards:
     evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M04-T01.md"
     tests_summary: "Exact combined subject f19c906 GREEN: RETENTION_MULTICYCLE_TESTS_GREEN; BUILDKIT_CACHE_TESTS_GREEN; UPDATE_ORCHESTRATION_TESTS_GREEN; SOURCE_VALIDATION_GREEN; bash -n, refresh diff-check vs current main and forbidden global/default prune/buildx-use/no-cache scan GREEN; no live Docker/BuildKit/keyring mutation"
     independent_review: REQUIRED
-    review_state: pending
+    review_state: in_progress
     review_subject: "f19c906ee92dbdf966bd1eff3bb125853b876ac8"
     review_evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M04-T01.md"
 
