@@ -100,6 +100,6 @@ cards:
     evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M03-T01.md"
     tests_summary: "Exact integrated subject e4b0570 GREEN: RETENTION_MULTICYCLE_TESTS_GREEN; BUILDKIT_CACHE_TESTS_GREEN; UPDATE_ORCHESTRATION_TESTS_GREEN; SOURCE_VALIDATION_GREEN; bash -n, diff-check and forbidden global/default prune/buildx-use/no-cache scan GREEN; no live Docker mutation"
     independent_review: RECOMMENDED
-    review_state: in_progress
+    review_state: green
     review_subject: "e4b0570adc975b6cd18d9e1ccf49bc74cb0a4662"
     review_evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M03-T01.md"
