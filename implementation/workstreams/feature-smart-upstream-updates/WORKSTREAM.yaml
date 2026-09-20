@@ -1,6 +1,6 @@
 id: "feature-smart-upstream-updates"
 kind: "feature"
-status: "in_progress"
+status: "done"
 
 branch: "feat/smart-upstream-updates"
 base_ref: "elmakus/chatgpt-ce-workstation@04fb32a47b5bcfbfcf16f6fb77bffbe2a7282acf"
@@ -44,4 +44,4 @@ branch_cleanup:
   evidence: null
 
 pr: 7
-result: null
+result: "3f117a7a69895ba305e1355e3d0a81c8c8f8892d"
