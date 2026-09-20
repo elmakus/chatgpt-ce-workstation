@@ -89,7 +89,7 @@ cards:
     title: "Prove exact candidate provenance/cache semantics and freeze integrated M01-M02 review subject"
     milestone: M02
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     depends_on: ["M02-T01"]
     openspec_change: null
