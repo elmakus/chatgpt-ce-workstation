@@ -1,6 +1,6 @@
 # Smart upstream updates Master Plan
 
-Status: **draft**
+Status: **approved**
 Plan revision: **smart-upstream-updates-R2**
 Date: 2026-09-20
 Independent plan review: **RECOMMENDED**
