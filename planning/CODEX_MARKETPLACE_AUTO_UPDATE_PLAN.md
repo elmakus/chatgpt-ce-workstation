@@ -1,7 +1,7 @@
 # Master Plan — Codex Marketplace Auto-Update
 
 Plan revision: `CMAU-R1`
-Status: `draft`
+Status: `approved`
 Date: `2026-09-20`
 Independent plan review: `RECOMMENDED`
 
