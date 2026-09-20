@@ -1,7 +1,7 @@
 # Research — cross-harness worker capability patterns
 
 Research ID: R-MUSE-CROSS-HARNESS-CAPABILITIES-2026-09-20
-Status: complete
+Status: consumed
 Origin role: project_definition
 Origin subject: requirements/MUSE_WORKER_EXTERNAL_TOOL_ACCESS.md
 Return target: project_definition:requirements/MUSE_WORKER_EXTERNAL_TOOL_ACCESS.md
