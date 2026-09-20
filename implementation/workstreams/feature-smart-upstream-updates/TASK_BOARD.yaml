@@ -163,7 +163,7 @@ cards:
     title: "Activate accepted updater on production and run post-update regressions"
     milestone: M04
     decision_state: accepted
-    execution_status: blocked
+    execution_status: in_progress
     executor: chatgpt
     depends_on: ["M03-T02"]
     openspec_change: null
