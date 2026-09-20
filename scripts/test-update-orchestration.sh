@@ -67,6 +67,8 @@ run_case() (
   container_present=1
   active_running_state=true
   active_health_state=healthy
+  candidate_recreate_count=0
+  candidate_verify_count=0
 
   require_tools() { trace_line "tools"; }
   load_local_env() { trace_line "env"; }
@@ -141,10 +143,17 @@ run_case() (
   recreate_with_tag() {
     trace_line "recreate:$1"
     if [[ "$1" == candidate-test ]]; then
-      if [[ "$scenario" == promotion_fail ]]; then
+      candidate_recreate_count=$((candidate_recreate_count + 1))
+      trace_line "candidate-recreate-count:$candidate_recreate_count"
+      if [[ "$scenario" == promotion_fail && "$candidate_recreate_count" -eq 1 ]]; then
         return 1
       fi
-      if [[ "$scenario" == promoted_mismatch ]]; then
+      if [[ "$scenario" == persistence_recreate_fail && "$candidate_recreate_count" -eq 2 ]]; then
+        return 1
+      fi
+      if [[ "$scenario" == promoted_mismatch && "$candidate_recreate_count" -eq 1 ]]; then
+        active_image_id="$fixture_wrong_id"
+      elif [[ "$scenario" == persistence_image_mismatch && "$candidate_recreate_count" -eq 2 ]]; then
         active_image_id="$fixture_wrong_id"
       else
         active_image_id="$fixture_candidate_id"
@@ -176,6 +185,9 @@ run_case() (
     if [[ "$scenario" == health_fail && "$active_image_id" == "$fixture_candidate_id" ]]; then
       return 1
     fi
+    if [[ "$scenario" == persistence_health_fail && "$active_image_id" == "$fixture_candidate_id" && "$candidate_recreate_count" -eq 2 ]]; then
+      return 1
+    fi
     if [[ ( "$scenario" == rollback_fail || "$scenario" == rollback_missing || "$scenario" == rollback_mismatch ) && "$active_image_id" == "$fixture_candidate_id" ]]; then
       active_health_state=unhealthy
       return 1
@@ -184,7 +196,12 @@ run_case() (
   }
   verify_runtime() {
     trace_line "verify:$active_image_id"
-    if [[ "$scenario" == runtime_fail && "$active_image_id" == "$fixture_candidate_id" ]]; then
+    candidate_verify_count=$((candidate_verify_count + 1))
+    trace_line "candidate-verify-count:$candidate_verify_count"
+    if [[ "$scenario" == runtime_fail && "$active_image_id" == "$fixture_candidate_id" && "$candidate_verify_count" -eq 1 ]]; then
+      return 1
+    fi
+    if [[ "$scenario" == persistence_runtime_fail && "$active_image_id" == "$fixture_candidate_id" && "$candidate_verify_count" -eq 2 ]]; then
       return 1
     fi
     return 0
@@ -252,8 +269,12 @@ run_case() (
     success)
       assert_order "source-validation" "host-preflight"
       assert_order "host-preflight" "build"
-      assert_trace "recreate:candidate-test"
-      assert_trace "keyring-finalize"
+      assert_trace "candidate-recreate-count:1"
+      assert_trace "candidate-recreate-count:2"
+      assert_trace "candidate-verify-count:1"
+      assert_trace "candidate-verify-count:2"
+      assert_order "candidate-recreate-count:2" "keyring-finalize"
+      assert_order "candidate-verify-count:2" "keyring-finalize"
       assert_trace "evidence:success:"
       assert_no_trace_prefix 'recreate:rollback-'
       ;;
@@ -283,6 +304,527 @@ run_case() (
       assert_trace "verify-rollback:$fixture_old_id:expected:$fixture_old_id"
       assert_no_trace_prefix "verify:$fixture_old_id"
       assert_trace "evidence:update_failed_rolled_back:candidate_runtime_verification_failed"
+      ;;
+    persistence_recreate_fail)
+      assert_trace "candidate-recreate-count:2"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:update_failed_rolled_back:persistence_recreate_failed"
+      assert_no_trace_prefix 'keyring-finalize      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:complete:container-test:true:unhealthy:$fixture_candidate_id"
+      ;;
+    rollback_missing)
+      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:container_missing::missing:missing:missing"
+      ;;
+    rollback_mismatch)
+      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:complete:container-test:true:healthy:$fixture_wrong_id"
+      ;;
+    *)
+      echo "unknown scenario: $scenario" >&2
+      exit 1
+      ;;
+  esac
+)
+
+run_case source_fail 1
+run_case resolver_fail 1
+run_case preflight_fail 1
+run_case build_fail 1
+run_case readback_fail 1
+run_case success 0
+run_case promotion_fail 1
+run_case promoted_mismatch 1
+run_case health_fail 1
+run_case runtime_fail 1
+run_case persistence_recreate_fail 1
+run_case persistence_image_mismatch 1
+run_case persistence_health_fail 1
+run_case persistence_runtime_fail 1
+run_case rollback_fail 2
+run_case rollback_missing 2
+run_case rollback_mismatch 2
+
+test_recovery_evidence_serialization() (
+  local tmp
+  tmp="$(mktemp -d /tmp/workstation-update-evidence-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  UPDATE_EVIDENCE_FILE="$tmp/evidence.json"
+  write_evidence \
+    "rollback_failed" "candidate_health_failed" \
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
+    "example/workstation:candidate-test" \
+    "sha256:2222222222222222222222222222222222222222222222222222222222222222" \
+    "sha256:1111111111111111111111111111111111111111111111111111111111111111" \
+    "example/workstation:rollback-1111111111111111" \
+    "complete" "container-test" "true" "unhealthy" \
+    "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+
+  python3 - "$UPDATE_EVIDENCE_FILE" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+assert payload["status"] == "rollback_failed"
+assert payload["recovery_state"] == {
+    "readback": "complete",
+    "container_id": "container-test",
+    "running": "true",
+    "health": "unhealthy",
+    "image_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+}
+PY
+)
+
+test_recovery_evidence_serialization
+
+test_marker_cleanup_without_backup() (
+  local tmp home
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  mkdir -p "$home/.config/workstation"
+  : > "$home/.config/workstation/keyring-passwordless-v1"
+  : > "$home/.config/workstation/keyring-passwordless-v2"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  restore_keyring_migration_backup
+
+  test ! -e "$home/.config/workstation/keyring-passwordless-v1"
+  test ! -e "$home/.config/workstation/keyring-passwordless-v2"
+)
+
+test_v2_backup_restore() (
+  local tmp home
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  mkdir -p "$home/.local/share/keyrings" "$home/.local/share/keyrings.pre-passwordless-v2" "$home/.config/workstation"
+  printf 'candidate-state' > "$home/.local/share/keyrings/state"
+  printf 'pre-attempt-state' > "$home/.local/share/keyrings.pre-passwordless-v2/state"
+  : > "$home/.config/workstation/keyring-passwordless-v2"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  docker() {
+    [[ "$1" == compose && "$2" == stop && "$3" == workstation ]]
+  }
+  restore_keyring_migration_backup
+
+  grep -Fx 'pre-attempt-state' "$home/.local/share/keyrings/state" >/dev/null
+  test ! -d "$home/.local/share/keyrings.pre-passwordless-v2"
+  test ! -e "$home/.config/workstation/keyring-passwordless-v2"
+)
+
+test_marker_cleanup_without_backup
+test_v2_backup_restore
+
+echo "UPDATE_ORCHESTRATION_TESTS_GREEN"
+
+      ;;
+    persistence_image_mismatch)
+      assert_trace "candidate-recreate-count:2"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:update_failed_rolled_back:persistence_image_mismatch"
+      assert_no_trace_prefix 'keyring-finalize      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:complete:container-test:true:unhealthy:$fixture_candidate_id"
+      ;;
+    rollback_missing)
+      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:container_missing::missing:missing:missing"
+      ;;
+    rollback_mismatch)
+      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:complete:container-test:true:healthy:$fixture_wrong_id"
+      ;;
+    *)
+      echo "unknown scenario: $scenario" >&2
+      exit 1
+      ;;
+  esac
+)
+
+run_case source_fail 1
+run_case resolver_fail 1
+run_case preflight_fail 1
+run_case build_fail 1
+run_case readback_fail 1
+run_case success 0
+run_case promotion_fail 1
+run_case promoted_mismatch 1
+run_case health_fail 1
+run_case runtime_fail 1
+run_case rollback_fail 2
+run_case rollback_missing 2
+run_case rollback_mismatch 2
+
+test_recovery_evidence_serialization() (
+  local tmp
+  tmp="$(mktemp -d /tmp/workstation-update-evidence-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  UPDATE_EVIDENCE_FILE="$tmp/evidence.json"
+  write_evidence \
+    "rollback_failed" "candidate_health_failed" \
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
+    "example/workstation:candidate-test" \
+    "sha256:2222222222222222222222222222222222222222222222222222222222222222" \
+    "sha256:1111111111111111111111111111111111111111111111111111111111111111" \
+    "example/workstation:rollback-1111111111111111" \
+    "complete" "container-test" "true" "unhealthy" \
+    "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+
+  python3 - "$UPDATE_EVIDENCE_FILE" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+assert payload["status"] == "rollback_failed"
+assert payload["recovery_state"] == {
+    "readback": "complete",
+    "container_id": "container-test",
+    "running": "true",
+    "health": "unhealthy",
+    "image_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+}
+PY
+)
+
+test_recovery_evidence_serialization
+
+test_marker_cleanup_without_backup() (
+  local tmp home
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  mkdir -p "$home/.config/workstation"
+  : > "$home/.config/workstation/keyring-passwordless-v1"
+  : > "$home/.config/workstation/keyring-passwordless-v2"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  restore_keyring_migration_backup
+
+  test ! -e "$home/.config/workstation/keyring-passwordless-v1"
+  test ! -e "$home/.config/workstation/keyring-passwordless-v2"
+)
+
+test_v2_backup_restore() (
+  local tmp home
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  mkdir -p "$home/.local/share/keyrings" "$home/.local/share/keyrings.pre-passwordless-v2" "$home/.config/workstation"
+  printf 'candidate-state' > "$home/.local/share/keyrings/state"
+  printf 'pre-attempt-state' > "$home/.local/share/keyrings.pre-passwordless-v2/state"
+  : > "$home/.config/workstation/keyring-passwordless-v2"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  docker() {
+    [[ "$1" == compose && "$2" == stop && "$3" == workstation ]]
+  }
+  restore_keyring_migration_backup
+
+  grep -Fx 'pre-attempt-state' "$home/.local/share/keyrings/state" >/dev/null
+  test ! -d "$home/.local/share/keyrings.pre-passwordless-v2"
+  test ! -e "$home/.config/workstation/keyring-passwordless-v2"
+)
+
+test_marker_cleanup_without_backup
+test_v2_backup_restore
+
+echo "UPDATE_ORCHESTRATION_TESTS_GREEN"
+
+      ;;
+    persistence_health_fail)
+      assert_trace "candidate-recreate-count:2"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:update_failed_rolled_back:persistence_health_failed"
+      assert_no_trace_prefix 'keyring-finalize      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:complete:container-test:true:unhealthy:$fixture_candidate_id"
+      ;;
+    rollback_missing)
+      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:container_missing::missing:missing:missing"
+      ;;
+    rollback_mismatch)
+      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:complete:container-test:true:healthy:$fixture_wrong_id"
+      ;;
+    *)
+      echo "unknown scenario: $scenario" >&2
+      exit 1
+      ;;
+  esac
+)
+
+run_case source_fail 1
+run_case resolver_fail 1
+run_case preflight_fail 1
+run_case build_fail 1
+run_case readback_fail 1
+run_case success 0
+run_case promotion_fail 1
+run_case promoted_mismatch 1
+run_case health_fail 1
+run_case runtime_fail 1
+run_case rollback_fail 2
+run_case rollback_missing 2
+run_case rollback_mismatch 2
+
+test_recovery_evidence_serialization() (
+  local tmp
+  tmp="$(mktemp -d /tmp/workstation-update-evidence-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  UPDATE_EVIDENCE_FILE="$tmp/evidence.json"
+  write_evidence \
+    "rollback_failed" "candidate_health_failed" \
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
+    "example/workstation:candidate-test" \
+    "sha256:2222222222222222222222222222222222222222222222222222222222222222" \
+    "sha256:1111111111111111111111111111111111111111111111111111111111111111" \
+    "example/workstation:rollback-1111111111111111" \
+    "complete" "container-test" "true" "unhealthy" \
+    "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+
+  python3 - "$UPDATE_EVIDENCE_FILE" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+assert payload["status"] == "rollback_failed"
+assert payload["recovery_state"] == {
+    "readback": "complete",
+    "container_id": "container-test",
+    "running": "true",
+    "health": "unhealthy",
+    "image_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+}
+PY
+)
+
+test_recovery_evidence_serialization
+
+test_marker_cleanup_without_backup() (
+  local tmp home
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  mkdir -p "$home/.config/workstation"
+  : > "$home/.config/workstation/keyring-passwordless-v1"
+  : > "$home/.config/workstation/keyring-passwordless-v2"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  restore_keyring_migration_backup
+
+  test ! -e "$home/.config/workstation/keyring-passwordless-v1"
+  test ! -e "$home/.config/workstation/keyring-passwordless-v2"
+)
+
+test_v2_backup_restore() (
+  local tmp home
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  mkdir -p "$home/.local/share/keyrings" "$home/.local/share/keyrings.pre-passwordless-v2" "$home/.config/workstation"
+  printf 'candidate-state' > "$home/.local/share/keyrings/state"
+  printf 'pre-attempt-state' > "$home/.local/share/keyrings.pre-passwordless-v2/state"
+  : > "$home/.config/workstation/keyring-passwordless-v2"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  docker() {
+    [[ "$1" == compose && "$2" == stop && "$3" == workstation ]]
+  }
+  restore_keyring_migration_backup
+
+  grep -Fx 'pre-attempt-state' "$home/.local/share/keyrings/state" >/dev/null
+  test ! -d "$home/.local/share/keyrings.pre-passwordless-v2"
+  test ! -e "$home/.config/workstation/keyring-passwordless-v2"
+)
+
+test_marker_cleanup_without_backup
+test_v2_backup_restore
+
+echo "UPDATE_ORCHESTRATION_TESTS_GREEN"
+
+      ;;
+    persistence_runtime_fail)
+      assert_trace "candidate-recreate-count:2"
+      assert_trace "candidate-verify-count:2"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:update_failed_rolled_back:persistence_runtime_verification_failed"
+      assert_no_trace_prefix 'keyring-finalize      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:complete:container-test:true:unhealthy:$fixture_candidate_id"
+      ;;
+    rollback_missing)
+      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:container_missing::missing:missing:missing"
+      ;;
+    rollback_mismatch)
+      assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
+      assert_trace "recreate:rollback-1111111111111111"
+      assert_trace "evidence:rollback_failed:candidate_health_failed"
+      assert_trace "recovery-evidence:complete:container-test:true:healthy:$fixture_wrong_id"
+      ;;
+    *)
+      echo "unknown scenario: $scenario" >&2
+      exit 1
+      ;;
+  esac
+)
+
+run_case source_fail 1
+run_case resolver_fail 1
+run_case preflight_fail 1
+run_case build_fail 1
+run_case readback_fail 1
+run_case success 0
+run_case promotion_fail 1
+run_case promoted_mismatch 1
+run_case health_fail 1
+run_case runtime_fail 1
+run_case rollback_fail 2
+run_case rollback_missing 2
+run_case rollback_mismatch 2
+
+test_recovery_evidence_serialization() (
+  local tmp
+  tmp="$(mktemp -d /tmp/workstation-update-evidence-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  UPDATE_EVIDENCE_FILE="$tmp/evidence.json"
+  write_evidence \
+    "rollback_failed" "candidate_health_failed" \
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
+    "example/workstation:candidate-test" \
+    "sha256:2222222222222222222222222222222222222222222222222222222222222222" \
+    "sha256:1111111111111111111111111111111111111111111111111111111111111111" \
+    "example/workstation:rollback-1111111111111111" \
+    "complete" "container-test" "true" "unhealthy" \
+    "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+
+  python3 - "$UPDATE_EVIDENCE_FILE" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+assert payload["status"] == "rollback_failed"
+assert payload["recovery_state"] == {
+    "readback": "complete",
+    "container_id": "container-test",
+    "running": "true",
+    "health": "unhealthy",
+    "image_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+}
+PY
+)
+
+test_recovery_evidence_serialization
+
+test_marker_cleanup_without_backup() (
+  local tmp home
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  mkdir -p "$home/.config/workstation"
+  : > "$home/.config/workstation/keyring-passwordless-v1"
+  : > "$home/.config/workstation/keyring-passwordless-v2"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  restore_keyring_migration_backup
+
+  test ! -e "$home/.config/workstation/keyring-passwordless-v1"
+  test ! -e "$home/.config/workstation/keyring-passwordless-v2"
+)
+
+test_v2_backup_restore() (
+  local tmp home
+  tmp="$(mktemp -d /tmp/workstation-keyring-rollback-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  home="$tmp/home"
+  mkdir -p "$home/.local/share/keyrings" "$home/.local/share/keyrings.pre-passwordless-v2" "$home/.config/workstation"
+  printf 'candidate-state' > "$home/.local/share/keyrings/state"
+  printf 'pre-attempt-state' > "$home/.local/share/keyrings.pre-passwordless-v2/state"
+  : > "$home/.config/workstation/keyring-passwordless-v2"
+
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  APPDATA_ROOT="$tmp"
+  docker() {
+    [[ "$1" == compose && "$2" == stop && "$3" == workstation ]]
+  }
+  restore_keyring_migration_backup
+
+  grep -Fx 'pre-attempt-state' "$home/.local/share/keyrings/state" >/dev/null
+  test ! -d "$home/.local/share/keyrings.pre-passwordless-v2"
+  test ! -e "$home/.config/workstation/keyring-passwordless-v2"
+)
+
+test_marker_cleanup_without_backup
+test_v2_backup_restore
+
+echo "UPDATE_ORCHESTRATION_TESTS_GREEN"
+
       ;;
     rollback_fail)
       assert_trace "recreate:candidate-test"
