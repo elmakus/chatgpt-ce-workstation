@@ -180,7 +180,7 @@ cards:
     title: "Make Codex Web GPT interrupt-hook ownership compatible with native enabled normalization"
     milestone: M04
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: chatgpt
     depends_on: ["M03-T02"]
     openspec_change: null
