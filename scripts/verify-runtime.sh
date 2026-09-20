@@ -122,6 +122,30 @@ docker exec -u codex "$container" env DBUS_SESSION_BUS_ADDRESS="$desktop_session
   | grep -F 'boolean true' >/dev/null \
   || fail 'GNOME Secret Service is not present on the canonical desktop bus'
 
+default_collection="$(
+  docker exec -u codex "$container" env DBUS_SESSION_BUS_ADDRESS="$desktop_session_bus" \
+    gdbus call --session \
+      --dest org.freedesktop.secrets \
+      --object-path /org/freedesktop/secrets \
+      --method org.freedesktop.Secret.Service.ReadAlias default \
+    | sed -n "s/^(objectpath '\([^']*\)',)$/\1/p"
+)"
+[[ -n "$default_collection" && "$default_collection" != "/" ]] \
+  || fail 'passwordless default Secret Service collection is missing'
+docker exec -u codex "$container" env DBUS_SESSION_BUS_ADDRESS="$desktop_session_bus" \
+  gdbus call --session \
+    --dest org.freedesktop.secrets \
+    --object-path "$default_collection" \
+    --method org.freedesktop.DBus.Properties.Get \
+    org.freedesktop.Secret.Collection Locked \
+  | grep -F 'boolean false' >/dev/null \
+  || fail 'default Secret Service collection is locked'
+docker exec -u codex "$container" test -f /home/codex/.config/workstation/keyring-passwordless-v1 \
+  || fail 'passwordless keyring migration marker is missing'
+if docker exec -u codex "$container" test -e /run/workstation/keyring-migration-password; then
+  fail 'one-time keyring migration credential remains staged after desktop startup'
+fi
+
 root_keyrings="$(docker top "$container" -eo pid,user,args \
   | awk '$2 == "root" && /[g]nome-keyring-daemon/ { print }')"
 [[ -z "$root_keyrings" ]] || {
@@ -137,9 +161,11 @@ set -Eeuo pipefail
 [[ \"\$(pwd)\" == '$canonical_root' ]]
 [[ ! -e /workspace ]]
 [[ ! -e /var/run/docker.sock ]]
-[[ -r /run/workstation/keyring-password ]]
+[[ ! -e /run/workstation/keyring-migration-password ]]
+[[ -f /home/codex/.config/workstation/keyring-passwordless-v1 ]]
 [[ -s /home/codex/.config/workstation/vnc.pass ]]
 [[ -x /opt/muse-code/bin/muse ]]
+python3 -c 'import dbus'
 for cmd in chatgpt-ce codex-web-gpt muse openbox tint2 xterm google-chrome workstation-healthcheck xdotool wmctrl; do
   command -v \"\$cmd\" >/dev/null
   echo \"OK command: \$cmd\"
@@ -163,7 +189,7 @@ touch '$canonical_root/.workstation-write-test'
 rm -f '$canonical_root/.workstation-write-test'
 bash /usr/local/bin/workstation-healthcheck
 "
-pass 'canonical pwd, launchers, Muse CLI surface, X11 automation, secrets, panel, write access and desktop health'
+pass 'canonical pwd, passwordless keyring marker, launchers, Muse CLI surface, X11 automation, secrets, panel, write access and desktop health'
 
 echo
 echo '=== persistent home ==='
