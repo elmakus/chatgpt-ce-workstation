@@ -6,7 +6,7 @@ current_milestone: "M02"
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "fb9aa76b69d2b48a4c3a70e9af8008c50cf3ab98"
+  head: "35e979542815451079fbeb6f6398b70066c5a962"
 
 research_obligation: null
 
@@ -28,9 +28,9 @@ milestones:
     execution_status: in_progress
     contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m02--exact-candidate-build--cache-semantics"
     checkpoint: null
-    implementation_head: null
+    implementation_head: "35e979542815451079fbeb6f6398b70066c5a962"
     handoff: null
-    acceptance_evidence: null
+    acceptance_evidence: "Implementation acceptance GREEN on exact integrated subject 35e979542815451079fbeb6f6398b70066c5a962: CI #141 and exact non-production candidate build/readback #11 GREEN; independent review pending before M03."
     review_state: null
     review_subject: null
     review_evidence: null
@@ -94,10 +94,10 @@ cards:
     depends_on: ["M02-T01"]
     openspec_change: null
     contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M02-T02.md"
-    review_state: null
-    review_subject: null
-    review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    review_state: pending
+    review_subject: "35e979542815451079fbeb6f6398b70066c5a962"
+    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M02-T02-implementation.md"
+    result_commit: "35e979542815451079fbeb6f6398b70066c5a962"
+    result_pr: 7
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M02-T02-implementation.md"
+    tests_summary: "GREEN on exact integrated M01-M02 subject 35e979542815451079fbeb6f6398b70066c5a962: CI #141 GREEN and exact candidate build #11 GREEN; candidate image sha256:ef4b0c22c261356fd1c5f1a2b9f17b935160042663149aba0e6debe83686d5a5 read back label + embedded manifest matching frozen resolution SHA-256 837043af65bd6f13793af245c6a32cc2ad6e142504afd9e9cd2b47fbc7d246d8; no production write/recreate occurred."
