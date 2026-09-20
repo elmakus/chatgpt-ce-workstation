@@ -65,10 +65,24 @@ A subsequent release-branch push at `377fee05896278395da68beb5c3bef926cde1344` r
 Release PR #9 was then merged to fork `main` as:
 `9de6a670f1934f5f4843a9df0d4b0d408884798f`
 
-## Workstation consumption
+## Current workstation consumption
 
-The workstation installer defaults to `elmakus/codex-chatgpt-web`, resolves the latest release when `CODEX_CHATGPT_WEB_VERSION` is unset, downloads the Linux AppImage and `checksums.txt`, and verifies the AppImage SHA-256 before installation.
+Current workstation `main` at the final refresh is `c32898eaa20a60aaddec8edad96dfc3e91cc4bdc`.
 
-Therefore a future authorized workstation image build will consume published `v5.0.13` under the existing D11 release-consumption contract.
+D11 still selects `elmakus/codex-chatgpt-web` as the package source, while D25 now requires upstream resolution before build.
+
+The current consumption path is:
+
+1. `scripts/resolve-upstreams.py::resolve_codex_web_gpt` resolves the stable GitHub release for `elmakus/codex-chatgpt-web`.
+2. The resolver requires `codex-web-gpt-<version>-linux-x64.AppImage` and `checksums.txt`.
+3. It extracts the AppImage digest from the published checksum manifest and freezes `version@sha256:<digest>`.
+4. `scripts/build/install-codex-web-gpt.sh` requires that exact version and exact SHA-256.
+5. The installer downloads the release AppImage + checksum manifest, checks the manifest against the frozen digest, and checks the downloaded bytes against the same digest.
+
+For `v5.0.13`, the frozen digest is:
+
+`ce2e60699a711993d8013a2a8c8b3951ebbf7b1ce968836176eb5ec4d8350270`
+
+Therefore a future authorized workstation update will resolve and cryptographically freeze the published fixed release under the current D11/D25 contract.
 
 No production workstation rebuild/recreate or live configuration mutation was performed by this workstream.
