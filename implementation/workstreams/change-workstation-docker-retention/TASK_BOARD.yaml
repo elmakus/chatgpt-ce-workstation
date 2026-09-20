@@ -49,7 +49,7 @@ milestones:
 
   M04:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md#Milestone-M04--Live-Unraid-verification"
     checkpoint: null
     implementation_head: null
@@ -118,7 +118,7 @@ cards:
 
   - id: "M04-T01"
     contract: "implementation/workstreams/change-workstation-docker-retention/cards/M04-T01.md"
-    execution_status: ready
+    execution_status: in_progress
     dependencies: ["M03-T01"]
     executor: chatgpt
     result_commit: null
