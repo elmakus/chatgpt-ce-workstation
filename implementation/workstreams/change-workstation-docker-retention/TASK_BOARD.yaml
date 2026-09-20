@@ -5,7 +5,7 @@ current_milestone: "M04"
 
 execution_ref:
   branch: "work/workstation-docker-retention"
-  pr: null
+  pr: 21
   head: "9c2523a0bd0ae18c43a3a559a05e57e8275aaa77"
 
 research_obligation: null
