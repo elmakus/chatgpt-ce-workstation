@@ -176,6 +176,23 @@ cards:
     evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-live-regression.md"
     tests_summary: "PARTIAL LIVE ACCEPTANCE: production smart update GREEN on candidate sha256:214ac0f... with health/runtime/isolation/provenance GREEN; Codex Web GPT 5.0.10 doctor RED because current Codex normalized the managed interrupt hook with enabled=true, which 5.0.10 rejects as changed owned state. Bounded source correction required before M04-T01 completion."
 
+  - id: M04-T01-C01
+    title: "Make Codex Web GPT interrupt-hook ownership compatible with native enabled normalization"
+    milestone: M04
+    decision_state: accepted
+    execution_status: ready
+    executor: chatgpt
+    depends_on: ["M03-T02"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M04-T01-C01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+
   - id: M04-T02
     title: "Exercise bounded live rollback and prove stable no-change updates"
     milestone: M04
