@@ -220,6 +220,16 @@ grep -F 'gnome-keyring-daemon --start --components=secrets' scripts/container/de
   || fail 'desktop session no longer starts Secret Service'
 grep -F 'keyring-passwordless.py' scripts/container/desktop-session-inner.sh >/dev/null \
   || fail 'desktop session does not enforce passwordless keyring state'
+grep -Fx 'runtime_keyring_secret="$runtime_secret_dir/keyring-migration-password"' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
+  || fail 'container init keyring runtime-secret assignment is malformed'
+grep -Fx 'keyring_marker="$config_dir/keyring-passwordless-v1"' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
+  || fail 'container init keyring marker assignment is malformed'
+grep -Fx 'keyring_migration_password_file="${KEYRING_MIGRATION_PASSWORD_FILE:-/run/workstation/keyring-migration-password}"' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session migration-password assignment is malformed'
+grep -Fx 'keyring_marker="${KEYRING_PASSWORDLESS_MARKER:-/home/codex/.config/workstation/keyring-passwordless-v1}"' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session keyring marker assignment is malformed'
+grep -Fx 'keyring_backup="${KEYRING_PASSWORDLESS_BACKUP:-/home/codex/.local/share/keyrings.pre-passwordless-v1}"' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session keyring backup assignment is malformed'
 grep -F 'keyring-passwordless-v1' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
   || fail 'container init does not honor passwordless migration marker'
 grep -F 'keyring-migration-password' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
