@@ -42,6 +42,67 @@ python3 scripts/test-managed-global-agents.py || fail 'managed global AGENTS fix
 pass 'managed global AGENTS reconciliation fixtures and wiring'
 
 echo
+echo '=== frozen upstream resolver foundation ==='
+[[ -s scripts/resolve-upstreams.py ]] || fail 'upstream resolver missing'
+[[ -s scripts/build/Dockerfile.upstream-resolution ]] || fail 'upstream resolver Dockerfile missing'
+grep -F 'FROM ${UBUNTU_BASE} AS openai-resolver' scripts/build/Dockerfile.upstream-resolution >/dev/null \
+  || fail 'OpenAI metadata resolver is not bound to an explicit base identity'
+grep -F 'CE_COMMIT' scripts/build/Dockerfile.upstream-resolution >/dev/null \
+  || fail 'OpenAI metadata resolver is not bound to an exact CE commit'
+grep -F -- '--metadata-only' scripts/build/Dockerfile.upstream-resolution >/dev/null \
+  || fail 'OpenAI metadata resolver does not use CE metadata-only signed resolver path'
+python3 scripts/test-resolve-upstreams.py || fail 'frozen upstream resolver fixture tests'
+python3 scripts/test-render-build-env.py || fail 'frozen manifest build-input fixture tests'
+grep -F 'ARG UBUNTU_BASE' Dockerfile >/dev/null || fail 'Dockerfile has no explicit frozen Ubuntu base arg'
+grep -F 'FROM ${UBUNTU_BASE}' Dockerfile >/dev/null || fail 'Dockerfile does not consume the frozen Ubuntu base'
+grep -F 'CE_COMMIT' Dockerfile >/dev/null || fail 'Dockerfile does not consume the exact CE commit'
+grep -F 'upstream-linux-package.js' Dockerfile >/dev/null || fail 'Dockerfile bypasses CE signed OpenAI package resolver'
+grep -F 'OPENAI_PACKAGE_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind the OpenAI package hash'
+grep -F 'AGENT_WORKSPACE_INTEGRITY' Dockerfile >/dev/null || fail 'Dockerfile does not bind Agent Workspace integrity'
+grep -F 'S6_OVERLAY_NOARCH_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind s6 asset hashes'
+grep -F 'CODEX_CHATGPT_WEB_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind Codex Web GPT checksum'
+grep -F 'MUSE_EXPECTED_VERSION' Dockerfile >/dev/null || fail 'Dockerfile does not bind Muse stable release id'
+grep -F 'CHROME_PACKAGE_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind Chrome package checksum'
+grep -F 'RUST_STABLE_MANIFEST_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind Rust stable manifest identity'
+grep -F 'UBUNTU_APT_INDEXES' Dockerfile >/dev/null || fail 'Dockerfile does not consume the exact frozen Ubuntu InRelease set'
+grep -F 'expected_indexes' scripts/build/assert-ubuntu-apt-identity.sh >/dev/null || fail 'Ubuntu APT assertion helper does not require exact frozen indexes'
+grep -F 'COPY .workstation-build/upstream-resolution.json /opt/workstation/upstream-resolution.json' Dockerfile >/dev/null \
+  || fail 'candidate image does not embed exact upstream resolution'
+grep -F 'io.chatgpt-ce-workstation.upstream-resolution-sha256' Dockerfile >/dev/null \
+  || fail 'candidate image does not label exact upstream resolution digest'
+if grep -F 'UPSTREAM_REFRESH' Dockerfile compose.yaml scripts/build.sh .env.example >/dev/null; then
+  fail 'timestamp-style UPSTREAM_REFRESH remains in exact candidate build path'
+fi
+if grep -F -- '--no-cache' Dockerfile compose.yaml scripts/build.sh >/dev/null; then
+  fail 'exact candidate build path uses global --no-cache invalidation'
+fi
+if grep -F 'resolve-upstreams.py' scripts/build.sh >/dev/null; then
+  fail 'build.sh must consume a frozen resolution, not resolve latest itself'
+fi
+grep -F 'UPSTREAM_RESOLUTION_FILE' scripts/build.sh >/dev/null \
+  || fail 'build.sh does not require an explicit frozen resolution file'
+grep -F 'docker image inspect' scripts/build.sh >/dev/null \
+  || fail 'build.sh does not read back candidate provenance label'
+pass 'frozen upstream resolution and exact build-input contracts'
+
+echo
+echo '=== safe updater orchestration ==='
+[[ -s scripts/update.sh ]] || fail 'update orchestrator missing'
+[[ -s scripts/test-update-orchestration.sh ]] || fail 'update orchestration tests missing'
+if grep -F 'UPSTREAM_REFRESH' scripts/update.sh >/dev/null; then
+  fail 'legacy timestamp upstream refresh remains in update.sh'
+fi
+grep -F 'resolve_upstreams' scripts/update.sh >/dev/null || fail 'update.sh does not resolve a frozen upstream set'
+grep -F 'host_preflight' scripts/update.sh >/dev/null || fail 'update.sh does not run host preflight'
+grep -F 'candidate_readback' scripts/update.sh >/dev/null || fail 'update.sh does not read back candidate provenance'
+grep -F 'rollback_after_failure' scripts/update.sh >/dev/null || fail 'update.sh has no rollback path'
+grep -F -- '--no-build workstation' scripts/update.sh >/dev/null || fail 'promotion is not constrained to an already-built exact image'
+grep -F 'update_failed_rolled_back' scripts/update.sh >/dev/null || fail 'successful rollback is not distinguished from update success'
+grep -F 'rollback_failed' scripts/update.sh >/dev/null || fail 'rollback failure is not explicitly represented'
+bash scripts/test-update-orchestration.sh || fail 'isolated update orchestration tests'
+pass 'exact updater promotion, verification and rollback contracts'
+
+echo
 echo '=== Codex marketplace updater ==='
 python3 -m py_compile \
   scripts/container/codex_marketplace_updater.py \
@@ -91,8 +152,24 @@ echo
 echo '=== compose ==='
 command -v docker >/dev/null || fail 'docker is required for compose validation'
 docker compose version >/dev/null || fail 'Docker Compose v2 is required'
-docker compose config >/dev/null || fail 'docker compose config'
-pass 'compose config'
+fixture_sha="$(printf 'a%.0s' {1..64})"
+fixture_commit="$(printf 'b%.0s' {1..40})"
+env \
+  UBUNTU_BASE="ubuntu:24.04@sha256:${fixture_sha}" \
+  UBUNTU_APT_IDENTITY="sha256:${fixture_sha}" \
+  UBUNTU_APT_INDEXES="archive.ubuntu.com_ubuntu_dists_noble_InRelease=${fixture_sha}" \
+  CE_REPOSITORY="https://github.com/ilysenko/codex-desktop-linux.git" \
+  CE_REF=main CE_COMMIT="${fixture_commit}" \
+  OPENAI_PACKAGE_VERSION=1.0.0 OPENAI_PACKAGE_SHA256="${fixture_sha}" \
+  S6_OVERLAY_VERSION=3.2.3.2 S6_OVERLAY_NOARCH_SHA256="${fixture_sha}" S6_OVERLAY_X86_64_SHA256="${fixture_sha}" \
+  AGENT_WORKSPACE_VERSION=0.0.0 AGENT_WORKSPACE_INTEGRITY="sha512-fixture" \
+  CODEX_CHATGPT_WEB_VERSION=0.0.0 CODEX_CHATGPT_WEB_SHA256="${fixture_sha}" \
+  MUSE_INSTALLER_URL=https://dev.meta.ai/install.sh MUSE_INSTALLER_SHA256="${fixture_sha}" MUSE_EXPECTED_VERSION=0.0.0-R0.0 \
+  CHROME_VERSION=1.0.0-1 CHROME_PACKAGE_SHA256="${fixture_sha}" GOOGLE_LINUX_PUB_MATERIAL_SHA256="${fixture_sha}" \
+  RUST_VERSION=1.90.0 RUST_STABLE_MANIFEST_SHA256="${fixture_sha}" RUSTUP_INSTALLER_SHA256="${fixture_sha}" \
+  UPSTREAM_RESOLUTION_SHA256="${fixture_sha}" \
+  docker compose config >/dev/null || fail 'docker compose config'
+pass 'compose config with exact frozen build inputs'
 
 echo
 echo '=== canonical paths ==='
@@ -149,8 +226,12 @@ fi
 grep -F 'PACKAGE_WITH_UPDATER=0' Dockerfile >/dev/null || fail 'CE native updater is not disabled at build time'
 grep -F 'CODEX_WEB_GPT_DISABLE_UPDATES="\${CODEX_WEB_GPT_DISABLE_UPDATES:-1}"' scripts/build/install-codex-web-gpt.sh >/dev/null \
   || fail 'Codex Web GPT self-updater is not disabled by default in the workstation wrapper'
-grep -Fx 'CODEX_CHATGPT_WEB_VERSION=' .env.example >/dev/null || fail 'Codex Web GPT default version override must stay empty'
-grep -F 'releases/latest' scripts/build/install-codex-web-gpt.sh >/dev/null || fail 'Codex Web GPT installer no longer resolves releases/latest when unpinned'
+grep -F '# CODEX_CHATGPT_WEB_VERSION=' .env.example >/dev/null || fail 'Codex Web GPT expert override is not documented as optional'
+if grep -F 'releases/latest' scripts/build/install-codex-web-gpt.sh >/dev/null; then
+  fail 'Codex Web GPT build installer still resolves a moving latest release'
+fi
+grep -F 'CODEX_CHATGPT_WEB_SHA256' scripts/build/install-codex-web-gpt.sh >/dev/null \
+  || fail 'Codex Web GPT build installer does not require frozen checksum'
 grep -F 'codex-web-gpt-set-codex-lb-key' scripts/build/install-codex-web-gpt.sh >/dev/null || fail 'Codex Web GPT packaged Codex-LB key helper is not installed'
 [[ -s scripts/build/install-muse-code.sh ]] || fail 'Muse build installer helper missing'
 [[ -s rootfs/usr/local/bin/muse ]] || fail 'Muse runtime wrapper missing'
@@ -160,7 +241,7 @@ grep -F 'MUSE_NO_AUTO_UPDATE="${MUSE_NO_AUTO_UPDATE:-1}"' rootfs/usr/local/bin/m
 grep -F 'MUSE_INSTALLER_URL' Dockerfile >/dev/null || fail 'Muse installer URL build arg missing'
 grep -F '/tmp/install-muse-code.sh' Dockerfile >/dev/null || fail 'Muse install helper is not wired into Dockerfile'
 grep -F 'muse exec --help' scripts/verify-runtime.sh >/dev/null || fail 'runtime verification does not assert Muse exec surface'
-pass 'Codex policy, CE features, latest-release Codex Web GPT and Muse image-managed boundaries'
+pass 'Codex policy, CE features, frozen Codex Web GPT and Muse image-managed boundaries'
 
 echo
 echo '=== desktop recovery surface ==='

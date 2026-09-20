@@ -6,3 +6,4 @@ secrets/
 **/secrets/
 *.log
 .DS_Store
+.workstation-update/

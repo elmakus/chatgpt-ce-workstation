@@ -1,0 +1,228 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "feature-smart-upstream-updates"
+plan_revision: "smart-upstream-updates-R2"
+current_milestone: "M04"
+
+execution_ref:
+  branch: "feat/smart-upstream-updates"
+  pr: 7
+  head: "272ec9d238ca19ab3c190b1450cd2a19b7bdd4cb"
+
+research_obligation: null
+
+milestones:
+  M01:
+    decision_state: accepted
+    execution_status: done
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m01--frozen-upstream-resolution-contract"
+    checkpoint: "b337578fd3bad298cd96ec69d82ae2ebc3b5c6f0"
+    implementation_head: "b337578fd3bad298cd96ec69d82ae2ebc3b5c6f0"
+    handoff: "implementation/workstreams/feature-smart-upstream-updates/handoffs/M01_HANDOFF.md"
+    acceptance_evidence: "CI run #102 GREEN on exact M01 subject b337578; full resolver tests plus source/desktop/shell/dockerfile/secret validation; no production write."
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  M02:
+    decision_state: accepted
+    execution_status: done
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m02--exact-candidate-build--cache-semantics"
+    checkpoint: "35e979542815451079fbeb6f6398b70066c5a962"
+    implementation_head: "35e979542815451079fbeb6f6398b70066c5a962"
+    handoff: "implementation/workstreams/feature-smart-upstream-updates/handoffs/M02_HANDOFF.md"
+    acceptance_evidence: "GREEN on exact integrated M01-M02 subject 35e979542815451079fbeb6f6398b70066c5a962: CI #141 and exact non-production candidate build/readback #11 GREEN; fresh independent M02-T02 review GREEN with evidence at implementation/workstreams/feature-smart-upstream-updates/evidence/M02-T02-review.md; no production write/recreate occurred."
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  M03:
+    decision_state: accepted
+    execution_status: done
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m03--safe-promoteverifyrollback-updater"
+    checkpoint: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
+    implementation_head: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
+    handoff: "implementation/workstreams/feature-smart-upstream-updates/handoffs/M03_HANDOFF.md"
+    acceptance_evidence: "GREEN on exact M03 subject ffe39dfcb6ac5584af9410feee5eab5f81b008cc: CI #162 and exact candidate build #27 GREEN; REQUIRED independent M03-T02 corrected-subject review GREEN at implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T02-correction-review.md; no production updater invocation or recreate/write occurred."
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  M04:
+    decision_state: accepted
+    execution_status: done
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m04--production-activation-and-live-fault-injection-verification"
+    checkpoint: "a6fbfd8d9e5a7e3dca3ed3053a2bc7cab214b251"
+    implementation_head: "a6fbfd8d9e5a7e3dca3ed3053a2bc7cab214b251"
+    handoff: "implementation/workstreams/feature-smart-upstream-updates/handoffs/M04_HANDOFF.md"
+    acceptance_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-acceptance.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: M01-T01
+    title: "Build frozen-resolution framework and critical trust identities"
+    milestone: M01
+    decision_state: accepted
+    execution_status: done
+    executor: chatgpt
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M01-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: "302a8b8438ff513dcd96c03b4a9262d2b34dc633"
+    result_pr: 7
+    evidence: null
+    tests_summary: "GREEN on exact T01 subject 302a8b8: resolver fixture/unit tests through validate-source, noVNC desktop regression, ShellCheck, Dockerfile buildx static check and secret scan all passed in CI run #95; no production recreate/write performed."
+  - id: M01-T02
+    title: "Complete managed-upstream resolution and M01 acceptance"
+    milestone: M01
+    decision_state: accepted
+    execution_status: done
+    executor: chatgpt
+    depends_on: ["M01-T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M01-T02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: "b337578fd3bad298cd96ec69d82ae2ebc3b5c6f0"
+    result_pr: 7
+    evidence: null
+    tests_summary: "GREEN on exact M01 completion subject b337578: full resolver fixture/unit suite for Ubuntu base/APT, CE/OpenAI, Agent Workspace, s6-overlay, Codex Web GPT, Muse, Chrome and Rust; validate-source, noVNC regression, ShellCheck, Dockerfile static check and secret scan all passed in CI run #102; no production recreate/write performed."
+
+  - id: M02-T01
+    title: "Wire the frozen resolution set into an exact candidate build"
+    milestone: M02
+    decision_state: accepted
+    execution_status: done
+    executor: chatgpt
+    depends_on: ["M01-T02"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M02-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: "8a200373c38657abc34e7d87940b46d2bf96a5d9"
+    result_pr: 7
+    evidence: null
+    tests_summary: "GREEN on exact T01 subject 8a20037: frozen-manifest build-input fixtures, source validation, desktop regression, ShellCheck, Dockerfile buildx static check and secret scan all passed in CI run #126; build path consumes exact frozen identities and no production recreate/write occurred."
+  - id: M02-T02
+    title: "Prove exact candidate provenance/cache semantics and freeze integrated M01-M02 review subject"
+    milestone: M02
+    decision_state: accepted
+    execution_status: done
+    executor: chatgpt
+    depends_on: ["M02-T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M02-T02.md"
+    review_state: green
+    review_subject: "35e979542815451079fbeb6f6398b70066c5a962"
+    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M02-T02-review.md"
+    result_commit: "35e979542815451079fbeb6f6398b70066c5a962"
+    result_pr: 7
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M02-T02-implementation.md"
+    tests_summary: "GREEN on exact integrated M01-M02 subject 35e979542815451079fbeb6f6398b70066c5a962: CI #141 GREEN and exact candidate build #11 GREEN; candidate image sha256:ef4b0c22c261356fd1c5f1a2b9f17b935160042663149aba0e6debe83686d5a5 read back label + embedded manifest matching frozen resolution SHA-256 837043af65bd6f13793af245c6a32cc2ad6e142504afd9e9cd2b47fbc7d246d8; no production write/recreate occurred."
+
+  - id: M03-T01
+    title: "Implement exact promote/verify/rollback orchestration"
+    milestone: M03
+    decision_state: accepted
+    execution_status: done
+    executor: chatgpt
+    depends_on: ["M02-T02"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M03-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: "eeebbc3d14a26ba7b896b5d0e5af6693303301b2"
+    result_pr: 7
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T01-implementation.md"
+    tests_summary: "GREEN on exact M03-T01 subject eeebbc3: isolated updater orchestration tests, full validate-source, Dockerfile buildx --check and error-level ShellCheck for new updater/test scripts passed on Tower; no real updater invocation or production recreate/write occurred."
+  - id: M03-T02
+    title: "Prove M03 failure safety and freeze the production-activation subject"
+    milestone: M03
+    decision_state: accepted
+    execution_status: done
+    executor: chatgpt
+    depends_on: ["M03-T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M03-T02.md"
+    review_state: green
+    review_subject: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
+    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T02-correction-review.md"
+    result_commit: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
+    result_pr: 7
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T02-correction-implementation.md"
+    tests_summary: "GREEN on exact corrected M03 subject ffe39dfcb6ac5584af9410feee5eab5f81b008cc: CI #162 GREEN with UPDATE_ORCHESTRATION_TESTS_GREEN/SOURCE_VALIDATION_GREEN, noVNC, ShellCheck, Dockerfile and secret scan; exact candidate build #27 GREEN with resolution/image provenance readback; rollback-failure recovery-state fixtures cover candidate-present/unhealthy, container-missing and wrong-image states; no real production updater invocation or recreate/write occurred."
+
+  - id: M04-T01
+    title: "Activate accepted updater on production and run post-update regressions"
+    milestone: M04
+    decision_state: accepted
+    execution_status: done
+    executor: chatgpt
+    depends_on: ["M03-T02"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M04-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: "0fb42d3c4b3ae916157853c3bff96f81e2c4f6c5"
+    result_pr: 7
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-live-regression-3.md"
+    tests_summary: "GREEN after C02: normal production updater status success on exact resolution 27a9929c4cb4da99c0c3cd4c4e5807539ad759b5360559a872664162b5ba1fff and candidate image sha256:ea264b43f32482b8edd9a6012f0c28a38bab4fd27f1db092ad6ed11d67d27852; source/preflight/health/runtime/isolation GREEN; Codex Web GPT 5.0.12 doctor ready with active error-free route; Agent Workspace doctor plus real start/run/stop smoke GREEN; Computer Use ready with no blockers; CE app-server remains active with --remote-control. Controlled rollback remains M04-T02."
+
+  - id: M04-T01-C01
+    title: "Make Codex Web GPT interrupt-hook ownership compatible with native enabled normalization"
+    milestone: M04
+    decision_state: accepted
+    execution_status: done
+    executor: chatgpt
+    depends_on: ["M03-T02"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M04-T01-C01.md"
+    review_state: green
+    review_subject: "elmakus/codex-chatgpt-web@9dd258be18605f9ca2d9fdbd76edd437cf0e12a4"
+    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-C01-review.md"
+    result_commit: "9dd258be18605f9ca2d9fdbd76edd437cf0e12a4"
+    result_pr: 4
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-C01-implementation.md"
+    tests_summary: "GREEN on reviewed related-repository subject 9dd258be18605f9ca2d9fdbd76edd437cf0e12a4 and published v5.0.11: PR #4 independently reviewed GREEN then merged to main; release commit c612b007ec8be0057a17c14e403a12b9b75533ad passed Linux/macOS/Windows CI and Fork Linux Release, published checksummed AppImage sha256:0dc9b30e8256b6ea3c6d1cda3bbca73a8a012eee2120fb7f2b2e1591712b3f86, and PR #5 merged release metadata to main."
+
+  - id: M04-T01-C02
+    title: "Accept native multi_agent normalization without weakening ownership"
+    milestone: M04
+    decision_state: accepted
+    execution_status: done
+    executor: chatgpt
+    depends_on: ["M04-T01-C01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M04-T01-C02.md"
+    review_state: green
+    review_subject: "elmakus/codex-chatgpt-web@9317954b0e9391bb0def278c54e04084b1699465"
+    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-C02-review.md"
+    result_commit: "9317954b0e9391bb0def278c54e04084b1699465"
+    result_pr: 6
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-C02-implementation.md"
+    tests_summary: "GREEN on exact related-repository subject 9317954b0e9391bb0def278c54e04084b1699465: PR #6 CI run 35494779591 GREEN on Ubuntu/macOS/Windows plus actionlint; focused Compatibility V1 native multi_agent normalization, exact restore, and negative ownership tests PASS; main Bun suite 739 pass / 0 fail; launcher suite 309 pass / 0 fail; typecheck/build/package/app smoke/relocatable runtime smoke GREEN. No release or production redeployment performed."
+
+  - id: M04-T02
+    title: "Exercise bounded live rollback and prove stable no-change updates"
+    milestone: M04
+    decision_state: accepted
+    execution_status: done
+    executor: chatgpt
+    depends_on: ["M04-T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M04-T02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: "c4ba05b1d3f7fc01cd83379c8125c97a899c4fda"
+    result_pr: 7
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T02-live-rollback.md"
+    tests_summary: "GREEN live acceptance: real updater promoted exact ea264b43 candidate then a bounded injected post-promotion runtime failure triggered automatic rollback to exact prior e11e3f47, health/full runtime verification passed and evidence status was update_failed_rolled_back; persistence sentinels survived rollback/restoration; normal restore returned exact accepted ea264b43 and D15/D4 regressions GREEN; fresh no-change resolution remained 27a9929c4cb4da99... and a subsequent normal update reused the same image with 24 BuildKit CACHED markers and status success."
