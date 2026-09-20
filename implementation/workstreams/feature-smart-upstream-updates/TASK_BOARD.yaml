@@ -6,7 +6,7 @@ current_milestone: "M04"
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "c4ba05b1d3f7fc01cd83379c8125c97a899c4fda"
+  head: "a6fbfd8d9e5a7e3dca3ed3053a2bc7cab214b251"
 
 research_obligation: null
 
@@ -49,12 +49,12 @@ milestones:
 
   M04:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m04--production-activation-and-live-fault-injection-verification"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: "Explicit user deployment/live-write authorization granted on 2026-09-20 for M04 production recreate/write and controlled rollback testing; execution not yet started."
+    checkpoint: "a6fbfd8d9e5a7e3dca3ed3053a2bc7cab214b251"
+    implementation_head: "a6fbfd8d9e5a7e3dca3ed3053a2bc7cab214b251"
+    handoff: "implementation/workstreams/feature-smart-upstream-updates/handoffs/M04_HANDOFF.md"
+    acceptance_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-acceptance.md"
     review_state: null
     review_subject: null
     review_evidence: null
