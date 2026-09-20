@@ -13,8 +13,9 @@ research_obligation: null
 milestones:
   M01:
     execution_status: in_progress
-    checkpoint: null
-    evidence: null
+    checkpoint: "elmakus/chatgpt-ce-workstation@a13757a8611201a15784dd4d0250ac1c35068cb6"
+    evidence: "implementation/workstreams/issue-remove-novnc-password/evidence/M01-integration.md"
+    handoff: "implementation/workstreams/issue-remove-novnc-password/handoffs/M01_HANDOFF.md"
 
 cards:
   - id: "M01-T01"
