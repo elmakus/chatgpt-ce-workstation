@@ -17,7 +17,7 @@ intake:
 routing:
   exploratory_scope: null
   research_obligation: null
-  plan_review: null
+  plan_review: "planning/reviews/NPA-P1.md"
 
 task_board: null
 
@@ -27,7 +27,7 @@ authority:
     - "docs/DECISIONS.md#d7--lightweight-recoverable-novnc-desktop"
     - "docs/DECISIONS.md#d14--security--exposure"
     - "docs/DECISIONS.md#d27--novnc-recovery-desktop-is-intentionally-passwordless-on-trusted-networks"
-  plan: null
+  plan: "planning/NOVNC_PASSWORDLESS_ACCESS_PLAN.md"
 
 review:
   requirement: RECOMMENDED
