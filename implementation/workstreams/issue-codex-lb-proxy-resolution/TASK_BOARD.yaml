@@ -21,7 +21,7 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-codex-lb-proxy-resolution/cards/MF-T01.md"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex-chatgpt-web@0b2336dd01520c7a33699a6d90a290b108bebd42"
     review_evidence: null
     result_commit: "0b2336dd01520c7a33699a6d90a290b108bebd42"
