@@ -6,7 +6,7 @@ current_milestone: "CMAU-M02"
 execution_ref:
   branch: "feat/codex-marketplace-auto-update"
   pr: null
-  head: "15b399ad0bdaf7ed843039be7e402cd75796352b"
+  head: "d9b631c4d8de650a59cfa623f34b46ab67a55b51"
 
 research_obligation: null
 
@@ -25,7 +25,7 @@ milestones:
 
   CMAU-M02:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m02--s6image-integration"
     checkpoint: null
     implementation_head: null
@@ -61,8 +61,8 @@ cards:
     title: "s6/image integration for marketplace updater"
     milestone: CMAU-M02
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on:
       - "CMAU-M01-T01"
     openspec_change: null
