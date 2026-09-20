@@ -1,0 +1,32 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "issue-remove-novnc-password"
+plan_revision: "NPA-P1"
+current_milestone: "M01"
+
+execution_ref:
+  branch: "fix/remove-novnc-password"
+  pr: null
+  head: null
+
+research_obligation: null
+
+milestones:
+  M01:
+    execution_status: ready
+    checkpoint: null
+    evidence: null
+
+cards:
+  - id: "M01-T01"
+    contract: "implementation/workstreams/issue-remove-novnc-password/cards/M01-T01.md"
+    dependencies: []
+    execution_status: ready
+    executor: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    blocker: null
