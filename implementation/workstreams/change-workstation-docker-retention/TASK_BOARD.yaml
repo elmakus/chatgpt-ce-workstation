@@ -1,7 +1,7 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "change-workstation-docker-retention"
 plan_revision: "workstation-docker-retention-R1"
-current_milestone: "M02"
+current_milestone: "M03"
 
 execution_ref:
   branch: "work/workstation-docker-retention"
@@ -25,8 +25,20 @@ milestones:
 
   M02:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md#Milestone-M02--Bounded-workstation-BuildKit-cache-retention"
+    checkpoint: "a6a580fced3573b3e4a9912a02430ab62c04d153"
+    implementation_head: "a6a580fced3573b3e4a9912a02430ab62c04d153"
+    handoff: "implementation/workstreams/change-workstation-docker-retention/handoffs/M02_HANDOFF.md"
+    acceptance_evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M02-T01.md; implementation/workstreams/change-workstation-docker-retention/evidence/M02-T02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  M03:
+    decision_state: accepted
+    execution_status: planned
+    contract: "planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md#Milestone-M03--Multi-cycle-retention-harness-and-pre-live-proof"
     checkpoint: null
     implementation_head: null
     handoff: null
