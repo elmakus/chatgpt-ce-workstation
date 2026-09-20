@@ -25,7 +25,7 @@ milestones:
 
   M02:
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     contract: "planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md#Milestone-M02--Bounded-workstation-BuildKit-cache-retention"
     checkpoint: null
     implementation_head: null
@@ -49,3 +49,17 @@ cards:
     review_state: green
     review_subject: "a3f15c251c4a31787249b6bd5fc69a7e97e4a285"
     review_evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M01-T01.md"
+
+  - id: "M02-T01"
+    contract: "implementation/workstreams/change-workstation-docker-retention/cards/M02-T01.md"
+    execution_status: ready
+    dependencies: ["M01-T01"]
+    executor: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    independent_review: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
