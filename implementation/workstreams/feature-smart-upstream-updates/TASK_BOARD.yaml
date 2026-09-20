@@ -1,0 +1,58 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "feature-smart-upstream-updates"
+plan_revision: "smart-upstream-updates-R2"
+current_milestone: "M01"
+
+execution_ref:
+  branch: "feat/smart-upstream-updates"
+  pr: null
+  head: "86f79211356685e8c77824c5e2f3604e36ee4859"
+
+research_obligation: null
+
+milestones:
+  M01:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m01--frozen-upstream-resolution-contract"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: M01-T01
+    title: "Build frozen-resolution framework and critical trust identities"
+    milestone: M01
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M01-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+  - id: M01-T02
+    title: "Complete managed-upstream resolution and M01 acceptance"
+    milestone: M01
+    decision_state: accepted
+    execution_status: planned
+    executor: null
+    depends_on: ["M01-T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M01-T02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
