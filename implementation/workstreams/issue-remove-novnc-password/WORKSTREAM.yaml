@@ -31,10 +31,10 @@ authority:
 
 review:
   requirement: RECOMMENDED
-  state: null
-  subject: null
-  evidence: null
-  covered_by: null
+  state: green
+  subject: "elmakus/chatgpt-ce-workstation@a13757a8611201a15784dd4d0250ac1c35068cb6"
+  evidence: "implementation/workstreams/issue-remove-novnc-password/evidence/M01-integration.md"
+  covered_by: "M01-T01@a13757a8611201a15784dd4d0250ac1c35068cb6 -> implementation/workstreams/issue-remove-novnc-password/evidence/M01-T01-review.md"
 
 branch_cleanup:
   state: null
