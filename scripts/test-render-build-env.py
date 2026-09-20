@@ -67,14 +67,88 @@ class BuildEnvTests(unittest.TestCase):
             with self.assertRaises(bridge.ManifestError):
                 bridge.load_manifest(path)
 
-    def test_component_change_changes_only_corresponding_build_input(self):
+    def test_component_changes_reach_only_expected_build_inputs(self):
+        cases = [
+            ("ce", {"identity": "c"*40}, {"CE_COMMIT"}),
+            (
+                "openai_chatgpt",
+                {"sha256": "a"*64, "identity": "1@sha256:" + "a"*64},
+                {"OPENAI_PACKAGE_SHA256"},
+            ),
+            (
+                "agent_workspace",
+                {"integrity": "sha512-y", "identity": "0.3.3@sha512-y"},
+                {"AGENT_WORKSPACE_INTEGRITY"},
+            ),
+            (
+                "codex_web_gpt",
+                {"package_sha256": "a"*64, "identity": "1@sha256:" + "a"*64},
+                {"CODEX_CHATGPT_WEB_SHA256"},
+            ),
+            (
+                "muse_code",
+                {"installer_sha256": "a"*64, "identity": "1@sha256:" + "a"*64},
+                {"MUSE_INSTALLER_SHA256"},
+            ),
+            (
+                "chrome",
+                {"package_sha256": "a"*64, "identity": "145@sha256:" + "a"*64},
+                {"CHROME_PACKAGE_SHA256"},
+            ),
+            (
+                "rust",
+                {"version": "1.91.0", "identity": "1.91@sha256:" + "a"*64},
+                {"RUST_VERSION"},
+            ),
+            (
+                "ubuntu_packages",
+                {"identity": "sha256:" + "a"*64},
+                {"UBUNTU_APT_IDENTITY"},
+            ),
+        ]
+        for component, updates, expected in cases:
+            with self.subTest(component=component):
+                first = bridge.build_inputs(manifest())
+                changed = manifest()
+                changed["components"][component].update(updates)
+                second = bridge.build_inputs(changed)
+                differing = {key for key in first if first[key] != second[key]}
+                self.assertEqual(differing, expected)
+
+    def test_s6_asset_change_reaches_only_that_frozen_asset_input(self):
         first = bridge.build_inputs(manifest())
         changed = manifest()
-        changed["components"]["rust"]["version"] = "1.91.0"
-        changed["components"]["rust"]["identity"] = "1.91@sha256:" + "a"*64
+        changed["components"]["s6_overlay"]["assets"]["s6-overlay-noarch.tar.xz"] = "a"*64
+        changed["components"]["s6_overlay"]["identity"] = "3.2@sha256:" + "a"*64
         second = bridge.build_inputs(changed)
         differing = {key for key in first if first[key] != second[key]}
-        self.assertEqual(differing, {"RUST_VERSION"})
+        self.assertEqual(differing, {"S6_OVERLAY_NOARCH_SHA256"})
+
+    def test_base_digest_change_reaches_exact_from_input(self):
+        first = bridge.build_inputs(manifest())
+        changed = manifest()
+        changed["components"]["ubuntu_base"]["identity"] = "sha256:" + "a"*64
+        second = bridge.build_inputs(changed)
+        differing = {key for key in first if first[key] != second[key]}
+        self.assertEqual(differing, {"UBUNTU_BASE"})
+
+    def test_any_manifest_change_changes_candidate_tag_seed_but_not_unrelated_build_args(self):
+        first_manifest = manifest()
+        second_manifest = manifest()
+        second_manifest["components"]["ce"]["identity"] = "c"*40
+
+        first_digest = hashlib.sha256(bridge.canonical_bytes(first_manifest)).hexdigest()
+        second_digest = hashlib.sha256(bridge.canonical_bytes(second_manifest)).hexdigest()
+        self.assertNotEqual(first_digest, second_digest)
+        self.assertNotEqual(
+            f"candidate-{first_digest[:16]}",
+            f"candidate-{second_digest[:16]}",
+        )
+
+        first_inputs = bridge.build_inputs(first_manifest)
+        second_inputs = bridge.build_inputs(second_manifest)
+        differing = {key for key in first_inputs if first_inputs[key] != second_inputs[key]}
+        self.assertEqual(differing, {"CE_COMMIT"})
 
     def test_shell_exports_quote_values(self):
         rendered = bridge.shell_exports({"CE_REF":"feature/test", "X":"a b"})
