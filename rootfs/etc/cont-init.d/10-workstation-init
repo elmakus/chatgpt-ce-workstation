@@ -14,7 +14,8 @@ vnc_auth_file="$config_dir/vnc.pass"
 vnc_secret_file=/run/secrets/novnc-password
 keyring_secret_file=/run/secrets/keyring-password
 runtime_secret_dir=/run/workstation
-runtime_keyring_secret="$runtime_secret_dir/keyring-password"
+runtime_keyring_secret="$runtime_secret_dir/keyring-migration-password"
+keyring_marker="$config_dir/keyring-passwordless-v1"
 
 # These directories are created by root during container init, but the persistent
 # home is a normal user home. Explicitly hand every root-created parent back to
@@ -59,19 +60,12 @@ elif [[ ! -f "$vnc_auth_file" ]]; then
   exit 1
 fi
 
-# Docker Compose's local secret uid/gid/mode controls are not portable across
-# Unraid Compose implementations. Stage the keyring password into a root-created
-# runtime file with deterministic ownership and permissions for the codex user.
-if [[ -r "$keyring_secret_file" ]]; then
-  if [[ ! -s "$keyring_secret_file" ]]; then
-    echo "[init] $keyring_secret_file is empty" >&2
-    exit 1
-  fi
+# D26 makes the persistent keyring passwordless. A legacy non-empty secret is
+# accepted only as a one-time migration credential while the versioned marker is
+# absent. Fresh/passwordless installations do not require or stage a password.
+rm -f "$runtime_keyring_secret"
+if [[ ! -f "$keyring_marker" && -s "$keyring_secret_file" ]]; then
   install -m 0400 -o codex -g "$codex_group" "$keyring_secret_file" "$runtime_keyring_secret"
-else
-  echo "[init] missing keyring password secret: $keyring_secret_file" >&2
-  echo "[init] run scripts/init-unraid.sh to provision it." >&2
-  exit 1
 fi
 
 # Workstation-wide Codex defaults are enabled by Compose after explicit user

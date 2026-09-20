@@ -72,23 +72,20 @@ else
   echo "Keeping existing $VNC_SECRET_FILE"
 fi
 
-if [[ ! -s "$KEYRING_SECRET_FILE" ]]; then
-  echo "Choose the password this workstation will use for the GNOME keyring."
-  echo "If CE/keyring prompts during first login, use this same password."
-  read -r -s -p "GNOME keyring password: " keyring_password
-  echo
-  read -r -s -p "Repeat keyring password: " keyring_password2
-  echo
-  if [[ -z "$keyring_password" || "$keyring_password" != "$keyring_password2" ]]; then
-    echo "Keyring passwords are empty or do not match." >&2
-    exit 1
-  fi
-  printf '%s' "$keyring_password" > "$KEYRING_SECRET_FILE"
-  unset keyring_password keyring_password2
+# D26 uses a passwordless GNOME keyring. Keep the historical secret path only
+# as an optional one-time migration credential for already-encrypted installs.
+# Fresh installations get an empty placeholder and never prompt for a keyring
+# password. Existing non-empty credentials are preserved until migration succeeds.
+if [[ ! -e "$KEYRING_SECRET_FILE" ]]; then
+  : > "$KEYRING_SECRET_FILE"
   chmod 0600 "$KEYRING_SECRET_FILE"
-  echo "Created $KEYRING_SECRET_FILE"
+  echo "Created empty keyring migration placeholder: $KEYRING_SECRET_FILE"
+elif [[ -s "$KEYRING_SECRET_FILE" ]]; then
+  chmod 0600 "$KEYRING_SECRET_FILE"
+  echo "Keeping legacy keyring migration credential until passwordless migration succeeds."
 else
-  echo "Keeping existing $KEYRING_SECRET_FILE"
+  chmod 0600 "$KEYRING_SECRET_FILE"
+  echo "Keyring migration credential is already empty (passwordless target)."
 fi
 
 # Persistent home must be writable by the configured container user.
@@ -144,7 +141,7 @@ echo "  appdata:        $APPDATA_ROOT/home"
 echo "  projects host:  $PROJECTS_ROOT"
 echo "  projects in CE: /home/codex/Documents/ChatGPT"
 echo "  VNC secret:     $VNC_SECRET_FILE"
-echo "  keyring secret: $KEYRING_SECRET_FILE"
+echo "  keyring migration file: $KEYRING_SECRET_FILE"
 echo "  identity:       UID $CODEX_UID / GID $CODEX_GID"
 echo
 echo "Next: bash scripts/build.sh"

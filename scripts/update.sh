@@ -157,6 +157,37 @@ recreate_with_tag() {
   IMAGE_TAG="$tag" docker compose up -d --force-recreate --no-build workstation
 }
 
+restore_keyring_migration_backup() {
+  local appdata_root="${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}"
+  local home="${appdata_root%/}/home"
+  local keyrings="$home/.local/share/keyrings"
+  local backup="$home/.local/share/keyrings.pre-passwordless-v1"
+  local marker="$home/.config/workstation/keyring-passwordless-v1"
+
+  [[ -d "$backup" ]] || return 0
+
+  docker compose stop workstation >/dev/null 2>&1 || true
+  rm -rf "$keyrings"
+  mv "$backup" "$keyrings"
+  rm -f "$marker"
+}
+
+finalize_keyring_passwordless_migration() {
+  local appdata_root="${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}"
+  local home="${appdata_root%/}/home"
+  local backup="$home/.local/share/keyrings.pre-passwordless-v1"
+  local marker="$home/.config/workstation/keyring-passwordless-v1"
+  local legacy_secret="${appdata_root%/}/secrets/keyring-password"
+
+  [[ -f "$marker" ]] || return 0
+
+  if [[ -e "$legacy_secret" ]]; then
+    : > "$legacy_secret"
+    chmod 0600 "$legacy_secret"
+  fi
+  rm -rf "$backup"
+}
+
 wait_healthy() {
   bash scripts/wait-healthy.sh
 }
@@ -292,6 +323,16 @@ rollback_after_failure() {
 
   echo "Update failed after promotion attempt: $reason" >&2
   echo "Attempting rollback to exact prior image: $previous_image_id" >&2
+
+  if ! restore_keyring_migration_backup; then
+    echo "Failed to restore pre-migration keyring backup before rollback." >&2
+    capture_recovery_state
+    write_evidence "rollback_failed" "keyring_restore_failed:$reason" "$resolution_sha" \
+      "$candidate_ref" "$candidate_id" "$previous_image_id" "$rollback_ref" \
+      "$RECOVERY_READBACK_STATE" "$RECOVERY_CONTAINER_ID" "$RECOVERY_RUNNING_STATE" \
+      "$RECOVERY_HEALTH_STATE" "$RECOVERY_IMAGE_ID" || true
+    return 1
+  fi
 
   if recreate_with_tag "${rollback_ref##*:}"; then
     local restored_container restored_image
@@ -467,6 +508,10 @@ main() {
       return 1
     fi
     return 2
+  fi
+
+  if ! finalize_keyring_passwordless_migration; then
+    echo "WARNING: candidate is healthy but keyring migration cleanup was incomplete." >&2
   fi
 
   write_evidence "success" "" "$resolution_sha" "$candidate_ref" "$candidate_id"     "$previous_image_id" "$rollback_ref"

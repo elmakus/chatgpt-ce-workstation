@@ -9,7 +9,9 @@ export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/runtime-codex}"
 
 vnc_auth_file="${VNC_AUTH_FILE:-/home/codex/.config/workstation/vnc.pass}"
 novnc_port="${NOVNC_PORT:-6080}"
-keyring_password_file="${KEYRING_PASSWORD_FILE:-/run/workstation/keyring-password}"
+keyring_migration_password_file="${KEYRING_MIGRATION_PASSWORD_FILE:-/run/workstation/keyring-migration-password}"
+keyring_marker="${KEYRING_PASSWORDLESS_MARKER:-/home/codex/.config/workstation/keyring-passwordless-v1}"
+keyring_backup="${KEYRING_PASSWORDLESS_BACKUP:-/home/codex/.local/share/keyrings.pre-passwordless-v1}"
 
 pids=()
 cleanup() {
@@ -57,30 +59,12 @@ websockify \
 websockify_pid=$!
 pids+=("$websockify_pid")
 
-# Headless Xvfb sessions do not pass through PAM. Reproduce the normal GNOME
-# login sequence explicitly: --login receives the login-keyring password and
-# keeps it for the not-yet-initialized daemon, then --start completes
-# initialization in this D-Bus session. This avoids spawning a second daemon via
-# a separate --unlock invocation and keeps CE on the same Secret Service.
-if [[ ! -r "$keyring_password_file" ]]; then
-  echo "[desktop-session] keyring password file is unavailable: $keyring_password_file" >&2
-  exit 1
-fi
-keyring_password="$(cat "$keyring_password_file")"
-if [[ -z "$keyring_password" ]]; then
-  echo "[desktop-session] keyring password file is empty" >&2
-  exit 1
-fi
-
-login_env="$(printf '%s' "$keyring_password" | gnome-keyring-daemon --login --components=secrets)"
-unset keyring_password
-while IFS= read -r line; do
-  case "$line" in
-    GNOME_KEYRING_CONTROL=*|SSH_AUTH_SOCK=*) export "$line" ;;
-  esac
-done <<<"$login_env"
-unset login_env
-
+# D26 uses one passwordless persistent Secret Service collection. Start the
+# daemon on the canonical desktop D-Bus first, then let the migration helper
+# either create a fresh passwordless collection, verify an already-passwordless
+# one, or migrate an existing encrypted collection using the one-time legacy
+# credential staged by container init. The helper creates its durable marker only
+# after the collection is available unlocked.
 start_env="$(gnome-keyring-daemon --start --components=secrets)"
 while IFS= read -r line; do
   case "$line" in
@@ -88,6 +72,16 @@ while IFS= read -r line; do
   esac
 done <<<"$start_env"
 unset start_env
+
+keyring_args=(
+  --marker "$keyring_marker"
+  --backup "$keyring_backup"
+)
+if [[ -s "$keyring_migration_password_file" ]]; then
+  keyring_args+=(--password-file "$keyring_migration_password_file")
+fi
+python3 /opt/workstation/bin/keyring-passwordless.py "${keyring_args[@]}"
+rm -f "$keyring_migration_password_file"
 
 # codex-chatgpt-web is part of the workstation desktop and should come up with
 # every desktop session. If it is closed, it can be relaunched from the panel or

@@ -31,11 +31,15 @@ ARG UPSTREAM_RESOLUTION_SHA256
 ARG CODEX_UID=99
 ARG CODEX_GID=100
 
+# Processes outside the supervised desktop session must not let libdbus
+# autolaunch a private session bus. The desktop's dbus-run-session replaces this
+# fail-closed address with its canonical session bus before GUI/keyring startup.
 ENV TZ=Europe/Zurich \
     DISPLAY=:1 \
     HOME=/home/codex \
     USER=codex \
     LOGNAME=codex \
+    DBUS_SESSION_BUS_ADDRESS=unix:path=/run/workstation/no-session-bus \
     RUSTUP_HOME=/opt/rustup \
     BROWSER_BIN=/usr/bin/google-chrome \
     CHROME_BIN=/usr/bin/google-chrome \
@@ -87,6 +91,7 @@ RUN set -eux; \
       ninja-build \
       pkg-config \
       python3 \
+      python3-dbus \
       python3-pip \
       python3-venv \
       pipx \

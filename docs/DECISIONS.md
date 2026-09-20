@@ -399,3 +399,24 @@ Expert pins/overrides remain permissible only as explicit recovery/debug/compati
 **Consequences for earlier decisions:** D25 supersedes the permanent-version-pin aspect of D6 for ordinary s6-overlay updates while preserving s6-overlay as the accepted supervisor. D5's disabled CE self-updater, D10's image-owned application state, D11's Codex Web GPT image management, D15's validation discipline and D16's Compose deployment authority remain in force.
 
 **Integration reconciliation note (2026-09-20):** this decision was originally numbered D24 on the smart-upstream workstream before reconciliation with current main. Current main already owned D24 for the Codex marketplace updater, so the identifier was renumbered to D25 without changing the accepted decision content.
+
+## D26 — Workstation GNOME keyring is intentionally passwordless
+
+**Decision (2026-09-20):** keep GNOME Keyring / Secret Service as the workstation desktop secret-store interface, but do not protect the workstation login keyring with a separate master password.
+
+The target state is:
+
+- the canonical desktop D-Bus session owns the GNOME Secret Service used by CE and desktop applications;
+- the persistent login keyring remains under the persistent `/home/codex` home;
+- the login keyring uses an empty master password and is therefore available without an unlock prompt;
+- existing encrypted keyring state must be migrated in place to an empty master password without deleting stored items or forcing a fresh CE login;
+- secondary/root-context processes must not silently autolaunch another D-Bus + keyring session against the same persistent codex home;
+- migration must fail closed before changing existing keyring state when the installed GNOME keyring runtime does not expose the verified password-change mechanism;
+- no keyring password is requested from the operator for fresh installations after this migration path is implemented.
+
+**Security consequence accepted by the operator:** stored keyring secrets no longer receive a separate master-password encryption barrier at rest. Anyone who gains sufficient access to the persistent workstation home may have easier access to those stored secrets. Docker/Unraid access controls, filesystem permissions and the existing container boundary remain the surrounding protection.
+
+**Supersedes:** only the D14 statement that a keyring password must be supplied from an Unraid-side secret file. D14's noVNC/network exposure and no-secrets-in-Git requirements remain in force.
+
+**Rationale:** this workstation is a dedicated always-on headless container whose keyring is expected to be available automatically. A separate keyring password adds prompt/unlock failure modes without providing useful interactive authentication in the normal operating model. Preventing accidental secondary D-Bus/keyring sessions remains independently valuable and is retained.
+
