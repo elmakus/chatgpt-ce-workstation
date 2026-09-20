@@ -138,7 +138,7 @@ Those are mechanism choices, not unresolved product decisions.
 - Research still needed: none before Definition; bounded mechanism verification can occur during planning/JIT.
 - Open questions: implementation-level resolver format, freshness-key mechanics, candidate tags and stage layout.
 - Next phase/action: `ready for definition`
-- Definition promotion authorization: `pending`
-- Definition promotion subject: `none`
+- Definition promotion authorization: `user_authorized`
+- Definition promotion subject: `smart-upstream-updates@R1`
 
 > Nothing in this file becomes accepted requirement/decision authority by itself. Project Definition owns promotion into canonical `requirements/` and `decisions/`. The `#feature` directive does not itself authorize phase promotion.
