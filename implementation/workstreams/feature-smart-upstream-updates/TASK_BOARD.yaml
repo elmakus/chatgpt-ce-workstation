@@ -118,7 +118,7 @@ cards:
     title: "Implement exact promote/verify/rollback orchestration"
     milestone: M03
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     depends_on: ["M02-T02"]
     openspec_change: null
@@ -126,15 +126,15 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "eeebbc3d14a26ba7b896b5d0e5af6693303301b2"
     result_pr: 7
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T01-implementation.md"
+    tests_summary: "GREEN on exact M03-T01 subject eeebbc3: isolated updater orchestration tests, full validate-source, Dockerfile buildx --check and error-level ShellCheck for new updater/test scripts passed on Tower; no real updater invocation or production recreate/write occurred."
   - id: M03-T02
     title: "Prove M03 failure safety and freeze the production-activation subject"
     milestone: M03
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: null
     depends_on: ["M03-T01"]
     openspec_change: null
