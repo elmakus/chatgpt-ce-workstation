@@ -26,6 +26,9 @@ for file in "${shell_files[@]}"; do
   bash -n "$file" || fail "shell syntax: $file"
 done
 pass "bash -n (${#shell_files[@]} files)"
+python3 -m py_compile scripts/container/keyring-passwordless.py \
+  || fail 'passwordless keyring helper Python compile check'
+pass 'passwordless keyring helper Python compile'
 
 echo
 echo '=== managed global AGENTS reconciliation ==='
@@ -203,18 +206,36 @@ fi
 pass 'restart, binds, secrets, optional native upstream, healthcheck and isolation boundary'
 
 echo
-echo '=== desktop keyring session isolation ==='
+echo '=== passwordless keyring + desktop session isolation ==='
 grep -F 'DBUS_SESSION_BUS_ADDRESS=unix:path=/run/workstation/no-session-bus' Dockerfile >/dev/null \
   || fail 'image default does not block out-of-session D-Bus autolaunch'
+grep -F 'python3-dbus' Dockerfile >/dev/null \
+  || fail 'image does not install dbus-python for keyring migration'
 grep -F 'dbus-run-session -- /opt/workstation/bin/desktop-session-inner.sh' scripts/container/desktop-session.sh >/dev/null \
   || fail 'desktop session no longer owns an explicit D-Bus session'
-grep -F 'gnome-keyring-daemon --login --components=secrets' scripts/container/desktop-session-inner.sh >/dev/null \
-  || fail 'desktop session no longer performs login-keyring password handoff'
+if grep -F 'gnome-keyring-daemon --login --components=secrets' scripts/container/desktop-session-inner.sh >/dev/null; then
+  fail 'desktop session still performs password-based keyring login'
+fi
 grep -F 'gnome-keyring-daemon --start --components=secrets' scripts/container/desktop-session-inner.sh >/dev/null \
-  || fail 'desktop session no longer completes keyring startup'
+  || fail 'desktop session no longer starts Secret Service'
+grep -F 'keyring-passwordless.py' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session does not enforce passwordless keyring state'
+grep -F 'keyring-passwordless-v1' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
+  || fail 'container init does not honor passwordless migration marker'
+grep -F 'keyring-migration-password' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
+  || fail 'container init does not stage a bounded legacy migration credential'
+if grep -F 'GNOME keyring password:' scripts/init-unraid.sh >/dev/null; then
+  fail 'fresh host initialization still prompts for a GNOME keyring password'
+fi
+grep -F 'Created empty keyring migration placeholder' scripts/init-unraid.sh >/dev/null \
+  || fail 'fresh host initialization does not create an empty migration placeholder'
+grep -F 'restore_keyring_migration_backup' scripts/update.sh >/dev/null \
+  || fail 'update rollback does not restore pre-migration keyring state'
+grep -F 'finalize_keyring_passwordless_migration' scripts/update.sh >/dev/null \
+  || fail 'successful update does not retire keyring migration artifacts'
 grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/keyring-password' compose.yaml >/dev/null \
-  || fail 'keyring password secret wiring changed'
-pass 'fail-closed non-desktop D-Bus default with canonical desktop keyring session'
+  || fail 'legacy keyring migration secret channel is missing'
+pass 'passwordless keyring migration and fail-closed desktop D-Bus contract'
 
 echo
 echo '=== Codex policy, CE features and image-managed applications ==='
