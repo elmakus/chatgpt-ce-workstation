@@ -166,14 +166,36 @@ restore_keyring_migration_backup() {
 
   local marker_v1="$home/.config/workstation/keyring-passwordless-v1"
 
+  if [[ -e "$backup" && ! -d "$backup" ]]; then
+    echo "Keyring migration backup is not a directory: $backup" >&2
+    return 1
+  fi
+
+  # If a rollback snapshot exists, do not touch persistent keyring state until
+  # the candidate workstation is confirmed stopped. This function is called
+  # from an 'if ! ...' condition, so every safety-critical operation must check
+  # its own status rather than relying on errexit propagation.
+  if [[ -d "$backup" ]] && ! docker compose stop workstation >/dev/null 2>&1; then
+    echo "Failed to stop workstation before keyring rollback restore." >&2
+    return 1
+  fi
+
   # Failed candidates must never leave completion markers behind, even when a
   # migration backup was not created.
-  rm -f "$marker" "$marker_v1"
+  if ! rm -f -- "$marker" "$marker_v1"; then
+    echo "Failed to clear candidate keyring migration markers." >&2
+    return 1
+  fi
   [[ -d "$backup" ]] || return 0
 
-  docker compose stop workstation >/dev/null 2>&1 || true
-  rm -rf "$keyrings"
-  mv "$backup" "$keyrings"
+  if ! rm -rf -- "$keyrings"; then
+    echo "Failed to remove candidate keyring state before rollback restore." >&2
+    return 1
+  fi
+  if ! mv -- "$backup" "$keyrings"; then
+    echo "Failed to publish pre-migration keyring backup during rollback." >&2
+    return 1
+  fi
 }
 
 finalize_keyring_passwordless_migration() {
