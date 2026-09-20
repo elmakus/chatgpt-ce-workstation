@@ -22,6 +22,7 @@ authority:
     - "docs/DECISIONS.md#D10"
     - "docs/DECISIONS.md#D11"
     - "docs/DECISIONS.md#D15"
+    - "docs/DECISIONS.md#D25"
   plan: null
 
 review:
@@ -37,5 +38,5 @@ branch_cleanup:
   verified_head: null
   evidence: null
 
-pr: null
+pr: 10
 result: null
