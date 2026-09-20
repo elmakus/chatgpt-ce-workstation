@@ -28,3 +28,20 @@ cards:
     result_pr: 9
     evidence: "implementation/workstreams/issue-keyring-auto-unlock-prompts/evidence/MF_T01_KEYRING_SESSION_ISOLATION_2026-09-20.md"
     tests_summary: "GREEN: bash -n for modified verifiers; full scripts/validate-source.sh SOURCE_VALIDATION_GREEN; live diagnostic proved explicit dead-bus fail-closed behavior, dbus-run-session override, canonical Secret Service ownership, and old-image root-keyring regression detection. Production rebuild/recreate intentionally not performed."
+
+  - id: "MF-T02"
+    title: "Migrate workstation login keyring to passwordless operation"
+    milestone: "micro-fix"
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: []
+    contract: "implementation/workstreams/issue-keyring-auto-unlock-prompts/cards/MF-T02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: 9
+    evidence: null
+    tests_summary: null
+
