@@ -5,8 +5,8 @@ current_milestone: "micro-fix"
 
 execution_ref:
   branch: "fix/keyring-auto-unlock-prompts"
-  pr: null
-  head: "6d50d803fc498031e061bba33e03d9b99500c310"
+  pr: 9
+  head: "92d99732276c470d13165d8b5d14961bcb77cbeb"
 
 research_obligation: null
 
@@ -21,10 +21,10 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-auto-unlock-prompts/cards/MF-T01.md"
-    review_state: null
-    review_subject: null
-    review_evidence: null
-    result_commit: null
-    result_pr: null
+    review_state: pending
+    review_subject: "elmakus/chatgpt-ce-workstation@04a9c200f315cc0f3d99f8793d83a9a31f86caba"
+    review_evidence: "implementation/workstreams/issue-keyring-auto-unlock-prompts/evidence/MF_T01_KEYRING_SESSION_ISOLATION_2026-09-20.md"
+    result_commit: "04a9c200f315cc0f3d99f8793d83a9a31f86caba"
+    result_pr: 9
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN: bash -n for modified verifiers; full scripts/validate-source.sh SOURCE_VALIDATION_GREEN; live diagnostic proved explicit dead-bus fail-closed behavior, dbus-run-session override, canonical Secret Service ownership, and old-image root-keyring regression detection. Production rebuild/recreate intentionally not performed."
