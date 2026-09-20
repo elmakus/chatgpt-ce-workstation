@@ -238,7 +238,7 @@ main() {
   resolution_file="$work_dir/upstream-resolution.json"
   env_file="$work_dir/build-env.sh"
   staged_resolution="$work_dir/canonical-upstream-resolution.json"
-  trap 'rm -rf "$work_dir"' RETURN
+  trap 'rm -rf "${work_dir:-}"' EXIT HUP INT TERM
 
   echo '=== source validation ==='
   if ! source_validate; then
@@ -323,8 +323,10 @@ main() {
     pre_promotion_failure "candidate_repository_unusable" "$resolution_sha" "$candidate_ref" "$candidate_id"
     return 1
   }
-  rollback_ref="$repository:rollback-${previous_image_id#sha256:}"
-  rollback_ref="${rollback_ref:0:${#repository}+1+9+16}"
+  local previous_short
+  previous_short="${previous_image_id#sha256:}"
+  previous_short="${previous_short:0:16}"
+  rollback_ref="$repository:rollback-$previous_short"
   if ! tag_image "$previous_image_id" "$rollback_ref"; then
     pre_promotion_failure "rollback_tag_failed" "$resolution_sha" "$candidate_ref" "$candidate_id"
     return 1
