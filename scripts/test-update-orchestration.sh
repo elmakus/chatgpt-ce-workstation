@@ -58,10 +58,11 @@ run_case() (
   # shellcheck disable=SC1091
   source "$REPO_ROOT/scripts/update.sh"
 
-  local fixture_old_id fixture_candidate_id fixture_wrong_id fixture_resolution_sha
+  local fixture_old_id fixture_candidate_id fixture_wrong_id fixture_older_id fixture_resolution_sha
   fixture_old_id="sha256:1111111111111111111111111111111111111111111111111111111111111111"
   fixture_candidate_id="sha256:2222222222222222222222222222222222222222222222222222222222222222"
   fixture_wrong_id="sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  fixture_older_id="sha256:4444444444444444444444444444444444444444444444444444444444444444"
   fixture_resolution_sha="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   active_image_id="$fixture_old_id"
   container_present=1
@@ -101,7 +102,12 @@ run_case() (
     trace_line "image-id:$1"
     case "$1" in
       example/workstation:candidate-test) printf '%s\n' "$fixture_candidate_id" ;;
-      "$fixture_old_id") printf '%s\n' "$fixture_old_id" ;;
+      example/workstation:rollback-1111111111111111|example/workstation:candidate-previous|"$fixture_old_id")
+        printf '%s\n' "$fixture_old_id"
+        ;;
+      example/workstation:candidate-old|example/workstation:rollback-4444444444444444)
+        printf '%s\n' "$fixture_older_id"
+        ;;
       *) return 1 ;;
     esac
   }
@@ -128,6 +134,22 @@ run_case() (
   }
   tag_image() {
     trace_line "tag:$2"
+    return 0
+  }
+  list_image_refs() {
+    trace_line "cleanup-inventory:$1"
+    printf '%s|%s\n' "example/workstation" "candidate-test"
+    printf '%s|%s\n' "example/workstation" "rollback-1111111111111111"
+    printf '%s|%s\n' "example/workstation" "candidate-previous"
+    printf '%s|%s\n' "example/workstation" "candidate-old"
+    printf '%s|%s\n' "example/workstation" "rollback-4444444444444444"
+    printf '%s|%s\n' "example/other" "candidate-foreign"
+  }
+  remove_image_ref() {
+    trace_line "remove-ref:$1"
+    if [[ "$scenario" == cleanup_fail && "$1" == "example/workstation:rollback-4444444444444444" ]]; then
+      return 1
+    fi
     return 0
   }
   restore_keyring_migration_backup() {
@@ -191,6 +213,19 @@ run_case() (
   }
   write_evidence() {
     trace_line "evidence:$1:$2"
+    if [[ "$1" == success ]]; then
+      trace_line "cleanup-status:${IMAGE_CLEANUP_STATUS:-}"
+      local cleanup_ref
+      while IFS= read -r cleanup_ref; do
+        [[ -n "$cleanup_ref" ]] && trace_line "cleanup-retained:$cleanup_ref"
+      done <<< "${IMAGE_CLEANUP_RETAINED_REFS:-}"
+      while IFS= read -r cleanup_ref; do
+        [[ -n "$cleanup_ref" ]] && trace_line "cleanup-removed:$cleanup_ref"
+      done <<< "${IMAGE_CLEANUP_REMOVED_REFS:-}"
+      while IFS= read -r cleanup_ref; do
+        [[ -n "$cleanup_ref" ]] && trace_line "cleanup-failed:$cleanup_ref"
+      done <<< "${IMAGE_CLEANUP_FAILED_REFS:-}"
+    fi
     if [[ "$1" == rollback_failed ]]; then
       trace_line "recovery-evidence:${8:-}:${9:-}:${10:-}:${11:-}:${12:-}"
     fi
@@ -249,6 +284,23 @@ run_case() (
       assert_order "host-preflight" "build"
       assert_trace "recreate:candidate-test"
       assert_trace "keyring-finalize"
+      assert_order "verify:$fixture_candidate_id" "cleanup-inventory:example/workstation"
+      assert_trace "cleanup-status:success"
+      assert_trace "cleanup-retained:example/workstation:candidate-test"
+      assert_trace "cleanup-retained:example/workstation:rollback-1111111111111111"
+      assert_trace "cleanup-retained:example/workstation:candidate-previous"
+      assert_trace "cleanup-removed:example/workstation:candidate-old"
+      assert_trace "cleanup-removed:example/workstation:rollback-4444444444444444"
+      assert_no_trace_prefix 'remove-ref:example/other:'
+      assert_trace "evidence:success:"
+      assert_no_trace_prefix 'recreate:rollback-'
+      ;;
+    cleanup_fail)
+      assert_trace "recreate:candidate-test"
+      assert_order "verify:$fixture_candidate_id" "cleanup-inventory:example/workstation"
+      assert_trace "cleanup-status:warning"
+      assert_trace "cleanup-removed:example/workstation:candidate-old"
+      assert_trace "cleanup-failed:example/workstation:rollback-4444444444444444"
       assert_trace "evidence:success:"
       assert_no_trace_prefix 'recreate:rollback-'
       ;;
@@ -302,6 +354,11 @@ run_case() (
       exit 1
       ;;
   esac
+
+  if [[ "$scenario" != success && "$scenario" != cleanup_fail ]]; then
+    assert_no_trace_prefix 'cleanup-inventory:'
+    assert_no_trace_prefix 'remove-ref:'
+  fi
 )
 
 run_case source_fail 1
@@ -310,6 +367,7 @@ run_case preflight_fail 1
 run_case build_fail 1
 run_case readback_fail 1
 run_case success 0
+run_case cleanup_fail 0
 run_case promotion_fail 1
 run_case promoted_mismatch 1
 run_case health_fail 1
@@ -353,5 +411,60 @@ PY
 )
 
 test_recovery_evidence_serialization
+
+test_retention_evidence_serialization() (
+  local tmp
+  tmp="$(mktemp -d /tmp/workstation-update-retention-evidence-test.XXXXXX)"
+  trap 'rm -rf "$tmp"' EXIT
+  # shellcheck disable=SC1091
+  source "$REPO_ROOT/scripts/update.sh"
+  UPDATE_EVIDENCE_FILE="$tmp/evidence.json"
+  IMAGE_CLEANUP_STATUS="warning"
+  IMAGE_CLEANUP_RETAINED_REFS=
+example/workstation:candidate-test\nexample/workstation:rollback-1111111111111111'
+  IMAGE_CLEANUP_REMOVED_REFS="example/workstation:candidate-old"
+  IMAGE_CLEANUP_FAILED_REFS="example/workstation:rollback-4444444444444444"
+
+  write_evidence \
+    "success" "" \
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
+    "example/workstation:candidate-test" \
+    "sha256:2222222222222222222222222222222222222222222222222222222222222222" \
+    "sha256:1111111111111111111111111111111111111111111111111111111111111111" \
+    "example/workstation:rollback-1111111111111111"
+
+  python3 - "$UPDATE_EVIDENCE_FILE" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+assert payload["status"] == "success"
+retention = payload["retention"]
+assert retention["current_image_id"] == "sha256:" + "2" * 64
+assert retention["rollback_image_id"] == "sha256:" + "1" * 64
+assert retention["rollback_image"] == "example/workstation:rollback-1111111111111111"
+cleanup = retention["image_cleanup"]
+assert cleanup["status"] == "warning"
+assert cleanup["retained"]["count"] == 2
+assert cleanup["removed"]["refs"] == ["example/workstation:candidate-old"]
+assert cleanup["failed"]["refs"] == ["example/workstation:rollback-4444444444444444"]
+assert cleanup["retained"]["truncated"] is False
+PY
+)
+
+test_no_global_image_prune_or_force_delete() {
+  if grep -Eq 'docker[[:space:]]+(system|image)[[:space:]]+prune' "$REPO_ROOT/scripts/update.sh"; then
+    echo "global Docker prune is forbidden" >&2
+    exit 1
+  fi
+  if grep -Eq 'docker[[:space:]]+image[[:space:]]+rm[^#]*(--force|[[:space:]]-f([[:space:]]|$))' "$REPO_ROOT/scripts/update.sh"; then
+    echo "forced Docker image deletion is forbidden" >&2
+    exit 1
+  fi
+}
+
+test_retention_evidence_serialization
+test_no_global_image_prune_or_force_delete
 
 echo "UPDATE_ORCHESTRATION_TESTS_GREEN"
