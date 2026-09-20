@@ -13,12 +13,12 @@ research_obligation: null
 milestones:
   M01:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/MUSE_WORKER_CAPABILITY_PLANE_PLAN.md#milestone-m01--workstation-side-capability-substrate-contract"
-    checkpoint: null
+    checkpoint: "elmakus/chatgpt-ce-workstation@f175bbdcab094c8daa9d3a27ce05bd3caeff231d"
     implementation_head: "f175bbdcab094c8daa9d3a27ce05bd3caeff231d"
-    handoff: null
-    acceptance_evidence: null
+    handoff: "implementation/workstreams/issue-muse-worker-mcp-access/handoffs/M01_HANDOFF.md"
+    acceptance_evidence: "implementation/workstreams/issue-muse-worker-mcp-access/evidence/M01_T01_INDEPENDENT_REVIEW_2026-09-20.md"
     review_state: null
     review_subject: null
     review_evidence: null
