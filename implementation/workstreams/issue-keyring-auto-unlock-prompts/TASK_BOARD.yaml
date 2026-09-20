@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/keyring-auto-unlock-prompts"
   pr: 9
-  head: "5d4d8c6efeeedddbfea99c7234c222b872313229"
+  head: "f709bffe0796ae0d2646264325df1677c44ec641"
 
 research_obligation: null
 
@@ -43,4 +43,4 @@ cards:
     result_commit: "1addd26a736b1bd64126b1b14daadddf75a2b867"
     result_pr: 9
     evidence: "implementation/workstreams/issue-keyring-auto-unlock-prompts/evidence/MF_T02_PASSWORDLESS_KEYRING_2026-09-20.md"
-    tests_summary: "GREEN: corrected subject CI run 35501459367 completed successfully including Validate workstation source, noVNC semantics, ShellCheck, Dockerfile checks and secret scan; prior update rollback/finalize fixtures GREEN; isolated temporary-HOME encrypted->passwordless migration preserved stored secret across restart; fresh passwordless initialization preserved stored secret across restart; real keyring not mutated."
+    tests_summary: "GREEN: corrected subject CI run 35501459367 completed successfully including Validate workstation source, noVNC semantics, ShellCheck, Dockerfile checks and secret scan; prior update rollback/finalize fixtures GREEN; isolated temporary-HOME encrypted->passwordless migration preserved stored secret across restart; fresh passwordless initialization preserved stored secret across restart; REQUIRED independent review GREEN; closure-ready source head f709bffe0796ae0d2646264325df1677c44ec641 passed CI run 35502067496 and PR #9 merged to main as 22bca4132163e7d5f907f56204dcd906865d47d8; no production keyring mutation performed."
