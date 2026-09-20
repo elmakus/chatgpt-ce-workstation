@@ -64,6 +64,8 @@ grep -F 'CODEX_CHATGPT_WEB_SHA256' Dockerfile >/dev/null || fail 'Dockerfile doe
 grep -F 'MUSE_EXPECTED_VERSION' Dockerfile >/dev/null || fail 'Dockerfile does not bind Muse stable release id'
 grep -F 'CHROME_PACKAGE_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind Chrome package checksum'
 grep -F 'RUST_STABLE_MANIFEST_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind Rust stable manifest identity'
+grep -F 'UBUNTU_APT_INDEXES' Dockerfile >/dev/null || fail 'Dockerfile does not consume the exact frozen Ubuntu InRelease set'
+grep -F 'UBUNTU_APT_INDEXES' scripts/build/assert-ubuntu-apt-identity.sh >/dev/null || fail 'Ubuntu APT assertion helper does not require exact frozen indexes'
 grep -F 'COPY .workstation-build/upstream-resolution.json /opt/workstation/upstream-resolution.json' Dockerfile >/dev/null \
   || fail 'candidate image does not embed exact upstream resolution'
 grep -F 'io.chatgpt-ce-workstation.upstream-resolution-sha256' Dockerfile >/dev/null \
@@ -92,6 +94,7 @@ fixture_commit="$(printf 'b%.0s' {1..40})"
 env \
   UBUNTU_BASE="ubuntu:24.04@sha256:${fixture_sha}" \
   UBUNTU_APT_IDENTITY="sha256:${fixture_sha}" \
+  UBUNTU_APT_INDEXES="archive.ubuntu.com_ubuntu_dists_noble_InRelease=${fixture_sha}" \
   CE_REPOSITORY="https://github.com/ilysenko/codex-desktop-linux.git" \
   CE_REF=main CE_COMMIT="${fixture_commit}" \
   OPENAI_PACKAGE_VERSION=1.0.0 OPENAI_PACKAGE_SHA256="${fixture_sha}" \
