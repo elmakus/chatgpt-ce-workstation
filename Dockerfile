@@ -272,7 +272,8 @@ RUN set -eux; \
     test "$actual_integrity" = "${AGENT_WORKSPACE_INTEGRITY}"; \
     npm install -g "@agent-sh/agent-workspace-linux@${AGENT_WORKSPACE_VERSION}"; \
     command -v agent-workspace-linux; \
-    test "$(node -p "require('/usr/local/lib/node_modules/@agent-sh/agent-workspace-linux/package.json').version")" = "${AGENT_WORKSPACE_VERSION}"
+    npm_root="$(npm root -g)"; \
+    test "$(node -p "require('${npm_root}/@agent-sh/agent-workspace-linux/package.json').version")" = "${AGENT_WORKSPACE_VERSION}"
 
 COPY scripts/build/install-muse-code.sh /tmp/install-muse-code.sh
 RUN set -eux; \
