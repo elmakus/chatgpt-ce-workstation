@@ -163,7 +163,7 @@ cards:
     title: "Activate accepted updater on production and run post-update regressions"
     milestone: M04
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: blocked
     executor: chatgpt
     depends_on: ["M03-T02"]
     openspec_change: null
@@ -173,8 +173,8 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: 7
-    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-live-regression.md"
-    tests_summary: "PARTIAL LIVE ACCEPTANCE: production smart update GREEN on candidate sha256:214ac0f... with health/runtime/isolation/provenance GREEN; Codex Web GPT 5.0.10 doctor RED because current Codex normalized the managed interrupt hook with enabled=true, which 5.0.10 rejects as changed owned state. Bounded source correction required before M04-T01 completion."
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-live-regression-2.md"
+    tests_summary: "PARTIAL LIVE ACCEPTANCE: second authorized smart update GREEN on exact image sha256:e11e3f473ee45c25585f79f7b891e18f359a0a133d9b3e37359e7514233a4972 / resolution 604ed5c8904bc55cbf3b8c10a718acc837c6795792f1d31b8dbee2fa1f2e371b with v5.0.11 provenance and runtime/isolation GREEN; Codex Web GPT doctor RED because current Codex normalized the bridge-owned Compatibility V1 multi_agent line to literal multi_agent = true, stripping only the managed comment. Bounded C02 correction required; controlled rollback not started."
 
   - id: M04-T01-C01
     title: "Make Codex Web GPT interrupt-hook ownership compatible with native enabled normalization"
@@ -192,6 +192,23 @@ cards:
     result_pr: 4
     evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-C01-implementation.md"
     tests_summary: "GREEN on reviewed related-repository subject 9dd258be18605f9ca2d9fdbd76edd437cf0e12a4 and published v5.0.11: PR #4 independently reviewed GREEN then merged to main; release commit c612b007ec8be0057a17c14e403a12b9b75533ad passed Linux/macOS/Windows CI and Fork Linux Release, published checksummed AppImage sha256:0dc9b30e8256b6ea3c6d1cda3bbca73a8a012eee2120fb7f2b2e1591712b3f86, and PR #5 merged release metadata to main."
+
+  - id: M04-T01-C02
+    title: "Accept native multi_agent normalization without weakening ownership"
+    milestone: M04
+    decision_state: accepted
+    execution_status: in_progress
+    executor: chatgpt
+    depends_on: ["M04-T01-C01"]
+    openspec_change: null
+    contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M04-T01-C02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-live-regression-2.md"
+    tests_summary: null
 
   - id: M04-T02
     title: "Exercise bounded live rollback and prove stable no-change updates"
