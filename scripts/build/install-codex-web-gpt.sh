@@ -3,38 +3,37 @@ set -Eeuo pipefail
 
 repository="${CODEX_WEB_GPT_REPOSITORY:-elmakus/codex-chatgpt-web}"
 version="${CODEX_CHATGPT_WEB_VERSION:-}"
+frozen_sha256="${CODEX_CHATGPT_WEB_SHA256:-}"
 
-if [[ ! "$repository" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
+[[ "$repository" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || {
   echo "Invalid codex-chatgpt-web repository: $repository" >&2
   exit 1
-fi
-
-if [[ -z "$version" ]]; then
-  version="$(curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 60 \
-    "https://api.github.com/repos/${repository}/releases/latest" \
-    | sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"v\([^"]*\)".*/\1/p' \
-    | sed -n '1p')"
-fi
+}
 version="${version#v}"
-
-if [[ -z "$version" || "$version" =~ [^A-Za-z0-9._-] ]]; then
-  echo "Invalid or unresolved codex-chatgpt-web version: ${version:-<empty>}" >&2
+[[ -n "$version" && ! "$version" =~ [^A-Za-z0-9._-] ]] || {
+  echo "Exact codex-chatgpt-web version is required" >&2
   exit 1
-fi
+}
+[[ "$frozen_sha256" =~ ^[0-9a-f]{64}$ ]] || {
+  echo "Exact codex-chatgpt-web SHA-256 is required" >&2
+  exit 1
+}
 
 asset="codex-web-gpt-${version}-linux-x64.AppImage"
 base_url="https://github.com/${repository}/releases/download/v${version}"
 tmp_dir="$(mktemp -d /tmp/codex-web-gpt.XXXXXX)"
 trap 'rm -rf "$tmp_dir"' EXIT HUP INT TERM
 
-curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 900 \
-  "$base_url/$asset" -o "$tmp_dir/$asset"
-curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 60 \
-  "$base_url/checksums.txt" -o "$tmp_dir/checksums.txt"
+curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 900   "$base_url/$asset" -o "$tmp_dir/$asset"
+curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 60   "$base_url/checksums.txt" -o "$tmp_dir/checksums.txt"
 
 expected="$(awk -v asset="$asset" '$2 == asset { print $1; exit }' "$tmp_dir/checksums.txt")"
 actual="$(sha256sum "$tmp_dir/$asset" | awk '{ print $1}')"
 [[ -n "$expected" ]] || { echo "checksums.txt has no entry for $asset" >&2; exit 1; }
+[[ "$expected" == "$frozen_sha256" ]] || {
+  echo "Frozen codex-chatgpt-web checksum no longer matches upstream checksums.txt" >&2
+  exit 1
+}
 [[ "$actual" == "$expected" ]] || { echo "SHA-256 verification failed for $asset" >&2; exit 1; }
 
 chmod 0755 "$tmp_dir/$asset"
@@ -44,12 +43,10 @@ mkdir -p "$tmp_dir/extract"
   "$tmp_dir/$asset" --appimage-extract >/dev/null
 )
 
-runner_source="$(find "$tmp_dir/extract/squashfs-root" -type f \
-  -path '*/app.asar.unpacked/assets/linux-appimage-runner.sh' -print -quit)"
+runner_source="$(find "$tmp_dir/extract/squashfs-root" -type f   -path '*/app.asar.unpacked/assets/linux-appimage-runner.sh' -print -quit)"
 [[ -n "$runner_source" ]] || { echo "Launcher AppImage has no bounded Linux runner" >&2; exit 1; }
 
-key_helper_source="$(find "$tmp_dir/extract/squashfs-root" -type f \
-  -path '*/app.asar.unpacked/assets/set-codex-lb-key.sh' -print -quit)"
+key_helper_source="$(find "$tmp_dir/extract/squashfs-root" -type f   -path '*/app.asar.unpacked/assets/set-codex-lb-key.sh' -print -quit)"
 [[ -n "$key_helper_source" ]] || { echo "Launcher AppImage has no Codex-LB key helper" >&2; exit 1; }
 
 icon_source="$(find "$tmp_dir/extract/squashfs-root" -type f -path '*/512x512/*' -name '*.png' -print -quit)"
@@ -83,7 +80,5 @@ exec "$runner" "$target" "\$@"
 EOF
 chmod 0755 "$wrapper"
 
-# Deliberately do not launch the GUI here. Docker image builds have no desktop
-# session; the launcher is started later from the running workstation/noVNC.
 printf 'Installed codex-chatgpt-web launcher v%s at %s\n' "$version" "$target"
 printf 'Installed Codex-LB key helper at %s\n' "$key_helper"
