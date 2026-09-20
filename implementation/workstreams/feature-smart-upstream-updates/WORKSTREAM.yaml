@@ -1,6 +1,6 @@
 id: "feature-smart-upstream-updates"
 kind: "feature"
-status: "planning"
+status: "ready"
 
 branch: "feat/smart-upstream-updates"
 base_ref: "elmakus/chatgpt-ce-workstation@04fb32a47b5bcfbfcf16f6fb77bffbe2a7282acf"
@@ -14,7 +14,7 @@ intake:
   state: "complete"
   record: "implementation/workstreams/feature-smart-upstream-updates/INTAKE.md"
 
-task_board: null
+task_board: "implementation/workstreams/feature-smart-upstream-updates/TASK_BOARD.yaml"
 
 authority:
   requirements: "requirements/SMART_UPSTREAM_UPDATES.md"
@@ -31,7 +31,7 @@ authority:
   plan: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md"
 
 review:
-  requirement: null
+  requirement: "RECOMMENDED"
   state: null
   subject: null
   evidence: null
