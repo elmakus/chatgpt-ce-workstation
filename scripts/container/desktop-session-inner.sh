@@ -10,8 +10,8 @@ export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/runtime-codex}"
 vnc_auth_file="${VNC_AUTH_FILE:-/home/codex/.config/workstation/vnc.pass}"
 novnc_port="${NOVNC_PORT:-6080}"
 keyring_migration_password_file="${KEYRING_MIGRATION_PASSWORD_FILE:-/run/workstation/keyring-migration-password}"
-keyring_marker="${KEYRING_PASSWORDLESS_MARKER:-/home/codex/.config/workstation/keyring-passwordless-v1}"
-keyring_backup="${KEYRING_PASSWORDLESS_BACKUP:-/home/codex/.local/share/keyrings.pre-passwordless-v1}"
+keyring_marker="${KEYRING_PASSWORDLESS_MARKER:-/home/codex/.config/workstation/keyring-passwordless-v2}"
+keyring_backup="${KEYRING_PASSWORDLESS_BACKUP:-/home/codex/.local/share/keyrings.pre-passwordless-v2}"
 
 pids=()
 cleanup() {
@@ -59,12 +59,10 @@ websockify \
 websockify_pid=$!
 pids+=("$websockify_pid")
 
-# D26 uses one passwordless persistent Secret Service collection. Start the
-# daemon on the canonical desktop D-Bus first, then let the migration helper
-# either create a fresh passwordless collection, verify an already-passwordless
-# one, or migrate an existing encrypted collection using the one-time legacy
-# credential staged by container init. The helper creates its durable marker only
-# after the collection is available unlocked.
+# D26 v2 uses one canonical passwordless persistent login collection. Root init
+# has already backed up the complete pre-attempt keyring directory and repaired
+# active ownership. The helper then migrates/proves the login collection,
+# converges both login/default aliases, and writes v2 only after success.
 start_env="$(gnome-keyring-daemon --start --components=secrets)"
 while IFS= read -r line; do
   case "$line" in
