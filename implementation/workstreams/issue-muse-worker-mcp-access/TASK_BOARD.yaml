@@ -1,7 +1,7 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "issue-muse-worker-mcp-access"
 plan_revision: "muse-worker-capability-plane-R2"
-current_milestone: "M01"
+current_milestone: "M02"
 
 execution_ref:
   branch: "fix/muse-worker-mcp-access"
@@ -22,6 +22,19 @@ milestones:
     review_state: null
     review_subject: null
     review_evidence: null
+
+  M02:
+    decision_state: accepted
+    execution_status: blocked
+    contract: "planning/MUSE_WORKER_CAPABILITY_PLANE_PLAN.md#milestone-m02--cross-repository-integration-readiness"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    blocker: "implementation/workstreams/issue-muse-worker-mcp-access/blockers/M02_EXTERNAL_DEPENDENCY_2026-09-20.md"
 
 cards:
   - id: "M01-T01"
