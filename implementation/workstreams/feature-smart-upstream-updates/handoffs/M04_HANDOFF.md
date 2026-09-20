@@ -2,21 +2,23 @@
 
 Date: `2026-09-20`
 Milestone: `M04 — Production activation and live fault-injection verification`
-Status: **GREEN / accepted; final workstream integration pending**
+Status: **GREEN / complete**
 
 ## Completed checkpoint
 
-- Accepted pre-Close repository checkpoint: `a6fbfd8d9e5a7e3dca3ed3053a2bc7cab214b251`.
-- M04-T01: production updater activation and corrected application regressions GREEN.
-- M04-T02: bounded live rollback, accepted-candidate restoration and no-change/cache verification GREEN.
+- Accepted implementation checkpoint: `a6fbfd8d9e5a7e3dca3ed3053a2bc7cab214b251`.
+- M04-T01 production updater activation and corrected application regressions: GREEN.
+- M04-T02 bounded live rollback, accepted-candidate restoration and no-change/cache verification: GREEN.
 - Milestone acceptance: `implementation/workstreams/feature-smart-upstream-updates/evidence/M04-acceptance.md`.
-- Final integration refresh: `implementation/workstreams/feature-smart-upstream-updates/evidence/SMART_UPSTREAM_UPDATES-final-integration-refresh.md`.
+- Final-integration review: GREEN at `implementation/workstreams/feature-smart-upstream-updates/evidence/SMART_UPSTREAM_UPDATES-final-integration-review.md`.
+- Final integration: PR #7 merged to `main`; merge result `3f117a7a69895ba305e1355e3d0a81c8c8f8892d`.
+- Target-side closure evidence: `implementation/workstreams/feature-smart-upstream-updates/evidence/SMART_UPSTREAM_UPDATES-final-integration-result.md`.
 
 ## Achieved state
 
-Production is running the accepted exact candidate image `sha256:ea264b43f32482b8edd9a6012f0c28a38bab4fd27f1db092ad6ed11d67d27852` for frozen resolution `27a9929c4cb4da99c0c3cd4c4e5807539ad759b5360559a872664162b5ba1fff`, healthy after normal update, controlled rollback/restoration and a subsequent no-change update.
+The complete smart-upstream-updates workstream is integrated into `main`. The normal `scripts/update.sh` path resolves and freezes current trusted stable/current upstreams, builds and validates one exact candidate, promotes only after pre-promotion gates, verifies health/runtime, and retains an exact known-working rollback image.
 
-The smart updater now has live evidence for exact-source resolution, deterministic image identity, preflight/build/provenance, exact promotion, health/runtime verification, rollback to the retained prior image, persistent-state survival, restored application behavior and stable cache reuse without timestamp-only invalidation.
+Production remains on accepted image `sha256:ea264b43f32482b8edd9a6012f0c28a38bab4fd27f1db092ad6ed11d67d27852` for frozen resolution `27a9929c4cb4da99c0c3cd4c4e5807539ad759b5360559a872664162b5ba1fff`, with successful live update, controlled rollback/restoration, persistence checks and stable no-change cache reuse already demonstrated.
 
 ## Authority in force
 
@@ -29,18 +31,19 @@ The smart updater now has live evidence for exact-source resolution, determinist
 
 - M02-T02 independent review: GREEN.
 - M03-T02 corrected-subject independent review: GREEN.
-- Related Codex Web GPT C01 and C02 independent reviews: GREEN; corrected release `v5.0.12` is active in production.
+- Related Codex Web GPT C01/C02 independent reviews: GREEN; corrected release `v5.0.12` is active in production.
 - M04-T01 production revalidation: GREEN.
 - M04-T02 real rollback/no-change acceptance: GREEN.
-- Final integration target refresh: GREEN; PR #7 base is exactly current `main@04440574afb2d85790301c915e9d7f8c90721021`, branch is behind by zero and GitHub reports mergeable.
-- Final workstream independent review: **pending**; no prior independent verdict covers the whole final workstream acceptance surface.
+- Workstream final-integration independent review: GREEN on subject `272ec9d238ca19ab3c190b1450cd2a19b7bdd4cb`.
+- PR #7 target readback: GREEN; exact source head `59a7d17526f5681f2402f562d7a7e4a4fff11041` merged as `3f117a7a69895ba305e1355e3d0a81c8c8f8892d`.
+- The source branch was automatically removed after merge, so no fallback `branch_cleanup` lifecycle is required.
 
 ## Material exceptions / deferred items
 
-PR #7 is not yet merged. Final workstream integration remains blocked only by the manifest-owned `RECOMMENDED` independent review and subsequent normal Close publication/finalization.
-
 The preserved historical pre-bind backup under the persistent home remains a non-blocking runtime-verifier warning and is outside this workstream's cleanup scope.
+
+No additional production recreate/live write was performed during Git integration.
 
 ## Next durable starting point
 
-Start from `implementation/workstreams/feature-smart-upstream-updates/WORKSTREAM.yaml` once Close freezes its exact final-integration review subject. A fresh normal ChatGPT chat must perform that review. After GREEN, return to Close, re-read current `main`, verify PR #7 publication state, merge into `main`, and reconcile merge-result-dependent terminal state from the target-side package.
+The approved `smart-upstream-updates-R2` workstream scope is complete. No further deterministic implementation, review or integration obligation remains for this workstream.
