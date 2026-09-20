@@ -25,12 +25,12 @@ milestones:
 
   M02:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m02--exact-candidate-build--cache-semantics"
-    checkpoint: null
+    checkpoint: "35e979542815451079fbeb6f6398b70066c5a962"
     implementation_head: "35e979542815451079fbeb6f6398b70066c5a962"
-    handoff: null
-    acceptance_evidence: "Implementation acceptance GREEN on exact integrated subject 35e979542815451079fbeb6f6398b70066c5a962: CI #141 and exact non-production candidate build/readback #11 GREEN; independent review pending before M03."
+    handoff: "implementation/workstreams/feature-smart-upstream-updates/handoffs/M02_HANDOFF.md"
+    acceptance_evidence: "GREEN on exact integrated M01-M02 subject 35e979542815451079fbeb6f6398b70066c5a962: CI #141 and exact non-production candidate build/readback #11 GREEN; fresh independent M02-T02 review GREEN with evidence at implementation/workstreams/feature-smart-upstream-updates/evidence/M02-T02-review.md; no production write/recreate occurred."
     review_state: null
     review_subject: null
     review_evidence: null
