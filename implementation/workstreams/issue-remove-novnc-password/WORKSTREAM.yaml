@@ -1,6 +1,6 @@
 id: "issue-remove-novnc-password"
 kind: "issue"
-status: "discovery"
+status: "definition"
 
 branch: "fix/remove-novnc-password"
 base_ref: "elmakus/chatgpt-ce-workstation@e796e2fef00e348e2329be1a4856da335dff6842"
@@ -11,7 +11,7 @@ parent_branch: null
 parent_dependency: null
 
 intake:
-  state: active
+  state: complete
   record: "implementation/workstreams/issue-remove-novnc-password/INTAKE.md"
 
 routing:
@@ -22,7 +22,7 @@ routing:
 task_board: null
 
 authority:
-  requirements: null
+  requirements: "requirements/NOVNC_PASSWORDLESS_ACCESS.md"
   decisions:
     - "docs/DECISIONS.md#d7--lightweight-recoverable-novnc-desktop"
     - "docs/DECISIONS.md#d14--security--exposure"

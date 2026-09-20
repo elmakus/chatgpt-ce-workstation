@@ -3,6 +3,7 @@
 Workstream ID: `issue-remove-novnc-password`
 Kind: `issue`
 Branch: `fix/remove-novnc-password`
+Status: `complete`
 
 ## Operator intent
 
@@ -38,8 +39,10 @@ Classification: **independent**.
 
 ## Intake classification
 
-Provisional path: Project Definition.
+Path: Project Definition.
+Next route: `project_definition`.
+Canonical starting authority: `requirements/NOVNC_PASSWORDLESS_ACCESS.md`.
 
 Reason: removing noVNC authentication changes accepted security/exposure intent in D14. Definition must explicitly reconcile the intended network exposure/security model before implementation planning/execution.
 
-Intake remains active until the canonical Project Definition recovery state is materialized.
+The issue is independent and intake is complete.
