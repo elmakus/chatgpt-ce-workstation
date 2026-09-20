@@ -1,6 +1,6 @@
 id: "issue-muse-worker-mcp-access"
 kind: "issue"
-status: "definition"
+status: "planning"
 
 branch: "fix/muse-worker-mcp-access"
 base_ref: "04440574afb2d85790301c915e9d7f8c90721021"
@@ -20,7 +20,8 @@ authority:
   requirements: "requirements/MUSE_WORKER_EXTERNAL_TOOL_ACCESS.md"
   decisions:
     - "docs/DECISIONS.md#d25--muse-workers-own-a-persistent-external-capability-plane"
-  plan: null
+    - "docs/DECISIONS.md#d26--muse-uses-one-shared-persistent-skill-catalog-across-worker-roles"
+  plan: "planning/MUSE_WORKER_CAPABILITY_PLANE_PLAN.md"
 
 review:
   requirement: null

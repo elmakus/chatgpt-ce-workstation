@@ -1,97 +1,93 @@
 # Muse worker external-tool and skill access
 
-Status: **definition in progress**
+Status: **approved**
 Workstream: `issue-muse-worker-mcp-access`
 Date: 2026-09-20
 
-## Problem
+## Goal
 
-Muse workers in `muse-max` are separate Muse Code sessions. They do not inherit Codex Main's live MCP/connectors/tool objects or its in-memory skill context.
+Muse workers used by the `muse-max` profile must be able to use external authenticated systems and reusable domain skills without pretending to inherit Codex Main's live connectors or collapsing Executor/Tester independence.
 
-When an Executor, Tester or Investigator needs an external system or specialized domain guidance, the Muse harness needs its own durable capability/knowledge surface.
+## Accepted architecture
 
-## Accepted external capability model
+- D25: Muse owns a persistent external capability plane.
+- D26: Muse owns one shared persistent skill catalog across worker roles.
 
-D25 establishes a **Muse-owned persistent external capability plane**:
+Research:
+- `research/MUSE_CROSS_HARNESS_CAPABILITY_PATTERNS_2026-09-20.md`
+- `research/MUSE_WORKER_SKILL_PLANE_2026-09-20.md`
 
-- configure/authenticate required MCP servers once in the Muse runtime;
-- later `muse exec` processes under the same Muse user/config root reuse that configuration/auth;
-- Main does not routinely broker ordinary external calls;
-- credentials are never copied into task capsules/results/Git;
-- hard least privilege is enforced at the MCP server, credential, endpoint or another real runtime boundary.
+## Requirements
 
-Research: `research/MUSE_CROSS_HARNESS_CAPABILITY_PATTERNS_2026-09-20.md`.
+### R1 — Persistent Muse capability plane
 
-## Verified Muse skill model
+Required MCP servers and their Muse-side authentication/configuration must be reusable by later `muse exec` workers running under the same persistent Muse user/config root.
 
-Muse Code 1.3.0 has a native skills system:
+### R2 — No implicit Main inheritance
 
-- a skill is a directory containing `SKILL.md`;
-- at session start the model receives only the skill catalog metadata, not every full skill body;
-- the model loads a relevant body on demand through `read_skill`;
-- user skills can live under `~/.config/muse/skills/<id>/` or `$HOME/.agents/skills/<id>/`;
-- Muse can also discover Claude/Codex personal and project skill roots and can import foreign personal skills into Muse-owned storage;
-- project skills require a trusted workspace;
-- skill `allowed-tools` metadata does not grant/enforce tool permissions.
+A Muse worker must never assume Codex Main/ChatGPT connector sessions, MCP clients or authenticated app sessions are inherited across the process/harness boundary.
 
-This means specialized skills can be installed once for the Muse harness rather than copied into every worker task or repository.
+### R3 — Direct worker use is the default
 
-Research: `research/MUSE_WORKER_SKILL_PLANE_2026-09-20.md`.
+When an external capability is configured for Muse, ordinary worker calls use the Muse-owned client directly. Main-mediated brokerage is not the normal path.
 
-## HA Bubble skill case study
+### R4 — Secret boundary
 
-`johnnyh1975/HA_Bubble_Skill` is a suitable example of a cross-project domain skill:
+Credentials, OAuth material and service secrets must not be copied into task capsules, normalized worker results, repository files or ordinary Main context.
 
-- its `SKILL.md` uses compatible name/description front matter and is well below Muse's 256 KiB skill-body limit;
-- it contains generation/repair guidance for Home Assistant Lovelace, Bubble Card, Streamline, Sidebar and Mushroom;
-- it includes a Health-Check Mode for reviewing existing dashboard YAML;
-- it includes a behavioral `eval-set.md` for validating the skill itself;
-- its repository verification script validates the skill library/package, not arbitrary generated dashboard output.
+### R5 — Hard least privilege
 
-### Executor / Investigator
+Where a capability requires restriction, enforcement must occur through a real boundary such as MCP-server configuration, credential scope, endpoint exposure or another runtime-enforced control. Prompt text and Muse tool-list metadata are insufficient as security boundaries.
 
-For a Home Assistant/Bubble task, the relevant domain skill should be available and should normally be loaded before implementation or focused diagnosis.
+### R6 — Shared persistent skill catalog
 
-A domain skill may be marked/referenced as required by the dispatch/task capsule so correctness does not depend only on the model noticing the catalog trigger.
+Reusable domain skills must be installable once at Muse user scope and discoverable by all Muse worker roles. Separate per-role physical catalogs are not required.
 
-### Tester
+### R7 — Lazy skill use
 
-Tester should also be able to access the relevant domain skill when verifying a domain-specific artifact. Withholding domain knowledge merely to create "independence" would make the Tester weaker.
+Workers should rely on Muse's native skill catalog/read mechanism rather than copying full skill bodies into every task capsule. Task capsules may identify a relevant/required skill by stable ID.
 
-However, shared skill access must not collapse Executor/Tester independence:
+### R8 — Executor / Investigator use
 
-- Tester still receives no Executor trajectory;
-- accepted requirements, current repository/runtime state and actual evidence remain the verification authority;
-- the domain skill is supporting reference material, not the sole oracle;
-- where the skill's claim is material, Tester should verify against actual runtime/component behavior, primary documentation, parsing/tests or other independent evidence when practical;
-- the skill's own `eval-set.md` and package verifier are specifically useful when the subject under test is the skill itself, not as substitutes for verifying a generated dashboard.
+When a task explicitly names a required domain skill, Executor/Investigator must load and use it before making domain-specific changes or conclusions. If the named skill is unavailable, the worker must report the limitation instead of silently proceeding as though it was loaded.
 
-## Proposed skill ownership model
+### R9 — Tester use and independence
 
-The simplest model consistent with D21/D25 is:
+Tester may load the same domain skill as supporting reference. Tester must still:
+- receive no Executor trajectory;
+- verify against accepted task/review requirements and actual repository/runtime state;
+- independently validate material skill claims through current primary/runtime evidence, tests/parsers or upstream documentation when practical;
+- never treat the shared skill alone as sufficient evidence for GREEN.
 
-1. Workstation/Muse owns one persistent user-level skill catalog.
-2. All Muse worker roles can see that catalog.
-3. Full skill bodies remain lazy-loaded by Muse.
-4. Dispatch may identify task-relevant skills so an Executor/Investigator can be required to load them.
-5. Tester may load the same domain skill as reference while preserving independent evidence and trajectory boundaries.
-6. Repo-specific skills may still live in trusted project `.agents/skills`; broadly reusable domain skills should normally be installed at Muse user scope.
+### R10 — Skill scope
 
-## Existing invariants
+Broadly reusable skills should normally be installed at persistent Muse user scope. Repository-specific skills may live in the trusted project's supported skill directory.
 
-1. Main remains orchestration/integration authority.
-2. Muse remains a bounded leaf worker harness, not a second project control plane.
-3. Caller/Main owns task authorization, workspace assignment and strategic escalation.
-4. `codex_workflow` remains Project-Workflow-state agnostic.
-5. Secrets/auth material do not enter task capsules, normalized results or Git.
-6. Executor and Tester remain distinct logical workers/sessions and Tester never receives Executor trajectory.
-7. A shared domain skill is shared reference knowledge, not shared worker trajectory.
+### R11 — Skills do not grant tools
 
-## Definition question requiring user authority
+Skill metadata cannot grant MCP/tool capability or bypass capability restrictions. Tool authorization and domain knowledge remain separate planes.
 
-Accept or reject the proposed **shared persistent Muse skill catalog with role-specific use**:
+### R12 — Existing Muse orchestration invariants remain
 
-- **Accept:** install reusable skills once for Muse; relevant Executor/Investigator tasks require the skill, and Tester may use the same skill as supporting reference while independently verifying the artifact.
-- **Reject:** define separate skill catalogs/installation surfaces per worker role.
+D21 remains unchanged: Main owns orchestration/integration; Muse workers remain bounded leaf workers; Executor and Tester remain distinct logical sessions; `codex_workflow` remains Project-Workflow-state agnostic.
 
-This choice materially affects Workstation skill installation/updates and whether `codex_workflow` needs role-specific skill-environment isolation.
+## Non-goals
+
+This work does not:
+- transplant Codex/ChatGPT live connector sessions into Muse;
+- introduce a universal Main capability broker;
+- create per-role Muse homes or per-role skill installations;
+- put credentials into Git or task text;
+- make an arbitrary third-party skill an image-baked mandatory dependency merely because it was used as a case study;
+- redefine the D21 worker lifecycle.
+
+## Acceptance-level outcomes
+
+The target is satisfied when:
+
+1. a later `muse exec` worker can reuse previously configured Muse-side MCP/auth state without Main copying credentials;
+2. two distinct Muse roles can discover the same persistent user-level skill;
+3. an Executor/Investigator can be explicitly told to load a relevant skill and fails visibly if it cannot;
+4. an independent Tester can use the same domain skill while retaining separate session/trajectory boundaries and evidence-based verification;
+5. existing non-`muse-max` profiles and D21 lifecycle semantics are not changed by this work;
+6. live user-home/auth mutations occur only behind an explicit authorization gate.

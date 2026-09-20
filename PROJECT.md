@@ -27,7 +27,7 @@ Normal ChatGPT is the fixed Task Card executor. Do not run the Capability Gate o
 - Codex marketplace updater Project Definition: requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md
 - Codex marketplace updater Master Plan: planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md
 - Approved workstation implementation/deployment plan: docs/IMPLEMENTATION_PLAN.md
-- Active Muse-max Project Definition: requirements/MUSE_MAX_RUNTIME.md
+- Active Muse-max Project Definition: requirements/MUSE_MAX_RUNTIME.md\n- Muse worker capability/skill Definition: requirements/MUSE_WORKER_EXTERNAL_TOOL_ACCESS.md\n- Muse worker capability/skill plan: planning/MUSE_WORKER_CAPABILITY_PLANE_PLAN.md
 - Approved Muse-max Master Plan: planning/MASTER_PLAN.md
 - Muse Code workstream plan when that workstream is active: docs/MUSE_CODE_PLAN.md
 - Superseded delegated-worker plan/requirements remain historical only and are not current authority.

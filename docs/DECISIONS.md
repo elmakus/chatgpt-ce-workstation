@@ -389,3 +389,20 @@ For `muse-max`:
 - Main-mediated brokerage and per-dispatch generated MCP environments are not the default architecture. They remain possible future mechanisms for exceptional capabilities that cannot safely or practically live in the Muse harness.
 
 **Rationale:** current cross-harness orchestrators normally treat the invoked CLI as an independently configured/authenticated runtime. Muse Code 1.3.0 provides persistent user/project MCP configuration and its own OAuth lifecycle, so this model avoids unnecessary Main round-trips while preserving the accepted D21 separation between Main orchestration and Muse worker execution. See `research/MUSE_CROSS_HARNESS_CAPABILITY_PATTERNS_2026-09-20.md`.
+
+
+## D26 — Muse uses one shared persistent skill catalog across worker roles
+
+**Decision (2026-09-20):** under `muse-max`, reusable domain skills are installed once in the persistent Muse user environment and are discoverable by all Muse worker roles.
+
+Role-specific behavior remains distinct:
+- Executor/Investigator may be instructed by the task capsule to load a relevant domain skill before implementation or focused diagnosis.
+- Tester may load the same domain skill as supporting reference, but the skill is not verification authority by itself.
+- Tester independence continues to require a separate logical session, no Executor trajectory, and evidence grounded in accepted requirements plus current repository/runtime state.
+- Material claims from a shared skill should be checked against primary/current runtime evidence, parsers/tests or upstream documentation when practical.
+- Repo-specific skills may remain project-scoped; broadly reusable domain skills belong at persistent Muse user scope.
+- Separate physical skill catalogs per role are not required.
+
+Skill metadata such as `allowed-tools` does not grant or restrict runtime capabilities. MCP/tool authorization remains a separate capability plane governed by D25.
+
+**Rationale:** Muse natively catalogs skills and lazily loads full `SKILL.md` bodies only when needed, so a shared catalog does not imply copying every skill into every worker context. Shared domain knowledge improves both implementation and review quality without violating Executor/Tester trajectory separation. The HA Bubble dashboard skill was used as a concrete case study. See `research/MUSE_WORKER_SKILL_PLANE_2026-09-20.md`.
