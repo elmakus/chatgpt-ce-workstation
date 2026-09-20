@@ -32,6 +32,6 @@ The isolated candidate build/runtime smoke was GREEN for the NPA scope. The full
 
 No live production Workstation deployment/recreate/restart was performed. The explicit production deployment gate remains separate from source integration.
 
-## Next durable step
+## Publication state
 
-Open/verify the workstream PR to `main`, re-read the target immediately before merge, integrate if still current, then reconcile only merge-result-dependent manifest/Task Board/handoff fields from target-side state.
+PR `#14` targets `main`. Before merge, re-read the target and PR head; if the target remains current and no behavioral drift is present, integrate and reconcile only merge-result-dependent manifest/Task Board/handoff fields from target-side state.
