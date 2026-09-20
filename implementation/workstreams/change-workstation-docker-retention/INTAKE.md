@@ -15,6 +15,7 @@ The change must bound workstation-specific Docker image/tag retention and BuildK
 - Current `scripts/update.sh` creates `candidate-*` images and a `rollback-<image>` tag but contains no post-success image/cache retention stage.
 - Current `scripts/test-update-orchestration.sh` covers promotion/verification/rollback failure paths but does not cover bounded retention across three sequential updates.
 - The smart-upstream updater implementation required by this change is already present on `main`; no unmerged parent-only behavior is required.
+- Existing accepted authority is `requirements/SMART_UPSTREAM_UPDATES.md` plus D25 in `docs/DECISIONS.md`. Those define exact-image rollback and useful cache reuse but do not bound historical image/cache retention.
 
 ## Workstream topology
 
@@ -26,9 +27,9 @@ Parent dependency: none
 
 ## Intake classification
 
-Path: pending
-Next route: pending
+Path: `project_definition`
+Next route: `project_definition:smart-upstream-retention-extension`
 
-The change is larger than a micro-fix because it adds lifecycle policy for two distinct resource classes (images/tags and BuildKit cache), requires scoped cleanup semantics, new evidence reporting, and multi-cycle/failure-path acceptance coverage.
+This change is larger than a micro-fix because it adds lifecycle policy for two distinct resource classes (images/tags and BuildKit cache), requires scoped cleanup semantics, new evidence reporting, and multi-cycle/failure-path acceptance coverage.
 
-The smallest downstream route will be selected after establishing whether existing accepted requirements/decisions already define enough of the retention policy and whether Unraid's concrete Docker/BuildKit backend requires implementation-shaping research.
+Project Definition is the smallest legal downstream route because issue #11 adds accepted system behavior not yet present in the canonical Smart Upstream Updates requirements. No further user/product choice is required to define the target behavior: the issue already fixes the retention and safety policy. The exact BuildKit GC command/mechanism remains a technical implementation choice and may be researched later without blocking Definition.
