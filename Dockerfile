@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG UBUNTU_BASE
+ARG UBUNTU_BASE=ubuntu:24.04
 FROM ${UBUNTU_BASE}
 
 ARG UBUNTU_BASE
@@ -48,6 +48,7 @@ COPY scripts/build/assert-ubuntu-apt-identity.sh /usr/local/lib/workstation/asse
 # Runtime + developer workstation tools. The signed Ubuntu repository state is
 # frozen before build and every successful apt phase must still match it.
 RUN set -eux; \
+    [[ "${UBUNTU_BASE}" =~ ^ubuntu:24\\.04@sha256:[0-9a-f]{64}$ ]]; \
     test -n "${UBUNTU_APT_IDENTITY}"; \
     chmod 0755 /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh; \
     apt-get update; \
