@@ -1,6 +1,6 @@
 # Issue Intake — Muse worker MCP/external-tool access
 
-Status: active
+Status: complete
 Workstream ID: `issue-muse-worker-mcp-access`
 Kind: issue
 Branch: `fix/muse-worker-mcp-access`
@@ -43,6 +43,14 @@ Root technical cause is concrete, but the intended behavior is not yet an accept
 - behavior when a required external capability is unavailable;
 - whether project `.mcp.json` is sufficient or runtime-generated session capability configuration is required.
 
-Provisional downstream route: Project Definition.
+## Downstream route
 
-Before intake completion, materialize the canonical Definition starting artifact and record the exact route.
+Path: `project_definition`
+
+Next route: `project_definition:requirements/MUSE_WORKER_EXTERNAL_TOOL_ACCESS.md`
+
+Canonical Definition authority:
+- `requirements/MUSE_WORKER_EXTERNAL_TOOL_ACCESS.md`
+- `brainstorming/MUSE_WORKER_MCP_ACCESS_OPEN_QUESTIONS.md`
+
+The remaining Definition blocker is the user-owned architecture choice among direct Muse-native MCP, Main-mediated capability brokering, or a hybrid model. Intake is complete; recovery continues from the Definition authority above.
