@@ -14,15 +14,18 @@ intake:
   state: "complete"
   record: "implementation/workstreams/issue-codex-lb-proxy-resolution/INTAKE.md"
 
-task_board: null
+task_board: "implementation/workstreams/issue-codex-lb-proxy-resolution/TASK_BOARD.yaml"
 
 authority:
   requirements: null
-  decisions: []
+  decisions:
+    - "docs/DECISIONS.md#D10"
+    - "docs/DECISIONS.md#D11"
+    - "docs/DECISIONS.md#D15"
   plan: null
 
 review:
-  requirement: null
+  requirement: "RECOMMENDED"
   state: null
   subject: null
   evidence: null
