@@ -62,26 +62,17 @@ Parent workstream: none.
 Parent branch: none.
 Parent dependency: none.
 
-## Path classification
+## Micro-fix qualification after Research R1
 
-The intended behavior remains fully governed by accepted D8/D14/D26 and the existing smart-updater rollback contract. No product/security/architecture decision currently needs to change.
+Research record: `implementation/workstreams/issue-keyring-live-migration-rollback/research/R1.md`
 
-However the exact root cause of the production keyring state is not yet sufficiently proven for micro-fix execution: issue #12 explicitly requires reproduction against a disposable copy of the real persistent keyring, and the synthetic temporary-HOME fixture did not reproduce the observed live failure.
+- **Root cause is concrete:** the legacy four-item `login.keyring` is root-owned/mode 0600 and unreadable to the UID-99 desktop; the failed candidate created a replacement `Login` collection and alias state instead of migrating that legacy keyring. Current helper/rollback source explains the marker-without-backup and verifier-skew failures.
+- **Change is bounded:** repair root-side migration preparation, v2 helper/alias semantics, rollback-state restoration, a backward-compatible rollback verifier, and focused tests.
+- **Strategic risk is bounded by existing authority:** D8/D14/D26 remain unchanged; smart-updater R11/R12 already require deterministic verified rollback.
+- **Acceptance is direct:** preserve all existing keyring bytes/items, converge the canonical login/default aliases after successful v2 migration, prove rollback to an older exact image without candidate-only checks, and retain strict candidate verification.
+- **No substantial new migration strategy is required:** this is a versioned corrective migration with backup/restore and an explicit reviewed live retry gate.
 
-Path: `research`
+Path: `micro_fix`
+Next route: `execution_prep:micro_fix`
 
-Research obligation: `implementation/workstreams/issue-keyring-live-migration-rollback/research/R1.md`
-
-Next route: `research:issue-keyring-live-migration-rollback-R1`
-
-## Research exit criteria
-
-Research must establish, without mutating the live keyring:
-
-- why the real keyring reached marker-present / backup-absent and later locked state;
-- whether encrypted-but-currently-unlocked state reproduces the failure;
-- the smallest safe migration predicate/operation that proves restart-persistent passwordless state while preserving items;
-- the exact rollback verification compatibility model for a retained older image;
-- the bounded fix/test shape sufficient to return to Execution Prep without changing D26.
-
-Until this Research completes, do not rerun the production updater.
+Issue #11 remains excluded and independent.

@@ -1,6 +1,6 @@
 id: "issue-keyring-live-migration-rollback"
 kind: "issue"
-status: "discovery"
+status: "ready"
 
 branch: "fix/keyring-live-migration-rollback"
 base_ref: "e796e2fef00e348e2329be1a4856da335dff6842"
@@ -19,10 +19,10 @@ routing:
   research_obligation: "implementation/workstreams/issue-keyring-live-migration-rollback/research/R1.md"
   plan_review: null
 
-task_board: null
+task_board: "implementation/workstreams/issue-keyring-live-migration-rollback/TASK_BOARD.yaml"
 
 authority:
-  requirements: null
+  requirements: "requirements/SMART_UPSTREAM_UPDATES.md"
   decisions:
     - "docs/DECISIONS.md#D8"
     - "docs/DECISIONS.md#D14"
@@ -30,7 +30,7 @@ authority:
   plan: null
 
 review:
-  requirement: null
+  requirement: "REQUIRED"
   state: null
   subject: null
   evidence: null

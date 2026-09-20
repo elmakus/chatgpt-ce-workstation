@@ -1,0 +1,30 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "issue-keyring-live-migration-rollback"
+plan_revision: "micro-fix"
+current_milestone: "micro-fix"
+
+execution_ref:
+  branch: "fix/keyring-live-migration-rollback"
+  pr: null
+  head: "063e94900a61e3a69b47256f09af3cb9c925005f"
+
+research_obligation: null
+
+milestones: {}
+
+cards:
+  - id: "MF-T01"
+    title: "Repair live keyring migration and rollback verifier compatibility"
+    milestone: "micro-fix"
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: []
+    contract: "implementation/workstreams/issue-keyring-live-migration-rollback/cards/MF-T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
