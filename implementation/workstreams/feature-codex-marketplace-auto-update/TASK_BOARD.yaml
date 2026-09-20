@@ -1,7 +1,7 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "feature-codex-marketplace-auto-update"
 plan_revision: "CMAU-R1"
-current_milestone: "CMAU-M02"
+current_milestone: "CMAU-M03"
 
 execution_ref:
   branch: "feat/codex-marketplace-auto-update"
@@ -31,6 +31,18 @@ milestones:
     implementation_head: "51d9cf2463c03c15dde6ae0c09965fc6ba572ab8"
     handoff: "implementation/workstreams/feature-codex-marketplace-auto-update/handoffs/CMAU-M02_HANDOFF.md"
     acceptance_evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M02-acceptance.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  CMAU-M03:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m03--runtime-validation-and-release-readiness"
+    checkpoint: null
+    implementation_head: null
+    handoff: null
+    acceptance_evidence: null
     review_state: null
     review_subject: null
     review_evidence: null
@@ -79,3 +91,26 @@ cards:
     result_pr: null
     evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M02-T01-implementation.md"
     tests_summary: "GREEN: bash syntax, Python compile, 14/14 deterministic scheduler tests, and full bash scripts/validate-source.sh SOURCE_VALIDATION_GREEN on isolated exact-subject worktree."
+
+  - id: CMAU-M03-T01
+    title: "Candidate runtime validation and release readiness"
+    milestone: CMAU-M03
+    decision_state: accepted
+    execution_status: ready
+    executor: "chatgpt"
+    depends_on:
+      - "CMAU-M02-T01"
+    openspec_change: null
+    contract: "implementation/workstreams/feature-codex-marketplace-auto-update/cards/CMAU-M03-T01.md"
+    authority_refs:
+      - "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m03--runtime-validation-and-release-readiness"
+      - "requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md"
+      - "docs/DECISIONS.md#d24--global-codex-marketplace-refresh-uses-one-persistent-s6-timer"
+      - "implementation/workstreams/feature-codex-marketplace-auto-update/handoffs/CMAU-M02_HANDOFF.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
