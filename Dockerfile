@@ -307,6 +307,7 @@ RUN chmod 0755 /opt/workstation/bin/*.sh \
     /usr/local/bin/workstation-healthcheck \
     /etc/cont-init.d/10-workstation-init \
     /etc/s6-overlay/s6-rc.d/desktop/run \
+    /etc/s6-overlay/s6-rc.d/codex-marketplace-updater/run \
     && test -s /etc/xdg/openbox/menu.xml \
     && test -s /etc/xdg/tint2/tint2rc \
     && test -s /usr/local/share/applications/chatgpt-ce.desktop \

@@ -11,7 +11,7 @@ Card: `M02-T02`
 Independent review against the exact M02 Task Card authority slice:
 - `planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m02--exact-candidate-build--cache-semantics`
 - requirements R1-R9 and R13-R16 as carried by the Card, with M02 ownership focused on R2-R9/R13-R16
-- accepted decisions D2, D5, D6, D10, D11, D15, D16 and D24
+- accepted decisions D2, D5, D6, D10, D11, D15, D16 and D25
 - completed M01 checkpoint plus exact GREEN M02-T01 dependency result
 
 ## Findings

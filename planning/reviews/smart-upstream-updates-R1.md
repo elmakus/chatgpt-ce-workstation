@@ -12,7 +12,7 @@ Review evidence: RED — bounded plan-only correction required; accepted Definit
 Independently review the exact immutable plan subject above against:
 
 - approved `requirements/SMART_UPSTREAM_UPDATES.md`;
-- accepted `docs/DECISIONS.md#D2`, `#D4`, `#D5`, `#D6`, `#D10`, `#D11`, `#D15`, `#D16` and `#D24`;
+- accepted `docs/DECISIONS.md#D2`, `#D4`, `#D5`, `#D6`, `#D10`, `#D11`, `#D15`, `#D16` and `#D25`;
 - the current workstation build/update baseline referenced by the plan;
 - only the upstream/source evidence materially needed to assess feasibility, trust boundaries and update safety.
 

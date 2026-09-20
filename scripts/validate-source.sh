@@ -103,6 +103,52 @@ bash scripts/test-update-orchestration.sh || fail 'isolated update orchestration
 pass 'exact updater promotion, verification and rollback contracts'
 
 echo
+echo '=== Codex marketplace updater ==='
+python3 -m py_compile \
+  scripts/container/codex_marketplace_updater.py \
+  scripts/test-codex-marketplace-updater.py \
+  || fail 'Codex marketplace updater Python compile check'
+python3 scripts/test-codex-marketplace-updater.py \
+  || fail 'Codex marketplace updater deterministic tests'
+grep -F '"/opt/codex-desktop/resources/codex"' scripts/container/codex_marketplace_updater.py >/dev/null \
+  || fail 'Codex marketplace updater does not target CE-bundled Codex'
+grep -F '"plugin",' scripts/container/codex_marketplace_updater.py >/dev/null \
+  || fail 'Codex marketplace updater command wiring missing plugin subcommand'
+grep -F '"marketplace",' scripts/container/codex_marketplace_updater.py >/dev/null \
+  || fail 'Codex marketplace updater command wiring missing marketplace subcommand'
+grep -F '"upgrade",' scripts/container/codex_marketplace_updater.py >/dev/null \
+  || fail 'Codex marketplace updater command wiring missing upgrade subcommand'
+grep -F '"--json",' scripts/container/codex_marketplace_updater.py >/dev/null \
+  || fail 'Codex marketplace updater command wiring missing JSON mode'
+
+updater_service_root='rootfs/etc/s6-overlay/s6-rc.d/codex-marketplace-updater'
+updater_bundle_entry='rootfs/etc/s6-overlay/user-bundles.d/user/contents.d/codex-marketplace-updater'
+[[ -s "$updater_service_root/run" ]] || fail 'Codex marketplace updater s6 run script missing'
+grep -Fx 'longrun' "$updater_service_root/type" >/dev/null \
+  || fail 'Codex marketplace updater s6 service is not longrun'
+[[ -f "$updater_bundle_entry" ]] \
+  || fail 'Codex marketplace updater is not registered in the user bundle'
+bash -n "$updater_service_root/run" \
+  || fail 'Codex marketplace updater s6 run script syntax'
+grep -F 's6-setuidgid codex env' "$updater_service_root/run" >/dev/null \
+  || fail 'Codex marketplace updater does not drop privileges to codex'
+grep -F 'HOME=/home/codex' "$updater_service_root/run" >/dev/null \
+  || fail 'Codex marketplace updater does not use the persistent codex home'
+grep -F 'python3 /opt/workstation/bin/codex_marketplace_updater.py' "$updater_service_root/run" >/dev/null \
+  || fail 'Codex marketplace updater s6 service does not launch the repository-owned core'
+grep -F '/etc/s6-overlay/s6-rc.d/codex-marketplace-updater/run' Dockerfile >/dev/null \
+  || fail 'Dockerfile does not make the Codex marketplace updater s6 run script executable'
+grep -F 'COPY scripts/container/ /opt/workstation/bin/' Dockerfile >/dev/null \
+  || fail 'Dockerfile does not install the repository-owned updater core'
+if grep -F 'codex-marketplace-updater' rootfs/usr/local/bin/workstation-healthcheck >/dev/null; then
+  fail 'Workstation healthcheck must not depend on Codex marketplace updater'
+fi
+if grep -F 'codex-marketplace-updater' rootfs/etc/s6-overlay/s6-rc.d/desktop/run >/dev/null; then
+  fail 'desktop s6 service must not depend on Codex marketplace updater'
+fi
+pass 'Codex marketplace updater deterministic scheduler, bundled CLI and independent s6 service wiring'
+
+echo
 echo '=== compose ==='
 command -v docker >/dev/null || fail 'docker is required for compose validation'
 docker compose version >/dev/null || fail 'Docker Compose v2 is required'

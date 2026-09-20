@@ -27,7 +27,7 @@ authority:
     - "docs/DECISIONS.md#D11"
     - "docs/DECISIONS.md#D15"
     - "docs/DECISIONS.md#D16"
-    - "docs/DECISIONS.md#D24"
+    - "docs/DECISIONS.md#D25"
   plan: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md"
 
 review:

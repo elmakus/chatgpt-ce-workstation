@@ -24,6 +24,8 @@ Normal ChatGPT is the fixed Task Card executor. Do not run the Capability Gate o
 ## Project authority index
 
 - Accepted architecture decisions: docs/DECISIONS.md
+- Codex marketplace updater Project Definition: requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md
+- Codex marketplace updater Master Plan: planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md
 - Approved workstation implementation/deployment plan: docs/IMPLEMENTATION_PLAN.md
 - Active Muse-max Project Definition: requirements/MUSE_MAX_RUNTIME.md
 - Approved Muse-max Master Plan: planning/MASTER_PLAN.md

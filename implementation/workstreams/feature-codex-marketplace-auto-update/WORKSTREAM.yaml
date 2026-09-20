@@ -1,0 +1,45 @@
+id: "feature-codex-marketplace-auto-update"
+kind: "feature"
+status: "done"
+
+branch: "feat/codex-marketplace-auto-update"
+base_ref: "04fb32a47b5bcfbfcf16f6fb77bffbe2a7282acf"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: null
+  record: null
+
+task_board: "implementation/workstreams/feature-codex-marketplace-auto-update/TASK_BOARD.yaml"
+
+authority:
+  requirements: "requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md"
+  decisions:
+    - "docs/DECISIONS.md#D24"
+    - "docs/DECISIONS.md#D3"
+    - "docs/DECISIONS.md#D6"
+    - "docs/DECISIONS.md#D8"
+    - "docs/DECISIONS.md#D10"
+    - "docs/DECISIONS.md#D14"
+    - "docs/DECISIONS.md#D17"
+  plan: "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md"
+
+review:
+  requirement: "RECOMMENDED"
+  state: "green"
+  subject: "elmakus/chatgpt-ce-workstation@577a64630b6aa942b89c7c657265f3d6e8f448f3"
+  evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-final-integration-refresh.md"
+  covered_by: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M03-T01-review.md"
+
+branch_cleanup:
+  state: null
+  ref: null
+  verified_head: null
+  evidence: null
+
+pr: 8
+result: "e059a6e4983810c0564f0f763503996461851051"

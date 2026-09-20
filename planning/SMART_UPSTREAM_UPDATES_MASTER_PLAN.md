@@ -16,12 +16,12 @@ Authority:
 - `docs/DECISIONS.md#D2`
 - `docs/DECISIONS.md#D4`
 - `docs/DECISIONS.md#D5`
-- `docs/DECISIONS.md#D6` as amended by D24
+- `docs/DECISIONS.md#D6` as amended by D25
 - `docs/DECISIONS.md#D10`
 - `docs/DECISIONS.md#D11`
 - `docs/DECISIONS.md#D15`
 - `docs/DECISIONS.md#D16`
-- `docs/DECISIONS.md#D24`
+- `docs/DECISIONS.md#D25`
 
 The accepted product policy is latest trusted stable/current channels with Ubuntu held on the 24.04 LTS family. Exact resolver formats, Docker stage decomposition and rollback command details remain implementation decisions.
 
@@ -289,7 +289,7 @@ Execution Prep may choose:
 - mock/isolated Compose test harness details;
 - the concrete existing/new helper wiring used to realize the accepted host-preflight checkpoint.
 
-Those choices must stay inside D24 and the requirements. In particular, JIT may choose the mechanism for base-image resolution but may not weaken the pre-build frozen-identity invariant. If a vendor channel cannot provide enough stable identity/trust evidence to meet the Definition, open a Research obligation rather than weakening the contract silently.
+Those choices must stay inside D25 and the requirements. In particular, JIT may choose the mechanism for base-image resolution but may not weaken the pre-build frozen-identity invariant. If a vendor channel cannot provide enough stable identity/trust evidence to meet the Definition, open a Research obligation rather than weakening the contract silently.
 
 ## Planning audit
 

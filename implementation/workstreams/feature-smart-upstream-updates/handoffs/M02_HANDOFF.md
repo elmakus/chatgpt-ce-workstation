@@ -29,7 +29,7 @@ The exact M02 checkpoint:
 ## Authority now in force
 
 - Requirements: `requirements/SMART_UPSTREAM_UPDATES.md`
-- Decisions: D2, D4, D5, D6 as amended by D24, D10, D11, D15, D16, D24 in `docs/DECISIONS.md`
+- Decisions: D2, D4, D5, D6 as amended by D25, D10, D11, D15, D16, D25 in `docs/DECISIONS.md`
 - Approved plan: `planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md` revision `smart-upstream-updates-R2`
 
 ## Continuation

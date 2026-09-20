@@ -32,7 +32,7 @@ Explicit overrides are marked in the manifest. Required source/network/metadata 
 ## Authority in force
 
 - `requirements/SMART_UPSTREAM_UPDATES.md`
-- `docs/DECISIONS.md` D2, D4, D5, D6, D10, D11, D15, D16, D24
+- `docs/DECISIONS.md` D2, D4, D5, D6, D10, D11, D15, D16, D25
 - approved `planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md` revision `smart-upstream-updates-R2`
 - independent plan review GREEN at `planning/reviews/smart-upstream-updates-R2.md`
 
