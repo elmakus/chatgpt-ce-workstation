@@ -236,7 +236,7 @@ cleanup_workstation_image_refs() {
       continue
     fi
 
-    if [[ "$ref_id" == "$current_id" || "$ref_id" == "$rollback_id" ]]; then
+    if [[ "$ref" == "$current_ref" || "$ref" == "$rollback_ref" ]]; then
       append_image_cleanup_ref IMAGE_CLEANUP_RETAINED_REFS "$ref"
       continue
     fi
