@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/keyring-auto-unlock-prompts"
   pr: null
-  head: null
+  head: "6d50d803fc498031e061bba33e03d9b99500c310"
 
 research_obligation: null
 
@@ -17,8 +17,8 @@ cards:
     title: "Prevent secondary keyring sessions outside the desktop bus"
     milestone: "micro-fix"
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-auto-unlock-prompts/cards/MF-T01.md"
     review_state: null
