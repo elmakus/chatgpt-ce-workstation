@@ -6,15 +6,32 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        CE_REF: ${CE_REF:-main}
-        S6_OVERLAY_VERSION: ${S6_OVERLAY_VERSION:-3.2.3.2}
-        CODEX_CHATGPT_WEB_VERSION: ${CODEX_CHATGPT_WEB_VERSION:-}
-        AGENT_WORKSPACE_VERSION: ${AGENT_WORKSPACE_VERSION:-0.3.2}
-        MUSE_INSTALLER_URL: ${MUSE_INSTALLER_URL:-https://dev.meta.ai/install.sh}
-        MUSE_INSTALLER_SHA256: ${MUSE_INSTALLER_SHA256:-}
+        UBUNTU_BASE: ${UBUNTU_BASE:?frozen UBUNTU_BASE is required}
+        UBUNTU_APT_IDENTITY: ${UBUNTU_APT_IDENTITY:?frozen UBUNTU_APT_IDENTITY is required}
+        CE_REPOSITORY: ${CE_REPOSITORY:?frozen CE_REPOSITORY is required}
+        CE_REF: ${CE_REF:?frozen CE_REF is required}
+        CE_COMMIT: ${CE_COMMIT:?frozen CE_COMMIT is required}
+        OPENAI_PACKAGE_VERSION: ${OPENAI_PACKAGE_VERSION:?frozen OpenAI package version is required}
+        OPENAI_PACKAGE_SHA256: ${OPENAI_PACKAGE_SHA256:?frozen OpenAI package SHA-256 is required}
+        S6_OVERLAY_VERSION: ${S6_OVERLAY_VERSION:?frozen s6-overlay version is required}
+        S6_OVERLAY_NOARCH_SHA256: ${S6_OVERLAY_NOARCH_SHA256:?frozen s6 noarch SHA-256 is required}
+        S6_OVERLAY_X86_64_SHA256: ${S6_OVERLAY_X86_64_SHA256:?frozen s6 x86_64 SHA-256 is required}
+        AGENT_WORKSPACE_VERSION: ${AGENT_WORKSPACE_VERSION:?frozen Agent Workspace version is required}
+        AGENT_WORKSPACE_INTEGRITY: ${AGENT_WORKSPACE_INTEGRITY:?frozen Agent Workspace integrity is required}
+        CODEX_CHATGPT_WEB_VERSION: ${CODEX_CHATGPT_WEB_VERSION:?frozen codex-chatgpt-web version is required}
+        CODEX_CHATGPT_WEB_SHA256: ${CODEX_CHATGPT_WEB_SHA256:?frozen codex-chatgpt-web SHA-256 is required}
+        MUSE_INSTALLER_URL: ${MUSE_INSTALLER_URL:?frozen Muse installer URL is required}
+        MUSE_INSTALLER_SHA256: ${MUSE_INSTALLER_SHA256:?frozen Muse installer SHA-256 is required}
+        MUSE_EXPECTED_VERSION: ${MUSE_EXPECTED_VERSION:?frozen Muse release id is required}
+        CHROME_VERSION: ${CHROME_VERSION:?frozen Chrome version is required}
+        CHROME_PACKAGE_SHA256: ${CHROME_PACKAGE_SHA256:?frozen Chrome package SHA-256 is required}
+        GOOGLE_LINUX_SIGNING_KEY_SHA256: ${GOOGLE_LINUX_SIGNING_KEY_SHA256:?frozen Google signing-key SHA-256 is required}
+        RUST_VERSION: ${RUST_VERSION:?frozen Rust version is required}
+        RUST_STABLE_MANIFEST_SHA256: ${RUST_STABLE_MANIFEST_SHA256:?frozen Rust stable manifest SHA-256 is required}
+        RUSTUP_INSTALLER_SHA256: ${RUSTUP_INSTALLER_SHA256:?frozen rustup installer SHA-256 is required}
+        UPSTREAM_RESOLUTION_SHA256: ${UPSTREAM_RESOLUTION_SHA256:?frozen resolution SHA-256 is required}
         CODEX_UID: ${CODEX_UID:-99}
         CODEX_GID: ${CODEX_GID:-100}
-        UPSTREAM_REFRESH: ${UPSTREAM_REFRESH:-bootstrap}
     image: ${IMAGE_NAME:-chatgpt-ce-workstation}:${IMAGE_TAG:-local}
     container_name: ${CONTAINER_NAME:-chatgpt-ce-workstation}
     hostname: chatgpt-ce-workstation
@@ -23,11 +40,7 @@ services:
     working_dir: /home/codex/Documents/ChatGPT
     environment:
       TZ: ${TZ_VALUE:-Europe/Zurich}
-      # Workstation supplies only the native-upstream address. codex-chatgpt-web
-      # owns Codex-LB credential loading and fails closed when its required key is missing.
       CODEX_CHATGPT_WEB_NATIVE_UPSTREAM: ${CODEX_CHATGPT_WEB_NATIVE_UPSTREAM:-}
-      # Explicitly accepted workstation-wide Codex policy. The init script only
-      # creates ~/.codex/AGENTS.md when it does not already exist.
       INSTALL_GLOBAL_AGENTS: ${INSTALL_GLOBAL_AGENTS:-1}
     ports:
       - "${NOVNC_BIND_IP:-0.0.0.0}:${NOVNC_PORT:-6080}:6080"
@@ -46,8 +59,6 @@ services:
         target: keyring-password
         mode: 0400
     healthcheck:
-      # CE itself is intentionally not part of health. It may be Quit from the
-      # desktop and relaunched without making the workstation unhealthy.
       test: ["CMD", "bash", "/usr/local/bin/workstation-healthcheck"]
       interval: 30s
       timeout: 5s
