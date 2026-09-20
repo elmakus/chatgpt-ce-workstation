@@ -6,7 +6,7 @@ current_milestone: "CMAU-M02"
 execution_ref:
   branch: "feat/codex-marketplace-auto-update"
   pr: null
-  head: "d9b631c4d8de650a59cfa623f34b46ab67a55b51"
+  head: "51d9cf2463c03c15dde6ae0c09965fc6ba572ab8"
 
 research_obligation: null
 
@@ -72,10 +72,10 @@ cards:
       - "requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md"
       - "docs/DECISIONS.md#d24--global-codex-marketplace-refresh-uses-one-persistent-s6-timer"
       - "implementation/workstreams/feature-codex-marketplace-auto-update/handoffs/CMAU-M01_HANDOFF.md"
-    review_state: null
-    review_subject: null
-    review_evidence: null
-    result_commit: null
+    review_state: pending
+    review_subject: "elmakus/chatgpt-ce-workstation@51d9cf2463c03c15dde6ae0c09965fc6ba572ab8"
+    review_evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M02-T01-implementation.md"
+    result_commit: "51d9cf2463c03c15dde6ae0c09965fc6ba572ab8"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M02-T01-implementation.md"
+    tests_summary: "GREEN: bash syntax, Python compile, 14/14 deterministic scheduler tests, and full bash scripts/validate-source.sh SOURCE_VALIDATION_GREEN on isolated exact-subject worktree."
