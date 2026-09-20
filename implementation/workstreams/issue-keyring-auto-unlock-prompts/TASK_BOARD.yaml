@@ -16,13 +16,13 @@ cards:
   - id: "MF-T01"
     title: "Prevent secondary keyring sessions outside the desktop bus"
     milestone: "micro-fix"
-    decision_state: accepted
-    execution_status: in_progress
+    decision_state: superseded
+    execution_status: superseded
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-auto-unlock-prompts/cards/MF-T01.md"
-    review_state: pending
-    review_subject: "elmakus/chatgpt-ce-workstation@04a9c200f315cc0f3d99f8793d83a9a31f86caba"
+    review_state: null
+    review_subject: null
     review_evidence: null
     result_commit: "04a9c200f315cc0f3d99f8793d83a9a31f86caba"
     result_pr: 9
