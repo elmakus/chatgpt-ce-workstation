@@ -5,8 +5,8 @@ current_milestone: "micro-fix"
 
 execution_ref:
   branch: "fix/keyring-live-migration-rollback"
-  pr: null
-  head: "2243636995fefdabf0bd4ed366ed76bb95900f86"
+  pr: 13
+  head: "d89b2eb3ae4469349ed39d6bdb6d27e8236efc36"
 
 research_obligation: null
 
@@ -21,10 +21,10 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-live-migration-rollback/cards/MF-T01.md"
-    review_state: null
-    review_subject: null
+    review_state: pending
+    review_subject: "d89b2eb3ae4469349ed39d6bdb6d27e8236efc36"
     review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "d89b2eb3ae4469349ed39d6bdb6d27e8236efc36"
+    result_pr: 13
+    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_IMPLEMENTATION_2026-09-20.md"
+    tests_summary: "CI #260 / run 35505509221 GREEN on exact subject; source-validation incl. keyring v2/helper/prep + updater rollback fixtures, secret-scan and Dockerfile checks passed; no production mutation."

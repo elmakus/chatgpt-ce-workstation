@@ -1,6 +1,6 @@
 id: "issue-keyring-live-migration-rollback"
 kind: "issue"
-status: "ready"
+status: "review"
 
 branch: "fix/keyring-live-migration-rollback"
 base_ref: "e796e2fef00e348e2329be1a4856da335dff6842"
@@ -42,5 +42,5 @@ branch_cleanup:
   verified_head: null
   evidence: null
 
-pr: null
+pr: 13
 result: null
