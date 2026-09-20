@@ -3,3 +3,4 @@
 *.local.*
 secrets/
 .workstation-build/
+.workstation-update/
