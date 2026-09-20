@@ -1,6 +1,6 @@
 id: "issue-muse-worker-mcp-access"
 kind: "issue"
-status: "ready"
+status: "in_progress"
 
 branch: "fix/muse-worker-mcp-access"
 base_ref: "04440574afb2d85790301c915e9d7f8c90721021"

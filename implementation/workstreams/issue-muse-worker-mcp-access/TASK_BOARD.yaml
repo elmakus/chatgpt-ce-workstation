@@ -6,14 +6,14 @@ current_milestone: "M01"
 execution_ref:
   branch: "fix/muse-worker-mcp-access"
   pr: null
-  head: null
+  head: "8d03396a69ba41025ac3fd309f153fa747a8844a"
 
 research_obligation: null
 
 milestones:
   M01:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/MUSE_WORKER_CAPABILITY_PLANE_PLAN.md#milestone-m01--workstation-side-capability-substrate-contract"
     checkpoint: null
     implementation_head: null
@@ -28,8 +28,8 @@ cards:
     title: "Reconcile Muse capability substrate and persistence guards"
     milestone: "M01"
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-muse-worker-mcp-access/cards/M01-T01.md"
     review_state: null
