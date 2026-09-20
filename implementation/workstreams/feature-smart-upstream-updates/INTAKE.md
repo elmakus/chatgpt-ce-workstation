@@ -3,7 +3,7 @@
 Date: 2026-09-20
 Workstream ID: `feature-smart-upstream-updates`
 Kind: `feature`
-Status: active
+Status: complete
 
 ## Operator intent
 
@@ -18,6 +18,8 @@ Replace timestamp-driven workstation updates with a smart upstream-update lifecy
 - `Dockerfile` references `UPSTREAM_REFRESH` in Chrome, CE, Muse and Codex Web GPT layers, so an explicit update deliberately invalidates those remote-source layers even when the upstream identity did not change.
 - The initial Ubuntu APT package layer does not reference the refresh token, so explicit updates do not reliably refresh that layer when Docker cache remains valid.
 - The workstation currently pins `S6_OVERLAY_VERSION=3.2.3.2` and `AGENT_WORKSPACE_VERSION=0.3.2`; CE defaults to moving `main`; Codex Web GPT resolves latest when its layer actually reruns; Muse uses Meta's stable installer when its layer reruns; Chrome and Rust follow moving stable channels.
+- Current upstream checks confirm Agent Workspace latest is `v0.3.3`, while the workstation pin is `0.3.2`; s6-overlay latest remains `v3.2.3.2`; Codex Web GPT latest is `v5.0.10`.
+- Current CE source resolves the official OpenAI Linux `chatgpt` package from signed stable APT metadata and validates its package identity/architecture.
 - The accepted container architecture keeps Ubuntu on the 24.04 LTS line and disables application self-updaters in favor of image rebuilds.
 
 ## Base / dependency classification
@@ -48,4 +50,6 @@ Path: `brainstorming`
 
 Next route: `brainstorming:smart-upstream-updates@R1`
 
-The `#feature` directive does not authorize Project Definition promotion.
+Canonical exploratory record: `brainstorming/smart-upstream-updates.md`
+
+Definition promotion remains `pending`; the `#feature` directive does not authorize Project Definition promotion.
