@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/codex-lb-proxy-resolution"
   pr: null
-  head: "b53f9a48227ce2ee8e4c5715b942b83a82baa018"
+  head: "5e2a2f66ed02335690f55e18b5751ba998175e8f"
 
 research_obligation: null
 
@@ -21,10 +21,10 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-codex-lb-proxy-resolution/cards/MF-T01.md"
-    review_state: null
-    review_subject: null
-    review_evidence: null
-    result_commit: null
-    result_pr: null
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@0b2336dd01520c7a33699a6d90a290b108bebd42"
+    review_evidence: "implementation/workstreams/issue-codex-lb-proxy-resolution/evidence/MF_T01_CODEX_LB_PROXY_RESOLUTION_2026-09-20.md"
+    result_commit: "0b2336dd01520c7a33699a6d90a290b108bebd42"
+    result_pr: 8
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN on exact fork subject 0b2336dd: GitHub CI run 35498117851 success; actionlint + full verify/package/smoke matrix GREEN on Ubuntu, macOS and Windows. No production deployment performed."
