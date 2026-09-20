@@ -58,11 +58,11 @@ run_case() (
   # shellcheck disable=SC1091
   source "$REPO_ROOT/scripts/update.sh"
 
-  local old_id candidate_id resolution_sha
-  old_id="sha256:1111111111111111111111111111111111111111111111111111111111111111"
-  candidate_id="sha256:2222222222222222222222222222222222222222222222222222222222222222"
-  resolution_sha="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  active_image_id="$old_id"
+  local fixture_old_id fixture_candidate_id fixture_resolution_sha
+  fixture_old_id="sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  fixture_candidate_id="sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  fixture_resolution_sha="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  active_image_id="$fixture_old_id"
 
   require_tools() { trace_line "tools"; }
   load_local_env() { trace_line "env"; }
@@ -78,7 +78,7 @@ run_case() (
   render_resolution_env() {
     trace_line "render"
     cp "$1" "$2"
-    printf 'export UPSTREAM_RESOLUTION_SHA256=%q\n' "$resolution_sha"
+    printf 'export UPSTREAM_RESOLUTION_SHA256=%q\n' "$fixture_resolution_sha"
     printf 'export CANDIDATE_IMAGE_TAG=%q\n' "candidate-test"
   }
   host_preflight() {
@@ -96,8 +96,8 @@ run_case() (
   image_id() {
     trace_line "image-id:$1"
     case "$1" in
-      example/workstation:candidate-test) printf '%s\n' "$candidate_id" ;;
-      "$old_id") printf '%s\n' "$old_id" ;;
+      example/workstation:candidate-test) printf '%s\n' "$fixture_candidate_id" ;;
+      "$fixture_old_id") printf '%s\n' "$fixture_old_id" ;;
       *) return 1 ;;
     esac
   }
@@ -128,27 +128,27 @@ run_case() (
   recreate_with_tag() {
     trace_line "recreate:$1"
     if [[ "$1" == candidate-test ]]; then
-      active_image_id="$candidate_id"
+      active_image_id="$fixture_candidate_id"
       return 0
     fi
     if [[ "$scenario" == rollback_fail ]]; then
       return 1
     fi
-    active_image_id="$old_id"
+    active_image_id="$fixture_old_id"
   }
   wait_healthy() {
     trace_line "wait:$active_image_id"
-    if [[ "$scenario" == health_fail && "$active_image_id" == "$candidate_id" ]]; then
+    if [[ "$scenario" == health_fail && "$active_image_id" == "$fixture_candidate_id" ]]; then
       return 1
     fi
-    if [[ "$scenario" == rollback_fail && "$active_image_id" == "$candidate_id" ]]; then
+    if [[ "$scenario" == rollback_fail && "$active_image_id" == "$fixture_candidate_id" ]]; then
       return 1
     fi
     return 0
   }
   verify_runtime() {
     trace_line "verify:$active_image_id"
-    if [[ "$scenario" == runtime_fail && "$active_image_id" == "$candidate_id" ]]; then
+    if [[ "$scenario" == runtime_fail && "$active_image_id" == "$fixture_candidate_id" ]]; then
       return 1
     fi
     return 0
