@@ -6,7 +6,7 @@ current_milestone: "M04"
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "f58a0f16fadec8cc7b5c1fd04491c4d329a4748d"
+  head: "0fb42d3c4b3ae916157853c3bff96f81e2c4f6c5"
 
 research_obligation: null
 
@@ -163,7 +163,7 @@ cards:
     title: "Activate accepted updater on production and run post-update regressions"
     milestone: M04
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     depends_on: ["M03-T02"]
     openspec_change: null
@@ -171,10 +171,10 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "0fb42d3c4b3ae916157853c3bff96f81e2c4f6c5"
     result_pr: 7
-    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-live-regression-2.md"
-    tests_summary: "RESUMED after REQUIRED M04-T01-C02 independent review GREEN on exact related-repository subject 9317954b0e9391bb0def278c54e04084b1699465; prior live update/runtime acceptance remains valid evidence, corrected release publication and production revalidation now in progress; controlled rollback not started."
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-live-regression-3.md"
+    tests_summary: "GREEN after C02: normal production updater status success on exact resolution 27a9929c4cb4da99c0c3cd4c4e5807539ad759b5360559a872664162b5ba1fff and candidate image sha256:ea264b43f32482b8edd9a6012f0c28a38bab4fd27f1db092ad6ed11d67d27852; source/preflight/health/runtime/isolation GREEN; Codex Web GPT 5.0.12 doctor ready with active error-free route; Agent Workspace doctor plus real start/run/stop smoke GREEN; Computer Use ready with no blockers; CE app-server remains active with --remote-control. Controlled rollback remains M04-T02."
 
   - id: M04-T01-C01
     title: "Make Codex Web GPT interrupt-hook ownership compatible with native enabled normalization"
