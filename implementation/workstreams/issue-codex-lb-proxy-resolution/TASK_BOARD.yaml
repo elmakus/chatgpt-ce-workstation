@@ -5,8 +5,8 @@ current_milestone: "micro-fix"
 
 execution_ref:
   branch: "fix/codex-lb-proxy-resolution"
-  pr: null
-  head: "5e2a2f66ed02335690f55e18b5751ba998175e8f"
+  pr: 10
+  head: "b8138353f133419544700d8aea686fb74306f381"
 
 research_obligation: null
 
@@ -27,4 +27,4 @@ cards:
     result_commit: "0b2336dd01520c7a33699a6d90a290b108bebd42"
     result_pr: 8
     evidence: "implementation/workstreams/issue-codex-lb-proxy-resolution/evidence/MF_T01_CODEX_LB_PROXY_RESOLUTION_2026-09-20.md"
-    tests_summary: "GREEN on exact fork subject 0b2336dd: GitHub CI run 35498117851 success; actionlint + full verify/package/smoke matrix GREEN on Ubuntu, macOS and Windows. No production deployment performed."
+    tests_summary: "GREEN on exact fork subject 0b2336dd: GitHub CI run 35498117851 success; actionlint + full verify/package/smoke matrix GREEN on Ubuntu, macOS and Windows. Fork publication v5.0.13 verified with matching AppImage/checksum digest. Current workstation main compatibility reconciled against D25 resolve/freeze path. No production deployment performed."
