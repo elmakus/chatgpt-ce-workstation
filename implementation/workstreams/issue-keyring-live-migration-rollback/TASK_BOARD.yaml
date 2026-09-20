@@ -8,7 +8,7 @@ execution_ref:
   pr: 13
   head: "5b9afc564e6c2795f4fdd50df2453f3e47dc8b80"
 
-research_obligation: "implementation/workstreams/issue-keyring-live-migration-rollback/research/R3.md"
+research_obligation: null
 
 milestones: {}
 
