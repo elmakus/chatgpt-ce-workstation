@@ -6,7 +6,7 @@ current_milestone: "CMAU-M03"
 execution_ref:
   branch: "feat/codex-marketplace-auto-update"
   pr: null
-  head: "51d9cf2463c03c15dde6ae0c09965fc6ba572ab8"
+  head: "d63d9a337262a2b821ecfdbebdf6a91fc1113993"
 
 research_obligation: null
 
@@ -37,7 +37,7 @@ milestones:
 
   CMAU-M03:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m03--runtime-validation-and-release-readiness"
     checkpoint: null
     implementation_head: null
@@ -96,7 +96,7 @@ cards:
     title: "Candidate runtime validation and release readiness"
     milestone: CMAU-M03
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     executor: "chatgpt"
     depends_on:
       - "CMAU-M02-T01"
