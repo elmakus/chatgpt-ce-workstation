@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/keyring-live-migration-rollback"
   pr: 13
-  head: "41949c8fdf374c9c3ac21117db38fc90254c7853"
+  head: "ef5a4b1ee0d72c2ea6a95363e90fce7fa813a417"
 
 research_obligation: null
 
@@ -21,10 +21,10 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-live-migration-rollback/cards/MF-T01.md"
-    review_state: red
-    review_subject: "41949c8fdf374c9c3ac21117db38fc90254c7853"
-    review_evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_REVIEW_3_2026-09-20.md"
-    result_commit: "41949c8fdf374c9c3ac21117db38fc90254c7853"
+    review_state: pending
+    review_subject: "ef5a4b1ee0d72c2ea6a95363e90fce7fa813a417"
+    review_evidence: null
+    result_commit: "ef5a4b1ee0d72c2ea6a95363e90fce7fa813a417"
     result_pr: 13
-    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_ALIAS_CORRECTION_2026-09-20.md"
-    tests_summary: "Exact corrected source 41949c8fdf374c9c3ac21117db38fc90254c7853: Tower detached-worktree helper tests 6/6 GREEN, migration prep GREEN, updater orchestration GREEN, SOURCE_VALIDATION_GREEN. Production-derived disposable-copy retest GREEN; no production mutation. Independent review attempt 3 RED: interrupted initial v2 backup can leave a partial canonical backup that is trusted on retry."
+    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_ATOMIC_BACKUP_CORRECTION_2026-09-20.md"
+    tests_summary: "Exact frozen subject ef5a4b1ee0d72c2ea6a95363e90fce7fa813a417 (zero-file-diff checkpoint above tested abbca2a425fded9ef17e96a42a3d02a9aca882d4): migration prep GREEN including failed/interrupted backup retry, updater orchestration GREEN, keyring helper 6/6 GREEN, SOURCE_VALIDATION_GREEN; exact checkpoint git diff --check, bash -n changed scripts and docker buildx --check GREEN. GitHub hosted CI did not create a run after the normal PR push, so no hosted-CI result is claimed. No production mutation."
