@@ -93,6 +93,44 @@ cap_add="$(docker inspect --format='{{json .HostConfig.CapAdd}}' "$container")"
 pass 'container unprivileged and without SYS_ADMIN'
 
 echo
+echo '=== D-Bus / keyring session isolation ==='
+blocked_session_bus='unix:path=/run/workstation/no-session-bus'
+container_session_bus="$(docker exec "$container" /bin/sh -c 'printf "%s" "${DBUS_SESSION_BUS_ADDRESS:-}"')"
+[[ "$container_session_bus" == "$blocked_session_bus" ]] \
+  || fail "unexpected non-desktop D-Bus default: ${container_session_bus:-missing}"
+
+# The supervised desktop must replace the fail-closed image default with the
+# private session bus created by dbus-run-session.
+desktop_session_bus="$(
+  docker exec -u codex "$container" bash -lc '
+    set -Eeuo pipefail
+    pid="$(pgrep -u "$(id -u)" -f "^/bin/bash /opt/workstation/bin/desktop-session-inner\\.sh$" | head -n 1)"
+    [[ -n "$pid" ]]
+    tr "\\0" "\\n" <"/proc/$pid/environ" \
+      | sed -n "s/^DBUS_SESSION_BUS_ADDRESS=//p" \
+      | head -n 1
+  '
+)"
+[[ "$desktop_session_bus" == unix:path=* ]] \
+  || fail "desktop session has no usable D-Bus address: ${desktop_session_bus:-missing}"
+[[ "$desktop_session_bus" != "$blocked_session_bus" ]] \
+  || fail 'desktop session did not replace the fail-closed D-Bus default'
+
+docker exec -u codex "$container" env DBUS_SESSION_BUS_ADDRESS="$desktop_session_bus" \
+  dbus-send --session --print-reply --dest=org.freedesktop.DBus / \
+    org.freedesktop.DBus.NameHasOwner string:org.freedesktop.secrets \
+  | grep -F 'boolean true' >/dev/null \
+  || fail 'GNOME Secret Service is not present on the canonical desktop bus'
+
+root_keyrings="$(docker top "$container" -eo user,args \
+  | awk '$1 == "root" && /[g]nome-keyring-daemon/ { print }')"
+[[ -z "$root_keyrings" ]] || {
+  printf '%s\n' "$root_keyrings" >&2
+  fail 'root-owned secondary GNOME keyring daemon detected'
+}
+pass 'non-desktop D-Bus fails closed; desktop owns the only keyring service session'
+
+echo
 echo '=== in-container runtime ==='
 docker exec -u codex "$container" bash -lc "
 set -Eeuo pipefail
