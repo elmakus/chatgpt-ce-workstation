@@ -6,7 +6,7 @@ current_milestone: "M03"
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "83e77ed669a2d58da248e052896c6c44a90f8972"
+  head: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
 
 research_obligation: null
 
@@ -40,7 +40,7 @@ milestones:
     execution_status: in_progress
     contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m03--safe-promoteverifyrollback-updater"
     checkpoint: null
-    implementation_head: "83e77ed669a2d58da248e052896c6c44a90f8972"
+    implementation_head: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
     handoff: null
     acceptance_evidence: "Automated M03 acceptance GREEN on exact reconciled subject 83e77ed669a2d58da248e052896c6c44a90f8972: CI #154 and exact non-production candidate build #19 GREEN; isolated orchestration/validate-source/Dockerfile/ShellCheck/Gitleaks verification GREEN; no production updater invocation or recreate/write occurred; M03-T02 independent review pending."
     review_state: null
@@ -139,10 +139,10 @@ cards:
     depends_on: ["M03-T01"]
     openspec_change: null
     contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M03-T02.md"
-    review_state: red
-    review_subject: "83e77ed669a2d58da248e052896c6c44a90f8972"
-    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T02-review.md"
-    result_commit: "83e77ed669a2d58da248e052896c6c44a90f8972"
+    review_state: pending
+    review_subject: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
+    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T02-correction-implementation.md"
+    result_commit: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
     result_pr: 7
-    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T02-implementation.md"
-    tests_summary: "GREEN on exact reconciled M03 subject 83e77ed: CI #154 (source validation/noVNC/ShellCheck/Dockerfile/secret scan) and exact candidate build #19 GREEN; isolated updater orchestration, full validate-source, Dockerfile check, full ShellCheck and full-history Gitleaks GREEN; no real production updater invocation or recreate/write occurred."
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T02-correction-implementation.md"
+    tests_summary: "GREEN on exact corrected M03 subject ffe39dfcb6ac5584af9410feee5eab5f81b008cc: CI #162 GREEN with UPDATE_ORCHESTRATION_TESTS_GREEN/SOURCE_VALIDATION_GREEN, noVNC, ShellCheck, Dockerfile and secret scan; exact candidate build #27 GREEN with resolution/image provenance readback; rollback-failure recovery-state fixtures cover candidate-present/unhealthy, container-missing and wrong-image states; no real production updater invocation or recreate/write occurred."
