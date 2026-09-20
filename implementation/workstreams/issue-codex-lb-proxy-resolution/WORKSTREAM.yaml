@@ -1,0 +1,38 @@
+id: "issue-codex-lb-proxy-resolution"
+kind: "issue"
+status: "discovery"
+
+branch: "fix/codex-lb-proxy-resolution"
+base_ref: "elmakus/chatgpt-ce-workstation@04440574afb2d85790301c915e9d7f8c90721021"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: "active"
+  record: "implementation/workstreams/issue-codex-lb-proxy-resolution/INTAKE.md"
+
+task_board: null
+
+authority:
+  requirements: null
+  decisions: []
+  plan: null
+
+review:
+  requirement: null
+  state: null
+  subject: null
+  evidence: null
+  covered_by: null
+
+branch_cleanup:
+  state: null
+  ref: null
+  verified_head: null
+  evidence: null
+
+pr: null
+result: null
