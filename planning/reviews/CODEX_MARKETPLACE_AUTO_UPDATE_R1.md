@@ -2,9 +2,9 @@
 
 Plan revision: `CMAU-R1`
 Review requirement: `RECOMMENDED`
-Review state: `pending`
+Review state: `in_progress`
 Review subject: `planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md blob 2b15517d666c0cb13f5829a1d4b09b69c3b64199 at commit 847038623bc103007274344f41531734a277ae1d`
-Review evidence: `pending independent review`
+Review evidence: `independent review in progress`
 
 ## Authority
 
