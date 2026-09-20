@@ -59,7 +59,33 @@ grep -F '"upgrade",' scripts/container/codex_marketplace_updater.py >/dev/null \
   || fail 'Codex marketplace updater command wiring missing upgrade subcommand'
 grep -F '"--json",' scripts/container/codex_marketplace_updater.py >/dev/null \
   || fail 'Codex marketplace updater command wiring missing JSON mode'
-pass 'Codex marketplace updater deterministic scheduler tests and bundled CLI wiring'
+
+updater_service_root='rootfs/etc/s6-overlay/s6-rc.d/codex-marketplace-updater'
+updater_bundle_entry='rootfs/etc/s6-overlay/user-bundles.d/user/contents.d/codex-marketplace-updater'
+[[ -s "$updater_service_root/run" ]] || fail 'Codex marketplace updater s6 run script missing'
+grep -Fx 'longrun' "$updater_service_root/type" >/dev/null \
+  || fail 'Codex marketplace updater s6 service is not longrun'
+[[ -f "$updater_bundle_entry" ]] \
+  || fail 'Codex marketplace updater is not registered in the user bundle'
+bash -n "$updater_service_root/run" \
+  || fail 'Codex marketplace updater s6 run script syntax'
+grep -F 's6-setuidgid codex env' "$updater_service_root/run" >/dev/null \
+  || fail 'Codex marketplace updater does not drop privileges to codex'
+grep -F 'HOME=/home/codex' "$updater_service_root/run" >/dev/null \
+  || fail 'Codex marketplace updater does not use the persistent codex home'
+grep -F 'python3 /opt/workstation/bin/codex_marketplace_updater.py' "$updater_service_root/run" >/dev/null \
+  || fail 'Codex marketplace updater s6 service does not launch the repository-owned core'
+grep -F '/etc/s6-overlay/s6-rc.d/codex-marketplace-updater/run' Dockerfile >/dev/null \
+  || fail 'Dockerfile does not make the Codex marketplace updater s6 run script executable'
+grep -F 'COPY scripts/container/ /opt/workstation/bin/' Dockerfile >/dev/null \
+  || fail 'Dockerfile does not install the repository-owned updater core'
+if grep -F 'codex-marketplace-updater' rootfs/usr/local/bin/workstation-healthcheck >/dev/null; then
+  fail 'Workstation healthcheck must not depend on Codex marketplace updater'
+fi
+if grep -F 'codex-marketplace-updater' rootfs/etc/s6-overlay/s6-rc.d/desktop/run >/dev/null; then
+  fail 'desktop s6 service must not depend on Codex marketplace updater'
+fi
+pass 'Codex marketplace updater deterministic scheduler, bundled CLI and independent s6 service wiring'
 
 echo
 echo '=== compose ==='
