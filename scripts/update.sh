@@ -161,22 +161,26 @@ restore_keyring_migration_backup() {
   local appdata_root="${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}"
   local home="${appdata_root%/}/home"
   local keyrings="$home/.local/share/keyrings"
-  local backup="$home/.local/share/keyrings.pre-passwordless-v1"
-  local marker="$home/.config/workstation/keyring-passwordless-v1"
+  local backup="$home/.local/share/keyrings.pre-passwordless-v2"
+  local marker="$home/.config/workstation/keyring-passwordless-v2"
 
+  local marker_v1="$home/.config/workstation/keyring-passwordless-v1"
+
+  # Failed candidates must never leave completion markers behind, even when a
+  # migration backup was not created.
+  rm -f "$marker" "$marker_v1"
   [[ -d "$backup" ]] || return 0
 
   docker compose stop workstation >/dev/null 2>&1 || true
   rm -rf "$keyrings"
   mv "$backup" "$keyrings"
-  rm -f "$marker"
 }
 
 finalize_keyring_passwordless_migration() {
   local appdata_root="${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}"
   local home="${appdata_root%/}/home"
-  local backup="$home/.local/share/keyrings.pre-passwordless-v1"
-  local marker="$home/.config/workstation/keyring-passwordless-v1"
+  local backup="$home/.local/share/keyrings.pre-passwordless-v2"
+  local marker="$home/.config/workstation/keyring-passwordless-v2"
   local legacy_secret="${appdata_root%/}/secrets/keyring-password"
 
   [[ -f "$marker" ]] || return 0
@@ -186,6 +190,7 @@ finalize_keyring_passwordless_migration() {
     chmod 0600 "$legacy_secret"
   fi
   rm -rf "$backup"
+  rm -f "$home/.config/workstation/keyring-passwordless-v1"
 }
 
 wait_healthy() {
@@ -194,6 +199,11 @@ wait_healthy() {
 
 verify_runtime() {
   bash scripts/verify-runtime.sh
+}
+
+verify_rollback_runtime() {
+  local expected_image_id="$1"
+  bash scripts/verify-rollback-runtime.sh "$expected_image_id"
 }
 
 require_tools() {
@@ -337,7 +347,9 @@ rollback_after_failure() {
   if recreate_with_tag "${rollback_ref##*:}"; then
     local restored_container restored_image
     restored_container="$(current_container_id || true)"
-    if [[ -n "$restored_container" ]]       && wait_healthy       && verify_runtime; then
+    if [[ -n "$restored_container" ]] \
+      && wait_healthy \
+      && verify_rollback_runtime "$previous_image_id"; then
       restored_image="$(container_image_id "$restored_container" || true)"
       if [[ "$restored_image" == "$previous_image_id" ]]; then
         write_evidence "update_failed_rolled_back" "$reason" "$resolution_sha"           "$candidate_ref" "$candidate_id" "$previous_image_id" "$rollback_ref"
