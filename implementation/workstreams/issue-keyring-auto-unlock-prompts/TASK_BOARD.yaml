@@ -37,11 +37,10 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-auto-unlock-prompts/cards/MF-T02.md"
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/chatgpt-ce-workstation@1addd26a736b1bd64126b1b14daadddf75a2b867"
     review_evidence: null
     result_commit: "1addd26a736b1bd64126b1b14daadddf75a2b867"
     result_pr: 9
     evidence: "implementation/workstreams/issue-keyring-auto-unlock-prompts/evidence/MF_T02_PASSWORDLESS_KEYRING_2026-09-20.md"
     tests_summary: "GREEN: corrected subject CI run 35501459367 completed successfully including Validate workstation source, noVNC semantics, ShellCheck, Dockerfile checks and secret scan; prior update rollback/finalize fixtures GREEN; isolated temporary-HOME encrypted->passwordless migration preserved stored secret across restart; fresh passwordless initialization preserved stored secret across restart; real keyring not mutated."
-
