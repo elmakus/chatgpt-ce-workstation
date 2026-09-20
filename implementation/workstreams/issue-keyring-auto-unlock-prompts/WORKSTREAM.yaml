@@ -1,0 +1,40 @@
+id: "issue-keyring-auto-unlock-prompts"
+kind: "issue"
+status: "discovery"
+
+branch: "fix/keyring-auto-unlock-prompts"
+base_ref: "3f117a7a69895ba305e1355e3d0a81c8c8f8892d"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: "active"
+  record: "implementation/workstreams/issue-keyring-auto-unlock-prompts/INTAKE.md"
+
+task_board: null
+
+authority:
+  requirements: null
+  decisions:
+    - "docs/DECISIONS.md#D8"
+    - "docs/DECISIONS.md#D14"
+  plan: null
+
+review:
+  requirement: null
+  state: null
+  subject: null
+  evidence: null
+  covered_by: null
+
+branch_cleanup:
+  state: null
+  ref: null
+  verified_head: null
+  evidence: null
+
+pr: null
+result: null
