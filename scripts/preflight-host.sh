@@ -43,8 +43,7 @@ pass 'Docker/Compose available and compose.yaml resolves'
 
 [[ -d "$APPDATA_ROOT/home" ]] || fail "persistent home does not exist: $APPDATA_ROOT/home"
 [[ -d "$PROJECTS_ROOT" ]] || fail "project root does not exist: $PROJECTS_ROOT"
-[[ -s "$KEYRING_SECRET_FILE" ]] || fail "missing/empty keyring secret: $KEYRING_SECRET_FILE"
-pass 'persistent home, project root and keyring migration credential state are ready'
+# D26 intentionally uses an empty file as the steady-state/fresh-install\n# passwordless migration placeholder. Presence is required; non-empty content is\n# only an optional one-time legacy migration credential.\n[[ -f "$KEYRING_SECRET_FILE" ]] || fail "missing keyring migration placeholder: $KEYRING_SECRET_FILE"\npass 'persistent home, project root and keyring migration credential state are ready'
 
 if docker inspect "$CONTAINER_NAME" >/dev/null 2>&1; then
   running="$(docker inspect --format='{{.State.Running}}' "$CONTAINER_NAME")"
