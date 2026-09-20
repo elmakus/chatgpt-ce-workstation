@@ -58,6 +58,11 @@ restart_policy="$(docker inspect --format='{{.HostConfig.RestartPolicy.Name}}' "
 [[ "$restart_policy" == unless-stopped ]] || fail "unexpected restart policy: $restart_policy"
 pass 'restart policy is unless-stopped'
 
+port_bindings="$(docker inspect --format='{{json .HostConfig.PortBindings}}' "$container")"
+[[ "$port_bindings" == *'"6080/tcp"'* ]] || fail "noVNC port 6080 is not published: $port_bindings"
+[[ "$port_bindings" != *'"5900/tcp"'* ]] || fail "raw VNC port 5900 is host-published: $port_bindings"
+pass 'noVNC published and raw VNC not host-published'
+
 echo
 echo '=== mounts ==='
 mounts="$(docker inspect "$container" --format='{{range .Mounts}}{{println .Type .Source "->" .Destination}}{{end}}')"
@@ -91,6 +96,24 @@ privileged="$(docker inspect --format='{{.HostConfig.Privileged}}' "$container")
 cap_add="$(docker inspect --format='{{json .HostConfig.CapAdd}}' "$container")"
 [[ "$cap_add" != *SYS_ADMIN* ]] || fail "SYS_ADMIN capability is enabled: $cap_add"
 pass 'container unprivileged and without SYS_ADMIN'
+
+echo
+echo '=== passwordless noVNC runtime ==='
+if docker exec -u codex "$container" test -e /run/secrets/novnc-password; then
+  fail 'legacy noVNC password secret is mounted'
+fi
+x11vnc_cmdline="$(
+  docker exec -u codex "$container" bash -lc '
+    set -Eeuo pipefail
+    pid="$(pgrep -x x11vnc | head -n 1)"
+    [[ -n "$pid" ]]
+    tr "\0" " " <"/proc/$pid/cmdline"
+  '
+)"
+[[ "$x11vnc_cmdline" == *" -localhost "* ]] || fail "x11vnc is not loopback-only: $x11vnc_cmdline"
+[[ "$x11vnc_cmdline" == *" -nopw "* ]] || fail "x11vnc is not explicitly passwordless: $x11vnc_cmdline"
+[[ "$x11vnc_cmdline" != *" -rfbauth "* ]] || fail "x11vnc still uses rfbauth: $x11vnc_cmdline"
+pass 'x11vnc passwordless on container loopback with no legacy secret'
 
 echo
 echo '=== D-Bus / keyring session isolation ==='
@@ -163,7 +186,7 @@ set -Eeuo pipefail
 [[ ! -e /var/run/docker.sock ]]
 [[ ! -e /run/workstation/keyring-migration-password ]]
 [[ -f /home/codex/.config/workstation/keyring-passwordless-v1 ]]
-[[ -s /home/codex/.config/workstation/vnc.pass ]]
+[[ ! -e /run/secrets/novnc-password ]]
 [[ -x /opt/muse-code/bin/muse ]]
 python3 -c 'import dbus'
 for cmd in chatgpt-ce codex-web-gpt muse openbox tint2 xterm google-chrome workstation-healthcheck xdotool wmctrl; do
@@ -189,7 +212,7 @@ touch '$canonical_root/.workstation-write-test'
 rm -f '$canonical_root/.workstation-write-test'
 bash /usr/local/bin/workstation-healthcheck
 "
-pass 'canonical pwd, passwordless keyring marker, launchers, Muse CLI surface, X11 automation, secrets, panel, write access and desktop health'
+pass 'canonical pwd, passwordless keyring/noVNC state, launchers, Muse CLI surface, X11 automation, panel, write access and desktop health'
 
 echo
 echo '=== persistent home ==='
