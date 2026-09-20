@@ -412,9 +412,10 @@ def resolve_apt_metadata(
     indexes.sort(key=lambda item: item["name"])
     if not indexes:
         raise ResolutionError("no signed Ubuntu InRelease metadata was resolved")
-    composite = sha256_bytes(
-        json.dumps(indexes, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    identity_rows = "".join(
+        f"{item['name']}\t{item['sha256']}\n" for item in indexes
     )
+    composite = sha256_bytes(identity_rows.encode("utf-8"))
     ubuntu_packages = {
         "identity": f"sha256:{composite}",
         "indexes": indexes,
