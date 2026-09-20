@@ -139,7 +139,7 @@ cards:
     depends_on: ["M03-T01"]
     openspec_change: null
     contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M03-T02.md"
-    review_state: pending
+    review_state: in_progress
     review_subject: "83e77ed669a2d58da248e052896c6c44a90f8972"
     review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T02-implementation.md"
     result_commit: "83e77ed669a2d58da248e052896c6c44a90f8972"
