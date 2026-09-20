@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/keyring-live-migration-rollback"
   pr: 13
-  head: "35d1b9dd91287c2953c56824f91716a77c59afd7"
+  head: "41949c8fdf374c9c3ac21117db38fc90254c7853"
 
 research_obligation: "implementation/workstreams/issue-keyring-live-migration-rollback/research/R2.md"
 
@@ -17,14 +17,14 @@ cards:
     title: "Repair live keyring migration and rollback verifier compatibility"
     milestone: "micro-fix"
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: blocked
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-live-migration-rollback/cards/MF-T01.md"
     review_state: red
     review_subject: "35d1b9dd91287c2953c56824f91716a77c59afd7"
     review_evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_REVIEW_2_2026-09-20.md"
-    result_commit: "35d1b9dd91287c2953c56824f91716a77c59afd7"
+    result_commit: "41949c8fdf374c9c3ac21117db38fc90254c7853"
     result_pr: 13
     evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_CORRECTION_2026-09-20.md"
-    tests_summary: "CI #267 / run 35506152500 GREEN on corrected exact subject; source-validation incl. persistence-recreate rollback fixtures, ShellCheck, secret-scan and Dockerfile checks passed; no production mutation."
+    tests_summary: "Exact corrected source 41949c8fdf374c9c3ac21117db38fc90254c7853: Tower detached-worktree helper tests 6/6 GREEN, migration prep GREEN, updater orchestration GREEN, SOURCE_VALIDATION_GREEN. Production-derived disposable-copy retest remains pending; no production mutation."
