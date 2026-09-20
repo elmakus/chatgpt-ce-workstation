@@ -14,7 +14,8 @@ vnc_auth_file="$config_dir/vnc.pass"
 vnc_secret_file=/run/secrets/novnc-password
 keyring_secret_file=/run/secrets/keyring-password
 runtime_secret_dir=/run/workstation
-runtime_keyring_secret="$runtime_secret_dir/keyring-migration-password"\nkeyring_marker="$config_dir/keyring-passwordless-v1"
+runtime_keyring_secret="$runtime_secret_dir/keyring-migration-password"
+keyring_marker="$config_dir/keyring-passwordless-v1"
 
 # These directories are created by root during container init, but the persistent
 # home is a normal user home. Explicitly hand every root-created parent back to
