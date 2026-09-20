@@ -12,6 +12,12 @@ novnc_port="${NOVNC_PORT:-6080}"
 keyring_migration_password_file="${KEYRING_MIGRATION_PASSWORD_FILE:-/run/workstation/keyring-migration-password}"
 keyring_marker="${KEYRING_PASSWORDLESS_MARKER:-/home/codex/.config/workstation/keyring-passwordless-v2}"
 keyring_backup="${KEYRING_PASSWORDLESS_BACKUP:-/home/codex/.local/share/keyrings.pre-passwordless-v2}"
+keyring_ready="${KEYRING_SESSION_READY:-/run/workstation/keyring-session-ready}"
+
+# Readiness is session-local, not persistent migration state. Clear any marker
+# left by a prior desktop-service incarnation before substrate processes can
+# make Docker health checks otherwise appear ready.
+rm -f "$keyring_ready"
 
 pids=()
 cleanup() {
@@ -80,6 +86,8 @@ if [[ -s "$keyring_migration_password_file" ]]; then
 fi
 python3 /opt/workstation/bin/keyring-passwordless.py "${keyring_args[@]}"
 rm -f "$keyring_migration_password_file"
+printf 'keyring-session-ready\n' > "$keyring_ready"
+chmod 0600 "$keyring_ready"
 
 # codex-chatgpt-web is part of the workstation desktop and should come up with
 # every desktop session. If it is closed, it can be relaunched from the panel or
