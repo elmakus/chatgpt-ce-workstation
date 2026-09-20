@@ -345,3 +345,32 @@ Fresh installations are seeded directly into the managed form, and repeated reco
 
 **Rationale:** the full home is intentionally persistent, so seed-once behavior leaves existing installations on stale workstation policy after image updates. Whole-file overwrite would violate D12 and can destroy independently managed or user-authored content. Explicit block ownership gives the image a safe update boundary while preserving the persistent file as a shared user configuration surface.
 
+
+
+## D24 — Global Codex marketplace refresh uses one persistent s6 timer
+
+**Decision (2026-09-20):** Workstation owns one deterministic automatic updater for all configured Git-backed Codex plugin marketplaces.
+
+The updater:
+- runs as an independent s6-overlay longrun registered through the existing Workstation user bundle;
+- runs as user `codex` with the persistent `/home/codex` home;
+- uses CE's bundled Codex runtime rather than adding a second independently managed Codex CLI;
+- refreshes all configured Git marketplaces in one invocation by running the Codex marketplace upgrade command without a marketplace name;
+- schedules the normal next refresh 24 hours after the **last successful refresh**, with that success timestamp persisted across container restart/recreate;
+- performs a first refresh promptly when no successful timestamp exists;
+- treats zero configured Git marketplaces as a successful no-op;
+- does not advance last-success state on failure and retries later with a bounded non-busy interval;
+- keeps update failures isolated from Workstation/desktop health;
+- never injects refresh output into LLM session context;
+- requires no SessionStart hook, LLM action, manual user command, cron, systemd, or per-skill/per-plugin updater.
+
+Exact persistent state path, retry interval, executable discovery and machine-readable success validation are implementation details as long as they preserve the requirements in `requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md`.
+
+**Rationale:** Codex already provides one command that refreshes all configured Git marketplaces, while Workstation already standardizes service lifecycle on s6-overlay and persists the full Codex home. One persistent scheduler avoids duplicated updater logic across skills, avoids refreshes caused merely by container restart, and remains independent of whether a user opens a Codex session.
+
+**Rejected alternatives:**
+- SessionStart + TTL updater — rejected by explicit user preference;
+- one updater per skill/plugin — rejected as duplicated lifecycle/state;
+- plain container-lifetime `sleep 86400` cadence — rejected because restart/recreate would reset timing;
+- cron/systemd — rejected because s6-overlay is the accepted Workstation supervisor.
+
