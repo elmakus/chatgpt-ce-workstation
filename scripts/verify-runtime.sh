@@ -104,7 +104,7 @@ container_session_bus="$(docker exec "$container" /bin/sh -c 'printf "%s" "${DBU
 desktop_session_bus="$(
   docker exec -u codex "$container" bash -lc '
     set -Eeuo pipefail
-    pid="$(pgrep -u "$(id -u)" -f "^/bin/bash /opt/workstation/bin/desktop-session-inner\\.sh$" | head -n 1)"
+    pid="$(pgrep -u "$(id -u)" -f "^bash /opt/workstation/bin/desktop-session-inner\\.sh$" | head -n 1)"
     [[ -n "$pid" ]]
     tr "\\0" "\\n" <"/proc/$pid/environ" \
       | sed -n "s/^DBUS_SESSION_BUS_ADDRESS=//p" \
@@ -122,8 +122,8 @@ docker exec -u codex "$container" env DBUS_SESSION_BUS_ADDRESS="$desktop_session
   | grep -F 'boolean true' >/dev/null \
   || fail 'GNOME Secret Service is not present on the canonical desktop bus'
 
-root_keyrings="$(docker top "$container" -eo user,args \
-  | awk '$1 == "root" && /[g]nome-keyring-daemon/ { print }')"
+root_keyrings="$(docker top "$container" -eo pid,user,args \
+  | awk '$2 == "root" && /[g]nome-keyring-daemon/ { print }')"
 [[ -z "$root_keyrings" ]] || {
   printf '%s\n' "$root_keyrings" >&2
   fail 'root-owned secondary GNOME keyring daemon detected'
