@@ -6,19 +6,19 @@ current_milestone: "M01"
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "b337578fd3bad298cd96ec69d82ae2ebc3b5c6f0"
+  head: "9bcbcbcb6c7ba7b494c1262d066c799003a1fcd8"
 
 research_obligation: null
 
 milestones:
   M01:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m01--frozen-upstream-resolution-contract"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
+    checkpoint: "b337578fd3bad298cd96ec69d82ae2ebc3b5c6f0"
+    implementation_head: "b337578fd3bad298cd96ec69d82ae2ebc3b5c6f0"
+    handoff: "implementation/workstreams/feature-smart-upstream-updates/handoffs/M01_HANDOFF.md"
+    acceptance_evidence: "CI run #102 GREEN on exact M01 subject b337578; full resolver tests plus source/desktop/shell/dockerfile/secret validation; no production write."
     review_state: null
     review_subject: null
     review_evidence: null
