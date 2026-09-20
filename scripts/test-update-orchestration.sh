@@ -288,7 +288,7 @@ run_case() (
       assert_trace "cleanup-status:success"
       assert_trace "cleanup-retained:example/workstation:candidate-test"
       assert_trace "cleanup-retained:example/workstation:rollback-1111111111111111"
-      assert_trace "cleanup-retained:example/workstation:candidate-previous"
+      assert_trace "cleanup-removed:example/workstation:candidate-previous"
       assert_trace "cleanup-removed:example/workstation:candidate-old"
       assert_trace "cleanup-removed:example/workstation:rollback-4444444444444444"
       assert_no_trace_prefix 'remove-ref:example/other:'
