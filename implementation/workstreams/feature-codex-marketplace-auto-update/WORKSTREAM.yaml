@@ -1,0 +1,45 @@
+id: "feature-codex-marketplace-auto-update"
+kind: "feature"
+status: "ready"
+
+branch: "feat/codex-marketplace-auto-update"
+base_ref: "04fb32a47b5bcfbfcf16f6fb77bffbe2a7282acf"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: null
+  record: null
+
+task_board: "implementation/workstreams/feature-codex-marketplace-auto-update/TASK_BOARD.yaml"
+
+authority:
+  requirements: "requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md"
+  decisions:
+    - "docs/DECISIONS.md#D24"
+    - "docs/DECISIONS.md#D3"
+    - "docs/DECISIONS.md#D6"
+    - "docs/DECISIONS.md#D8"
+    - "docs/DECISIONS.md#D10"
+    - "docs/DECISIONS.md#D14"
+    - "docs/DECISIONS.md#D17"
+  plan: "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md"
+
+review:
+  requirement: "RECOMMENDED"
+  state: null
+  subject: null
+  evidence: null
+  covered_by: null
+
+branch_cleanup:
+  state: null
+  ref: null
+  verified_head: null
+  evidence: null
+
+pr: null
+result: null
