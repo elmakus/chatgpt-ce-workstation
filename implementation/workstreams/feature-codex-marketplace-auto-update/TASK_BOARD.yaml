@@ -13,12 +13,12 @@ research_obligation: null
 milestones:
   CMAU-M01:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m01--deterministic-scheduler-core"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
+    checkpoint: "15b399ad0bdaf7ed843039be7e402cd75796352b"
+    implementation_head: "15b399ad0bdaf7ed843039be7e402cd75796352b"
+    handoff: "implementation/workstreams/feature-codex-marketplace-auto-update/handoffs/CMAU-M01_HANDOFF.md"
+    acceptance_evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M01-acceptance.md"
     review_state: null
     review_subject: null
     review_evidence: null
