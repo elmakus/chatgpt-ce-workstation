@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/keyring-live-migration-rollback"
   pr: 13
-  head: "789fc358139a73a8bed8aaa38813157853df8b75"
+  head: "5b9afc564e6c2795f4fdd50df2453f3e47dc8b80"
 
 research_obligation: "implementation/workstreams/issue-keyring-live-migration-rollback/research/R3.md"
 
@@ -21,10 +21,10 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-live-migration-rollback/cards/MF-T01.md"
-    review_state: green
-    review_subject: "789fc358139a73a8bed8aaa38813157853df8b75"
-    review_evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_REVIEW_6_2026-09-20.md"
-    result_commit: "789fc358139a73a8bed8aaa38813157853df8b75"
+    review_state: pending
+    review_subject: "5b9afc564e6c2795f4fdd50df2453f3e47dc8b80"
+    review_evidence: null
+    result_commit: "5b9afc564e6c2795f4fdd50df2453f3e47dc8b80"
     result_pr: 13
-    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_LIVE_RETRY_2_FAILURE_2026-09-20.md"
-    tests_summary: "Exact reviewed subject 789fc358139a73a8bed8aaa38813157853df8b75 remained source/CI GREEN. Explicitly authorized Tower retry 2 built/promoted exact candidate c4f4028d...; Docker health reached healthy but strict runtime verification again failed because canonical login collection was locked. Automatic rollback restored exact prior image ea264b43... with ROLLBACK_RUNTIME_GREEN. Acceptance 10 remains unmet; Research R3 owns diagnosis before another correction/retry."
+    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_LOCK_CHECK_CORRECTION_2026-09-20.md"
+    tests_summary: "R3 proved the two live lock failures were strict-verifier false negatives: gdbus Properties.Get returns (<false>,) while the old grep expected boolean false. Corrected tree ef677de... uses dbus-send for the Locked boolean and adds fail-closed format regression coverage; Tower focused/full source validation GREEN. Exact frozen subject 5b9afc... has identical behavior tree plus CI trigger only; GitHub Actions CI #284 GREEN for source-validation/noVNC/ShellCheck, dockerfile-check and secret-scan. No production retry occurred after this correction; a new explicit operator authorization remains required after independent review GREEN."
