@@ -251,7 +251,7 @@ main() {
   resolution_file="$work_dir/upstream-resolution.json"
   env_file="$work_dir/build-env.sh"
   staged_resolution="$work_dir/canonical-upstream-resolution.json"
-  trap cleanup_update_work_dir EXIT HUP INT TERM
+  trap cleanup_update_work_dir EXIT
 
   echo '=== source validation ==='
   if ! source_validate; then
