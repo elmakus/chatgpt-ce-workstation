@@ -143,3 +143,17 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
+
+  - id: "M04-T03"
+    contract: "implementation/workstreams/change-workstation-docker-retention/cards/M04-T03.md"
+    execution_status: ready
+    dependencies: ["M04-T01"]
+    executor: chatgpt
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    independent_review: REQUIRED
+    review_state: null
+    review_subject: null
+    review_evidence: null
