@@ -239,6 +239,14 @@ SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
         self.assertEqual(
             ubuntu_packages["provenance"], "ubuntu-apt-signed-inrelease"
         )
+        identity_rows = (
+            "archive_InRelease\t" + "a" * 64 + "\n"
+            + "security_InRelease\t" + "b" * 64 + "\n"
+        )
+        self.assertEqual(
+            ubuntu_packages["identity"],
+            "sha256:" + resolver.sha256_bytes(identity_rows.encode()),
+        )
         self.assertEqual(chrome["version"], "145.0.7632.75-1")
         self.assertEqual(chrome["package_sha256"], "d" * 64)
         self.assertEqual(chrome["signing_key_sha256"], "c" * 64)
