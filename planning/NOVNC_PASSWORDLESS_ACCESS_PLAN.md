@@ -1,7 +1,7 @@
 # noVNC Passwordless Access — Master Plan
 
 Plan revision: `NPA-P1`
-Status: `draft`
+Status: `approved`
 Review requirement: `RECOMMENDED`
 Updated: `2026-09-20`
 
