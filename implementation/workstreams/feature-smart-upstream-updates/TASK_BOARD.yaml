@@ -185,13 +185,13 @@ cards:
     depends_on: ["M03-T02"]
     openspec_change: null
     contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M04-T01-C01.md"
-    review_state: null
-    review_subject: null
-    review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@9dd258be18605f9ca2d9fdbd76edd437cf0e12a4"
+    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-C01-implementation.md"
+    result_commit: "9dd258be18605f9ca2d9fdbd76edd437cf0e12a4"
+    result_pr: 4
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-C01-implementation.md"
+    tests_summary: "GREEN on exact related-repository subject 9dd258be18605f9ca2d9fdbd76edd437cf0e12a4: PR #4 CI run 35488714398 GREEN on Linux/Windows/macOS plus actionlint; targeted enabled=true normalization test PASS; Linux full runtime suite 736 pass / 0 fail; exact synthetic merge tree identical to frozen subject; no corrected release or production write performed."
 
   - id: M04-T02
     title: "Exercise bounded live rollback and prove stable no-change updates"
