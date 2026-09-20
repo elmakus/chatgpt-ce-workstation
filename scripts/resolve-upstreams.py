@@ -339,7 +339,7 @@ for file in /var/lib/apt/lists/*_InRelease; do
   [ -f "$file" ] || continue
   found=1
   printf '%s\t%s\n' "$(basename "$file")" "$(sha256sum "$file" | awk '{print $1}')"
-done | sort
+done
 [ "$found" -eq 1 ]
 apt-get install -y --no-install-recommends ca-certificates curl gnupg >/dev/null
 install -d -m 0755 /etc/apt/keyrings
