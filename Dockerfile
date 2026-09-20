@@ -91,6 +91,7 @@ RUN set -eux; \
       ninja-build \
       pkg-config \
       python3 \
+      python3-dbus \
       python3-pip \
       python3-venv \
       pipx \
