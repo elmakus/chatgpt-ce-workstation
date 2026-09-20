@@ -1,6 +1,6 @@
 # Muse worker capability and skill plane plan
 
-Status: **draft**
+Status: **approved**
 Plan revision: **muse-worker-capability-plane-R2**
 Date: 2026-09-20
 Independent plan review: **RECOMMENDED**
