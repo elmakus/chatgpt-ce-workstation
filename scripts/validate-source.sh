@@ -34,7 +34,9 @@ python3 scripts/test-keyring-passwordless.py \
   || fail 'passwordless keyring helper regression tests'
 bash scripts/test-keyring-migration-prep.sh \
   || fail 'keyring migration preparation regression tests'
-pass 'passwordless keyring v2 helper/preparation tests'
+bash scripts/test-keyring-session-readiness.sh \
+  || fail 'keyring session readiness regression tests'
+pass 'passwordless keyring v2 helper/preparation/readiness tests'
 
 echo
 echo '=== managed global AGENTS reconciliation ==='
@@ -244,6 +246,14 @@ grep -Fx 'keyring_marker="${KEYRING_PASSWORDLESS_MARKER:-/home/codex/.config/wor
   || fail 'desktop session keyring marker assignment is malformed'
 grep -Fx 'keyring_backup="${KEYRING_PASSWORDLESS_BACKUP:-/home/codex/.local/share/keyrings.pre-passwordless-v2}"' scripts/container/desktop-session-inner.sh >/dev/null \
   || fail 'desktop session keyring backup assignment is malformed'
+grep -Fx 'keyring_ready="${KEYRING_SESSION_READY:-/run/workstation/keyring-session-ready}"' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session keyring readiness assignment is malformed'
+grep -F 'rm -f "$keyring_ready"' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session does not clear stale per-session keyring readiness'
+grep -F "printf 'keyring-session-ready\\n' > \"\$keyring_ready\"" scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'desktop session does not publish readiness after keyring helper success'
+grep -F 'test -f "$keyring_session_ready"' rootfs/usr/local/bin/workstation-healthcheck >/dev/null \
+  || fail 'workstation healthcheck does not wait for session-local keyring readiness'
 grep -F 'keyring-passwordless-v2' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
   || fail 'container init does not honor passwordless v2 migration marker'
 grep -F 'prepare_keyring_passwordless_v2' rootfs/etc/cont-init.d/10-workstation-init >/dev/null \
