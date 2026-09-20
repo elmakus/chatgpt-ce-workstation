@@ -154,7 +154,7 @@ def build_inputs(manifest: Mapping[str, object]) -> dict[str, str]:
         "MUSE_EXPECTED_VERSION": require_text(muse, "version", "muse_code"),
         "CHROME_VERSION": require_text(chrome, "version", "chrome"),
         "CHROME_PACKAGE_SHA256": require_text(chrome, "package_sha256", "chrome"),
-        "GOOGLE_LINUX_SIGNING_KEY_SHA256": require_text(chrome, "signing_key_sha256", "chrome"),
+        "GOOGLE_LINUX_SIGNING_KEY_DIGEST_SHA256": require_text(chrome, "signing_key_sha256", "chrome"),
         "RUST_VERSION": require_text(rust, "version", "rust"),
         "RUST_STABLE_MANIFEST_SHA256": require_text(rust, "channel_manifest_sha256", "rust"),
         "RUSTUP_INSTALLER_SHA256": require_text(rust, "installer_sha256", "rust"),
