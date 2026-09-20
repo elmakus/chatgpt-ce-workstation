@@ -42,6 +42,26 @@ python3 scripts/test-managed-global-agents.py || fail 'managed global AGENTS fix
 pass 'managed global AGENTS reconciliation fixtures and wiring'
 
 echo
+echo '=== Codex marketplace updater ==='
+python3 -m py_compile \
+  scripts/container/codex_marketplace_updater.py \
+  scripts/test-codex-marketplace-updater.py \
+  || fail 'Codex marketplace updater Python compile check'
+python3 scripts/test-codex-marketplace-updater.py \
+  || fail 'Codex marketplace updater deterministic tests'
+grep -F '"/opt/codex-desktop/resources/codex"' scripts/container/codex_marketplace_updater.py >/dev/null \
+  || fail 'Codex marketplace updater does not target CE-bundled Codex'
+grep -F '"plugin",' scripts/container/codex_marketplace_updater.py >/dev/null \
+  || fail 'Codex marketplace updater command wiring missing plugin subcommand'
+grep -F '"marketplace",' scripts/container/codex_marketplace_updater.py >/dev/null \
+  || fail 'Codex marketplace updater command wiring missing marketplace subcommand'
+grep -F '"upgrade",' scripts/container/codex_marketplace_updater.py >/dev/null \
+  || fail 'Codex marketplace updater command wiring missing upgrade subcommand'
+grep -F '"--json",' scripts/container/codex_marketplace_updater.py >/dev/null \
+  || fail 'Codex marketplace updater command wiring missing JSON mode'
+pass 'Codex marketplace updater deterministic scheduler tests and bundled CLI wiring'
+
+echo
 echo '=== compose ==='
 command -v docker >/dev/null || fail 'docker is required for compose validation'
 docker compose version >/dev/null || fail 'Docker Compose v2 is required'
