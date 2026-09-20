@@ -149,7 +149,7 @@ def ensure_passwordless(
         if marker.exists():
             raise RuntimeError("passwordless marker exists but persistent login collection is missing")
         attrs = dbus.Dictionary(
-            {"org.freedesktop.Secret.Collection.Label": dbus.String("Login", variant_level=1)},
+            {"org.freedesktop.Secret.Collection.Label": dbus.String("login", variant_level=1)},
             signature="sv",
         )
         collection = internal.CreateWithMasterPassword(attrs, empty)
@@ -171,7 +171,10 @@ def ensure_passwordless(
     if collection_locked(bus, collection):
         raise RuntimeError("passwordless keyring remained locked after migration")
 
-    service.SetAlias("login", collection)
+    # GNOME keyring exposes "login" as a natural/reserved alias derived from
+    # the canonical login collection; this implementation only permits writing
+    # the "default" alias. Preserve/prove the natural login alias and converge
+    # default onto the same collection.
     service.SetAlias("default", collection)
 
     if str(service.ReadAlias("login")) != str(collection):
