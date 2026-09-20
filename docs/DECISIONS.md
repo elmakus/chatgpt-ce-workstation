@@ -374,3 +374,18 @@ Exact persistent state path, retry interval, executable discovery and machine-re
 - plain container-lifetime `sleep 86400` cadence — rejected because restart/recreate would reset timing;
 - cron/systemd — rejected because s6-overlay is the accepted Workstation supervisor.
 
+
+
+## D25 — Muse workers own a persistent external capability plane
+
+**Decision (2026-09-20):** external authenticated capabilities required by Muse workers are configured and authenticated in the Muse harness itself rather than inherited from Codex Main or routinely brokered through Main.
+
+For `muse-max`:
+- Workstation owns persistent Muse configuration/auth state under the persistent user home.
+- Required MCP servers are configured once for Muse and are then available to later `muse exec` worker processes under the same Muse user/config root.
+- `codex_workflow` passes task, role, workspace, session and execution constraints; it does not copy Codex/ChatGPT connector sessions or credentials into worker task capsules.
+- Ordinary GitHub, Home Assistant and similar tool calls execute directly from Muse through Muse-owned MCP clients when configured.
+- Security-sensitive least privilege must be enforced by a real boundary such as MCP-server configuration, credential scope, endpoint exposure or another runtime-enforced control; prompt convention or Muse tool-list metadata alone is not a security boundary.
+- Main-mediated brokerage and per-dispatch generated MCP environments are not the default architecture. They remain possible future mechanisms for exceptional capabilities that cannot safely or practically live in the Muse harness.
+
+**Rationale:** current cross-harness orchestrators normally treat the invoked CLI as an independently configured/authenticated runtime. Muse Code 1.3.0 provides persistent user/project MCP configuration and its own OAuth lifecycle, so this model avoids unnecessary Main round-trips while preserving the accepted D21 separation between Main orchestration and Muse worker execution. See `research/MUSE_CROSS_HARNESS_CAPABILITY_PATTERNS_2026-09-20.md`.

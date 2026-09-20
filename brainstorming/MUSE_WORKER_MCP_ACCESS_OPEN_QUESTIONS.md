@@ -1,23 +1,32 @@
-# Open question — Muse worker external-tool access
+# Open question — Muse worker skills
 
 Status: **open**
 Workstream: `issue-muse-worker-mcp-access`
 Date: 2026-09-20
 
+The external MCP capability model is resolved by D25: Muse owns a persistent capability plane.
+
 ## Decision required
 
-Which capability ownership model should become the accepted target?
+Should Muse workers also use one **shared persistent Muse skill catalog with role-specific use**?
 
-- **A — Muse-owned persistent capability plane:** configure/authenticate MCP servers once for Muse; all Muse workers use that harness-owned config directly.
-- **B — Main broker only:** Muse has no external authenticated tools; Main performs requested external operations.
-- **C — Per-dispatch generated capability plane:** Main/runtime creates a restricted MCP/config environment for each worker/task.
+### Option S1 — shared catalog
 
-## Evidence
+- Reusable domain skills are installed once at Muse user scope.
+- Every Muse worker role can discover them.
+- Executor/Investigator loads a relevant skill when required by the task.
+- Tester may load the same domain skill as supporting reference but independently validates current state/evidence and never receives Executor trajectory.
+- Repo-specific skills can remain project-scoped.
 
-Cross-harness systems that launch Codex/Claude/Gemini-style CLIs normally keep authentication and external-tool configuration inside the worker CLI itself. They pass task/workspace/sandbox/config constraints across the process boundary rather than transferring the orchestrator's live MCP session.
+### Option S2 — separate role catalogs
 
-Muse 1.3.0 supports exactly this worker-owned pattern through persistent settings, project MCP files and stored OAuth grants.
+- Executor, Tester, Investigator, etc. receive different skill roots/catalogs.
+- This can reduce shared-reference correlation but requires per-role skill-environment isolation, duplication/update policy and more runtime machinery.
 
-Hard least privilege should be enforced at the MCP server/credential/runtime boundary where required; Muse's current `enabled_tools` / `disabled_tools` fields are not sufficient as a security boundary.
+## Current evidence
 
-See `research/MUSE_CROSS_HARNESS_CAPABILITY_PATTERNS_2026-09-20.md`.
+Muse only puts skill metadata into the initial catalog and lazily loads full bodies with `read_skill`, so a shared catalog does not imply loading every skill into every worker context.
+
+The HA Bubble skill is a concrete case where both Executor and Tester benefit from the same domain knowledge, but in different modes: authoring/repair for Executor; independent health-check/reference use for Tester.
+
+See `research/MUSE_WORKER_SKILL_PLANE_2026-09-20.md`.

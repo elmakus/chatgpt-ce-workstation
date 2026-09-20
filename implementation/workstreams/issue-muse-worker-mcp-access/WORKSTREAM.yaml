@@ -18,7 +18,8 @@ task_board: null
 
 authority:
   requirements: "requirements/MUSE_WORKER_EXTERNAL_TOOL_ACCESS.md"
-  decisions: []
+  decisions:
+    - "docs/DECISIONS.md#d25--muse-workers-own-a-persistent-external-capability-plane"
   plan: null
 
 review:
