@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/keyring-live-migration-rollback"
   pr: 13
-  head: "8191cbbebe120b842f77b767979ee4f2202ed636"
+  head: "1fac67688ab9ad17fef337a77f168d283306716d"
 
 research_obligation: null
 
@@ -26,5 +26,5 @@ cards:
     review_evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_REVIEW_5_2026-09-20.md"
     result_commit: "8191cbbebe120b842f77b767979ee4f2202ed636"
     result_pr: 13
-    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_FAILCLOSED_ROLLBACK_CORRECTION_2026-09-20.md"
-    tests_summary: "Exact corrected subject 8191cbbebe120b842f77b767979ee4f2202ed636: fail-closed rollback correction + regressions; Tower detached-worktree updater orchestration GREEN, migration prep GREEN, helper 6/6 GREEN, SOURCE_VALIDATION_GREEN, git diff --check, bash -n and docker buildx --check GREEN; GitHub Actions run 35509724696 / CI #282 GREEN on exact head with source-validation, ShellCheck, desktop workarea, dockerfile-check and secret-scan all successful. No production mutation."
+    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_LIVE_RETRY_FAILURE_2026-09-20.md"
+    tests_summary: "Reviewed source 8191cbbebe120b842f77b767979ee4f2202ed636: exact CI #282 GREEN and source regressions GREEN; authorized Tower live retry built/promoted candidate sha256:6c418579302e083edc0e04940b5609070bbc81d4fe6aacdd7b83fc6ee1f329d1 but strict runtime verification failed because canonical login collection was locked. Corrected rollback restored exact prior image ea264b43... and ROLLBACK_RUNTIME_GREEN; post-rollback old image running/healthy, v1/v2 markers absent, v2 backup consumed by restore, legacy migration credential retained. Live evidence classifies a bounded per-session readiness race for correction."
