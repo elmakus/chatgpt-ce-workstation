@@ -6,7 +6,7 @@ current_milestone: "M02"
 execution_ref:
   branch: "work/workstation-docker-retention"
   pr: null
-  head: "bd96016be8bbdfb6b3591e0059bf2b790e0ee3d3"
+  head: "d51d3fa0bba632bfb13421c40ebe3c5cb0cf7fa2"
 
 research_obligation: null
 
@@ -66,9 +66,9 @@ cards:
 
   - id: "M02-T02"
     contract: "implementation/workstreams/change-workstation-docker-retention/cards/M02-T02.md"
-    execution_status: ready
+    execution_status: in_progress
     dependencies: ["M02-T01"]
-    executor: null
+    executor: chatgpt
     result_commit: null
     result_pr: null
     evidence: null
