@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/codex-lb-proxy-resolution"
   pr: null
-  head: "b081b854b08fec1734d7e90809716e62825bfc93"
+  head: "b53f9a48227ce2ee8e4c5715b942b83a82baa018"
 
 research_obligation: null
 
@@ -17,8 +17,8 @@ cards:
     title: "Fix Codex-LB launcher proxy resolution"
     milestone: "micro-fix"
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-codex-lb-proxy-resolution/cards/MF-T01.md"
     review_state: null
