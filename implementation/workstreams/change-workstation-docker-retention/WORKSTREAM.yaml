@@ -1,6 +1,6 @@
 id: "change-workstation-docker-retention"
 kind: "change"
-status: "implementation"
+status: "done"
 
 branch: "work/workstation-docker-retention"
 base_ref: "e796e2fef00e348e2329be1a4856da335dff6842"
@@ -42,4 +42,4 @@ branch_cleanup:
   evidence: null
 
 pr: 21
-result: null
+result: "main@4af4603cecea26e4fce4ae3e9ea2e09bde9dbde2"
