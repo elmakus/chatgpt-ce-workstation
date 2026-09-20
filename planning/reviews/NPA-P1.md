@@ -3,10 +3,10 @@
 Workstream: `issue-remove-novnc-password`
 Plan revision: `NPA-P1`
 Review requirement: `RECOMMENDED`
-Review state: `pending`
+Review state: `in_progress`
 Review subject: `git-blob:6823597208564da7c8d03ecaf766d8d827b859e0`
 Plan path: `planning/NOVNC_PASSWORDLESS_ACCESS_PLAN.md`
-Review evidence: pending
+Review evidence: exact immutable plan blob and manifest locator validated; independent review in progress
 
 ## Review scope
 
