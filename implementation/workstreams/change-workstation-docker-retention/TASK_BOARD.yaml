@@ -132,13 +132,13 @@ cards:
 
   - id: "M04-T02"
     contract: "implementation/workstreams/change-workstation-docker-retention/cards/M04-T02.md"
-    execution_status: in_progress
+    execution_status: done
     dependencies: ["M04-T01"]
     executor: chatgpt
-    result_commit: null
+    result_commit: "9c2523a0bd0ae18c43a3a559a05e57e8275aaa77"
     result_pr: null
     evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M04-T02.md"
-    tests_summary: "Live attempt 1: deterministic source tests GREEN; Tower preflight stopped before production mutation because D26-empty keyring migration placeholder is rejected by preflight-host.sh -s check; corrective source work required before retry"
+    tests_summary: "Exact reviewed subject 9c2523a live Tower retry GREEN: HOST_PREFLIGHT_GREEN; normal update exit 0; WORKSTATION_RUNTIME_GREEN before/after recreate and independent readback; current+one rollback retained; 8 stale lifecycle refs removed with 0 failures; dedicated docker-container builder GC success; 5.842GB cache retained and unchanged-input rebuild reused 23/24 explicit cached Dockerfile slots with identical image ID; persistent/keyring/secrets and unrelated Docker controls unchanged"
     independent_review: none
     review_state: null
     review_subject: null
