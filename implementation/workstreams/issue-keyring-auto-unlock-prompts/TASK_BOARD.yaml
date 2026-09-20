@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/keyring-auto-unlock-prompts"
   pr: 9
-  head: "c2ffeaf847514885ea7a706385ecefa569bfaf69"
+  head: "5d4d8c6efeeedddbfea99c7234c222b872313229"
 
 research_obligation: null
 
@@ -37,11 +37,11 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-auto-unlock-prompts/cards/MF-T02.md"
-    review_state: red
-    review_subject: "elmakus/chatgpt-ce-workstation@7be2eeb9cb39f7e84b01d5e30822dfa42784d34f"
-    review_evidence: "implementation/workstreams/issue-keyring-auto-unlock-prompts/evidence/MF_T02_INDEPENDENT_REVIEW_2026-09-20.md"
-    result_commit: "7be2eeb9cb39f7e84b01d5e30822dfa42784d34f"
+    review_state: pending
+    review_subject: "elmakus/chatgpt-ce-workstation@1addd26a736b1bd64126b1b14daadddf75a2b867"
+    review_evidence: null
+    result_commit: "1addd26a736b1bd64126b1b14daadddf75a2b867"
     result_pr: 9
     evidence: "implementation/workstreams/issue-keyring-auto-unlock-prompts/evidence/MF_T02_PASSWORDLESS_KEYRING_2026-09-20.md"
-    tests_summary: "GREEN: full SOURCE_VALIDATION_GREEN; update rollback/finalize fixtures GREEN; isolated temporary-HOME encrypted->passwordless migration preserved stored secret across restart; fresh passwordless initialization preserved stored secret across restart; real keyring not mutated."
+    tests_summary: "GREEN: corrected subject CI run 35501459367 completed successfully including Validate workstation source, noVNC semantics, ShellCheck, Dockerfile checks and secret scan; prior update rollback/finalize fixtures GREEN; isolated temporary-HOME encrypted->passwordless migration preserved stored secret across restart; fresh passwordless initialization preserved stored secret across restart; real keyring not mutated."
 
