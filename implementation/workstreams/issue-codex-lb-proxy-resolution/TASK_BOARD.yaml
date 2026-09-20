@@ -23,8 +23,8 @@ cards:
     contract: "implementation/workstreams/issue-codex-lb-proxy-resolution/cards/MF-T01.md"
     review_state: pending
     review_subject: "elmakus/codex-chatgpt-web@0b2336dd01520c7a33699a6d90a290b108bebd42"
-    review_evidence: "implementation/workstreams/issue-codex-lb-proxy-resolution/evidence/MF_T01_CODEX_LB_PROXY_RESOLUTION_2026-09-20.md"
+    review_evidence: null
     result_commit: "0b2336dd01520c7a33699a6d90a290b108bebd42"
     result_pr: 8
-    evidence: null
+    evidence: "implementation/workstreams/issue-codex-lb-proxy-resolution/evidence/MF_T01_CODEX_LB_PROXY_RESOLUTION_2026-09-20.md"
     tests_summary: "GREEN on exact fork subject 0b2336dd: GitHub CI run 35498117851 success; actionlint + full verify/package/smoke matrix GREEN on Ubuntu, macOS and Windows. No production deployment performed."
