@@ -123,7 +123,7 @@ Rejected. Codex can refresh all Git marketplaces in one command, so per-skill up
 - Recommended architecture: independent s6 longrun with persistent last-success scheduling and all-marketplace Codex refresh.
 - No unresolved product/strategic question currently remains; failure retry cadence and exact paths are implementation details.
 - Next phase/action: `ready for definition`
-- Definition promotion authorization: `pending`
-- Definition promotion subject: `none`
+- Definition promotion authorization: `user_authorized`
+- Definition promotion subject: `codex-marketplace-auto-update@R1`
 
 > Nothing in this file becomes accepted requirement/decision authority by itself. Project Definition owns promotion into canonical `requirements/` and `decisions/`.
