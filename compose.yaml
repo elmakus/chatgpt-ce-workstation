@@ -8,6 +8,7 @@ services:
       args:
         UBUNTU_BASE: ${UBUNTU_BASE:?frozen UBUNTU_BASE is required}
         UBUNTU_APT_IDENTITY: ${UBUNTU_APT_IDENTITY:?frozen UBUNTU_APT_IDENTITY is required}
+        UBUNTU_APT_INDEXES: ${UBUNTU_APT_INDEXES:?frozen UBUNTU_APT_INDEXES is required}
         CE_REPOSITORY: ${CE_REPOSITORY:?frozen CE_REPOSITORY is required}
         CE_REF: ${CE_REF:?frozen CE_REF is required}
         CE_COMMIT: ${CE_COMMIT:?frozen CE_COMMIT is required}
