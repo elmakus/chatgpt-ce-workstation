@@ -202,9 +202,9 @@ cards:
     depends_on: ["M04-T01-C01"]
     openspec_change: null
     contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M04-T01-C02.md"
-    review_state: in_progress
+    review_state: green
     review_subject: "elmakus/codex-chatgpt-web@9317954b0e9391bb0def278c54e04084b1699465"
-    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-C02-implementation.md"
+    review_evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-C02-review.md"
     result_commit: "9317954b0e9391bb0def278c54e04084b1699465"
     result_pr: 6
     evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-C02-implementation.md"
