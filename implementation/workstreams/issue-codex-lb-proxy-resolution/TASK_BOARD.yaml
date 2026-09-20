@@ -17,7 +17,7 @@ cards:
     title: "Fix Codex-LB launcher proxy resolution"
     milestone: "micro-fix"
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-codex-lb-proxy-resolution/cards/MF-T01.md"
