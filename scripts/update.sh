@@ -128,12 +128,20 @@ current_container_id() {
   docker compose ps -q workstation
 }
 
+container_running_state() {
+  docker inspect --format='{{.State.Running}}' "$1"
+}
+
+container_health_state() {
+  docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$1"
+}
+
 container_running() {
-  [[ "$(docker inspect --format='{{.State.Running}}' "$1")" == true ]]
+  [[ "$(container_running_state "$1")" == true ]]
 }
 
 container_healthy() {
-  [[ "$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$1")" == healthy ]]
+  [[ "$(container_health_state "$1")" == healthy ]]
 }
 
 container_image_id() {
@@ -171,9 +179,17 @@ write_evidence() {
   local candidate_id="$5"
   local previous_id="$6"
   local rollback_ref="$7"
+  local recovery_readback="${8:-}"
+  local recovery_container_id="${9:-}"
+  local recovery_running="${10:-}"
+  local recovery_health="${11:-}"
+  local recovery_image_id="${12:-}"
 
   mkdir -p "$(dirname "$UPDATE_EVIDENCE_FILE")"
-  python3 - "$UPDATE_EVIDENCE_FILE" "$status" "$reason" "$resolution_sha"     "$candidate_ref" "$candidate_id" "$previous_id" "$rollback_ref" <<'PY'
+  python3 - "$UPDATE_EVIDENCE_FILE" "$status" "$reason" "$resolution_sha" \
+    "$candidate_ref" "$candidate_id" "$previous_id" "$rollback_ref" \
+    "$recovery_readback" "$recovery_container_id" "$recovery_running" \
+    "$recovery_health" "$recovery_image_id" <<'PY'
 import json
 import os
 import pathlib
@@ -189,10 +205,71 @@ payload = {
     "previous_image_id": sys.argv[7] or None,
     "rollback_image": sys.argv[8] or None,
 }
+recovery_values = sys.argv[9:14]
+if any(recovery_values):
+    payload["recovery_state"] = {
+        "readback": recovery_values[0] or None,
+        "container_id": recovery_values[1] or None,
+        "running": recovery_values[2] or None,
+        "health": recovery_values[3] or None,
+        "image_id": recovery_values[4] or None,
+    }
 tmp = path.with_name(path.name + ".tmp")
 tmp.write_text(json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
 os.replace(tmp, path)
 PY
+}
+
+RECOVERY_READBACK_STATE=""
+RECOVERY_CONTAINER_ID=""
+RECOVERY_RUNNING_STATE=""
+RECOVERY_HEALTH_STATE=""
+RECOVERY_IMAGE_ID=""
+
+capture_recovery_state() {
+  RECOVERY_READBACK_STATE=""
+  RECOVERY_CONTAINER_ID=""
+  RECOVERY_RUNNING_STATE=""
+  RECOVERY_HEALTH_STATE=""
+  RECOVERY_IMAGE_ID=""
+
+  local container
+  if ! container="$(current_container_id 2>/dev/null)"; then
+    RECOVERY_READBACK_STATE="container_lookup_failed"
+    RECOVERY_RUNNING_STATE="unknown"
+    RECOVERY_HEALTH_STATE="unknown"
+    RECOVERY_IMAGE_ID="unknown"
+    return 0
+  fi
+
+  if [[ -z "$container" ]]; then
+    RECOVERY_READBACK_STATE="container_missing"
+    RECOVERY_RUNNING_STATE="missing"
+    RECOVERY_HEALTH_STATE="missing"
+    RECOVERY_IMAGE_ID="missing"
+    return 0
+  fi
+
+  RECOVERY_CONTAINER_ID="$container"
+  local complete=1
+  if ! RECOVERY_RUNNING_STATE="$(container_running_state "$container" 2>/dev/null)" || [[ -z "$RECOVERY_RUNNING_STATE" ]]; then
+    RECOVERY_RUNNING_STATE="unknown"
+    complete=0
+  fi
+  if ! RECOVERY_HEALTH_STATE="$(container_health_state "$container" 2>/dev/null)" || [[ -z "$RECOVERY_HEALTH_STATE" ]]; then
+    RECOVERY_HEALTH_STATE="unknown"
+    complete=0
+  fi
+  if ! RECOVERY_IMAGE_ID="$(container_image_id "$container" 2>/dev/null)" || [[ -z "$RECOVERY_IMAGE_ID" ]]; then
+    RECOVERY_IMAGE_ID="unknown"
+    complete=0
+  fi
+
+  if [[ "$complete" == 1 ]]; then
+    RECOVERY_READBACK_STATE="complete"
+  else
+    RECOVERY_READBACK_STATE="partial"
+  fi
 }
 
 pre_promotion_failure() {
@@ -230,11 +307,22 @@ rollback_after_failure() {
     fi
   fi
 
-  write_evidence "rollback_failed" "$reason" "$resolution_sha"     "$candidate_ref" "$candidate_id" "$previous_image_id" "$rollback_ref"
+  capture_recovery_state
+  if ! write_evidence "rollback_failed" "$reason" "$resolution_sha" \
+    "$candidate_ref" "$candidate_id" "$previous_image_id" "$rollback_ref" \
+    "$RECOVERY_READBACK_STATE" "$RECOVERY_CONTAINER_ID" "$RECOVERY_RUNNING_STATE" \
+    "$RECOVERY_HEALTH_STATE" "$RECOVERY_IMAGE_ID"; then
+    echo "WARNING: failed to persist rollback-failure evidence." >&2
+  fi
   echo "ROLLBACK FAILED." >&2
   echo "previous_image_id=$previous_image_id" >&2
   echo "rollback_image=$rollback_ref" >&2
   echo "candidate_image_id=$candidate_id" >&2
+  echo "recovery_readback=$RECOVERY_READBACK_STATE" >&2
+  echo "current_container_id=${RECOVERY_CONTAINER_ID:-<missing>}" >&2
+  echo "current_running=${RECOVERY_RUNNING_STATE:-unknown}" >&2
+  echo "current_health=${RECOVERY_HEALTH_STATE:-unknown}" >&2
+  echo "current_image_id=${RECOVERY_IMAGE_ID:-unknown}" >&2
   return 1
 }
 
