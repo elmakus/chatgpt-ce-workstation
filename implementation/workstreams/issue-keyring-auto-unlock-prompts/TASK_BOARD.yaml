@@ -37,9 +37,9 @@ cards:
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-auto-unlock-prompts/cards/MF-T02.md"
-    review_state: in_progress
+    review_state: red
     review_subject: "elmakus/chatgpt-ce-workstation@7be2eeb9cb39f7e84b01d5e30822dfa42784d34f"
-    review_evidence: null
+    review_evidence: "implementation/workstreams/issue-keyring-auto-unlock-prompts/evidence/MF_T02_INDEPENDENT_REVIEW_2026-09-20.md"
     result_commit: "7be2eeb9cb39f7e84b01d5e30822dfa42784d34f"
     result_pr: 9
     evidence: "implementation/workstreams/issue-keyring-auto-unlock-prompts/evidence/MF_T02_PASSWORDLESS_KEYRING_2026-09-20.md"
