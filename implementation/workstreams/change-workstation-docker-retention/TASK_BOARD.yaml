@@ -154,6 +154,6 @@ cards:
     evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M04-T03.md"
     tests_summary: "Exact correction subject 9c2523a GREEN: PREFLIGHT_KEYRING_STATE_TESTS_GREEN; UPDATE_ORCHESTRATION_TESTS_GREEN; RETENTION_MULTICYCLE_TESTS_GREEN; BUILDKIT_CACHE_TESTS_GREEN; SOURCE_VALIDATION_GREEN; diff-check GREEN; corrected live read-only host preflight HOST_PREFLIGHT_GREEN; no production mutation"
     independent_review: REQUIRED
-    review_state: in_progress
+    review_state: green
     review_subject: "9c2523a0bd0ae18c43a3a559a05e57e8275aaa77"
     review_evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M04-T03.md"
