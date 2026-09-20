@@ -6,13 +6,13 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/workstation-docker-retention"
   pr: null
-  head: null
+  head: "7a7bfefd37671899f04664b09dd8667005a325e9"
 
 research_obligation: null
 
 milestones:
   M01:
-    execution_status: ready
+    execution_status: in_progress
     result_commit: null
     evidence: null
     tests_summary: null
@@ -23,9 +23,9 @@ milestones:
 cards:
   - id: "M01-T01"
     contract: "implementation/workstreams/change-workstation-docker-retention/cards/M01-T01.md"
-    execution_status: ready
+    execution_status: in_progress
     dependencies: []
-    executor: null
+    executor: chatgpt
     result_commit: null
     result_pr: null
     evidence: null
