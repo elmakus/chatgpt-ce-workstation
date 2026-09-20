@@ -33,7 +33,7 @@ cards:
     title: "Migrate workstation login keyring to passwordless operation"
     milestone: "micro-fix"
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-auto-unlock-prompts/cards/MF-T02.md"
