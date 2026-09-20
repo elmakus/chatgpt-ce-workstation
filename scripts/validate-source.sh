@@ -65,7 +65,7 @@ grep -F 'MUSE_EXPECTED_VERSION' Dockerfile >/dev/null || fail 'Dockerfile does n
 grep -F 'CHROME_PACKAGE_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind Chrome package checksum'
 grep -F 'RUST_STABLE_MANIFEST_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind Rust stable manifest identity'
 grep -F 'UBUNTU_APT_INDEXES' Dockerfile >/dev/null || fail 'Dockerfile does not consume the exact frozen Ubuntu InRelease set'
-grep -F 'UBUNTU_APT_INDEXES' scripts/build/assert-ubuntu-apt-identity.sh >/dev/null || fail 'Ubuntu APT assertion helper does not require exact frozen indexes'
+grep -F 'expected_indexes' scripts/build/assert-ubuntu-apt-identity.sh >/dev/null || fail 'Ubuntu APT assertion helper does not require exact frozen indexes'
 grep -F 'COPY .workstation-build/upstream-resolution.json /opt/workstation/upstream-resolution.json' Dockerfile >/dev/null \
   || fail 'candidate image does not embed exact upstream resolution'
 grep -F 'io.chatgpt-ce-workstation.upstream-resolution-sha256' Dockerfile >/dev/null \
