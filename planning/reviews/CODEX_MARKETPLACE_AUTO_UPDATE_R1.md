@@ -2,9 +2,9 @@
 
 Plan revision: `CMAU-R1`
 Review requirement: `RECOMMENDED`
-Review state: `in_progress`
+Review state: `green`
 Review subject: `planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md blob 2b15517d666c0cb13f5829a1d4b09b69c3b64199 at commit 847038623bc103007274344f41531734a277ae1d`
-Review evidence: `independent review in progress`
+Review evidence: `GREEN — exact immutable plan blob verified; CMAU-REQ-001..016 are covered by ordered milestones with outcome-level checkpoints; accepted D3/D6/D8/D10/D14/D17/D24 constraints are preserved; current source confirms s6 longrun/user-bundle conventions, persistent /home/codex and CE-independent healthcheck; failure/last-success integrity, bounded retry, no-new-secret posture, candidate-runtime verification, rollback and explicit live recreate/persistent-marketplace authorization gate are present; deferred state-path/retry/executable/JSON details remain within approved JIT authority; no P0/P1 planning defect or unresolved strategic/product decision found.`
 
 ## Authority
 
