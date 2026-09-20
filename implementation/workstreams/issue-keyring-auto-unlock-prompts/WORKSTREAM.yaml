@@ -1,6 +1,6 @@
 id: "issue-keyring-auto-unlock-prompts"
 kind: "issue"
-status: "review"
+status: "done"
 
 branch: "fix/keyring-auto-unlock-prompts"
 base_ref: "3f117a7a69895ba305e1355e3d0a81c8c8f8892d"
@@ -38,4 +38,4 @@ branch_cleanup:
   evidence: null
 
 pr: 9
-result: null
+result: "22bca4132163e7d5f907f56204dcd906865d47d8"
