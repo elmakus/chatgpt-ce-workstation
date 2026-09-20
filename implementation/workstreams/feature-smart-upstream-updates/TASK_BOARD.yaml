@@ -163,7 +163,7 @@ cards:
     title: "Activate accepted updater on production and run post-update regressions"
     milestone: M04
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: blocked
     executor: chatgpt
     depends_on: ["M03-T02"]
     openspec_change: null
@@ -173,8 +173,8 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: 7
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/M04-T01-live-regression.md"
+    tests_summary: "PARTIAL LIVE ACCEPTANCE: production smart update GREEN on candidate sha256:214ac0f... with health/runtime/isolation/provenance GREEN; Codex Web GPT 5.0.10 doctor RED because current Codex normalized the managed interrupt hook with enabled=true, which 5.0.10 rejects as changed owned state. Bounded source correction required before M04-T01 completion."
 
   - id: M04-T02
     title: "Exercise bounded live rollback and prove stable no-change updates"
