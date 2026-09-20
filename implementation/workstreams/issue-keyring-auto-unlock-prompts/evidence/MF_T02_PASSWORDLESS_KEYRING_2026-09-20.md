@@ -39,7 +39,7 @@ Exact branch source passed:
 
 ## Independent-review correction
 
-The first frozen subject `7be2eeb9cb39f7e84b01d5e30822dfa42784d34f` received RED because two shell wrappers contained literal `\\n` text between keyring variable assignments. Bash syntax validation accepted that form, but it joined assignments and left later variables unset under `set -u`.
+The first frozen subject `7be2eeb9cb39f7e84b01d5e30822dfa42784d34f` received RED (evidence: `implementation/workstreams/issue-keyring-auto-unlock-prompts/evidence/MF_T02_INDEPENDENT_REVIEW_2026-09-20.md`) because two shell wrappers contained literal `\\n` text between keyring variable assignments. Bash syntax validation accepted that form, but it joined assignments and left later variables unset under `set -u`.
 
 Correction on the current subject:
 
