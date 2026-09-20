@@ -31,8 +31,8 @@ authority:
 
 review:
   requirement: "REQUIRED"
-  state: null
-  subject: null
+  state: "pending"
+  subject: "c4d76bdebd22a5a1fc6c6dfd419f00804c03cb8a"
   evidence: null
   covered_by: null
 
