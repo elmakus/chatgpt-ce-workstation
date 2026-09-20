@@ -6,7 +6,7 @@ current_milestone: "micro-fix"
 execution_ref:
   branch: "fix/keyring-live-migration-rollback"
   pr: null
-  head: "063e94900a61e3a69b47256f09af3cb9c925005f"
+  head: "2243636995fefdabf0bd4ed366ed76bb95900f86"
 
 research_obligation: null
 
@@ -17,8 +17,8 @@ cards:
     title: "Repair live keyring migration and rollback verifier compatibility"
     milestone: "micro-fix"
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: "chatgpt"
     depends_on: []
     contract: "implementation/workstreams/issue-keyring-live-migration-rollback/cards/MF-T01.md"
     review_state: null
