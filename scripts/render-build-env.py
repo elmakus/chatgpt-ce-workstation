@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shlex
 import sys
 from pathlib import Path
@@ -112,6 +113,41 @@ def canonical_bytes(manifest: Mapping[str, object]) -> bytes:
     ).encode("ascii")
 
 
+def frozen_ubuntu_indexes(component: Mapping[str, object]) -> str:
+    raw_indexes = component.get("indexes")
+    if not isinstance(raw_indexes, list) or not raw_indexes:
+        raise ManifestError("ubuntu_packages.indexes must be a non-empty list")
+
+    entries: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    for index, raw_entry in enumerate(raw_indexes):
+        entry = require_mapping(raw_entry, f"ubuntu_packages.indexes[{index}]")
+        if set(entry) != {"name", "sha256"}:
+            raise ManifestError(
+                f"ubuntu_packages.indexes[{index}] must contain only name and sha256"
+            )
+        name = require_text(entry, "name", f"ubuntu_packages.indexes[{index}]")
+        digest = require_text(entry, "sha256", f"ubuntu_packages.indexes[{index}]").lower()
+        if not re.fullmatch(r"[A-Za-z0-9._-]+", name):
+            raise ManifestError(f"unsafe Ubuntu InRelease filename: {name}")
+        if not re.fullmatch(r"[0-9a-f]{64}", digest):
+            raise ManifestError(f"invalid Ubuntu InRelease SHA-256 for {name}")
+        if name in seen:
+            raise ManifestError(f"duplicate Ubuntu InRelease filename: {name}")
+        seen.add(name)
+        entries.append((name, digest))
+
+    entries.sort()
+    rows = "".join(f"{name}\t{digest}\n" for name, digest in entries)
+    expected_identity = require_text(component, "identity", "ubuntu_packages")
+    computed_identity = "sha256:" + hashlib.sha256(rows.encode("utf-8")).hexdigest()
+    if expected_identity != computed_identity:
+        raise ManifestError(
+            "ubuntu_packages.identity does not match its exact frozen indexes"
+        )
+    return ";".join(f"{name}={digest}" for name, digest in entries)
+
+
 def build_inputs(manifest: Mapping[str, object]) -> dict[str, str]:
     c = require_mapping(manifest["components"], "components")
     ubuntu = require_mapping(c["ubuntu_base"], "ubuntu_base")
@@ -133,10 +169,12 @@ def build_inputs(manifest: Mapping[str, object]) -> dict[str, str]:
     assets = require_mapping(s6.get("assets"), "s6_overlay.assets")
     noarch_sha = require_text(assets, "s6-overlay-noarch.tar.xz", "s6_overlay.assets")
     x86_sha = require_text(assets, "s6-overlay-x86_64.tar.xz", "s6_overlay.assets")
+    ubuntu_indexes = frozen_ubuntu_indexes(ubuntu_packages)
 
     values = {
         "UBUNTU_BASE": f"{family}@{digest}",
         "UBUNTU_APT_IDENTITY": require_text(ubuntu_packages, "identity", "ubuntu_packages"),
+        "UBUNTU_APT_INDEXES": ubuntu_indexes,
         "CE_REPOSITORY": require_text(ce, "repository", "ce"),
         "CE_REF": require_text(ce, "ref", "ce"),
         "CE_COMMIT": require_text(ce, "identity", "ce"),
