@@ -10,8 +10,6 @@ local_share="$local_root/share"
 applications_dir="$local_share/applications"
 documents_root="$home/Documents"
 ce_projects_path="$documents_root/ChatGPT"
-vnc_auth_file="$config_dir/vnc.pass"
-vnc_secret_file=/run/secrets/novnc-password
 keyring_secret_file=/run/secrets/keyring-password
 runtime_secret_dir=/run/workstation
 runtime_keyring_secret="$runtime_secret_dir/keyring-migration-password"
@@ -53,21 +51,6 @@ fi
 if ! runuser -u codex -- test -w "$ce_projects_path"; then
   echo "[init] CE project root is not writable by codex: $ce_projects_path" >&2
   echo "[init] run scripts/init-unraid.sh on the host to repair root permissions." >&2
-  exit 1
-fi
-
-if [[ -r "$vnc_secret_file" ]]; then
-  password="$(cat "$vnc_secret_file")"
-  if [[ -z "$password" ]]; then
-    echo "[init] $vnc_secret_file is empty" >&2
-    exit 1
-  fi
-  x11vnc -storepasswd "$password" "$vnc_auth_file" >/dev/null
-  chown codex:"$codex_group" "$vnc_auth_file"
-  chmod 0600 "$vnc_auth_file"
-elif [[ ! -f "$vnc_auth_file" ]]; then
-  echo "[init] no VNC password available." >&2
-  echo "[init] mount /run/secrets/novnc-password or restore $vnc_auth_file from persistent home." >&2
   exit 1
 fi
 

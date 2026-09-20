@@ -1,0 +1,46 @@
+id: "issue-remove-novnc-password"
+kind: "issue"
+status: "done"
+
+branch: "fix/remove-novnc-password"
+base_ref: "elmakus/chatgpt-ce-workstation@e796e2fef00e348e2329be1a4856da335dff6842"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: complete
+  record: "implementation/workstreams/issue-remove-novnc-password/INTAKE.md"
+
+routing:
+  exploratory_scope: null
+  research_obligation: null
+  plan_review: null
+
+task_board: "implementation/workstreams/issue-remove-novnc-password/TASK_BOARD.yaml"
+
+authority:
+  requirements: "requirements/NOVNC_PASSWORDLESS_ACCESS.md"
+  decisions:
+    - "docs/DECISIONS.md#d7--lightweight-recoverable-novnc-desktop"
+    - "docs/DECISIONS.md#d14--security--exposure"
+    - "docs/DECISIONS.md#d27--novnc-recovery-desktop-is-intentionally-passwordless-on-trusted-networks"
+  plan: "planning/NOVNC_PASSWORDLESS_ACCESS_PLAN.md"
+
+review:
+  requirement: RECOMMENDED
+  state: green
+  subject: "elmakus/chatgpt-ce-workstation@a13757a8611201a15784dd4d0250ac1c35068cb6"
+  evidence: "implementation/workstreams/issue-remove-novnc-password/evidence/M01-integration.md"
+  covered_by: "M01-T01@a13757a8611201a15784dd4d0250ac1c35068cb6 -> implementation/workstreams/issue-remove-novnc-password/evidence/M01-T01-review.md"
+
+branch_cleanup:
+  state: null
+  ref: null
+  verified_head: null
+  evidence: null
+
+pr: 14
+result: "main@1bdbb4e9016c346653b9331c04ed89b3dd362361"

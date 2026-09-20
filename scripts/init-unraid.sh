@@ -33,7 +33,6 @@ CODEX_UID="${CODEX_UID:-99}"
 CODEX_GID="${CODEX_GID:-100}"
 CONTAINER_NAME="${CONTAINER_NAME:-chatgpt-ce-workstation}"
 SECRET_DIR="$APPDATA_ROOT/secrets"
-VNC_SECRET_FILE="$SECRET_DIR/novnc-password"
 KEYRING_SECRET_FILE="$SECRET_DIR/keyring-password"
 CE_PROJECT_TARGET="$APPDATA_ROOT/home/Documents/ChatGPT"
 
@@ -54,23 +53,6 @@ fi
 
 mkdir -p "$APPDATA_ROOT/home" "$SECRET_DIR" "$PROJECTS_ROOT"
 chmod 0700 "$SECRET_DIR"
-
-if [[ ! -s "$VNC_SECRET_FILE" ]]; then
-  read -r -s -p "Choose a noVNC/VNC password: " password
-  echo
-  read -r -s -p "Repeat password: " password2
-  echo
-  if [[ -z "$password" || "$password" != "$password2" ]]; then
-    echo "Passwords are empty or do not match." >&2
-    exit 1
-  fi
-  printf '%s' "$password" > "$VNC_SECRET_FILE"
-  unset password password2
-  chmod 0600 "$VNC_SECRET_FILE"
-  echo "Created $VNC_SECRET_FILE"
-else
-  echo "Keeping existing $VNC_SECRET_FILE"
-fi
 
 # D26 uses a passwordless GNOME keyring. Keep the historical secret path only
 # as an optional one-time migration credential for already-encrypted installs.
@@ -140,7 +122,6 @@ echo "Prepared:"
 echo "  appdata:        $APPDATA_ROOT/home"
 echo "  projects host:  $PROJECTS_ROOT"
 echo "  projects in CE: /home/codex/Documents/ChatGPT"
-echo "  VNC secret:     $VNC_SECRET_FILE"
 echo "  keyring migration file: $KEYRING_SECRET_FILE"
 echo "  identity:       UID $CODEX_UID / GID $CODEX_GID"
 echo

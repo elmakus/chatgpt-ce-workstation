@@ -53,9 +53,6 @@ services:
         source: ${PROJECTS_ROOT:-/mnt/user/projects}
         target: /home/codex/Documents/ChatGPT
     secrets:
-      - source: novnc_password
-        target: novnc-password
-        mode: 0400
       - source: keyring_password
         target: keyring-password
         mode: 0400
@@ -68,7 +65,5 @@ services:
     stop_grace_period: 30s
 
 secrets:
-  novnc_password:
-    file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/novnc-password
   keyring_password:
     file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/keyring-password
