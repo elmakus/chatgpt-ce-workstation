@@ -1,6 +1,6 @@
 id: "feature-codex-marketplace-auto-update"
 kind: "feature"
-status: "in_progress"
+status: "done"
 
 branch: "feat/codex-marketplace-auto-update"
 base_ref: "04fb32a47b5bcfbfcf16f6fb77bffbe2a7282acf"
@@ -42,4 +42,4 @@ branch_cleanup:
   evidence: null
 
 pr: 8
-result: null
+result: "e059a6e4983810c0564f0f763503996461851051"

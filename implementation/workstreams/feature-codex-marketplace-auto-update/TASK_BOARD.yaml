@@ -6,7 +6,7 @@ current_milestone: "CMAU-M03"
 execution_ref:
   branch: "feat/codex-marketplace-auto-update"
   pr: 8
-  head: "d63d9a337262a2b821ecfdbebdf6a91fc1113993"
+  head: "a78c589c0e5d6fcb841ef0b0b657822e24b19976"
 
 research_obligation: null
 
@@ -37,7 +37,7 @@ milestones:
 
   CMAU-M03:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m03--runtime-validation-and-release-readiness"
     checkpoint: "577a64630b6aa942b89c7c657265f3d6e8f448f3"
     implementation_head: "577a64630b6aa942b89c7c657265f3d6e8f448f3"
