@@ -139,13 +139,8 @@ default_collection="$(read_secret_alias default)"
 [[ "$default_collection" == "$login_collection" ]] \
   || fail "login/default Secret Service aliases diverged: login=$login_collection default=${default_collection:-missing}"
 
-docker exec -u codex "$container" env DBUS_SESSION_BUS_ADDRESS="$desktop_session_bus" \
-  gdbus call --session \
-    --dest org.freedesktop.secrets \
-    --object-path "$login_collection" \
-    --method org.freedesktop.DBus.Properties.Get \
-    org.freedesktop.Secret.Collection Locked \
-  | grep -F 'boolean false' >/dev/null \
+bash scripts/check-keyring-unlocked.sh \
+  "$container" "$desktop_session_bus" "$login_collection" \
   || fail 'canonical login Secret Service collection is locked'
 
 docker exec -u codex "$container" test -f /home/codex/.config/workstation/keyring-passwordless-v2 \
