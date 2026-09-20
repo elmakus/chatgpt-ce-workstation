@@ -25,7 +25,7 @@ services:
         MUSE_EXPECTED_VERSION: ${MUSE_EXPECTED_VERSION:?frozen Muse release id is required}
         CHROME_VERSION: ${CHROME_VERSION:?frozen Chrome version is required}
         CHROME_PACKAGE_SHA256: ${CHROME_PACKAGE_SHA256:?frozen Chrome package SHA-256 is required}
-        GOOGLE_LINUX_SIGNING_KEY_SHA256: ${GOOGLE_LINUX_SIGNING_KEY_SHA256:?frozen Google signing-key SHA-256 is required}
+        GOOGLE_LINUX_SIGNING_KEY_DIGEST_SHA256: ${GOOGLE_LINUX_SIGNING_KEY_DIGEST_SHA256:?frozen Google signing-key SHA-256 is required}
         RUST_VERSION: ${RUST_VERSION:?frozen Rust version is required}
         RUST_STABLE_MANIFEST_SHA256: ${RUST_STABLE_MANIFEST_SHA256:?frozen Rust stable manifest SHA-256 is required}
         RUSTUP_INSTALLER_SHA256: ${RUSTUP_INSTALLER_SHA256:?frozen rustup installer SHA-256 is required}
