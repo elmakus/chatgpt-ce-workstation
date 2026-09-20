@@ -420,3 +420,25 @@ The target state is:
 
 **Rationale:** this workstation is a dedicated always-on headless container whose keyring is expected to be available automatically. A separate keyring password adds prompt/unlock failure modes without providing useful interactive authentication in the normal operating model. Preventing accidental secondary D-Bus/keyring sessions remains independently valuable and is retained.
 
+
+
+## D27 — Bound workstation Docker image and build-cache retention
+
+**Decision (2026-09-20):** extend the D25 smart-update lifecycle with bounded post-success garbage collection for workstation Docker artifacts.
+
+After an update candidate has been promoted and has passed the required workstation health and runtime verification:
+
+- retain the exact current verified production image;
+- retain exactly one immediately previous known-working workstation image as the deterministic rollback baseline;
+- remove older workstation-specific candidate/rollback tags or images when they are no longer required by either protected identity or another live Docker reference;
+- treat BuildKit/build cache as a separate resource class with its own bounded workstation-scoped retention policy;
+- preserve useful identity-driven cache reuse rather than disabling cache or forcing clean rebuilds;
+- never use an unscoped/global Docker prune that can remove unrelated Unraid project artifacts;
+- never touch persistent home, projects, secrets, keyring or other bind-mounted user data;
+- report retention cleanup separately from production verification, so cleanup failure after a verified promotion is a cleanup warning/failure rather than a false update/rollback failure.
+
+Cleanup is forbidden before the new production image has passed the D25/R12 success gate. Any failed promotion, health check or runtime verification must preserve the image required for deterministic rollback.
+
+The exact Docker/BuildKit filtering, builder identity and age/size/GC mechanism are implementation details to be selected only after verifying the target Unraid backend. They must preserve the workstation-only scope and bounded-retention outcome.
+
+**Rationale:** D25 intentionally retains a previous known-working image and uses BuildKit cache for efficient repeated updates, but without an explicit lifecycle older candidate/rollback artifacts and historical cache can accumulate indefinitely on bounded Unraid Docker storage. Keeping only the current image plus one rollback baseline preserves deterministic recovery while separating safe image retention from bounded cache reuse.
