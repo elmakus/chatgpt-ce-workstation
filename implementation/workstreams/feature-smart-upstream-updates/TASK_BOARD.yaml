@@ -37,7 +37,7 @@ milestones:
 
   M03:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m03--safe-promoteverifyrollback-updater"
     checkpoint: null
     implementation_head: null
@@ -118,8 +118,8 @@ cards:
     title: "Implement exact promote/verify/rollback orchestration"
     milestone: M03
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: chatgpt
     depends_on: ["M02-T02"]
     openspec_change: null
     contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M03-T01.md"
