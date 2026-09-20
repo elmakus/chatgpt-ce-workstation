@@ -22,7 +22,7 @@ ARG MUSE_INSTALLER_SHA256
 ARG MUSE_EXPECTED_VERSION
 ARG CHROME_VERSION
 ARG CHROME_PACKAGE_SHA256
-ARG GOOGLE_LINUX_SIGNING_KEY_SHA256
+ARG GOOGLE_LINUX_SIGNING_KEY_DIGEST_SHA256
 ARG RUST_VERSION
 ARG RUST_STABLE_MANIFEST_SHA256
 ARG RUSTUP_INSTALLER_SHA256
@@ -246,7 +246,7 @@ RUN set -eux; \
 RUN set -eux; \
     install -d -m 0755 /etc/apt/keyrings; \
     curl -fsSL --retry 3 --retry-all-errors https://dl.google.com/linux/linux_signing_key.pub -o /tmp/google-linux-signing-key.pub; \
-    echo "${GOOGLE_LINUX_SIGNING_KEY_SHA256}  /tmp/google-linux-signing-key.pub" | sha256sum -c -; \
+    echo "${GOOGLE_LINUX_SIGNING_KEY_DIGEST_SHA256}  /tmp/google-linux-signing-key.pub" | sha256sum -c -; \
     gpg --dearmor -o /etc/apt/keyrings/google-chrome.gpg /tmp/google-linux-signing-key.pub; \
     rm -f /tmp/google-linux-signing-key.pub; \
     chmod 0644 /etc/apt/keyrings/google-chrome.gpg; \
