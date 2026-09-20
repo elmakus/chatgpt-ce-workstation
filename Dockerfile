@@ -5,6 +5,7 @@ FROM ${UBUNTU_BASE}
 
 ARG UBUNTU_BASE
 ARG UBUNTU_APT_IDENTITY
+ARG UBUNTU_APT_INDEXES
 ARG CE_REPOSITORY=https://github.com/ilysenko/codex-desktop-linux.git
 ARG CE_REF=main
 ARG CE_COMMIT
@@ -52,9 +53,10 @@ RUN set -eux; \
     base_digest="${UBUNTU_BASE#ubuntu:24.04@sha256:}"; \
     [[ "${base_digest}" =~ ^[0-9a-f]{64}$ ]]; \
     test -n "${UBUNTU_APT_IDENTITY}"; \
+    test -n "${UBUNTU_APT_INDEXES}"; \
     chmod 0755 /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh; \
     apt-get update; \
-    /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh "${UBUNTU_APT_IDENTITY}"; \
+    /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh "${UBUNTU_APT_IDENTITY}" "${UBUNTU_APT_INDEXES}"; \
     apt-get install -y --no-install-recommends \
       bash \
       ca-certificates \
@@ -202,7 +204,7 @@ RUN set -eux; \
     cd /tmp/ce-build/src; \
     export CARGO_HOME=/opt/cargo; \
     bash scripts/install-deps.sh; \
-    /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh "${UBUNTU_APT_IDENTITY}"; \
+    /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh "${UBUNTU_APT_IDENTITY}" "${UBUNTU_APT_INDEXES}"; \
     mkdir -p /tmp/openai-package; \
     upstream_deb="$(node scripts/lib/upstream-linux-package.js \
       --output-dir /tmp/openai-package \
@@ -220,7 +222,7 @@ RUN set -eux; \
     test -n "$deb"; \
     dpkg -i "$deb" || { \
       apt-get update; \
-      /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh "${UBUNTU_APT_IDENTITY}"; \
+      /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh "${UBUNTU_APT_IDENTITY}" "${UBUNTU_APT_INDEXES}"; \
       apt-get -f install -y; \
       dpkg -i "$deb"; \
     }; \
@@ -231,7 +233,7 @@ RUN set -eux; \
 # Ubuntu APT metadata still matches the frozen candidate.
 RUN set -eux; \
     apt-get update; \
-    /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh "${UBUNTU_APT_IDENTITY}"; \
+    /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh "${UBUNTU_APT_IDENTITY}" "${UBUNTU_APT_INDEXES}"; \
     apt-get install -y --no-install-recommends \
       dbus dbus-x11 libsecret-1-0 gnome-keyring at-spi2-core \
       xvfb openbox tint2 xterm xauth xclip x11vnc novnc websockify \
@@ -255,7 +257,7 @@ RUN set -eux; \
     printf '%s\n' 'deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' \
       > /etc/apt/sources.list.d/google-chrome.list; \
     apt-get update; \
-    /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh "${UBUNTU_APT_IDENTITY}"; \
+    /usr/local/lib/workstation/assert-ubuntu-apt-identity.sh "${UBUNTU_APT_IDENTITY}" "${UBUNTU_APT_INDEXES}"; \
     record="$(apt-cache show "google-chrome-stable=${CHROME_VERSION}")"; \
     test "$(printf '%s\n' "$record" | awk -F': ' '$1=="SHA256"{print $2; exit}')" = "${CHROME_PACKAGE_SHA256}"; \
     apt-get install -y --no-install-recommends "google-chrome-stable=${CHROME_VERSION}"; \
