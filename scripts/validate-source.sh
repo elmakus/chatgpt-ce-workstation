@@ -157,10 +157,22 @@ grep -F 'codex-web-gpt-set-codex-lb-key' scripts/build/install-codex-web-gpt.sh 
 grep -F '/opt/muse-code/bin/muse' rootfs/usr/local/bin/muse >/dev/null || fail 'Muse wrapper does not target image-owned install'
 grep -F 'MUSE_NO_AUTO_UPDATE="${MUSE_NO_AUTO_UPDATE:-1}"' rootfs/usr/local/bin/muse >/dev/null \
   || fail 'Muse runtime auto-update is not disabled by default'
+grep -F 'HOME=/home/codex' Dockerfile >/dev/null || fail 'image default HOME no longer targets persistent /home/codex'
+if grep -Ev '^[[:space:]]*#' rootfs/usr/local/bin/muse | grep -Eq '(^|[[:space:]])(export[[:space:]]+)?HOME='; then
+  fail 'Muse wrapper must inherit persistent HOME instead of overriding it'
+fi
 grep -F 'MUSE_INSTALLER_URL' Dockerfile >/dev/null || fail 'Muse installer URL build arg missing'
 grep -F '/tmp/install-muse-code.sh' Dockerfile >/dev/null || fail 'Muse install helper is not wired into Dockerfile'
 grep -F 'muse exec --help' scripts/verify-runtime.sh >/dev/null || fail 'runtime verification does not assert Muse exec surface'
-pass 'Codex policy, CE features, latest-release Codex Web GPT and Muse image-managed boundaries'
+grep -F '[[ \"\$HOME\" == /home/codex ]]' scripts/verify-runtime.sh >/dev/null \
+  || fail 'runtime verification does not assert persistent Muse HOME'
+grep -F '## Persistent capability and skill plane' docs/MUSE_CODE_PLAN.md >/dev/null \
+  || fail 'Muse capability-plane documentation missing'
+grep -F 'elmakus/codex_workflow' docs/MUSE_CODE_PLAN.md >/dev/null \
+  || fail 'Muse capability-plane documentation lost codex_workflow ownership boundary'
+grep -F 'elmakus/muse-capability-admin' docs/MUSE_CODE_PLAN.md >/dev/null \
+  || fail 'Muse capability-plane documentation lost administration ownership boundary'
+pass 'Codex policy, CE features, latest-release Codex Web GPT and Muse image-managed/persistent capability boundaries'
 
 echo
 echo '=== desktop recovery surface ==='

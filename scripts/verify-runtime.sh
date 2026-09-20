@@ -102,6 +102,8 @@ set -Eeuo pipefail
 [[ -r /run/workstation/keyring-password ]]
 [[ -s /home/codex/.config/workstation/vnc.pass ]]
 [[ -x /opt/muse-code/bin/muse ]]
+[[ \"\$HOME\" == /home/codex ]]
+printf '%s\\n' 'OK Muse persistent HOME: /home/codex'
 for cmd in chatgpt-ce codex-web-gpt muse openbox tint2 xterm google-chrome workstation-healthcheck xdotool wmctrl; do
   command -v \"\$cmd\" >/dev/null
   echo \"OK command: \$cmd\"
