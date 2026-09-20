@@ -26,8 +26,9 @@ The photographed warning is emitted by the fork itself, not by ChatGPT:
 - Launcher startup already calls `browserHost.refreshAuthentication()` in automatic mode.
 - `launcher/electron/browser-host.cjs` already has a bounded saved-session revalidation primitive. It loads Temporary Chat and probes `/api/auth/session` with existing browser credentials, validates the returned session/user/expiry and the authenticated composer surface.
 - A successful startup authentication refresh currently does not advance `sessionRefreshReminderAt`, so the fixed 48-hour reminder can still appear even when the saved session is demonstrably healthy.
+- Repository history shows the reminder was introduced as a fixed preventive 48-hour schedule; its due timestamp is not itself derived from actual session expiry.
 
-The warning therefore represents timer age, not proof that the ChatGPT session has expired.
+The warning therefore represents reminder age, not proof that the ChatGPT session has expired.
 
 ## Existing workstream / dependency discovery
 
@@ -40,14 +41,28 @@ Parent workstream: none.
 Parent branch: none.  
 Parent dependency: none.
 
-## Candidate bounded behavior
+## Intended bounded behavior
 
 Use the existing saved-session authentication probe rather than automating a fresh credential ceremony:
 
-1. when a refresh is due, run the existing session revalidation path;
-2. if the saved session is verified authenticated, defer the next reminder without showing the warning;
-3. if the session is actually unauthenticated, keep the existing interactive sign-in path;
+1. when the 48-hour refresh becomes due, automatically run saved-session revalidation;
+2. if the saved session is verified authenticated, record that successful verification and defer the next reminder without showing the warning;
+3. if the session is actually unauthenticated, retain the existing interactive sign-in path;
 4. if verification fails because of a transient/network error, do not falsely extend freshness;
-5. never automate password/passkey/MFA entry.
+5. never automate password/passkey/MFA entry;
+6. preserve current explicit logout/login behavior and existing browser-session isolation.
 
-Post-creation micro-fix classification and the exact implementation contract are still to be materialized before Intake is marked complete.
+The implementation belongs in the related fork `elmakus/codex-chatgpt-web`; the workstation workstream remains the Project Workflow authority and records the exact fork commit/PR evidence.
+
+## Micro-fix qualification
+
+- **Root cause and intended behavior are concrete:** a fixed reminder timestamp is decoupled from an already-available authoritative saved-session verification path.
+- **Bounded and low strategic risk:** wire successful authentication revalidation to reminder freshness and cover the state transitions with focused tests.
+- **No accepted requirement/architecture/product change:** D10/D11/D14 remain unchanged; the fork remains the package source and no secret-handling model changes.
+- **Acceptance is direct:** healthy saved sessions suppress/defer the warning only after successful verification; unauthenticated/error cases do not get falsely marked fresh.
+- **No substantial migration/deployment strategy:** no schema or persistent-data migration is required; normal fork release/workstation update mechanics remain unchanged.
+- **Review risk:** because the behavior touches authentication/session handling, independent review is REQUIRED even though the implementation is bounded.
+
+Path: `micro_fix`  
+Next route: `execution_prep:micro_fix`  
+Canonical continuation anchor: this completed Intake record plus `WORKSTREAM.yaml`.
