@@ -24,6 +24,7 @@ Normal ChatGPT is the fixed Task Card executor. Do not run the Capability Gate o
 ## Project authority index
 
 - Accepted architecture decisions: docs/DECISIONS.md
+- Codex marketplace updater Project Definition: requirements/CODEX_MARKETPLACE_AUTO_UPDATE.md
 - Approved workstation implementation/deployment plan: docs/IMPLEMENTATION_PLAN.md
 - Active Muse-max Project Definition: requirements/MUSE_MAX_RUNTIME.md
 - Approved Muse-max Master Plan: planning/MASTER_PLAN.md
@@ -38,7 +39,3 @@ Normal ChatGPT is the fixed Task Card executor. Do not run the Capability Gate o
 - compose.yaml is the runtime/deployment source of truth for the workstation container.
 - System/application changes must be reproducible from repository source rather than existing only in a live container.
 - Branch-isolated workstream handoffs are recovered from the selected workstream Task Board and do not update the project-global latest-handoff pointer.
-
-## Active exploratory scope
-
-brainstorming/CODEX_MARKETPLACE_AUTO_UPDATE.md
