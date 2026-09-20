@@ -130,6 +130,14 @@ run_case() (
     trace_line "tag:$2"
     return 0
   }
+  restore_keyring_migration_backup() {
+    trace_line "keyring-restore"
+    return 0
+  }
+  finalize_keyring_passwordless_migration() {
+    trace_line "keyring-finalize"
+    return 0
+  }
   recreate_with_tag() {
     trace_line "recreate:$1"
     if [[ "$1" == candidate-test ]]; then
@@ -240,43 +248,51 @@ run_case() (
       assert_order "source-validation" "host-preflight"
       assert_order "host-preflight" "build"
       assert_trace "recreate:candidate-test"
+      assert_trace "keyring-finalize"
       assert_trace "evidence:success:"
       assert_no_trace_prefix 'recreate:rollback-'
       ;;
     promotion_fail)
       assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
       assert_trace "recreate:rollback-1111111111111111"
       assert_trace "evidence:update_failed_rolled_back:promotion_failed"
       ;;
     promoted_mismatch)
       assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
       assert_trace "recreate:rollback-1111111111111111"
       assert_trace "evidence:update_failed_rolled_back:promoted_image_mismatch"
       ;;
     health_fail)
       assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
       assert_trace "recreate:rollback-1111111111111111"
       assert_trace "evidence:update_failed_rolled_back:candidate_health_failed"
       ;;
     runtime_fail)
       assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
       assert_trace "recreate:rollback-1111111111111111"
       assert_trace "evidence:update_failed_rolled_back:candidate_runtime_verification_failed"
       ;;
     rollback_fail)
       assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
       assert_trace "recreate:rollback-1111111111111111"
       assert_trace "evidence:rollback_failed:candidate_health_failed"
       assert_trace "recovery-evidence:complete:container-test:true:unhealthy:$fixture_candidate_id"
       ;;
     rollback_missing)
       assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
       assert_trace "recreate:rollback-1111111111111111"
       assert_trace "evidence:rollback_failed:candidate_health_failed"
       assert_trace "recovery-evidence:container_missing::missing:missing:missing"
       ;;
     rollback_mismatch)
       assert_trace "recreate:candidate-test"
+      assert_trace "keyring-restore"
       assert_trace "recreate:rollback-1111111111111111"
       assert_trace "evidence:rollback_failed:candidate_health_failed"
       assert_trace "recovery-evidence:complete:container-test:true:healthy:$fixture_wrong_id"
