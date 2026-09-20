@@ -37,12 +37,12 @@ milestones:
 
   M03:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m03--safe-promoteverifyrollback-updater"
-    checkpoint: null
+    checkpoint: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
     implementation_head: "ffe39dfcb6ac5584af9410feee5eab5f81b008cc"
-    handoff: null
-    acceptance_evidence: "Corrected M03 automated acceptance GREEN on exact subject ffe39dfcb6ac5584af9410feee5eab5f81b008cc: CI #162 GREEN including rollback recovery-state fixtures, noVNC, ShellCheck, Dockerfile and secret scan; exact non-production candidate build #27/provenance readback GREEN; prior M03-T02 RED finding corrected; no production updater invocation or recreate/write occurred; fresh M03-T02 independent review pending."
+    handoff: "implementation/workstreams/feature-smart-upstream-updates/handoffs/M03_HANDOFF.md"
+    acceptance_evidence: "GREEN on exact M03 subject ffe39dfcb6ac5584af9410feee5eab5f81b008cc: CI #162 and exact candidate build #27 GREEN; REQUIRED independent M03-T02 corrected-subject review GREEN at implementation/workstreams/feature-smart-upstream-updates/evidence/M03-T02-correction-review.md; no production updater invocation or recreate/write occurred."
     review_state: null
     review_subject: null
     review_evidence: null
