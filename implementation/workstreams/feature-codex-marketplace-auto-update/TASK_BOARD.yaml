@@ -39,10 +39,10 @@ milestones:
     decision_state: accepted
     execution_status: in_progress
     contract: "planning/CODEX_MARKETPLACE_AUTO_UPDATE_PLAN.md#milestone-cmau-m03--runtime-validation-and-release-readiness"
-    checkpoint: null
-    implementation_head: null
-    handoff: null
-    acceptance_evidence: null
+    checkpoint: "577a64630b6aa942b89c7c657265f3d6e8f448f3"
+    implementation_head: "577a64630b6aa942b89c7c657265f3d6e8f448f3"
+    handoff: "implementation/workstreams/feature-codex-marketplace-auto-update/handoffs/CMAU-M03_HANDOFF.md"
+    acceptance_evidence: "implementation/workstreams/feature-codex-marketplace-auto-update/evidence/CMAU-M03-acceptance.md"
     review_state: null
     review_subject: null
     review_evidence: null
