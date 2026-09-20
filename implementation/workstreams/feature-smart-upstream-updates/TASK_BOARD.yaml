@@ -6,7 +6,7 @@ current_milestone: "M02"
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "a29c1ee1802a89938659d015c56b30ee84638412"
+  head: "8a200373c38657abc34e7d87940b46d2bf96a5d9"
 
 research_obligation: null
 
@@ -73,7 +73,7 @@ cards:
     title: "Wire the frozen resolution set into an exact candidate build"
     milestone: M02
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     depends_on: ["M01-T02"]
     openspec_change: null
@@ -81,15 +81,15 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
-    result_pr: null
+    result_commit: "8a200373c38657abc34e7d87940b46d2bf96a5d9"
+    result_pr: 7
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN on exact T01 subject 8a20037: frozen-manifest build-input fixtures, source validation, desktop regression, ShellCheck, Dockerfile buildx static check and secret scan all passed in CI run #126; build path consumes exact frozen identities and no production recreate/write occurred."
   - id: M02-T02
     title: "Prove exact candidate provenance/cache semantics and freeze integrated M01-M02 review subject"
     milestone: M02
     decision_state: accepted
-    execution_status: planned
+    execution_status: ready
     executor: null
     depends_on: ["M02-T01"]
     openspec_change: null
