@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/workstation-docker-retention"
   pr: null
-  head: "7a7bfefd37671899f04664b09dd8667005a325e9"
+  head: "a3f15c251c4a31787249b6bd5fc69a7e97e4a285"
 
 research_obligation: null
 
@@ -26,11 +26,11 @@ cards:
     execution_status: in_progress
     dependencies: []
     executor: chatgpt
-    result_commit: null
+    result_commit: "a3f15c251c4a31787249b6bd5fc69a7e97e4a285"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M01-T01.md"
+    tests_summary: "bash -n update/test GREEN; test-update-orchestration UPDATE_ORCHESTRATION_TESTS_GREEN; validate-source SOURCE_VALIDATION_GREEN; diff-check and forbidden global/forced cleanup scan GREEN"
     independent_review: RECOMMENDED
-    review_state: null
-    review_subject: null
-    review_evidence: null
+    review_state: pending
+    review_subject: "a3f15c251c4a31787249b6bd5fc69a7e97e4a285"
+    review_evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M01-T01.md"
