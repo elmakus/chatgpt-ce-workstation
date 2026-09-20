@@ -42,6 +42,19 @@ python3 scripts/test-managed-global-agents.py || fail 'managed global AGENTS fix
 pass 'managed global AGENTS reconciliation fixtures and wiring'
 
 echo
+echo '=== frozen upstream resolver foundation ==='
+[[ -s scripts/resolve-upstreams.py ]] || fail 'upstream resolver missing'
+[[ -s scripts/build/Dockerfile.upstream-resolution ]] || fail 'upstream resolver Dockerfile missing'
+grep -F 'FROM ${UBUNTU_BASE} AS openai-resolver' scripts/build/Dockerfile.upstream-resolution >/dev/null \
+  || fail 'OpenAI metadata resolver is not bound to an explicit base identity'
+grep -F 'CE_COMMIT' scripts/build/Dockerfile.upstream-resolution >/dev/null \
+  || fail 'OpenAI metadata resolver is not bound to an exact CE commit'
+grep -F -- '--metadata-only' scripts/build/Dockerfile.upstream-resolution >/dev/null \
+  || fail 'OpenAI metadata resolver does not use CE metadata-only signed resolver path'
+python3 scripts/test-resolve-upstreams.py || fail 'frozen upstream resolver fixture tests'
+pass 'frozen Ubuntu/CE/OpenAI resolution fixtures and trust-boundary wiring'
+
+echo
 echo '=== compose ==='
 command -v docker >/dev/null || fail 'docker is required for compose validation'
 docker compose version >/dev/null || fail 'Docker Compose v2 is required'
