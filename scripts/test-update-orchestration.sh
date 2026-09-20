@@ -420,8 +420,7 @@ test_retention_evidence_serialization() (
   source "$REPO_ROOT/scripts/update.sh"
   UPDATE_EVIDENCE_FILE="$tmp/evidence.json"
   IMAGE_CLEANUP_STATUS="warning"
-  IMAGE_CLEANUP_RETAINED_REFS=
-example/workstation:candidate-test\nexample/workstation:rollback-1111111111111111'
+  IMAGE_CLEANUP_RETAINED_REFS="$(printf '%s\\n%s' "example/workstation:candidate-test" "example/workstation:rollback-1111111111111111")"
   IMAGE_CLEANUP_REMOVED_REFS="example/workstation:candidate-old"
   IMAGE_CLEANUP_FAILED_REFS="example/workstation:rollback-4444444444444444"
 
