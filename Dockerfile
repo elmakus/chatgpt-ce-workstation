@@ -216,7 +216,7 @@ RUN set -eux; \
     test -f "${upstream_deb}"; \
     echo "${OPENAI_PACKAGE_SHA256}  ${upstream_deb}" | sha256sum -c -; \
     PACKAGE_WITH_UPDATER=0 make build-native-feature-helpers; \
-    PACKAGE_WITH_UPDATER=0 UPSTREAM_DEB="${upstream_deb}" make build-app; \
+    env -u UPSTREAM_DEB CODEX_INSTALL_DIR="$PWD/codex-app" ./install.sh "${upstream_deb}"; \
     PACKAGE_WITH_UPDATER=0 make deb; \
     deb="$(scripts/select-latest-package.sh "$PWD/dist/codex-desktop_*.deb")"; \
     test -n "$deb"; \
