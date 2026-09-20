@@ -96,11 +96,19 @@ def atomic_write_last_success(state_path: Path, timestamp: float) -> None:
 
         os.replace(temp_path, state_path)
 
-        directory_fd = os.open(state_path.parent, os.O_RDONLY | os.O_DIRECTORY)
         try:
-            os.fsync(directory_fd)
-        finally:
-            os.close(directory_fd)
+            directory_fd = os.open(state_path.parent, os.O_RDONLY | os.O_DIRECTORY)
+            try:
+                os.fsync(directory_fd)
+            finally:
+                os.close(directory_fd)
+        except OSError as exc:
+            LOG.warning(
+                "Updater state was atomically replaced, but parent-directory fsync "
+                "could not confirm crash durability; keeping the verified refresh "
+                "as successful: %s",
+                exc,
+            )
     except BaseException:
         try:
             os.close(fd)
