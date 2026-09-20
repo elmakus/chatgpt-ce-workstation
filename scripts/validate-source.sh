@@ -196,14 +196,40 @@ echo '=== container boundary ==='
 grep -F 'restart: unless-stopped' compose.yaml >/dev/null || fail 'restart policy is not unless-stopped'
 grep -F 'source: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/home' compose.yaml >/dev/null || fail 'persistent-home source is unexpected'
 grep -F 'source: ${PROJECTS_ROOT:-/mnt/user/projects}' compose.yaml >/dev/null || fail 'project source is unexpected'
-grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/novnc-password' compose.yaml >/dev/null || fail 'noVNC secret wiring missing'
 grep -F 'file: ${APPDATA_ROOT:-/mnt/user/appdata/chatgpt-ce-workstation}/secrets/keyring-password' compose.yaml >/dev/null || fail 'keyring secret wiring missing'
 grep -F 'CODEX_CHATGPT_WEB_NATIVE_UPSTREAM: ${CODEX_CHATGPT_WEB_NATIVE_UPSTREAM:-}' compose.yaml >/dev/null || fail 'optional native upstream setting missing'
 grep -F '/usr/local/bin/workstation-healthcheck' compose.yaml >/dev/null || fail 'desktop-aware healthcheck missing'
 if grep -Eq '^[[:space:]]*privileged:[[:space:]]*true|SYS_ADMIN|/var/run/docker\.sock' compose.yaml; then
   fail 'compose.yaml weakens the Docker isolation boundary'
 fi
-pass 'restart, binds, secrets, optional native upstream, healthcheck and isolation boundary'
+pass 'restart, binds, keyring secret, optional native upstream, healthcheck and isolation boundary'
+
+echo
+echo '=== passwordless noVNC boundary ==='
+if grep -F 'novnc_password' compose.yaml >/dev/null \
+  || grep -F '/secrets/novnc-password' compose.yaml >/dev/null; then
+  fail 'legacy noVNC password secret wiring is present'
+fi
+if grep -F ':5900' compose.yaml >/dev/null; then
+  fail 'raw VNC port 5900 is published by Compose'
+fi
+grep -Fx '  -localhost \' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'x11vnc is no longer loopback-only'
+grep -Fx '  -nopw \' scripts/container/desktop-session-inner.sh >/dev/null \
+  || fail 'x11vnc is not explicitly passwordless'
+if grep -Eq -- '-rfbauth|VNC_AUTH_FILE|vnc\.pass' scripts/container/desktop-session-inner.sh; then
+  fail 'desktop session still depends on VNC authentication state'
+fi
+if grep -Eq 'novnc-password|vnc\.pass|x11vnc[[:space:]]+-storepasswd' rootfs/etc/cont-init.d/10-workstation-init; then
+  fail 'container init still creates or requires VNC authentication state'
+fi
+if grep -Eq 'novnc-password|noVNC/VNC password' scripts/init-unraid.sh; then
+  fail 'host initialization still creates or prompts for a noVNC password'
+fi
+if grep -F 'novnc-password' scripts/preflight-host.sh >/dev/null; then
+  fail 'host preflight still requires a noVNC password secret'
+fi
+pass 'passwordless noVNC, loopback-only raw VNC and no legacy auth dependency'
 
 echo
 echo '=== passwordless keyring + desktop session isolation ==='
