@@ -1,6 +1,6 @@
 id: "issue-remove-novnc-password"
 kind: "issue"
-status: "definition"
+status: "planning"
 
 branch: "fix/remove-novnc-password"
 base_ref: "elmakus/chatgpt-ce-workstation@e796e2fef00e348e2329be1a4856da335dff6842"
@@ -26,6 +26,7 @@ authority:
   decisions:
     - "docs/DECISIONS.md#d7--lightweight-recoverable-novnc-desktop"
     - "docs/DECISIONS.md#d14--security--exposure"
+    - "docs/DECISIONS.md#d27--novnc-recovery-desktop-is-intentionally-passwordless-on-trusted-networks"
   plan: null
 
 review:

@@ -1,7 +1,7 @@
 # noVNC Passwordless Access Requirements
 
 Revision: `R1`
-Status: `draft`
+Status: `approved`
 Updated: `2026-09-20`
 
 ## Goal / target state
@@ -12,9 +12,9 @@ The Workstation noVNC recovery desktop must open without asking for a VNC/noVNC 
 
 | ID | Requirement | Priority | Source / decision | Status |
 |---|---|---|---|---|
-| NPA-001 | noVNC access must not require a VNC password or a noVNC password secret. | MUST | Operator request 2026-09-20 | accepted |
+| NPA-001 | noVNC access must not require a VNC password or a noVNC password secret. | MUST | Operator request 2026-09-20; D27 | accepted |
 | NPA-002 | Raw VNC must remain bound only to container loopback and must not be published directly. | MUST | D7, D14 | accepted |
-| NPA-003 | The published noVNC endpoint remains intended only for trusted-network exposure unless a separate authenticated ingress is deliberately added. | MUST | D14 preserved security boundary | accepted |
+| NPA-003 | The published noVNC endpoint remains intended only for trusted-network exposure unless a separate authenticated ingress is deliberately added. | MUST | D14; D27 | accepted |
 | NPA-004 | Fresh setup, preflight, source validation, runtime validation, and deployment must not require or create the legacy `novnc-password` secret or persistent `vnc.pass` file. | MUST | Consequence of NPA-001 | accepted |
 | NPA-005 | Removing VNC authentication must not weaken unrelated Docker isolation, mount, privilege, keyring, CE, Remote Control, or desktop-lifecycle constraints. | MUST | Existing Workstation authority | accepted |
 
@@ -56,4 +56,4 @@ The implementation must not silently publish raw VNC or broaden network exposure
 
 ## Definition completeness
 
-Pending reconciliation of the accepted D14 security decision. No other product choice is currently unresolved.
+GREEN. D27 reconciles the requested passwordless behavior with the preserved D14 trusted-network boundary. No unresolved user/product choice remains.
