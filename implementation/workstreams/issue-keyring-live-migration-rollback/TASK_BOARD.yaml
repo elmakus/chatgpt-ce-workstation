@@ -1,0 +1,30 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "issue-keyring-live-migration-rollback"
+plan_revision: "micro-fix"
+current_milestone: "micro-fix"
+
+execution_ref:
+  branch: "fix/keyring-live-migration-rollback"
+  pr: 13
+  head: "5b9afc564e6c2795f4fdd50df2453f3e47dc8b80"
+
+research_obligation: null
+
+milestones: {}
+
+cards:
+  - id: "MF-T01"
+    title: "Repair live keyring migration and rollback verifier compatibility"
+    milestone: "micro-fix"
+    decision_state: accepted
+    execution_status: done
+    executor: "chatgpt"
+    depends_on: []
+    contract: "implementation/workstreams/issue-keyring-live-migration-rollback/cards/MF-T01.md"
+    review_state: green
+    review_subject: "5b9afc564e6c2795f4fdd50df2453f3e47dc8b80"
+    review_evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_REVIEW_7_2026-09-20.md"
+    result_commit: "5b9afc564e6c2795f4fdd50df2453f3e47dc8b80"
+    result_pr: 13
+    evidence: "implementation/workstreams/issue-keyring-live-migration-rollback/evidence/MF_T01_LIVE_RETRY_3_GREEN_2026-09-20.md"
+    tests_summary: "REQUIRED independent review attempt 7 GREEN on exact subject 5b9afc... with GitHub CI #284 GREEN. Authorized Tower live retry first failed closed pre-promotion when Ubuntu APT metadata moved; production remained unchanged. Fresh resolution ff89c28... built/promoted exact candidate dcf23c..., then strict runtime verification reached WORKSTATION_RUNTIME_GREEN both after promotion and after the required persistence recreate. Post-write readback: running/healthy exact candidate, login==default canonical collection unlocked with 4 preserved items, 5 persistent collections remain, v2 marker present, migration backup cleaned, host legacy credential empty, staged credential absent."

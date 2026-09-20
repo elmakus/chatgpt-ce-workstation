@@ -145,29 +145,45 @@ docker exec -u codex "$container" env DBUS_SESSION_BUS_ADDRESS="$desktop_session
   | grep -F 'boolean true' >/dev/null \
   || fail 'GNOME Secret Service is not present on the canonical desktop bus'
 
-default_collection="$(
+read_secret_alias() {
+  local alias="$1"
   docker exec -u codex "$container" env DBUS_SESSION_BUS_ADDRESS="$desktop_session_bus" \
     gdbus call --session \
       --dest org.freedesktop.secrets \
       --object-path /org/freedesktop/secrets \
-      --method org.freedesktop.Secret.Service.ReadAlias default \
+      --method org.freedesktop.Secret.Service.ReadAlias "$alias" \
     | sed -n "s/^(objectpath '\([^']*\)',)$/\1/p"
-)"
-[[ -n "$default_collection" && "$default_collection" != "/" ]] \
-  || fail 'passwordless default Secret Service collection is missing'
-docker exec -u codex "$container" env DBUS_SESSION_BUS_ADDRESS="$desktop_session_bus" \
-  gdbus call --session \
-    --dest org.freedesktop.secrets \
-    --object-path "$default_collection" \
-    --method org.freedesktop.DBus.Properties.Get \
-    org.freedesktop.Secret.Collection Locked \
-  | grep -F 'boolean false' >/dev/null \
-  || fail 'default Secret Service collection is locked'
-docker exec -u codex "$container" test -f /home/codex/.config/workstation/keyring-passwordless-v1 \
-  || fail 'passwordless keyring migration marker is missing'
+}
+
+login_collection="$(read_secret_alias login)"
+default_collection="$(read_secret_alias default)"
+[[ -n "$login_collection" && "$login_collection" != "/" ]] \
+  || fail 'passwordless login Secret Service collection is missing'
+[[ "$default_collection" == "$login_collection" ]] \
+  || fail "login/default Secret Service aliases diverged: login=$login_collection default=${default_collection:-missing}"
+
+bash scripts/check-keyring-unlocked.sh \
+  "$container" "$desktop_session_bus" "$login_collection" \
+  || fail 'canonical login Secret Service collection is locked'
+
+docker exec -u codex "$container" test -f /home/codex/.config/workstation/keyring-passwordless-v2 \
+  || fail 'passwordless keyring v2 migration marker is missing'
 if docker exec -u codex "$container" test -e /run/workstation/keyring-migration-password; then
   fail 'one-time keyring migration credential remains staged after desktop startup'
 fi
+
+bad_keyring_owner="$(
+  docker exec "$container" bash -lc '
+    set -Eeuo pipefail
+    dir=/home/codex/.local/share/keyrings
+    [[ -d "$dir" ]] || exit 0
+    uid="$(id -u codex)"
+    gid="$(id -g codex)"
+    find "$dir" -mindepth 1 \( ! -uid "$uid" -o ! -gid "$gid" \) -print -quit
+  '
+)"
+[[ -z "$bad_keyring_owner" ]] \
+  || fail "active keyring state is not owned by codex: $bad_keyring_owner"
 
 root_keyrings="$(docker top "$container" -eo pid,user,args \
   | awk '$2 == "root" && /[g]nome-keyring-daemon/ { print }')"
@@ -185,7 +201,7 @@ set -Eeuo pipefail
 [[ ! -e /workspace ]]
 [[ ! -e /var/run/docker.sock ]]
 [[ ! -e /run/workstation/keyring-migration-password ]]
-[[ -f /home/codex/.config/workstation/keyring-passwordless-v1 ]]
+[[ -f /home/codex/.config/workstation/keyring-passwordless-v2 ]]
 [[ ! -e /run/secrets/novnc-password ]]
 [[ -x /opt/muse-code/bin/muse ]]
 python3 -c 'import dbus'
