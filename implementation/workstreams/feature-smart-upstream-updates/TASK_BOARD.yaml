@@ -6,7 +6,7 @@ current_milestone: "M02"
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: 7
-  head: "d10c6ebd9c024569857fcaf25ae17ba5e0f1ea8"
+  head: "a29c1ee1802a89938659d015c56b30ee84638412"
 
 research_obligation: null
 
@@ -25,7 +25,7 @@ milestones:
 
   M02:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m02--exact-candidate-build--cache-semantics"
     checkpoint: null
     implementation_head: null
@@ -73,8 +73,8 @@ cards:
     title: "Wire the frozen resolution set into an exact candidate build"
     milestone: M02
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: chatgpt
     depends_on: ["M01-T02"]
     openspec_change: null
     contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M02-T01.md"
