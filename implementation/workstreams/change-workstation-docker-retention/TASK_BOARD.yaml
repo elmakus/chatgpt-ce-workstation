@@ -31,6 +31,6 @@ cards:
     evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M01-T01.md"
     tests_summary: "bash -n update/test GREEN; test-update-orchestration UPDATE_ORCHESTRATION_TESTS_GREEN; validate-source SOURCE_VALIDATION_GREEN; diff-check and forbidden global/forced cleanup scan GREEN"
     independent_review: RECOMMENDED
-    review_state: in_progress
+    review_state: green
     review_subject: "a3f15c251c4a31787249b6bd5fc69a7e97e4a285"
     review_evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/M01-T01.md"
