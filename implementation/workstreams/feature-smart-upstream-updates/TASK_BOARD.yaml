@@ -6,14 +6,14 @@ current_milestone: "M01"
 execution_ref:
   branch: "feat/smart-upstream-updates"
   pr: null
-  head: "86f79211356685e8c77824c5e2f3604e36ee4859"
+  head: "f2f1630ffc6a96027bd0fbf6da89d71d447fcfa2"
 
 research_obligation: null
 
 milestones:
   M01:
     decision_state: accepted
-    execution_status: ready
+    execution_status: in_progress
     contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m01--frozen-upstream-resolution-contract"
     checkpoint: null
     implementation_head: null
@@ -28,8 +28,8 @@ cards:
     title: "Build frozen-resolution framework and critical trust identities"
     milestone: M01
     decision_state: accepted
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: chatgpt
     depends_on: []
     openspec_change: null
     contract: "implementation/workstreams/feature-smart-upstream-updates/cards/M01-T01.md"
