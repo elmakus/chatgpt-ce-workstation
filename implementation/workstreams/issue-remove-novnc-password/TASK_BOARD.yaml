@@ -6,13 +6,13 @@ current_milestone: "M01"
 execution_ref:
   branch: "fix/remove-novnc-password"
   pr: null
-  head: null
+  head: "7cac37d202bacc25dc7d84a5fdc56a8f77006afb"
 
 research_obligation: null
 
 milestones:
   M01:
-    execution_status: ready
+    execution_status: in_progress
     checkpoint: null
     evidence: null
 
@@ -20,8 +20,8 @@ cards:
   - id: "M01-T01"
     contract: "implementation/workstreams/issue-remove-novnc-password/cards/M01-T01.md"
     dependencies: []
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: chatgpt
     result_commit: null
     result_pr: null
     evidence: null
