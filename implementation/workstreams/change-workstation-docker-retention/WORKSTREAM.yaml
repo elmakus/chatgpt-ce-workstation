@@ -30,9 +30,9 @@ authority:
 
 review:
   requirement: RECOMMENDED
-  state: null
-  subject: null
-  evidence: null
+  state: pending
+  subject: "9ca8f833c708a0a7211cb37d503cd4d06c8b8d8b"
+  evidence: "implementation/workstreams/change-workstation-docker-retention/evidence/FINAL_INTEGRATION_REVIEW.md"
   covered_by: null
 
 branch_cleanup:
