@@ -28,7 +28,7 @@ authority:
     - "docs/DECISIONS.md#D15"
     - "docs/DECISIONS.md#D16"
     - "docs/DECISIONS.md#D24"
-  plan: null
+  plan: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md"
 
 review:
   requirement: null
