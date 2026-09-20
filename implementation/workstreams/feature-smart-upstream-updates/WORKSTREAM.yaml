@@ -32,7 +32,7 @@ authority:
 
 review:
   requirement: "RECOMMENDED"
-  state: "pending"
+  state: "in_progress"
   subject: "elmakus/chatgpt-ce-workstation@272ec9d238ca19ab3c190b1450cd2a19b7bdd4cb"
   evidence: null
   covered_by: null
