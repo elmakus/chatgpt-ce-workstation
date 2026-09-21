@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "15fa967943f27c6851ae64f7543597a7caba8432"
+  head: "0ded6cbf75f29e96b6b126e7988caf3126b8c053"
 
 research_obligation: null
 
@@ -227,10 +227,10 @@ cards:
     dependencies:
       - "M01-T14"
     review_requirement: RECOMMENDED
-    review_state: null
-    review_subject: null
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@d7c9db70cf1d54029c061490d73335146a23ed28"
     review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "d7c9db70cf1d54029c061490d73335146a23ed28"
+    result_pr: "elmakus/codex-chatgpt-web#18"
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T15-release-candidate.md"
+    tests_summary: "GREEN — exact candidate d7c9db70cf1d54029c061490d73335146a23ed28 is one version-only commit atop independently GREEN M01-T14; CI run 35621150066 completed success with actionlint plus Ubuntu/macOS/Windows bun run verify, package and app smoke, and Linux AppImage ABI. Initial Windows attempt had two unrelated 5-second test timeouts; same-SHA Windows rerun completed GREEN without any candidate change."
