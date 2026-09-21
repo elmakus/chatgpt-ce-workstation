@@ -188,3 +188,19 @@ cards:
     result_pr: null
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T12-implementation.md"
     tests_summary: "GREEN — exact subject 55c61b0df3e4a09ca36614e4ddcec352499f51e3 changes only updater retry orchestration and deterministic tests; generic build failure retries 0 times, transient Ubuntu InRelease mismatch retries the same frozen resolution up to 3 attempts, exhaustion remains candidate_build_failed with zero recreate; UPDATE_ORCHESTRATION_TESTS_GREEN and SOURCE_VALIDATION_GREEN."
+
+  - id: "M01-T13"
+    contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T13.md"
+    execution_status: ready
+    executor: chatgpt
+    dependencies:
+      - "M01-T11"
+      - "M01-T12"
+    review_requirement: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
