@@ -17,7 +17,7 @@ intake:
 routing:
   exploratory_scope: null
   research_obligation: null
-  plan_review: null
+  plan_review: "planning/reviews/CIH-P1.md"
 
 task_board: null
 
@@ -25,7 +25,7 @@ authority:
   requirements: "requirements/CODEX_INTERRUPT_HOOK_DRIFT.md"
   decisions:
     - "docs/DECISIONS.md#d29--native-interrupt-hook-disable-state-is-narrowly-repairable-while-ownership-drift-remains-fail-closed"
-  plan: null
+  plan: "planning/CODEX_INTERRUPT_HOOK_DRIFT_PLAN.md"
 
 review:
   requirement: "RECOMMENDED"
