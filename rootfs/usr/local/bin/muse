@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+
+# Muse is image-managed in this workstation. Keep user auth/session state in the
+# persistent home, but do not let ordinary worker runs mutate the installed CLI.
+export MUSE_NO_AUTO_UPDATE="${MUSE_NO_AUTO_UPDATE:-1}"
+
+exec /opt/muse-code/bin/muse "$@"

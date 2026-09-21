@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-validation:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+
+      - name: Validate workstation source
+        run: bash scripts/validate-source.sh
+
+      - name: Test noVNC desktop workarea semantics
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xvfb openbox tint2 xterm x11-utils wmctrl
+          TEST_DISPLAY_NUMBER=91 SCREEN_WIDTH=1280 SCREEN_HEIGHT=720 bash scripts/test-desktop-workarea.sh
+          TEST_DISPLAY_NUMBER=92 SCREEN_WIDTH=1920 SCREEN_HEIGHT=1080 bash scripts/test-desktop-workarea.sh
+
+      - name: ShellCheck workstation scripts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+          mapfile -t files < <(
+            {
+              find scripts -type f -name '*.sh' -print
+              find rootfs -type f \
+                \( -name '*.sh' -o -path '*/usr/local/bin/chatgpt-ce' -o -path '*/usr/local/bin/muse' -o -path '*/usr/local/bin/workstation-healthcheck' \) \
+                -print
+              find rootfs/etc/cont-init.d -type f -print 2>/dev/null || true
+              find rootfs/etc/s6-overlay/s6-rc.d -type f -name run -print 2>/dev/null || true
+            } | sort -u
+          )
+          for file in "${files[@]}"; do
+            if head -n1 "$file" | grep -q '^#!/command/with-contenv bash$'; then
+              shellcheck -x -S error -s bash "$file"
+            else
+              shellcheck -x -S error "$file"
+            fi
+          done
+
+  dockerfile-check:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Dockerfile static checks
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - name: Check Dockerfile without building image
+        run: docker buildx build --check --file Dockerfile .
+
+  secret-scan:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+      - name: Scan repository history for secrets
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

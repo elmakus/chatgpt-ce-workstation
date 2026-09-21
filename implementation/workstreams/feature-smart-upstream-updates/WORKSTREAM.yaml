@@ -1,0 +1,47 @@
+id: "feature-smart-upstream-updates"
+kind: "feature"
+status: "done"
+
+branch: "feat/smart-upstream-updates"
+base_ref: "elmakus/chatgpt-ce-workstation@04fb32a47b5bcfbfcf16f6fb77bffbe2a7282acf"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: "complete"
+  record: "implementation/workstreams/feature-smart-upstream-updates/INTAKE.md"
+
+task_board: "implementation/workstreams/feature-smart-upstream-updates/TASK_BOARD.yaml"
+
+authority:
+  requirements: "requirements/SMART_UPSTREAM_UPDATES.md"
+  decisions:
+    - "docs/DECISIONS.md#D2"
+    - "docs/DECISIONS.md#D4"
+    - "docs/DECISIONS.md#D5"
+    - "docs/DECISIONS.md#D6"
+    - "docs/DECISIONS.md#D10"
+    - "docs/DECISIONS.md#D11"
+    - "docs/DECISIONS.md#D15"
+    - "docs/DECISIONS.md#D16"
+    - "docs/DECISIONS.md#D25"
+  plan: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md"
+
+review:
+  requirement: "RECOMMENDED"
+  state: "green"
+  subject: "elmakus/chatgpt-ce-workstation@272ec9d238ca19ab3c190b1450cd2a19b7bdd4cb"
+  evidence: "implementation/workstreams/feature-smart-upstream-updates/evidence/SMART_UPSTREAM_UPDATES-final-integration-review.md"
+  covered_by: null
+
+branch_cleanup:
+  state: null
+  ref: null
+  verified_head: null
+  evidence: null
+
+pr: 7
+result: "3f117a7a69895ba305e1355e3d0a81c8c8f8892d"

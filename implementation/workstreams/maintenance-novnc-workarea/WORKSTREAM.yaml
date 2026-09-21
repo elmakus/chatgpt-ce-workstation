@@ -1,0 +1,33 @@
+id: "maintenance-novnc-workarea"
+kind: "maintenance"
+status: "done"
+
+branch: "fix/novnc-tint2-workarea"
+base_ref: "elmakus/chatgpt-ce-workstation@201c8be8e5b337d22ab4b7adca133470fa6a8f94"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: null
+  record: null
+
+task_board: "implementation/workstreams/maintenance-novnc-workarea/TASK_BOARD.yaml"
+
+authority:
+  requirements: null
+  decisions:
+    - "docs/DECISIONS.md#d7--lightweight-recoverable-novnc-desktop"
+  plan: "docs/IMPLEMENTATION_PLAN.md#phase-5--verify-novnc-recovery-desktop"
+
+review:
+  requirement: none
+  state: null
+  subject: null
+  evidence: null
+  covered_by: null
+
+pr: 3
+result: "elmakus/chatgpt-ce-workstation@717ff5507416bfe29733d3b7a20959afc219f48e"

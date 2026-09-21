@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+export HOME=/home/codex
+export USER=codex
+export LOGNAME=codex
+export DISPLAY="${DISPLAY:-:1}"
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/runtime-codex}"
+export BAMF_DESKTOP_FILE_HINT="${BAMF_DESKTOP_FILE_HINT:-/usr/local/share/applications/chatgpt-ce.desktop}"
+export CHROME_DESKTOP="${CHROME_DESKTOP:-chatgpt-ce.desktop}"
+
+exec codex-desktop --no-sandbox "$@"

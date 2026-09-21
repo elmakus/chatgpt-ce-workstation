@@ -1,0 +1,46 @@
+id: "issue-chatgpt-session-auto-refresh"
+kind: "issue"
+status: "superseded"
+
+branch: "fix/chatgpt-session-auto-refresh"
+base_ref: "e796e2fef00e348e2329be1a4856da335dff6842"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: "complete"
+  record: "implementation/workstreams/issue-chatgpt-session-auto-refresh/INTAKE.md"
+
+routing:
+  exploratory_scope: null
+  research_obligation: null
+  plan_review: null
+
+task_board: "implementation/workstreams/issue-chatgpt-session-auto-refresh/TASK_BOARD.yaml"
+
+authority:
+  requirements: null
+  decisions:
+    - "docs/DECISIONS.md#D10"
+    - "docs/DECISIONS.md#D11"
+    - "docs/DECISIONS.md#D14"
+  plan: null
+
+review:
+  requirement: "none"
+  state: null
+  subject: null
+  evidence: null
+  covered_by: null
+
+branch_cleanup:
+  state: "safe_to_delete"
+  ref: "fix/chatgpt-session-auto-refresh"
+  verified_head: "ee90b4d76a82e2e629832afb23bf5d620b8abd73"
+  evidence: "implementation/workstreams/issue-chatgpt-session-auto-refresh/evidence/SUPERSEDED_2026-09-20.md"
+
+pr: null
+result: null

@@ -1,0 +1,5 @@
+# Workstation-wide Codex defaults for this dedicated Docker environment.
+# The container itself is the external sandbox boundary; Codex should not ask
+# for per-command approvals or apply an additional filesystem sandbox inside it.
+approval_policy = "never"
+sandbox_mode = "danger-full-access"

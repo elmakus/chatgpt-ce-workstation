@@ -1,0 +1,8 @@
+#!/command/with-contenv bash
+set -Eeuo pipefail
+
+exec s6-setuidgid codex env \
+  HOME=/home/codex \
+  USER=codex \
+  LOGNAME=codex \
+  python3 /opt/workstation/bin/codex_marketplace_updater.py

@@ -1,0 +1,35 @@
+id: "feature-muse-worker-orchestration"
+kind: "feature"
+status: "done"
+
+branch: "feat/muse-worker-orchestration"
+base_ref: "elmakus/chatgpt-ce-workstation@153a3bb337671fd6e742664710c5cc8e4d5c9a7a"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: null
+  record: null
+
+task_board: "implementation/workstreams/feature-muse-worker-orchestration/TASK_BOARD.yaml"
+
+authority:
+  requirements: "requirements/MUSE_MAX_RUNTIME.md"
+  decisions:
+    - "docs/DECISIONS.md#d20--chatgpt-owned-delegated-muse-workers-behind-a-normalized-harness"
+    - "docs/DECISIONS.md#d21--muse-max-is-a-mixed-harness-stateful-worker-codex_workflow-profile"
+    - "docs/DECISIONS.md#d22--m10-production-promotion-uses-an-exact-release-candidate-lineage"
+  plan: "planning/MASTER_PLAN.md"
+
+review:
+  requirement: "RECOMMENDED"
+  state: "green"
+  subject: "elmakus/chatgpt-ce-workstation@33472be2fb1991e38d0520500fd4af21f1080346"
+  evidence: "implementation/workstreams/feature-muse-worker-orchestration/evidence/reviews/workstream-final-integration-independent-review-2026-09-19.md"
+  covered_by: null
+
+pr: 4
+result: "elmakus/chatgpt-ce-workstation@c72e81bdb59c3917adeac6a1a3239a79f887ef59"

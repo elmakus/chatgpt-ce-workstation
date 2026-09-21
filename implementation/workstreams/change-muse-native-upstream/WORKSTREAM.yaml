@@ -1,0 +1,45 @@
+id: "change-muse-native-upstream"
+kind: "change"
+status: "in_progress"
+
+branch: "work/muse-native-upstream"
+base_ref: "dfa41ce0867824757a50dc151afe3a87c4826457"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: complete
+  record: "implementation/workstreams/change-muse-native-upstream/INTAKE.md"
+
+routing:
+  exploratory_scope: null
+  research_obligation: null
+  plan_review: null
+
+task_board: "implementation/workstreams/change-muse-native-upstream/TASK_BOARD.yaml"
+
+authority:
+  requirements: "requirements/MUSE_NATIVE_UPSTREAM.md"
+  decisions:
+    - "docs/DECISIONS.md#d29--muse-is-an-optional-parallel-native-upstream-through-cliproxyapi"
+    - "docs/DECISIONS.md#d30--muse-bound-codex-turns-intentionally-omit-gmail-tools"
+  plan: "planning/MUSE_NATIVE_UPSTREAM_PLAN.md"
+
+review:
+  requirement: RECOMMENDED
+  state: null
+  subject: null
+  evidence: null
+  covered_by: null
+
+branch_cleanup:
+  state: null
+  ref: null
+  verified_head: null
+  evidence: null
+
+pr: null
+result: null

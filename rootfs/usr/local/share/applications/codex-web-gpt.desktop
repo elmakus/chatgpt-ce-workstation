@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Codex Web GPT
+Comment=ChatGPT Web models inside the native Codex harness
+Exec=/usr/local/bin/codex-web-gpt
+Icon=codex-web-gpt
+Terminal=false
+Categories=Development;
+StartupWMClass=codex-web-gpt
