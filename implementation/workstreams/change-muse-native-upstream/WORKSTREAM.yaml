@@ -1,6 +1,6 @@
 id: "change-muse-native-upstream"
 kind: "change"
-status: "in_progress"
+status: "planning"
 
 branch: "work/muse-native-upstream"
 base_ref: "dfa41ce0867824757a50dc151afe3a87c4826457"
@@ -17,7 +17,7 @@ intake:
 routing:
   exploratory_scope: null
   research_obligation: null
-  plan_review: null
+  plan_review: "planning/reviews/MUSE_NATIVE_UPSTREAM_R5.md"
 
 task_board: "implementation/workstreams/change-muse-native-upstream/TASK_BOARD.yaml"
 
