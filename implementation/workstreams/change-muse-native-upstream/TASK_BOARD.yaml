@@ -8,7 +8,7 @@ execution_ref:
   pr: null
   head: "3801b90be02963bd3d6ee3589922d920a61aa26e"
 
-research_obligation: null
+research_obligation: "implementation/workstreams/change-muse-native-upstream/research/R2.md"
 
 milestones:
   M01:
@@ -191,7 +191,7 @@ cards:
 
   - id: "M01-T13"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T13.md"
-    execution_status: in_progress
+    execution_status: blocked
     executor: chatgpt
     dependencies:
       - "M01-T11"
@@ -202,5 +202,5 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T13-muse-activation-blocker.md"
+    tests_summary: "BLOCKED — direct CLIProxyAPI catalog and Workstation model filtering were GREEN and native gpt-5.6-sol smoke succeeded, but a normal muse-spark-1.3 turn failed with invalid_request_error: tools[].search_content_types is only supported for web_search_preview tools. Production rollback to the same frozen image is healthy with Muse endpoint unset and native upstream unchanged; R2 research is active."
