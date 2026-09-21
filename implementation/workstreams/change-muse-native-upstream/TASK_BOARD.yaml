@@ -162,7 +162,7 @@ cards:
     tests_summary: "GREEN — Fork Linux Release run 35602104526 published v5.0.15 from exact independently GREEN SHA 3a6d1d28c28dbe1be885077ae53fe4bba62b9673; verify/package/Linux ABI/app smoke/publish succeeded; tag is identical to reviewed SHA; AppImage digest bdad25547ae79f29ee27a029bed5ec6c7762f98a92e7578762de40a113b9b49d and checksums.txt digest are consistent; unrelated main remained unchanged; PR #15 closed unmerged."
   - id: "M01-T11"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T11.md"
-    execution_status: blocked
+    execution_status: done
     executor: chatgpt
     dependencies:
       - "M01-T10"
@@ -172,8 +172,8 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T11-d25-apt-mirror-blocker.md"
-    tests_summary: "BLOCKED before production mutation — repeated D25 candidate builds fail closed on transient archive.ubuntu.com noble-updates InRelease replica mismatch; production remains healthy on v5.0.14; bounded L1/L2 updater correction required before T11 resumes."
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T11-d25-update.md"
+    tests_summary: "GREEN — recovered and independently verified existing D25 success: exact v5.0.15 / bdad2554... / override=false, promoted image sha256:7470b644..., retained rollback baseline, native upstream unchanged, Muse unset, health GREEN and WORKSTATION_RUNTIME_GREEN; no duplicate deployment was run."
   - id: "M01-T12"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T12.md"
     execution_status: done
