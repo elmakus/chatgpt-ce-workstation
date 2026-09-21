@@ -125,9 +125,9 @@ cards:
     dependencies:
       - "M01-T06"
     review_requirement: RECOMMENDED
-    review_state: in_progress
+    review_state: green
     review_subject: "elmakus/codex-chatgpt-web@2bd8a74a6f467767c7a640806720e672f7342471"
-    review_evidence: null
+    review_evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T08-independent-review.md"
     result_commit: "2bd8a74a6f467767c7a640806720e672f7342471"
     result_pr: "elmakus/codex-chatgpt-web#13"
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T08-related-fork-gmail-filter.md"
