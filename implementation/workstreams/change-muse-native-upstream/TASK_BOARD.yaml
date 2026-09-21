@@ -132,3 +132,17 @@ cards:
     result_pr: "elmakus/codex-chatgpt-web#13"
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T08-related-fork-gmail-filter.md"
     tests_summary: "GREEN — related-fork CI run 35598358048 succeeded on exact HEAD 2bd8a74a6f467767c7a640806720e672f7342471: actionlint plus macOS/Windows/Ubuntu bun run verify, package/app smoke, and Linux AppImage ABI validation; focused regression coverage proves Muse-only exact Gmail namespace omission, non-Gmail preservation, zstd rewrite safety, Muse no-op without Gmail, and ordinary native Gmail byte preservation."
+  - id: "M01-T09"
+    contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T09.md"
+    execution_status: ready
+    executor: chatgpt
+    dependencies:
+      - "M01-T08"
+    review_requirement: RECOMMENDED
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
