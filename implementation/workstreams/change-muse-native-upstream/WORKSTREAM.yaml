@@ -17,7 +17,7 @@ intake:
 routing:
   exploratory_scope: null
   research_obligation: null
-  plan_review: null
+  plan_review: "planning/reviews/MUSE_NATIVE_UPSTREAM_R1.md"
 
 task_board: null
 
@@ -25,7 +25,7 @@ authority:
   requirements: "requirements/MUSE_NATIVE_UPSTREAM.md"
   decisions:
     - "docs/DECISIONS.md#d29--muse-is-an-optional-parallel-native-upstream-through-cliproxyapi"
-  plan: null
+  plan: "planning/MUSE_NATIVE_UPSTREAM_PLAN.md"
 
 review:
   requirement: null
