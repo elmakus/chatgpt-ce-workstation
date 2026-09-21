@@ -55,7 +55,7 @@ cards:
     dependencies:
       - "M01-T01"
     review_requirement: RECOMMENDED
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex-chatgpt-web@9ec01b939a08a191082b551bc2d6dc738a0159e2"
     review_evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T03-related-fork-correction.md"
     result_commit: "9ec01b939a08a191082b551bc2d6dc738a0159e2"
