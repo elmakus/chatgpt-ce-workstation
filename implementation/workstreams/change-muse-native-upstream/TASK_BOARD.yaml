@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "82e2e7f02c9438f6e02b597218d51143919d6c31"
+  head: "98f00f3cc646ee6d8e784a75702f3cc8d67e2344"
 
 research_obligation: null
 
@@ -212,10 +212,10 @@ cards:
     dependencies:
       - "M01-T10"
     review_requirement: RECOMMENDED
-    review_state: null
-    review_subject: null
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@acc95f7a5447144bdfc5cd40ff50ce7e63dd3e95"
     review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "acc95f7a5447144bdfc5cd40ff50ce7e63dd3e95"
+    result_pr: "elmakus/codex-chatgpt-web#17"
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T14-related-fork-web-search-normalization.md"
+    tests_summary: "GREEN — related-fork CI run 35617383232 succeeded on exact head acc95f7a5447144bdfc5cd40ff50ce7e63dd3e95: actionlint plus Ubuntu/macOS/Windows bun run verify, package and app smoke; Linux AppImage ABI GREEN. Exact compare to published release/v5.0.15@3a6d1d28c28dbe1be885077ae53fe4bba62b9673 is 2 commits / 2 files only (native passthrough + focused tests), with no version/release metadata changes."
