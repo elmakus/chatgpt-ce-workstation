@@ -1,7 +1,7 @@
 # Research — project trust registry drift
 
 Research ID: project-trust-registry-drift-r1
-Status: blocked
+Status: active
 Origin role: other
 Origin subject: issue-project-trust-registry-drift@intake
 Return target: project_definition:issue-project-trust-registry-drift
@@ -11,28 +11,39 @@ Return reconciliation result: none
 
 ## Verified findings
 
-The affected repository exists at the expected container path and is readable by the codex user. Git ownership checks succeed for the user that runs the desktop application.
+The affected repository exists at the expected container path and is readable by the codex runtime user. The active Codex config contains the exact ogolny path with trust_level set to trusted.
 
-The active Codex config contains the exact ogolny project path with trust_level set to trusted.
+The app-server project database contains ogolny with project id `01a0bb35-f5c7-7aa1-85be-97df5def88a1` and the correct root path. Before repair, the Electron/global `local-projects` registry did not contain ogolny.
 
-The app-server project database contains ogolny with the correct root path, while the current Electron/global local-project registry contains only chatgpt-ce-workstation and does not contain ogolny.
+Operator correction: ogolny was already absent from the Desktop-visible local project list before testowy and test3 were deleted. Their deletion therefore is not evidence that they caused ogolny to disappear.
 
-The same global state still contains legacy project mappings for the deleted testowy and test3 records. Its modification time is approximately 2026-09-21 13:46:55 +02:00, immediately before the Android failures captured at 13:47 and 13:48.
+The installed `/home/codex/.codex/bin/newproject` helper creates the directory/Git repository, then calls app-server `project/create` directly and starts a thread with the returned app-server project id. It never invokes the Desktop ProjectsManager local-project creation path.
 
-Archived session evidence confirms ogolny was created successfully through the local newproject helper and was later used successfully as a Codex Desktop workspace.
+Inspection of the installed Desktop implementation shows the normal folder-picker path calls `ProjectsManager.createOrSelectLocalProjects`. That path creates a local project identity/cache entry and, through the app-server-backed project backend, records the legacy-local-project to app-server-project mapping. The backend's local cache write persists `LOCAL_PROJECTS`; the app-server synchronization layer persists the mapping used to associate the local project identity with the server project id.
 
-The recent workstation commits inspected around the interrupt-hook recovery changed workflow/evidence state, while the live ogolny trust configuration remains present.
+A project created only through raw app-server `project/create` can therefore exist in the app-server database while having no corresponding Desktop local-project registration. This exactly matches ogolny's pre-repair state.
+
+The recent interrupt-hook recovery changes do not alter this project-registration path, and ogolny's trust_level remained present.
 
 ## Diagnosis
 
-The strongest supported explanation is cross-store project-registration drift rather than a missing trust_level.
+Root cause is the newproject helper bypassing the Desktop local-project registration lifecycle. Ogolny was app-server-only rather than a fully registered Desktop local project.
 
-Remote/mobile can still discover ogolny through app-server state, while the desktop's local project/folder-consent registry no longer contains the corresponding project registration. Deleting testowy and test3 is strongly correlated with the global-state rewrite and is the leading trigger. The deletion did not remove ogolny's explicit trust setting.
+Deleting testowy and test3 was incidental to the observed failure. It exposed stale mappings in global state but did not cause ogolny's missing local registration.
 
-The recent hook/workstation changes are not supported by current evidence as the direct cause.
+## Repair plan and verification
 
-## Remaining uncertainty and blocker
+User authorized live repair after diagnosis.
 
-Exact causality at the desktop API/event level is not yet proven. The smallest discriminating experiment is to re-open or re-add the original ogolny folder in Codex Desktop and confirm its trust/consent setting, then verify that the local project registry is restored and Android can open it.
+Repair the missing local registration by preserving the existing app-server project id and creating the corresponding Desktop local project identity plus legacy-to-app-server mapping. Do not create another app-server project for the same root. Preserve unrelated projects and current user state.
 
-That operation mutates live Codex Desktop project state and is outside the current diagnosis-only authorization. No manual SQLite or global-state edit should be attempted before the supported UI reconciliation path is tested.
+Restart only the ChatGPT/Codex Desktop application as needed to reload the repaired persistent registry; do not restart the whole workstation container unless required.
+
+Verify after restart that:
+- ogolny exists in the Desktop local-project registry;
+- its mapping points to the original app-server project id;
+- the app-server database still has only the original ogolny project for that root;
+- trust_level remains trusted;
+- unrelated current projects remain intact.
+
+Final Android/mobile confirmation remains the end-to-end validation of the original trust-verification symptom.
