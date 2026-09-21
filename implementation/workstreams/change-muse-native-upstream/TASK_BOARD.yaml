@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "6f3f4745f7164c72cda5962147db770b58fc0679"
+  head: "31844954da044343877385911f6a1c590ebf7efb"
 
 research_obligation: null
 
@@ -106,7 +106,7 @@ cards:
     tests_summary: "GREEN — D25 update consumed exact Codex Web GPT v5.0.14 AppImage SHA-256 2c68166425e049241c61ae76eafd42afdde37343e1e887ef977fd43bf636cbf2; last-update status=success; promoted image ce07c414... is healthy; WORKSTATION_RUNTIME_GREEN; native upstream unchanged; Muse upstream remains unset; rollback baseline retained."
   - id: "M01-T07"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T07.md"
-    execution_status: blocked
+    execution_status: superseded
     executor: chatgpt
     dependencies:
       - "M01-T06"
@@ -117,4 +117,18 @@ cards:
     result_commit: null
     result_pr: null
     evidence: "implementation/workstreams/change-muse-native-upstream/research/R1.md"
-    tests_summary: "BLOCKED — R1 proved Meta/Muse rejects the recursive Gmail namespace; operator accepted D30 Muse-only Gmail omission. R7 now owns a fork-side filter/release/D25/activation path. Production remains safely rolled back with Muse unset, native upstream unchanged, Sol + chatgpt-web/* available and WORKSTATION_RUNTIME_GREEN."
+    tests_summary: "SUPERSEDED by approved R7 after R1 proved the normal-client recursive Gmail namespace incompatibility and D30 accepted Muse-only Gmail omission. The v5.0.14 activation contract no longer matches the approved strategy; production remains safely rolled back with Muse unset."
+  - id: "M01-T08"
+    contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T08.md"
+    execution_status: ready
+    executor: null
+    dependencies:
+      - "M01-T06"
+    review_requirement: RECOMMENDED
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
