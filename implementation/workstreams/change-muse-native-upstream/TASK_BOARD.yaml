@@ -6,9 +6,9 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "161d47716b98ebf8a0499cd32a9b104d53dd515e"
+  head: "cd9f9930881a30d6bf4452d044d486ce18975198"
 
-research_obligation: null
+research_obligation: "implementation/workstreams/change-muse-native-upstream/research/R3.md"
 
 milestones:
   M01:
@@ -268,15 +268,15 @@ cards:
 
   - id: "M01-T18"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T18.md"
-    execution_status: in_progress
+    execution_status: blocked
     executor: chatgpt
     dependencies:
       - "M01-T17"
     review_requirement: none
     review_state: null
     review_subject: null
-    review_evidence: null
+    review_evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T18-native-transport-blocker.md"
     result_commit: null
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "BLOCKED after safe activation/rollback — exact v5.0.16 image remained healthy and WORKSTATION_RUNTIME_GREEN, but ordinary Codex 0.155 native/app-server sampling attempts Responses WebSocket to the local 5.0.16 bridge and receives HTTP 426 Upgrade Required. Muse was rolled back to unset; R3 owns transport investigation."
