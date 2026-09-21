@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "e2d610fba8a5518e76b3ca0a440f93e3f4cdc71d"
+  head: "82e2e7f02c9438f6e02b597218d51143919d6c31"
 
 research_obligation: null
 
@@ -207,7 +207,7 @@ cards:
 
   - id: "M01-T14"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T14.md"
-    execution_status: ready
+    execution_status: in_progress
     executor: chatgpt
     dependencies:
       - "M01-T10"
