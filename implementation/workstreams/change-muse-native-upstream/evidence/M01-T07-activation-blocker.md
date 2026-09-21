@@ -76,7 +76,7 @@ The current Codex Interrupt hook is still cryptographically and structurally att
 
 However, the current Codex configuration has materially changed the owned hook after setup:
 
-- the managed marker comments are absent
+- the managed start/end marker comments are still present exactly once
 - the hook has an explicit `enabled=false`
 - the journal-installed fragment did not contain that disabled state
 
@@ -113,3 +113,49 @@ After that authorization, execution can:
 No credential change or routing-code change is requested.
 
 **BLOCKED — explicit authorization required for the managed-hook repair.**
+
+
+## Additional non-mutating forensic investigation
+
+A follow-up read-only investigation was performed before requesting repair authorization.
+
+### Timeline
+
+- The active v10 journal was created on 2026-09-20 at 15:53 local time.
+- An automatic backup from 2026-09-20 16:56 contains the exact journal-owned hook with no explicit `enabled` field.
+- An automatic backup from 2026-09-21 06:44 contains the same exact journal-owned hook with `enabled=true`, matching command and trusted hash and retaining both managed markers.
+- Workflow/Muse verification runs later on 2026-09-21 repeatedly proved the live `~/.codex/config.toml` byte-identical before/after their own work. No shell/tool call that edited this hook was found.
+- The first launcher-side conflict for the current journal appears at 2026-09-21 10:27 local time, while the launcher was still v5.0.13. Therefore the `enabled=false` state predates the v5.0.14 D25 update and predates Muse activation.
+
+### Codex Desktop diagnostics
+
+The bundled production Codex reports:
+
+- Codex Desktop client: `26.915.31945`
+- bundled CLI: `0.155.0-alpha.9.2`
+
+Its binary contains the hook-review/enablement surface (`Hooks need review`, `SetHookEnabled`, `Trust all and continue`, and `Continue without trusting`).
+
+The local Codex diagnostic database was queried read-only. Between the last known enabled backup and the first launcher conflict:
+
+- no workflow/Muse shell write to `~/.codex/config.toml` was found;
+- there are no app-server config-write RPCs between 06:44 and 09:15 local;
+- at 09:27:41 local Codex Desktop issued `config/batchWrite`, but its immediate RPC context is plugin synchronization (`plugin/list -> config/batchWrite -> config/read -> plugin/installed`), not a hook-management request;
+- an analogous plugin-synchronization `config/batchWrite` occurs again at 10:27:13;
+- no `SetHookEnabled`, hook-specific config write, or other diagnostic record proving a deliberate user toggle was found.
+
+The logs do not record the `config/batchWrite` payload, so it is not possible to prove that the 09:27 plugin-related rewrite caused the hook's `enabled=false` normalization. It is also not possible to attribute the disable to a user action.
+
+### Revised assessment
+
+The evidence rules out the Muse/native-upstream work and the v5.0.14 update as the origin of the disable. The most defensible conclusion is:
+
+- the hook remained the exact codex-chatgpt-web-owned command and trusted identity;
+- its enablement changed between the last proven enabled state (06:44) and the first detected conflict (10:27);
+- Codex Desktop performed at least one unrelated config rewrite in that interval;
+- there is no evidence of a deliberate external replacement, malicious modification, or a workflow agent disabling the hook;
+- the exact writer/action that introduced `enabled=false` cannot be proven from retained logs.
+
+Because `enabled=false` is still a semantic state change, v5.0.14 is correct to fail closed. Explicit authorization remains required before restoring this already-owned hook to its journal-managed enabled state.
+
+No production configuration was changed by this forensic investigation.
