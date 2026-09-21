@@ -2,7 +2,7 @@
 
 Workstream ID: `issue-project-trust-registry-drift`
 Intake kind: `issue`
-Status: active
+Status: complete
 
 ## Operator intent
 
@@ -18,6 +18,18 @@ Parent dependency: none
 
 No matching existing workstream/branch was found. The observed failure is live workstation state and does not require unmerged parent-only source to reproduce or diagnose.
 
-## Intake state
+## Diagnostic evidence
 
-Pre-creation diagnosis completed. Post-creation classification is in progress.
+Live inspection established that `ogolny` still exists and is readable by the `codex` runtime user, its exact path remains explicitly trusted in Codex config, and app-server project state still contains the project. In contrast, the current Electron/global local-project registry has no `ogolny` entry and still retains legacy mappings for the deleted `testowy` and `test3` records.
+
+The global-state rewrite immediately preceded the Android failure. Recent hook-recovery commits inspected do not alter project trust registration, and the live trust entry for `ogolny` remains intact.
+
+## Intake classification
+
+Path: `research`
+Next route: `research:project-trust-registry-drift-r1`
+Durable research record: `research/PROJECT_TRUST_REGISTRY_DRIFT.md`
+
+The issue does not yet qualify as a micro-fix because the exact desktop reconciliation mechanism and durable fix ownership are not proven. The current diagnosis-only authorization also does not permit the live project-state mutation needed for the smallest discriminating repair experiment.
+
+Research is therefore the smallest legal downstream route. The durable research record owns the remaining validation blocker.
