@@ -69,7 +69,7 @@ cards:
     dependencies:
       - "M01-T03"
     review_requirement: RECOMMENDED
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex-chatgpt-web@2686d2a616864a1bc9cd975901773ab16a54ba47"
     review_evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T04-release-candidate.md"
     result_commit: "2686d2a616864a1bc9cd975901773ab16a54ba47"
