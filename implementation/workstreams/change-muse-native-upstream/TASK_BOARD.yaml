@@ -1,6 +1,6 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "change-muse-native-upstream"
-plan_revision: "R4"
+plan_revision: "R5"
 current_milestone: "M01"
 
 execution_ref:
@@ -36,7 +36,7 @@ cards:
     tests_summary: "GREEN — scripts/validate-source.sh => SOURCE_VALIDATION_GREEN (includes Compose config and secret hygiene); exact diff adds only optional CODEX_CHATGPT_WEB_MUSE_UPSTREAM wiring and non-secret .env.example documentation."
   - id: "M01-T02"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T02.md"
-    execution_status: blocked
+    execution_status: superseded
     executor: chatgpt
     dependencies:
       - "M01-T01"
@@ -47,4 +47,18 @@ cards:
     result_commit: null
     result_pr: null
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T02-live-activation-blocker.md"
-    tests_summary: "BLOCKED — live Muse discovery stayed empty because CLIProxyAPI catalog shape does not match the v5.0.13 fork merge contract; production rollback is GREEN."
+    tests_summary: "SUPERSEDED by approved R5 after BLOCKED live activation: the v5.0.13 fork cannot consume the observed CLIProxyAPI data/id catalog; rollback remained GREEN and the blocker evidence is preserved."
+  - id: "M01-T03"
+    contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T03.md"
+    execution_status: ready
+    executor: null
+    dependencies:
+      - "M01-T01"
+    review_requirement: RECOMMENDED
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
