@@ -8,7 +8,7 @@ execution_ref:
   pr: null
   head: "3801b90be02963bd3d6ee3589922d920a61aa26e"
 
-research_obligation: "implementation/workstreams/change-muse-native-upstream/research/R2.md"
+research_obligation: null
 
 milestones:
   M01:
