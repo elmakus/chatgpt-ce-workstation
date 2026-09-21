@@ -6,9 +6,9 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "f1f99a5e94e783e0bba9433c3242c532a6b80846"
+  head: "0c2f508602744500eb73a17a240e095c26a1892a"
 
-research_obligation: "implementation/workstreams/change-muse-native-upstream/research/R4.md"
+research_obligation: null
 
 milestones:
   M01:
@@ -279,4 +279,4 @@ cards:
     result_commit: null
     result_pr: null
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T18-recursive-schema-blocker.md"
-    tests_summary: "BLOCKED — real Codex Desktop Muse Spark 1.3 Contributor turn fails with invalid_request_error param=parameters: Recursive JSON schemas are not currently supported. M01-T18 rollback is required but Tower is currently offline; R4 owns exact schema/root-cause and bounded Muse-only compatibility research."
+    tests_summary: "BLOCKED — R4 confirms a third Muse/Meta compatibility boundary: recursive local JSON Schema refs in real Codex Desktop tool parameters are rejected. R9 draft is frozen for pending independent plan review. First future target-host action remains rollback to the exact v5.0.16 Muse-disabled baseline; Tower was offline when rollback was required."
