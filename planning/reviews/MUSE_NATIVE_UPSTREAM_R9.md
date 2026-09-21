@@ -2,9 +2,9 @@
 
 Plan revision: R9
 Review requirement: RECOMMENDED
-Review state: in_progress
+Review state: green
 Review subject: elmakus/chatgpt-ce-workstation:blob:9474cc52951c0481a898b66b45cc2df2312e4722:planning/MUSE_NATIVE_UPSTREAM_PLAN.md
-Review evidence: pending
+Review evidence: GREEN — exact immutable R9 blob independently checked against approved R2, D29/D30, R4, the M01-T18 blocker and active Task Board. The plan stays inside accepted authority; scopes recursive-schema compatibility to Muse-bound Responses tool schemas; requires bounded local-ref expansion with cycle-only permissive widening while preserving non-recursive structure/ref siblings; keeps existing Gmail/web-search rules, ordinary-native bytes and browser behavior; makes exact v5.0.16 Muse-disabled restoration the first target-host gate; preserves immutable fork review/release plus D25 provenance; requires real Codex Desktop Muse acceptance; and retains rollback, catalog isolation, credential hygiene and CLIProxyAPI production boundaries. No P0/P1 planning defect found.
 
 ## Authority
 
