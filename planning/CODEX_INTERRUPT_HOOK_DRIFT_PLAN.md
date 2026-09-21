@@ -1,7 +1,7 @@
 # Codex Interrupt Hook Drift Compatibility — Master Plan
 
 Plan revision: `CIH-P1`
-Status: `draft`
+Status: `approved`
 Review requirement: `RECOMMENDED`
 Updated: `2026-09-21`
 
