@@ -2,7 +2,7 @@
 
 Plan revision: R7
 Review requirement: RECOMMENDED
-Review state: pending
+Review state: in_progress
 Review subject: elmakus/chatgpt-ce-workstation:blob:da6f9f4e091e68974d8322108f9761067d4554e2:planning/MUSE_NATIVE_UPSTREAM_PLAN.md
 Review evidence: null
 
