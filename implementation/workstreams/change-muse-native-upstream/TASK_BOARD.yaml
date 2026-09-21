@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "8efde1bb3e59dfd5d8ac526fd061ccc92f49f842"
+  head: "15696ed2b981c3d927664496105bdbe55133e44f"
 
 research_obligation: null
 
@@ -252,7 +252,7 @@ cards:
 
   - id: "M01-T17"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T17.md"
-    execution_status: in_progress
+    execution_status: blocked
     executor: chatgpt
     dependencies:
       - "M01-T16"
@@ -263,6 +263,6 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T17-d25-execution-blocker.md"
+    tests_summary: "BLOCKED before mutation — v5.0.16 latest-stable identity/checksum and SOURCE_VALIDATION_GREEN confirmed; remote execution safeguards blocked scripts/update.sh before start; post-block production remains healthy on exact prior image with Muse unset and clean checkout."
 
