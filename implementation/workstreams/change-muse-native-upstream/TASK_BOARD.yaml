@@ -275,8 +275,8 @@ cards:
     review_requirement: none
     review_state: null
     review_subject: null
-    review_evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T18-native-transport-blocker.md"
+    review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: null
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T18-native-transport-blocker.md"
     tests_summary: "R3 RESOLVED — the observed HTTP 426 is the exact expected Codex 0.155 WebSocket-to-HTTP fallback signal; a fresh unchanged-config app-server gpt-5.6-sol turn completed NATIVE_CONTROL_OK. Resume activation/final verification; no transport correction required."
