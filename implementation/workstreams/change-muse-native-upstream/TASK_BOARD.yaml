@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "6fedd322e7f0638a400958d7daec4d1cdf259366"
+  head: "3801b90be02963bd3d6ee3589922d920a61aa26e"
 
 research_obligation: null
 
@@ -125,10 +125,10 @@ cards:
     dependencies:
       - "M01-T06"
     review_requirement: RECOMMENDED
-    review_state: null
-    review_subject: null
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@2bd8a74a6f467767c7a640806720e672f7342471"
     review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "2bd8a74a6f467767c7a640806720e672f7342471"
+    result_pr: "elmakus/codex-chatgpt-web#13"
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T08-related-fork-gmail-filter.md"
+    tests_summary: "GREEN — related-fork CI run 35598358048 succeeded on exact HEAD 2bd8a74a6f467767c7a640806720e672f7342471: actionlint plus macOS/Windows/Ubuntu bun run verify, package/app smoke, and Linux AppImage ABI validation; focused regression coverage proves Muse-only exact Gmail namespace omission, non-Gmail preservation, zstd rewrite safety, Muse no-op without Gmail, and ordinary native Gmail byte preservation."
