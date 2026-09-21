@@ -159,3 +159,58 @@ The evidence rules out the Muse/native-upstream work and the v5.0.14 update as t
 Because `enabled=false` is still a semantic state change, v5.0.14 is correct to fail closed. Explicit authorization remains required before restoring this already-owned hook to its journal-managed enabled state.
 
 No production configuration was changed by this forensic investigation.
+
+
+## Provenance investigation after blocker
+
+A read-only follow-up investigation narrowed the current `enabled=false` transition without changing production configuration.
+
+### Snapshot timeline
+
+Available Codex-workflow backups show the managed Interrupt hook state over time:
+
+- 2026-09-19 16:49 local: `enabled=true`
+- 2026-09-20 11:11 local: no explicit `enabled`
+- 2026-09-20 11:35 local: `enabled=true`
+- 2026-09-20 16:56 local: no explicit `enabled`
+- 2026-09-21 06:44 local: `enabled=true`
+- current: `enabled=false`
+
+Therefore the currently blocking `true -> false` transition happened after the 2026-09-21 06:44 snapshot.
+
+### Agent/tool activity
+
+Today’s Codex rollout records that mention `~/.codex/config.toml` were inspected. The relevant references were reads/evidence output; no agent tool call was found that explicitly wrote the managed hook to `enabled=false`.
+
+### Native Codex Desktop configuration write
+
+Native Codex structured logs show a cluster of configuration RPCs from Codex Desktop client `26.915.31945` after the 06:44 GREEN snapshot. Within the pre-error window there is one explicit general configuration write:
+
+- 2026-09-21 09:27:41 local: `config/batchWrite`
+
+There were also multiple `experimentalFeature/enablement/set` calls around 09:26–09:37 local.
+
+The first same-day launcher detection of the changed managed hook after the 06:44 snapshot occurs later:
+
+- 2026-09-21 10:27:13 local: bridge-connect/fail-safe reports `Codex interrupt lifecycle hook changed after setup; refusing to overwrite it`.
+
+The structured log records the `config/batchWrite` method but not its request parameters, so exact causal attribution to that RPC cannot be proven from retained logs alone.
+
+### Semantic config diff
+
+Comparing the 06:44 `config.toml` snapshot against current configuration yields only these semantic differences:
+
+- managed Interrupt hook handler: `enabled=true -> enabled=false`
+- model: `gpt-5.6-luna -> gpt-5.6-sol`
+- model reasoning effort: `max -> medium`
+- `service_tier=default` removed
+
+The managed hook command itself remains byte-for-byte identical to the journal-owned command and its trusted state hash remains identical.
+
+### Interpretation
+
+Evidence strongly favors a native Codex Desktop configuration rewrite/normalization during ordinary settings persistence, rather than an unrelated third-party replacement of the hook or a Workstation/Muse rollback mutation.
+
+However, because retained logs do not expose the `config/batchWrite` payload, this remains a strong correlation rather than definitive proof of the exact writer operation.
+
+The safe remediation boundary therefore remains unchanged: repair only the journal-owned hook definition/state, leave unrelated model/settings fields intact, and verify the post-write diff before allowing the built-in v5.0.14 runtime upgrade to continue.
