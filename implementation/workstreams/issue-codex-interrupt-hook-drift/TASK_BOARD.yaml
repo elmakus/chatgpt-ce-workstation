@@ -24,10 +24,10 @@ cards:
     execution_status: "in_progress"
     dependencies: []
     executor: "chatgpt"
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "elmakus/codex-chatgpt-web@a8325124decf42c5e9929da73228eb8693e4097a"
+    result_pr: "elmakus/codex-chatgpt-web#14"
+    evidence: "Fork branch fix/native-disabled-interrupt-hook-recovery from 2686d2a616864a1bc9cd975901773ab16a54ba47; 5-file PR patch read back; launcher production setup confirmed to invoke --replace-codex-route; GitHub Actions CI run 35598819431 is active on the exact result commit."
+    tests_summary: "Targeted Bun 1.4.0 container tests GREEN: 56 pass, 0 fail across tests/codex-interrupt-hook.test.ts and tests/codex-integration.test.ts. Full repository CI pending on run 35598819431."
     independent_review: "RECOMMENDED"
     review_state: null
     review_subject: null
