@@ -106,7 +106,7 @@ cards:
     tests_summary: "GREEN — D25 update consumed exact Codex Web GPT v5.0.14 AppImage SHA-256 2c68166425e049241c61ae76eafd42afdde37343e1e887ef977fd43bf636cbf2; last-update status=success; promoted image ce07c414... is healthy; WORKSTATION_RUNTIME_GREEN; native upstream unchanged; Muse upstream remains unset; rollback baseline retained."
   - id: "M01-T07"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T07.md"
-    execution_status: blocked
+    execution_status: in_progress
     executor: chatgpt
     dependencies:
       - "M01-T06"
@@ -117,4 +117,4 @@ cards:
     result_commit: null
     result_pr: null
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T07-live-routing-outage.md"
-    tests_summary: "BLOCKED — live routing outage confirmed: Codex route remains active to dead 127.0.0.1:17841, so ordinary Sol and chatgpt-web routes fail despite Docker health. Same hook inconsistency is reported by retained 5.0.13 and current 5.0.14 runtimes; first retained failure predates v5.0.14 update (2026-09-19 04:13 Europe/Zurich). Muse remains unset; image rollback alone cannot repair persistent route state; explicit authorization is required for bounded journal-owned hook repair."
+    tests_summary: "IN PROGRESS — user authorized bounded repair of the existing journal-owned Interrupt hook; recovery will snapshot persistent config, preserve unrelated Codex configuration, restore only the managed hook state, and verify proxy/routing before resuming T07 acceptance."
