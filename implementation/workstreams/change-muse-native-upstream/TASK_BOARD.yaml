@@ -106,7 +106,7 @@ cards:
     tests_summary: "GREEN — D25 update consumed exact Codex Web GPT v5.0.14 AppImage SHA-256 2c68166425e049241c61ae76eafd42afdde37343e1e887ef977fd43bf636cbf2; last-update status=success; promoted image ce07c414... is healthy; WORKSTATION_RUNTIME_GREEN; native upstream unchanged; Muse upstream remains unset; rollback baseline retained."
   - id: "M01-T07"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T07.md"
-    execution_status: ready
+    execution_status: in_progress
     executor: chatgpt
     dependencies:
       - "M01-T06"
