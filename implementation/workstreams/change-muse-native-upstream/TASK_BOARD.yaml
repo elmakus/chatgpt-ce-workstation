@@ -69,10 +69,10 @@ cards:
     dependencies:
       - "M01-T03"
     review_requirement: RECOMMENDED
-    review_state: null
-    review_subject: null
-    review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@2686d2a616864a1bc9cd975901773ab16a54ba47"
+    review_evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T04-release-candidate.md"
+    result_commit: "2686d2a616864a1bc9cd975901773ab16a54ba47"
+    result_pr: "elmakus/codex-chatgpt-web#12"
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T04-release-candidate.md"
+    tests_summary: "GREEN — release-candidate CI run 35582708176 succeeded on exact HEAD 2686d2a616864a1bc9cd975901773ab16a54ba47: actionlint plus macOS/Windows/Ubuntu bun run verify, package/app smoke, Linux AppImage ABI validation; PR #12 diff is version-only and no v5.0.14 release was published."
