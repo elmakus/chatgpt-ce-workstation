@@ -11,12 +11,12 @@ parent_branch: null
 parent_dependency: null
 
 intake:
-  state: "active"
+  state: "complete"
   record: "implementation/workstreams/issue-codex-interrupt-hook-drift/INTAKE.md"
 
 routing:
   exploratory_scope: null
-  research_obligation: null
+  research_obligation: "implementation/workstreams/issue-codex-interrupt-hook-drift/research/R01.md"
   plan_review: null
 
 task_board: null
