@@ -1,0 +1,52 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "issue-codex-interrupt-hook-drift"
+plan_revision: "CIH-P1"
+current_milestone: "M01"
+
+execution_ref:
+  branch: "fix/codex-interrupt-hook-drift"
+  pr: null
+  head: null
+
+research_obligation: null
+
+milestones:
+  M01:
+    execution_status: "ready"
+    checkpoint: null
+    evidence: null
+    result: null
+
+cards:
+  - id: "M01-T01"
+    contract: "implementation/workstreams/issue-codex-interrupt-hook-drift/cards/M01-T01.md"
+    milestone: "M01"
+    execution_status: "ready"
+    dependencies: []
+    executor: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    independent_review: "RECOMMENDED"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    blocker: null
+
+  - id: "M01-T02"
+    contract: "implementation/workstreams/issue-codex-interrupt-hook-drift/cards/M01-T02.md"
+    milestone: "M01"
+    execution_status: "planned"
+    dependencies:
+      - "M01-T01"
+    executor: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    independent_review: "none"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    blocker: null
