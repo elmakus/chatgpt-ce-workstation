@@ -90,3 +90,17 @@ cards:
     result_pr: "elmakus/codex-chatgpt-web#12"
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T05-fork-release.md"
     tests_summary: "GREEN — Fork Linux Release run 35584309931 succeeded on exact reviewed SHA 2686d2a616864a1bc9cd975901773ab16a54ba47; verify/package/Linux ABI/app smoke/publish GREEN; v5.0.14 latest tag resolves to exact SHA; AppImage/checksums digests are consistent; fork main fast-forward readback is identical."
+  - id: "M01-T06"
+    contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T06.md"
+    execution_status: ready
+    executor: chatgpt
+    dependencies:
+      - "M01-T05"
+    review_requirement: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
