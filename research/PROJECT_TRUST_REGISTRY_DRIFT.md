@@ -1,7 +1,7 @@
 # Research — project trust registry drift
 
 Research ID: project-trust-registry-drift-r1
-Status: active
+Status: blocked
 Origin role: other
 Origin subject: issue-project-trust-registry-drift@intake
 Return target: project_definition:issue-project-trust-registry-drift
@@ -31,19 +31,23 @@ Root cause is the newproject helper bypassing the Desktop local-project registra
 
 Deleting testowy and test3 was incidental to the observed failure. It exposed stale mappings in global state but did not cause ogolny's missing local registration.
 
-## Repair plan and verification
+## Live repair result
 
-User authorized live repair after diagnosis.
+User authorized and the live repair was applied.
 
-Repair the missing local registration by preserving the existing app-server project id and creating the corresponding Desktop local project identity plus legacy-to-app-server mapping. Do not create another app-server project for the same root. Preserve unrelated projects and current user state.
+A missing Desktop-local identity was registered for ogolny and mapped to the original app-server project id `01a0bb35-f5c7-7aa1-85be-97df5def88a1`. The ChatGPT/Codex Desktop application was restarted without restarting the workstation container.
 
-Restart only the ChatGPT/Codex Desktop application as needed to reload the repaired persistent registry; do not restart the whole workstation container unless required.
+Post-restart verification:
+- ogolny is present in the Desktop local-project registry;
+- its local identity maps to the original app-server project id;
+- the app-server database still contains exactly one ogolny project/root;
+- ogolny remains explicitly trusted in config;
+- unrelated current projects remain present.
 
-Verify after restart that:
-- ogolny exists in the Desktop local-project registry;
-- its mapping points to the original app-server project id;
-- the app-server database still has only the original ogolny project for that root;
-- trust_level remains trusted;
-- unrelated current projects remain intact.
+A pre-repair copy of the persistent Desktop state was retained locally for rollback.
 
-Final Android/mobile confirmation remains the end-to-end validation of the original trust-verification symptom.
+The installed newproject helper remains the source defect: it calls raw app-server project creation and bypasses the Desktop local-project lifecycle. Its canonical source is the separate newproject-skill project, so this Workstation workstream does not silently mutate that other project's durable state.
+
+## Remaining blocker
+
+Final Android/mobile confirmation is required to prove the original trust-verification error is gone. Research remains blocked pending that end-to-end check.
