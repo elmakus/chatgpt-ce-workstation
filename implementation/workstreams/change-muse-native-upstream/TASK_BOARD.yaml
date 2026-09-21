@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "a585677149e73173048e37942f79b73b67737958"
+  head: "cd2ad1d7513409809ba650cb89653c7953c29581"
 
 research_obligation: null
 
@@ -36,8 +36,8 @@ cards:
     tests_summary: "GREEN — scripts/validate-source.sh => SOURCE_VALIDATION_GREEN (includes Compose config and secret hygiene); exact diff adds only optional CODEX_CHATGPT_WEB_MUSE_UPSTREAM wiring and non-secret .env.example documentation."
   - id: "M01-T02"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T02.md"
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: chatgpt
     dependencies:
       - "M01-T01"
     review_requirement: none
