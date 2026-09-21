@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "3ca50e11bf2aa387b4898942ccc43bff2a7956b9"
+  head: "161d47716b98ebf8a0499cd32a9b104d53dd515e"
 
 research_obligation: null
 
@@ -266,3 +266,17 @@ cards:
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T17-d25-update.md"
     tests_summary: "GREEN — repository-owned D25 update consumed exact Codex Web GPT v5.0.16 / 7a46e032... / override=false; last-update status=success; promoted image sha256:9ede8f1f... is healthy; WORKSTATION_RUNTIME_GREEN after promotion and persistence recreate; native upstream unchanged; Muse upstream remains unset; rollback baseline retained."
 
+  - id: "M01-T18"
+    contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T18.md"
+    execution_status: ready
+    executor: chatgpt
+    dependencies:
+      - "M01-T17"
+    review_requirement: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
