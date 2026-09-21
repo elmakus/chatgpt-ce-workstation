@@ -120,7 +120,7 @@ cards:
     tests_summary: "SUPERSEDED by approved R7 after R1 proved the normal-client recursive Gmail namespace incompatibility and D30 accepted Muse-only Gmail omission. The v5.0.14 activation contract no longer matches the approved strategy; production remains safely rolled back with Muse unset."
   - id: "M01-T08"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T08.md"
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     dependencies:
       - "M01-T06"
