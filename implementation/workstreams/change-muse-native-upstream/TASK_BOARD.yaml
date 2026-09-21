@@ -78,7 +78,7 @@ cards:
     tests_summary: "GREEN — release-candidate CI run 35582708176 succeeded on exact HEAD 2686d2a616864a1bc9cd975901773ab16a54ba47: actionlint plus macOS/Windows/Ubuntu bun run verify, package/app smoke, Linux AppImage ABI validation; PR #12 diff is version-only and no v5.0.14 release was published."
   - id: "M01-T05"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T05.md"
-    execution_status: ready
+    execution_status: in_progress
     executor: chatgpt
     dependencies:
       - "M01-T04"
