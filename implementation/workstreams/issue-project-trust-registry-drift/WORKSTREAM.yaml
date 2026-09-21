@@ -11,12 +11,12 @@ parent_branch: null
 parent_dependency: null
 
 intake:
-  state: active
+  state: complete
   record: "implementation/workstreams/issue-project-trust-registry-drift/INTAKE.md"
 
 routing:
   exploratory_scope: null
-  research_obligation: null
+  research_obligation: "research/PROJECT_TRUST_REGISTRY_DRIFT.md"
   plan_review: null
 
 task_board: null
