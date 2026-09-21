@@ -106,7 +106,7 @@ cards:
     tests_summary: "GREEN — D25 update consumed exact Codex Web GPT v5.0.14 AppImage SHA-256 2c68166425e049241c61ae76eafd42afdde37343e1e887ef977fd43bf636cbf2; last-update status=success; promoted image ce07c414... is healthy; WORKSTATION_RUNTIME_GREEN; native upstream unchanged; Muse upstream remains unset; rollback baseline retained."
   - id: "M01-T07"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T07.md"
-    execution_status: in_progress
+    execution_status: blocked
     executor: chatgpt
     dependencies:
       - "M01-T06"
@@ -116,5 +116,5 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T07-activation-blocker.md"
+    tests_summary: "BLOCKED — exact v5.0.14 image/runtime and direct CLIProxyAPI catalog preflight GREEN; Muse activation recreate reached WORKSTATION_RUNTIME_GREEN, but launcher runtime-upgrade preflight correctly refused a journal-owned Codex Interrupt hook now explicitly enabled=false. Activation was rolled back to Muse unset on the same healthy frozen image; explicit authorization is required to restore only that managed hook to journal-owned enabled state."
