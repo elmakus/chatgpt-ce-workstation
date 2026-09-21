@@ -174,3 +174,17 @@ cards:
     result_pr: null
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T11-d25-apt-mirror-blocker.md"
     tests_summary: "BLOCKED before production mutation — repeated D25 candidate builds fail closed on transient archive.ubuntu.com noble-updates InRelease replica mismatch; production remains healthy on v5.0.14; bounded L1/L2 updater correction required before T11 resumes."
+  - id: "M01-T12"
+    contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T12.md"
+    execution_status: ready
+    executor: chatgpt
+    dependencies:
+      - "M01-T10"
+    review_requirement: RECOMMENDED
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
