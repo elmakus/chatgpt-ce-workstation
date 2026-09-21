@@ -462,3 +462,20 @@ Cleanup is forbidden before the new production image has passed the D25/R12 succ
 The exact Docker/BuildKit filtering, builder identity and age/size/GC mechanism are implementation details to be selected only after verifying the target Unraid backend. They must preserve the workstation-only scope and bounded-retention outcome.
 
 **Rationale:** D25 intentionally retains a previous known-working image and uses BuildKit cache for efficient repeated updates, but without an explicit lifecycle older candidate/rollback artifacts and historical cache can accumulate indefinitely on bounded Unraid Docker storage. Keeping only the current image plus one rollback baseline preserves deterministic recovery while separating safe image retention from bounded cache reuse.
+
+## D29 — Muse is an optional parallel native upstream through CLIProxyAPI
+
+**Decision (2026-09-21):** Workstation will wire the already-released `codex-chatgpt-web` parallel Muse upstream capability rather than implementing another provider router.
+
+The runtime contract is:
+- `CODEX_CHATGPT_WEB_NATIVE_UPSTREAM` continues to identify the primary native/Codex-LB route;
+- `CODEX_CHATGPT_WEB_MUSE_UPSTREAM` identifies the optional CLIProxyAPI route;
+- only model IDs beginning with `muse-` are imported/routed through that parallel upstream;
+- the Muse ingress key is persisted in the fork-owned `~/.config/codex-web-gpt/muse-proxy-api-key` file and is not stored in repository configuration;
+- CLIProxyAPI/Meta authentication remains independent from Codex-LB authentication;
+- a Muse catalog outage degrades only Muse availability and must not take down the primary native catalog or `chatgpt-web/*`.
+
+**Rationale:** the released fork already owns model-ID routing, catalog filtering, fail-closed Muse requests, zstd-aware model routing and separate credentials. Workstation only needs reproducible endpoint wiring and persistent secret provisioning. Duplicating routing logic in Compose or workstation scripts would create a second authority for the same behavior.
+
+**Boundary:** this decision is separate from D21 `muse-max` worker orchestration, which uses official Muse Code directly. It does not move Muse worker scheduling into Workstation.
+
