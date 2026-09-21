@@ -1,0 +1,44 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "change-muse-native-upstream"
+plan_revision: "R4"
+current_milestone: "M01"
+
+execution_ref:
+  branch: "work/muse-native-upstream"
+  pr: null
+  head: null
+
+research_obligation: null
+
+milestones:
+  M01:
+    status: in_progress
+    review_requirement: RECOMMENDED
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result: null
+    tests_summary: null
+
+cards:
+  - id: "M01-T01"
+    contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T01.md"
+    status: ready
+    dependencies: []
+    review_requirement: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result: null
+    tests_summary: null
+  - id: "M01-T02"
+    contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T02.md"
+    status: pending
+    dependencies:
+      - "M01-T01"
+    review_requirement: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result: null
+    tests_summary: null
