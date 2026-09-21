@@ -6,13 +6,13 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: null
+  head: "f06d186813fae3658ae441193b872a2ab6dd236c"
 
 research_obligation: null
 
 milestones:
   M01:
-    status: in_progress
+    execution_status: in_progress
     review_requirement: RECOMMENDED
     review_state: null
     review_subject: null
@@ -23,22 +23,28 @@ milestones:
 cards:
   - id: "M01-T01"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T01.md"
-    status: ready
+    execution_status: in_progress
+    executor: chatgpt
     dependencies: []
     review_requirement: none
     review_state: null
     review_subject: null
     review_evidence: null
-    result: null
+    result_commit: null
+    result_pr: null
+    evidence: null
     tests_summary: null
   - id: "M01-T02"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T02.md"
-    status: pending
+    execution_status: planned
+    executor: null
     dependencies:
       - "M01-T01"
     review_requirement: none
     review_state: null
     review_subject: null
     review_evidence: null
-    result: null
+    result_commit: null
+    result_pr: null
+    evidence: null
     tests_summary: null
