@@ -212,7 +212,7 @@ cards:
     dependencies:
       - "M01-T10"
     review_requirement: RECOMMENDED
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/codex-chatgpt-web@acc95f7a5447144bdfc5cd40ff50ce7e63dd3e95"
     review_evidence: null
     result_commit: "acc95f7a5447144bdfc5cd40ff50ce7e63dd3e95"
