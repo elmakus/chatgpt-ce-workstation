@@ -22,8 +22,9 @@ routing:
 task_board: null
 
 authority:
-  requirements: null
-  decisions: []
+  requirements: "requirements/CODEX_INTERRUPT_HOOK_DRIFT.md"
+  decisions:
+    - "docs/DECISIONS.md#d29--native-interrupt-hook-disable-state-is-narrowly-repairable-while-ownership-drift-remains-fail-closed"
   plan: null
 
 review:
