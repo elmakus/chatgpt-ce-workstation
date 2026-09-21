@@ -1,7 +1,7 @@
 # Muse native upstream integration plan
 
-Status: **approved**
-Revision: **R8**
+Status: **draft**
+Revision: **R9**
 Date: 2026-09-21
 Review requirement: **RECOMMENDED**
 
@@ -12,116 +12,163 @@ Review requirement: **RECOMMENDED**
   - `docs/DECISIONS.md#d29--muse-is-an-optional-parallel-native-upstream-through-cliproxyapi`
   - `docs/DECISIONS.md#d30--muse-bound-codex-turns-intentionally-omit-gmail-tools`
 - Workstream: `change-muse-native-upstream`
-- Prior approved plan: R7
-- Research evidence: `implementation/workstreams/change-muse-native-upstream/research/R2.md`
+- Prior approved plan: R8
+- New research: `implementation/workstreams/change-muse-native-upstream/research/R4.md`
+- Blocker evidence: `implementation/workstreams/change-muse-native-upstream/evidence/M01-T18-recursive-schema-blocker.md`
 
 ## Baseline
 
-Completed and accepted work remains preserved:
+Completed R8 work remains accepted:
 
-- Workstation optional Muse endpoint wiring and persistent secret placement are complete.
-- `elmakus/codex-chatgpt-web` v5.0.15 is released from exact reviewed commit `3a6d1d28c28dbe1be885077ae53fe4bba62b9673`.
-- The promoted Workstation image is `sha256:7470b64402282c56300ea6225c9d316c475b441878d38d68ff7862b5ff30248f` and embeds that v5.0.15 release.
-- M01-T12 updater-retry correction is independently GREEN.
-- M01-T13 activation proved catalog filtering and ordinary native routing GREEN, then failed the normal Muse turn on a second provider-specific request incompatibility and rolled production back to the same healthy image with Muse unset.
-R2 isolated that incompatibility. Current Codex emits a `type: "web_search"` tool with `search_content_types: ["text", "image"]`. The current CLIProxyAPI/Meta Muse route accepts the same `web_search` tool when that property is absent, but rejects the property with `tools[].search_content_types is only supported for web_search_preview tools.`
+- `codex-chatgpt-web` v5.0.16 is released from exact reviewed commit `d7c9db70cf1d54029c061490d73335146a23ed28`.
+- The promoted Workstation image is `sha256:9ede8f1f522a710707acac32d01fd8c4d7671b91912791e299d1c635d964b893`.
+- The fork already applies two reviewed Muse-only compatibility rules: exact Gmail namespace omission and exact `web_search.search_content_types` omission.
+- D25 consumption, ordinary native routing and Muse-only catalog filtering were GREEN.
+- R3 proved HTTP 426 is the expected WebSocket-to-HTTP fallback signal.
 
-This is not a Workstation routing defect and does not require a Definition change. Requirements R2/D30 already preserve non-Gmail Muse tools unless a specific incompatibility is independently verified. R2 provides that evidence for one optional property while proving the web-search tool itself remains usable.
+M01-T18 then exposed a third genuine compatibility boundary. A real Codex Desktop conversation using `Muse Spark 1.3 Contributor` failed with `invalid_request_error`, `param: parameters`, and `Recursive JSON schemas are not currently supported`.
+
+R4 establishes that Meta/Muse rejects recursive tool JSON Schemas as a general class. Exact installed Codex 0.155.0-alpha.9.2 intentionally preserves local `$ref` and reachable `$defs` / `definitions` for ordinary Responses-compatible providers. `openai/codex#44144` independently reports the same Desktop + Muse failure, and no upstream Codex fix was found.
+
+The Tower host went offline before the required M01-T18 rollback completed. Production therefore MUST NOT be assumed Muse-disabled yet.
 
 ## Milestone M01 — Complete the optional Muse route with bounded provider compatibility
 
 ### Outcome
 
-A corrected `codex-chatgpt-web` release routes `muse-*` through CLIProxyAPI while:
-- omitting the accepted Gmail namespace from Muse-bound Responses requests;
-- preserving the `web_search` tool but omitting its provider-unsupported `search_content_types` property only on Muse-bound Responses requests;
-- preserving every other Muse tool and property;
-- leaving ordinary native/Codex-LB and browser-backed routes unchanged.
+The next corrected fork release must keep all three Muse compatibility rules inside the existing fork boundary:
 
-Production then exposes usable Muse models and a normal Muse turn succeeds with the real client tool surface under those verified provider-specific compatibility rules.
+1. omit the accepted Gmail namespace;
+2. preserve exact `web_search` while omitting only `search_content_types`;
+3. keep affected non-Gmail tools available while replacing only provider-unsupported recursive local JSON-Schema cycles with a non-recursive representation.
+
+Ordinary native/Codex-LB tool schemas and browser-backed `chatgpt-web/*` behavior remain unchanged. Final acceptance requires a real Codex Desktop Muse turn using the actual Desktop-managed tool surface.
 
 ### Planned work
 
-0. Preserve the safe baseline:
-   - keep production Muse unset until the new fork release is reviewed, published, consumed and preflighted;
-   - retain exact v5.0.15, promoted-image, M01-T12 and M01-T13 rollback evidence;
-   - keep the native upstream, persistent Muse key and rollback baseline unchanged;
-   - do not mutate CLIProxyAPI production as part of this plan.
+#### 0. Restore the safe v5.0.16 baseline
 
-1. Implement the second bounded Muse-only normalization in `elmakus/codex-chatgpt-web`:
-   - use the existing decoded Responses-body boundary in `src/native-passthrough.ts`;
-   - apply only when the validated model is `muse-*` and the endpoint is `responses`;
-   - preserve every tool entry and its ordering except the already-accepted exact Gmail namespace omission;
-   - for a tool whose exact `type` is `web_search`, preserve the tool and all other properties while omitting only `search_content_types`;
-   - do not rename `web_search` to `web_search_preview`, disable web search, or drop any other field without new evidence;
-   - do not strip `search_content_types` from `web_search_preview` shapes merely for symmetry;
-   - preserve existing zstd/decode/re-serialization semantics and remove stale `content-encoding` only when rewriting is actually required;
-   - leave ordinary native/Codex-LB requests byte-preserved when no existing bridge rewrite applies;
-   - leave browser-backed `chatgpt-web/*` behavior unchanged;
-   - add focused regression tests proving the exact Muse `web_search` field omission, preservation of the rest of that tool, composition with Gmail omission, Muse no-op when neither rewrite is needed, preview-shape non-overreach, and ordinary-native controls.
+This is the first target-host mutation when Tower becomes reachable and a hard gate before further production execution.
 
-2. Review and publish one immutable corrected fork release:
-   - run the fork's required test/verify/package gates on the exact behavioral correction subject;
-   - independently review that exact subject when required by the related-fork workflow;
-   - after behavioral acceptance, prepare only the version-coupled release metadata needed by the fork's release contract;
-   - independently review the exact release candidate when required;
-   - publish from the exact accepted candidate with commit/tag/artifact checksum provenance;
-   - retain v5.0.15 as rollback provenance until production acceptance is GREEN.
+- Read back running image and native/Muse endpoint state.
+- Set only `CODEX_CHATGPT_WEB_MUSE_UPSTREAM` to empty.
+- Recreate with repository-owned Compose using the same frozen v5.0.16 image/resolution; do not rebuild or re-resolve.
+- Verify exact image `sha256:9ede8f1f522a710707acac32d01fd8c4d7671b91912791e299d1c635d964b893`, unchanged native upstream, healthy container, normal catalog reconciliation and `WORKSTATION_RUNTIME_GREEN`.
+- Do not print or rotate the persistent Muse key.
 
-3. Consume the corrected release through Workstation D25:
-   - use the repository-owned `resolve -> freeze -> build -> validate -> promote` path;
-   - require exact release/checksum provenance, frozen resolution, candidate validation, health/runtime verification and deterministic rollback;
-   - do not change the native upstream or provision a new Muse credential.
+#### 1. Add bounded Muse-only recursive-schema normalization in the related fork
 
-4. Repeat Muse activation from the healthy rollback baseline:
-   - recheck persistent Muse key metadata/readability without printing it;
-   - set only `CODEX_CHATGPT_WEB_MUSE_UPSTREAM=http://192.168.2.104:8317/v1`;
-   - recreate Workstation through repository-owned Compose using the exact frozen resolution for the promoted image.
+Use the existing decoded Responses-body boundary in `src/native-passthrough.ts`.
 
-5. Final verification:
-   - direct CLIProxyAPI catalog remains healthy;
-   - Workstation catalog imports exactly available `muse-*` rows and no CLIProxyAPI non-Muse rows;
-   - ordinary `gpt-5.6-sol` remains GREEN through Codex-LB;
-   - a normal Codex client `muse-*` turn succeeds with the real tool surface under the two verified Muse-only normalizations;
-   - secret-safe forwarded-request evidence proves the Gmail namespace is absent, `web_search` remains present, only its `search_content_types` property is absent, and representative other non-Gmail tools remain;
-   - an ordinary-native control proves Gmail and current `web_search` shape remain unchanged there;
-   - browser-backed `chatgpt-web/*` remains GREEN;
-   - source validation, route status, health and `WORKSTATION_RUNTIME_GREEN` remain GREEN;
-   - no credential value is emitted or committed.
+Stable behavior contract:
+
+- apply only to endpoint `responses` with validated model `muse-*`;
+- inspect only JSON-Schema surfaces inside the request tool tree, not arbitrary request/history/user content;
+- keep the two existing Muse rules unchanged and composable;
+- resolve local JSON Pointer refs within the same schema document, including `$defs` / `definitions`;
+- inline resolvable non-recursive refs while preserving non-recursive shape and `$ref` sibling constraints;
+- track the active ref-expansion path;
+- when expansion re-enters a ref already on the active path, replace **only that recursive occurrence** with a permissive schema node;
+- remove definition tables no longer needed after successful inlining so recursive local ref graphs are not forwarded to Muse;
+- do not silently widen unresolved, malformed or non-local refs;
+- preserve tool identity, ordering, descriptions, required fields, non-recursive properties and unrelated request fields;
+- preserve current zstd/decode/re-serialization semantics;
+- leave ordinary native requests byte-preserved whenever no existing bridge rewrite applies;
+- leave browser-backed routes untouched.
+
+Exact helper structure is L1 implementation detail.
+
+#### 2. Regression coverage
+
+Cover at minimum:
+
+- self-recursive `$defs`: preserve normal fields, widen only the cycle edge, no recursive local ref remains;
+- mutual recursion;
+- non-recursive local refs;
+- ref siblings;
+- nested schema-bearing tool/namespace shapes used by current Codex requests;
+- composition with Gmail omission and `web_search.search_content_types` normalization;
+- unchanged non-recursive Muse tools;
+- unresolved/non-local refs fail closed rather than silently widening;
+- ordinary-native recursive-schema byte preservation;
+- browser-backed non-interference.
+
+When exact target-host Desktop schema evidence is available, add a representative regression shape without hard-coding a single tool name as the compatibility rule.
+
+#### 3. Review and publish one immutable corrected fork release
+
+- Run focused tests plus the fork's full verify/package/platform gates.
+- Independently review the exact behavioral correction when required.
+- Prepare only release-coupled version metadata after behavioral acceptance.
+- Independently review the exact release candidate when required.
+- Publish with exact commit/tag/artifact/checksum provenance.
+- Retain v5.0.16 as rollback provenance until final production acceptance.
+
+#### 4. Consume through Workstation D25
+
+Use the repository-owned `resolve -> freeze -> build -> validate -> promote` path. Require exact release/checksum provenance, frozen resolution, candidate validation, health/runtime verification and deterministic rollback. Do not change native upstream, Muse credentials or CLIProxyAPI production.
+
+#### 5. Reactivate Muse
+
+Only after the corrected release is promoted:
+
+- verify Muse key metadata/readability without content;
+- set only `CODEX_CHATGPT_WEB_MUSE_UPSTREAM=http://192.168.2.104:8317/v1`;
+- recreate using the exact promoted frozen image;
+- require health/runtime GREEN before functional acceptance.
+
+#### 6. Final integrated verification
+
+Require all of:
+
+- direct CLIProxyAPI catalog healthy;
+- exactly available `muse-*` rows imported, no CLIProxyAPI non-Muse rows;
+- ordinary `gpt-5.6-sol` GREEN through Codex-LB;
+- a **real Codex Desktop** conversation explicitly using an available `muse-*` model succeeds with the actual Desktop-managed tool surface;
+- no toy/debug helper that silently starts on another/default model counts as Muse evidence;
+- secret-safe evidence shows Gmail omitted, `web_search` preserved without `search_content_types`, no recursive local schema cycle forwarded to Muse, and representative non-recursive tool/schema structure preserved;
+- ordinary-native control preserves its recursive tool schemas and Gmail/web-search shapes;
+- browser-backed `chatgpt-web/*` functionally GREEN;
+- source validation, route status, container health and `WORKSTATION_RUNTIME_GREEN` GREEN;
+- no credential or unrelated private request content in durable evidence.
 
 ### Rollback
 
-If the new fork correction/release introduces a regression before Muse activation, retain or restore the exact v5.0.15 Workstation baseline through D25 rollback and keep Muse unset.
+Before any new correction is consumed, restore the exact v5.0.16 Muse-disabled baseline described above.
 
-If final Muse activation fails acceptance, unset `CODEX_CHATGPT_WEB_MUSE_UPSTREAM` and recreate the same frozen Workstation image/resolution. Verify native upstream unchanged, Muse absent after normal catalog refresh, ordinary native + `chatgpt-web/*` retained, clean route status and `WORKSTATION_RUNTIME_GREEN`.
+If a new fork release or D25 consumption regresses ordinary routes before activation, restore that baseline.
 
-The persistent Muse key may remain dormant. No manual Codex model-cache deletion is part of normal rollback: R2 verified the stale Muse rows self-reconcile on the normal catalog refresh path.
+If final activation fails after the corrected release, unset only the Muse endpoint and recreate the same newly promoted frozen image/resolution. Verify native upstream unchanged, Muse absent after normal catalog reconciliation, ordinary native and browser-backed routes retained, clean route status and `WORKSTATION_RUNTIME_GREEN`.
+
+No manual model-cache deletion is part of normal rollback absent new evidence.
 
 ### Authorization
 
 Existing Definition authority remains sufficient:
-- D29 keeps provider/model routing in the existing fork and CLIProxyAPI boundary rather than Workstation.
-- D30 permits a non-Gmail Muse compatibility exception when separate verified evidence establishes it.
-- R2 provides that evidence only for `search_content_types` on `web_search`, while proving that the tool itself remains supported.
 
-Existing workstream authorization therefore covers the bounded related-fork correction/review/release, the already-approved Workstation D25 update and the endpoint recreate. No CLIProxyAPI production mutation is required by R8.
+- D29 keeps routing/compatibility in the fork/CLIProxyAPI boundary rather than Workstation.
+- D30 already permits another non-Gmail Muse exception when separate verified incompatibility evidence establishes it.
+- R4 is that evidence for recursive tool schemas.
+- The correction keeps affected tools available and widens only a recursive cycle edge instead of dropping the whole tool/schema.
+- Ordinary native, browser-backed behavior, credential boundaries and CLIProxyAPI production remain unchanged.
+
+R9 is therefore a material execution-strategy revision inside accepted Definition, not a Definition change.
 
 ### Requirement coverage
 
-- R1, R5 → completed Compose/example wiring plus final production readback.
-- R2 → fork-owned model routing/compatibility; Workstation does not duplicate provider logic.
-- R3 → existing persistent separate key, metadata-only verification.
-- R4 → existing catalog isolation plus final live catalog verification.
-- R6 → native/catalog/browser preservation, including non-Muse `web_search` shape, and secret hygiene.
-- R7 → Muse-only Gmail omission plus the independently evidenced property-level `web_search` normalization, normal Muse success, non-Gmail tool preservation and native Gmail control.
+- R1/R5: reproducible endpoint wiring plus rollback/reactivation readback.
+- R2: fork-owned routing/compatibility.
+- R3: persistent separate credential; metadata/readability only.
+- R4: catalog isolation and final catalog verification.
+- R6: ordinary-native/browser preservation and secret hygiene.
+- R7: Gmail omission plus independently evidenced web-search and recursive-schema Muse compatibility while retaining non-Gmail tools.
 
 ## Planning audit
 
 GREEN for independent review.
-R8 is a material execution-strategy revision, not a Definition change. It preserves the approved M01 outcome and repeats the already-established correction -> independent review/release -> D25 consumption -> activation sequence for the newly evidenced provider incompatibility.
 
-The extra complexity is justified by exact production evidence: the real Muse turn cannot pass Meta validation while current Codex's `web_search.search_content_types` field is forwarded unchanged. The correction is deliberately narrower than disabling web search, changing CLIProxyAPI, or adding a generic provider-normalization framework.
+R9 is required because production evidence invalidated R8's assumption that two Muse compatibility rules were sufficient. The cycle-only strategy is proportional: multiple independent reports establish recursion as a Meta/Muse class, while cycle-only widening preserves materially more tool semantics than disabling tools or replacing whole schemas.
 
-Security and rollback boundaries are unchanged. Production remains on the healthy Muse-disabled baseline until the new exact release is accepted. No secret moves into Git or `.env`. The rollback model cache is transient discovery state and requires no destructive cleanup.
+The immediate rollback gate reflects current reality: Tower is offline and the runtime cannot yet be claimed Muse-disabled. No further production execution may proceed until rollback readback is GREEN.
 
-Independent plan review remains **RECOMMENDED** because R8 materially changes the approved execution strategy and acceptance surface relative to R7.
+Independent plan review remains **RECOMMENDED** because R9 materially changes execution strategy and final acceptance surface.
