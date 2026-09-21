@@ -462,3 +462,20 @@ Cleanup is forbidden before the new production image has passed the D25/R12 succ
 The exact Docker/BuildKit filtering, builder identity and age/size/GC mechanism are implementation details to be selected only after verifying the target Unraid backend. They must preserve the workstation-only scope and bounded-retention outcome.
 
 **Rationale:** D25 intentionally retains a previous known-working image and uses BuildKit cache for efficient repeated updates, but without an explicit lifecycle older candidate/rollback artifacts and historical cache can accumulate indefinitely on bounded Unraid Docker storage. Keeping only the current image plus one rollback baseline preserves deterministic recovery while separating safe image retention from bounded cache reuse.
+
+## D29 — Native Interrupt-hook disable state is narrowly repairable, while ownership drift remains fail-closed
+
+**Decision (2026-09-21):** treat native Codex `enabled = false` on the codex-chatgpt-web journal-owned Interrupt hook as a distinct recoverable compatibility state only when the journal proves that the hook is otherwise exactly the same owned hook.
+
+The compatibility boundary is:
+
+- normal status/verification still reports a disabled Interrupt hook as inconsistent; it is never healthy merely because the command and trusted hash still match;
+- explicit setup, upgrade, or recovery may remove/replace the native disable override and restore enabled semantics only when managed boundaries, command, event/type, timeout, state key, trusted hash, and structural ownership all still match journal authority;
+- the repair must be followed by exact re-verification before route startup continues;
+- any other mutation remains subject to the existing strict fail-closed refusal;
+- the implementation must add positive regression coverage for the exact `enabled = false` incident and negative coverage for unrelated/tampered drift.
+
+**Rationale:** R01 verified that upstream Codex intentionally exposes user-config hooks as toggleable and persists `hooks.state.<key>.enabled` with an Upsert that preserves the existing trusted hash. codex-chatgpt-web simultaneously treats the hook block as strictly journal-owned. The 2026-09-19 outage was therefore an ownership-model compatibility conflict, not evidence that strict verification itself is wrong. Narrow repair of the native enablement-state override restores the integration invariant without granting permission to overwrite arbitrary managed-hook changes.
+
+**Rejected alternatives:** treating `enabled = false` as healthy; blindly overwriting any changed block; moving the hook into a system/MDM/enterprise managed layer; or patching upstream Codex solely to special-case codex-chatgpt-web ownership markers.
+
