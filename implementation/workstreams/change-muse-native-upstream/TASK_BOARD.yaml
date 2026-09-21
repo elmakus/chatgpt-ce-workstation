@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "15696ed2b981c3d927664496105bdbe55133e44f"
+  head: "3ca50e11bf2aa387b4898942ccc43bff2a7956b9"
 
 research_obligation: null
 
@@ -252,7 +252,7 @@ cards:
 
   - id: "M01-T17"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T17.md"
-    execution_status: blocked
+    execution_status: done
     executor: chatgpt
     dependencies:
       - "M01-T16"
@@ -263,6 +263,6 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T17-d25-execution-blocker.md"
-    tests_summary: "BLOCKED before mutation — v5.0.16 latest-stable identity/checksum and SOURCE_VALIDATION_GREEN confirmed; remote execution safeguards blocked scripts/update.sh before start; post-block production remains healthy on exact prior image with Muse unset and clean checkout."
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T17-d25-update.md"
+    tests_summary: "GREEN — repository-owned D25 update consumed exact Codex Web GPT v5.0.16 / 7a46e032... / override=false; last-update status=success; promoted image sha256:9ede8f1f... is healthy; WORKSTATION_RUNTIME_GREEN after promotion and persistence recreate; native upstream unchanged; Muse upstream remains unset; rollback baseline retained."
 
