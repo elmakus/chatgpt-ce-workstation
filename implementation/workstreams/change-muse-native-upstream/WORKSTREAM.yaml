@@ -1,6 +1,6 @@
 id: "change-muse-native-upstream"
 kind: "change"
-status: "planning"
+status: "ready"
 
 branch: "work/muse-native-upstream"
 base_ref: "dfa41ce0867824757a50dc151afe3a87c4826457"
@@ -19,7 +19,7 @@ routing:
   research_obligation: null
   plan_review: null
 
-task_board: null
+task_board: "implementation/workstreams/change-muse-native-upstream/TASK_BOARD.yaml"
 
 authority:
   requirements: "requirements/MUSE_NATIVE_UPSTREAM.md"
@@ -28,7 +28,7 @@ authority:
   plan: "planning/MUSE_NATIVE_UPSTREAM_PLAN.md"
 
 review:
-  requirement: null
+  requirement: RECOMMENDED
   state: null
   subject: null
   evidence: null
