@@ -37,16 +37,16 @@ cards:
   - id: "M01-T02"
     contract: "implementation/workstreams/issue-codex-interrupt-hook-drift/cards/M01-T02.md"
     milestone: "M01"
-    execution_status: "in_progress"
+    execution_status: "blocked"
     dependencies:
       - "M01-T01"
     executor: "chatgpt"
     result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_pr: "elmakus/codex-chatgpt-web#16"
+    evidence: "elmakus/codex-chatgpt-web#14 merged to main at 0f77eb00203f93617f7c38a24ad4e1c6e1cc9d3b; release-prep/v5.0.16 candidate PR #16 at 68142a3f1725e052a606f488ac2c525db650a661"
+    tests_summary: "Candidate CI run 35600698569 started for v5.0.16; publication checks remain pending behind the v5.0.15 ordering blocker."
     independent_review: "none"
     review_state: null
     review_subject: null
     review_evidence: null
-    blocker: null
+    blocker: "implementation/workstreams/issue-codex-interrupt-hook-drift/blockers/M01-T02-release-order.md"
