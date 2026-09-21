@@ -283,7 +283,7 @@ cards:
 
   - id: "M01-T19"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T19.md"
-    execution_status: ready
+    execution_status: in_progress
     executor: chatgpt
     dependencies:
       - "M01-T17"
