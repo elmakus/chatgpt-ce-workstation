@@ -1,7 +1,7 @@
 # Muse native upstream integration plan
 
 Status: **draft**
-Revision: **R2**
+Revision: **R3**
 Date: 2026-09-21
 Review requirement: **RECOMMENDED**
 
@@ -26,7 +26,7 @@ Current Workstation repository and production runtime supply only `CODEX_CHATGPT
 
 ### Outcome
 
-Workstation reproducibly supplies the optional CLIProxyAPI endpoint to `codex-chatgpt-web`, the ingress key exists only in the persistent fork-owned key file, and production Codex model discovery includes the available `muse-*` rows without changing the primary Codex-LB or `chatgpt-web/*` routes.
+Workstation reproducibly supplies the optional CLIProxyAPI endpoint to `codex-chatgpt-web`, the ingress key exists only in the persistent fork-owned key file, and production Codex model discovery plus request routing expose the available `muse-*` models without changing the primary Codex-LB or `chatgpt-web/*` routes.
 
 ### Planned work
 
@@ -57,6 +57,8 @@ Workstation reproducibly supplies the optional CLIProxyAPI endpoint to `codex-ch
    - key-file readback proves the persistent Muse key exists with restrictive permissions without printing its contents;
    - Workstation-side model discovery includes the expected `muse-*` rows while retaining ordinary native and `chatgpt-web/*` rows;
    - CLIProxyAPI non-`muse-*` rows are not imported;
+   - perform secret-safe functional route smoke checks showing: one ordinary native request still succeeds through the existing Codex-LB route, one available `muse-*` request succeeds through the Muse/CLIProxyAPI route, and one browser-backed `chatgpt-web/*` request remains functional;
+   - prove Muse-catalog failure isolation against the exact Muse-capable fork release/capability without intentionally degrading production: prefer existing exact-release automated/source-level evidence; if that evidence is not sufficient, run a bounded isolated/staged instance with an unreachable Muse catalog endpoint and verify ordinary native plus `chatgpt-web/*` discovery remains available. Do not use a production outage as the default failure-injection method;
    - existing Workstation health remains GREEN.
 
 ### Rollback
@@ -65,19 +67,20 @@ Unset `CODEX_CHATGPT_WEB_MUSE_UPSTREAM` and recreate the Workstation. The option
 
 ### Authorization
 
-The operator explicitly authorized this production configuration/deployment change in the current task. No additional live-write approval is required for the bounded M01 activation described above.
+The operator explicitly authorized this production configuration/deployment change in the current task. No additional live-write approval is required for the bounded M01 activation described above. Deliberate production failure injection is not part of this authorization and is not required by the plan because failure isolation is to be proven from exact-release evidence or an isolated/staged invocation.
 
 ## Requirement coverage
 
 - R1, R5 → repository Compose/example wiring and production readback.
-- R2, R4 → use the existing fork contract; verify merged model catalog and failure isolation.
+- R2 → use the existing fork contract plus healthy-state functional route smoke checks.
 - R3 → persistent key file outside Git/`.env`, with secret-safe validation.
-- R6 → production catalog/health/readback and preservation of primary routes.
+- R4 → merged-catalog verification plus exact-release or isolated/staged failure-isolation evidence.
+- R6 → production discovery, secret-safe functional route checks, health/readback, non-`muse-*` filtering and preservation of primary/browser-backed routes.
 
 ## Planning audit
 
 GREEN.
 
-The implementation is intentionally narrow: Workstation wires an existing released capability rather than duplicating routing logic. No schema migration, data migration, or new service is required. A rebuild is not required when the running image proves Muse-capable; otherwise the existing repository-owned D25 update/build/validate/promote path is a prerequisite rather than activating unsupported configuration. Rollback of this integration remains configuration-only after a capability-ready image is in place. The material external writes are the already-authorized production Workstation recreate plus persistent key-file creation, and conditionally the existing D25 update path if the preflight proves the running image is stale.
+The implementation is intentionally narrow: Workstation wires an existing released capability rather than duplicating routing logic. No schema migration, data migration, or new service is required. A rebuild is not required when the running image proves Muse-capable; otherwise the existing repository-owned D25 update/build/validate/promote path is a prerequisite rather than activating unsupported configuration. Rollback of this integration remains configuration-only after a capability-ready image is in place. The material external writes are the already-authorized production Workstation recreate plus persistent key-file creation, and conditionally the existing D25 update path if the preflight proves the running image is stale. Failure-isolation proof does not require a deliberate production outage.
 
 Independent plan review is RECOMMENDED because this is a new accepted Workstation behavior with production secret/configuration wiring, even though the implementation itself is bounded.
