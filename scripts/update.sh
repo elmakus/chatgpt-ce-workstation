@@ -88,9 +88,40 @@ host_preflight() {
   bash scripts/preflight-host.sh
 }
 
-build_candidate() {
+build_candidate_once() {
   local resolution="$1"
   UPSTREAM_RESOLUTION_FILE="$resolution" IMAGE_TAG="$CANDIDATE_IMAGE_TAG" bash scripts/build.sh
+}
+
+build_candidate() {
+  local resolution="$1"
+  local attempt log status
+
+  for attempt in 1 2 3; do
+    log="$(mktemp /tmp/workstation-candidate-build.XXXXXX.log)"
+    if build_candidate_once "$resolution" 2>&1 | tee "$log"; then
+      rm -f "$log"
+      return 0
+    else
+      status=$?
+    fi
+
+    if ! grep -Fq 'Ubuntu InRelease SHA-256 mismatch for ' "$log"; then
+      rm -f "$log"
+      return "$status"
+    fi
+
+    if [[ "$attempt" -ge 3 ]]; then
+      echo "Candidate build hit Ubuntu APT mirror identity mismatch on all 3 attempts; keeping the frozen-resolution failure fail-closed." >&2
+      rm -f "$log"
+      return "$status"
+    fi
+
+    echo "Candidate build hit transient Ubuntu APT mirror identity mismatch; retrying the same frozen resolution ($((attempt + 1))/3)." >&2
+    rm -f "$log"
+  done
+
+  return 1
 }
 
 candidate_image_ref() {

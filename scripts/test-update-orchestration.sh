@@ -70,6 +70,8 @@ run_case() (
   active_health_state=healthy
   candidate_recreate_count=0
   candidate_verify_count=0
+  candidate_build_count_file="$tmp/candidate-build-count"
+  printf '0\n' > "$candidate_build_count_file"
 
   require_tools() { trace_line "tools"; }
   load_local_env() { trace_line "env"; }
@@ -92,9 +94,28 @@ run_case() (
     trace_line "host-preflight"
     [[ "$scenario" != preflight_fail ]]
   }
-  build_candidate() {
+  build_candidate_once() {
+    local candidate_build_count
+    candidate_build_count="$(cat "$candidate_build_count_file")"
+    candidate_build_count=$((candidate_build_count + 1))
+    printf '%s\n' "$candidate_build_count" > "$candidate_build_count_file"
     trace_line "build"
-    [[ "$scenario" != build_fail ]]
+    case "$scenario" in
+      build_fail)
+        return 1
+        ;;
+      apt_mirror_retry_success)
+        if [[ "$candidate_build_count" -lt 3 ]]; then
+          echo "Ubuntu InRelease SHA-256 mismatch for archive.ubuntu.com_ubuntu_dists_noble-updates_InRelease" >&2
+          return 1
+        fi
+        ;;
+      apt_mirror_retry_exhausted)
+        echo "Ubuntu InRelease SHA-256 mismatch for archive.ubuntu.com_ubuntu_dists_noble-updates_InRelease" >&2
+        return 1
+        ;;
+    esac
+    return 0
   }
   candidate_image_ref() {
     trace_line "candidate-ref"
@@ -313,6 +334,14 @@ run_case() (
     build_fail)
       assert_order "source-validation" "host-preflight"
       assert_order "host-preflight" "build"
+      [[ "$(grep -Fxc 'build' "$TRACE_FILE")" -eq 1 ]]
+      assert_trace "evidence:pre_promotion_failed:candidate_build_failed"
+      assert_no_trace_prefix 'recreate:'
+      ;;
+    apt_mirror_retry_exhausted)
+      assert_order "source-validation" "host-preflight"
+      assert_order "host-preflight" "build"
+      [[ "$(grep -Fxc 'build' "$TRACE_FILE")" -eq 3 ]]
       assert_trace "evidence:pre_promotion_failed:candidate_build_failed"
       assert_no_trace_prefix 'recreate:'
       ;;
@@ -322,9 +351,14 @@ run_case() (
       assert_trace "evidence:pre_promotion_failed:candidate_readback_failed"
       assert_no_trace_prefix 'recreate:'
       ;;
-    success)
+    success|apt_mirror_retry_success)
       assert_order "source-validation" "host-preflight"
       assert_order "host-preflight" "build"
+      if [[ "$scenario" == apt_mirror_retry_success ]]; then
+        [[ "$(grep -Fxc 'build' "$TRACE_FILE")" -eq 3 ]]
+      else
+        [[ "$(grep -Fxc 'build' "$TRACE_FILE")" -eq 1 ]]
+      fi
       assert_trace "recreate:candidate-test"
       assert_trace "candidate-recreate-count:1"
       assert_trace "candidate-recreate-count:2"
@@ -458,7 +492,7 @@ run_case() (
       ;;
   esac
 
-  if [[ "$scenario" != success && "$scenario" != cleanup_fail && "$scenario" != cache_cleanup_fail ]]; then
+  if [[ "$scenario" != success && "$scenario" != apt_mirror_retry_success && "$scenario" != cleanup_fail && "$scenario" != cache_cleanup_fail ]]; then
     assert_no_trace_prefix 'cleanup-inventory:'
     assert_no_trace_prefix 'remove-ref:'
     assert_no_trace_prefix 'cache-cleanup:'
@@ -469,8 +503,10 @@ run_case source_fail 1
 run_case resolver_fail 1
 run_case preflight_fail 1
 run_case build_fail 1
+run_case apt_mirror_retry_exhausted 1
 run_case readback_fail 1
 run_case success 0
+run_case apt_mirror_retry_success 0
 run_case cleanup_fail 0
 run_case cache_cleanup_fail 0
 run_case promotion_fail 1
