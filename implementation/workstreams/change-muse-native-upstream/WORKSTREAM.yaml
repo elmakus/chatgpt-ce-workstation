@@ -1,6 +1,6 @@
 id: "change-muse-native-upstream"
 kind: "change"
-status: "discovery"
+status: "planning"
 
 branch: "work/muse-native-upstream"
 base_ref: "dfa41ce0867824757a50dc151afe3a87c4826457"
@@ -11,7 +11,7 @@ parent_branch: null
 parent_dependency: null
 
 intake:
-  state: active
+  state: complete
   record: "implementation/workstreams/change-muse-native-upstream/INTAKE.md"
 
 routing:
@@ -22,8 +22,9 @@ routing:
 task_board: null
 
 authority:
-  requirements: null
-  decisions: []
+  requirements: "requirements/MUSE_NATIVE_UPSTREAM.md"
+  decisions:
+    - "docs/DECISIONS.md#d29--muse-is-an-optional-parallel-native-upstream-through-cliproxyapi"
   plan: null
 
 review:
