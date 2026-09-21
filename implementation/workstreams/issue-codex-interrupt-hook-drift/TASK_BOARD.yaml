@@ -21,7 +21,7 @@ cards:
   - id: "M01-T01"
     contract: "implementation/workstreams/issue-codex-interrupt-hook-drift/cards/M01-T01.md"
     milestone: "M01"
-    execution_status: "in_progress"
+    execution_status: "done"
     dependencies: []
     executor: "chatgpt"
     result_commit: "elmakus/codex-chatgpt-web@a8325124decf42c5e9929da73228eb8693e4097a"
