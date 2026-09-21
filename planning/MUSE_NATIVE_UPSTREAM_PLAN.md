@@ -1,7 +1,7 @@
 # Muse native upstream integration plan
 
 Status: **draft**
-Revision: **R3**
+Revision: **R4**
 Date: 2026-09-21
 Review requirement: **RECOMMENDED**
 
@@ -20,7 +20,9 @@ The released `elmakus/codex-chatgpt-web` already owns the parallel native routin
 - the Muse catalog is optional and failure-isolated;
 - Muse uses its own persistent ingress key.
 
-Current Workstation repository and production runtime supply only `CODEX_CHATGPT_WEB_NATIVE_UPSTREAM`. CLIProxyAPI itself is healthy and already returns five `muse-*` rows when queried with its ingress key. The parallel Muse capability is released in `codex-chatgpt-web` v5.0.10 and later, but the running production image version/capability is not assumed: it must be verified before activation.
+Current Workstation repository and production runtime supply only `CODEX_CHATGPT_WEB_NATIVE_UPSTREAM`. CLIProxyAPI itself is healthy and already returns five `muse-*` rows when queried with its ingress key.
+
+The parallel Muse capability was first released in `codex-chatgpt-web` v5.0.10, but the configured native/Muse upstream transport also requires the proxy-resolution correction merged in fork PR #8 and published in v5.0.13. The running production image version/capability is not assumed: before activation it must prove v5.0.13+ or equivalent direct evidence that both the Muse routing capability and configured-upstream proxy-resolution fix are present.
 
 ## Milestone M01 — Wire and deploy the optional Muse upstream
 
@@ -31,9 +33,10 @@ Workstation reproducibly supplies the optional CLIProxyAPI endpoint to `codex-ch
 ### Planned work
 
 0. Production capability preflight:
-   - before any Muse activation, verify without exposing secrets that the running Workstation `codex-web-gpt` is a Muse-capable release/capability (v5.0.10+ or equivalent direct capability evidence);
-   - if the running image lacks that capability, do not apply the Muse endpoint/key to the old binary; first use the repository-owned D25 Workstation update/build/validate/promote path, then repeat this preflight before continuing;
-   - if the running image is already Muse-capable, no image rebuild is required solely for the configuration wiring below.
+   - before any Muse activation, verify without exposing secrets that the running Workstation `codex-web-gpt` is production-ready for configured Muse routing: v5.0.13+ or equivalent direct capability evidence proving both the parallel Muse route and the configured-upstream proxy-resolution fix are present;
+   - do not treat v5.0.10-v5.0.12 as sufficient solely because they contain the initial Muse routing implementation;
+   - if the running image lacks either required capability, do not apply the Muse endpoint/key to that binary; first use the repository-owned D25 Workstation update/build/validate/promote path, then repeat this preflight before continuing;
+   - if the running image already proves both required capabilities, no image rebuild is required solely for the configuration wiring below.
 
 1. Repository wiring:
    - add `CODEX_CHATGPT_WEB_MUSE_UPSTREAM: ${CODEX_CHATGPT_WEB_MUSE_UPSTREAM:-}` to the Workstation service environment in `compose.yaml`;
@@ -51,7 +54,7 @@ Workstation reproducibly supplies the optional CLIProxyAPI endpoint to `codex-ch
    - when the preflight required a Workstation update/rebuild, require that update's normal D25 candidate validation/rollback gate to complete before this activation.
 
 4. Verification:
-   - record the non-secret production capability/version preflight result and whether activation reused the existing image or followed the repository-owned update path;
+   - record the non-secret production version/capability preflight result, including evidence for the configured-upstream proxy-resolution fix, and whether activation reused the existing image or followed the repository-owned update path;
    - repository checks prove Compose/example configuration is valid and contains no secret;
    - production readback proves `CODEX_CHATGPT_WEB_NATIVE_UPSTREAM` is unchanged and `CODEX_CHATGPT_WEB_MUSE_UPSTREAM` is present;
    - key-file readback proves the persistent Muse key exists with restrictive permissions without printing its contents;
@@ -81,6 +84,6 @@ The operator explicitly authorized this production configuration/deployment chan
 
 GREEN.
 
-The implementation is intentionally narrow: Workstation wires an existing released capability rather than duplicating routing logic. No schema migration, data migration, or new service is required. A rebuild is not required when the running image proves Muse-capable; otherwise the existing repository-owned D25 update/build/validate/promote path is a prerequisite rather than activating unsupported configuration. Rollback of this integration remains configuration-only after a capability-ready image is in place. The material external writes are the already-authorized production Workstation recreate plus persistent key-file creation, and conditionally the existing D25 update path if the preflight proves the running image is stale. Failure-isolation proof does not require a deliberate production outage.
+The implementation is intentionally narrow: Workstation wires an existing released capability rather than duplicating routing logic. No schema migration, data migration, or new service is required. The production capability gate now accounts for both the initial Muse routing release and the later configured-upstream proxy-resolution correction: v5.0.10-v5.0.12 are not accepted merely by version, while v5.0.13+ or equivalent direct evidence is sufficient. A rebuild is not required when the running image proves both capabilities; otherwise the existing repository-owned D25 update/build/validate/promote path is a prerequisite rather than activating unsupported or known-incomplete transport behavior. Rollback of this integration remains configuration-only after a capability-ready image is in place. The material external writes are the already-authorized production Workstation recreate plus persistent key-file creation, and conditionally the existing D25 update path if the preflight proves the running image is stale. Failure-isolation proof does not require a deliberate production outage.
 
 Independent plan review is RECOMMENDED because this is a new accepted Workstation behavior with production secret/configuration wiring, even though the implementation itself is bounded.
