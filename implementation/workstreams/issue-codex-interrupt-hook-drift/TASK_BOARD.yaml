@@ -37,7 +37,7 @@ cards:
   - id: "M01-T02"
     contract: "implementation/workstreams/issue-codex-interrupt-hook-drift/cards/M01-T02.md"
     milestone: "M01"
-    execution_status: "planned"
+    execution_status: "ready"
     dependencies:
       - "M01-T01"
     executor: null
