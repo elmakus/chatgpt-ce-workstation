@@ -1,7 +1,7 @@
 # Muse native upstream integration plan
 
 Status: **draft**
-Revision: **R1**
+Revision: **R2**
 Date: 2026-09-21
 Review requirement: **RECOMMENDED**
 
@@ -20,7 +20,7 @@ The released `elmakus/codex-chatgpt-web` already owns the parallel native routin
 - the Muse catalog is optional and failure-isolated;
 - Muse uses its own persistent ingress key.
 
-Current Workstation repository and production runtime supply only `CODEX_CHATGPT_WEB_NATIVE_UPSTREAM`. CLIProxyAPI itself is healthy and already returns five `muse-*` rows when queried with its ingress key.
+Current Workstation repository and production runtime supply only `CODEX_CHATGPT_WEB_NATIVE_UPSTREAM`. CLIProxyAPI itself is healthy and already returns five `muse-*` rows when queried with its ingress key. The parallel Muse capability is released in `codex-chatgpt-web` v5.0.10 and later, but the running production image version/capability is not assumed: it must be verified before activation.
 
 ## Milestone M01 — Wire and deploy the optional Muse upstream
 
@@ -29,6 +29,11 @@ Current Workstation repository and production runtime supply only `CODEX_CHATGPT
 Workstation reproducibly supplies the optional CLIProxyAPI endpoint to `codex-chatgpt-web`, the ingress key exists only in the persistent fork-owned key file, and production Codex model discovery includes the available `muse-*` rows without changing the primary Codex-LB or `chatgpt-web/*` routes.
 
 ### Planned work
+
+0. Production capability preflight:
+   - before any Muse activation, verify without exposing secrets that the running Workstation `codex-web-gpt` is a Muse-capable release/capability (v5.0.10+ or equivalent direct capability evidence);
+   - if the running image lacks that capability, do not apply the Muse endpoint/key to the old binary; first use the repository-owned D25 Workstation update/build/validate/promote path, then repeat this preflight before continuing;
+   - if the running image is already Muse-capable, no image rebuild is required solely for the configuration wiring below.
 
 1. Repository wiring:
    - add `CODEX_CHATGPT_WEB_MUSE_UPSTREAM: ${CODEX_CHATGPT_WEB_MUSE_UPSTREAM:-}` to the Workstation service environment in `compose.yaml`;
@@ -41,11 +46,12 @@ Workstation reproducibly supplies the optional CLIProxyAPI endpoint to `codex-ch
    - use restrictive file permissions and verify only presence/ownership/mode, never the secret value.
 
 3. Production activation:
-   - set the Workstation runtime value to `http://192.168.2.104:8317/v1`;
+   - only after the capability preflight is GREEN, set the Workstation runtime value to `http://192.168.2.104:8317/v1`;
    - recreate/restart the Workstation through its repository-owned Compose path so the process receives the new environment;
-   - no image rebuild is required solely for this configuration change because production already carries the fork release with Muse routing support.
+   - when the preflight required a Workstation update/rebuild, require that update's normal D25 candidate validation/rollback gate to complete before this activation.
 
 4. Verification:
+   - record the non-secret production capability/version preflight result and whether activation reused the existing image or followed the repository-owned update path;
    - repository checks prove Compose/example configuration is valid and contains no secret;
    - production readback proves `CODEX_CHATGPT_WEB_NATIVE_UPSTREAM` is unchanged and `CODEX_CHATGPT_WEB_MUSE_UPSTREAM` is present;
    - key-file readback proves the persistent Muse key exists with restrictive permissions without printing its contents;
@@ -72,6 +78,6 @@ The operator explicitly authorized this production configuration/deployment chan
 
 GREEN.
 
-The implementation is intentionally narrow: Workstation wires an existing released capability rather than duplicating routing logic. No schema migration, image rebuild, data migration, or new service is required. Rollback is configuration-only. The only material external write is the already-authorized production Workstation recreate plus persistent key-file creation.
+The implementation is intentionally narrow: Workstation wires an existing released capability rather than duplicating routing logic. No schema migration, data migration, or new service is required. A rebuild is not required when the running image proves Muse-capable; otherwise the existing repository-owned D25 update/build/validate/promote path is a prerequisite rather than activating unsupported configuration. Rollback of this integration remains configuration-only after a capability-ready image is in place. The material external writes are the already-authorized production Workstation recreate plus persistent key-file creation, and conditionally the existing D25 update path if the preflight proves the running image is stale.
 
 Independent plan review is RECOMMENDED because this is a new accepted Workstation behavior with production secret/configuration wiring, even though the implementation itself is bounded.
