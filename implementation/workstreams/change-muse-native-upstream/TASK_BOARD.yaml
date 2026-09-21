@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "98f00f3cc646ee6d8e784a75702f3cc8d67e2344"
+  head: "3c17ae310a0a8f0e46db776f9ea11ab01d5f7fd7"
 
 research_obligation: null
 
@@ -212,9 +212,9 @@ cards:
     dependencies:
       - "M01-T10"
     review_requirement: RECOMMENDED
-    review_state: in_progress
+    review_state: green
     review_subject: "elmakus/codex-chatgpt-web@acc95f7a5447144bdfc5cd40ff50ce7e63dd3e95"
-    review_evidence: null
+    review_evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T14-independent-review.md"
     result_commit: "acc95f7a5447144bdfc5cd40ff50ce7e63dd3e95"
     result_pr: "elmakus/codex-chatgpt-web#17"
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T14-related-fork-web-search-normalization.md"
