@@ -5,7 +5,7 @@
 - Branch: `work/muse-native-upstream`
 - Integration target: `main`
 - Base: `dfa41ce0867824757a50dc151afe3a87c4826457`
-- Status: active
+- Status: complete
 
 ## Authorized scope
 
@@ -21,8 +21,16 @@ Persist the already-supported Muse/CLIProxyAPI native routing in the Workstation
 
 ## Identity / dependency classification
 
-No existing matching Workstation branch or workstream was found. The change is independent and branches from current `main`; it does not require either currently open fix branch.
+No existing matching Workstation branch or workstream was found. The completed `feature-muse-worker-orchestration` workstream is separate: it owns direct Muse Code worker execution and does not own CLIProxyAPI routing.
 
-## Pending classification
+This change is independent and branches from current `main`.
 
-Determine the smallest legal downstream route and materialize its durable recovery anchor before marking Intake complete.
+## Classification
+
+The repository had no accepted Workstation product/system authority for exposing CLIProxyAPI Muse rows, and the existing implementation plan explicitly kept Muse out of the Codex Web GPT phase. Generic change Intake therefore routed first through Project Definition rather than treating this as an unplanned execution-only edit.
+
+Definition is materialized as:
+- `requirements/MUSE_NATIVE_UPSTREAM.md` R1
+- `docs/DECISIONS.md#d29--muse-is-an-optional-parallel-native-upstream-through-cliproxyapi`
+
+Next route: strategic planning for this bounded integration.
