@@ -116,5 +116,5 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T07-activation-blocker.md"
-    tests_summary: "BLOCKED — exact v5.0.14 image/runtime and direct CLIProxyAPI catalog preflight GREEN; Muse activation recreate reached WORKSTATION_RUNTIME_GREEN, but launcher runtime-upgrade preflight correctly refused a journal-owned Codex Interrupt hook now explicitly enabled=false. Activation was rolled back to Muse unset on the same healthy frozen image; explicit authorization is required to restore only that managed hook to journal-owned enabled state."
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T07-live-routing-outage.md"
+    tests_summary: "BLOCKED — live routing outage confirmed: Codex route remains active to dead 127.0.0.1:17841, so ordinary Sol and chatgpt-web routes fail despite Docker health. Same hook inconsistency is reported by retained 5.0.13 and current 5.0.14 runtimes; first retained failure predates v5.0.14 update (2026-09-19 04:13 Europe/Zurich). Muse remains unset; image rollback alone cannot repair persistent route state; explicit authorization is required for bounded journal-owned hook repair."
