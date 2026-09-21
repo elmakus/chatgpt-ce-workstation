@@ -3,7 +3,7 @@
 Workstream: `issue-codex-interrupt-hook-drift`
 Plan revision: `CIH-P1`
 Review requirement: `RECOMMENDED`
-Review state: `pending`
+Review state: `in_progress`
 Review subject: `git-blob:377c4f8ee728940218f9f1ebbcdf83d43d2a9d77`
 Plan path: `planning/CODEX_INTERRUPT_HOOK_DRIFT_PLAN.md`
 Review evidence: pending
