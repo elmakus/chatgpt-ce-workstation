@@ -139,10 +139,10 @@ cards:
     dependencies:
       - "M01-T08"
     review_requirement: RECOMMENDED
-    review_state: null
-    review_subject: null
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@3a6d1d28c28dbe1be885077ae53fe4bba62b9673"
     review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "3a6d1d28c28dbe1be885077ae53fe4bba62b9673"
+    result_pr: "elmakus/codex-chatgpt-web#15"
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T09-release-candidate.md"
+    tests_summary: "GREEN — exact candidate 3a6d1d28c28dbe1be885077ae53fe4bba62b9673 passed CI run 35600382479: actionlint plus macOS/Ubuntu/Windows verify, package and app smoke; Linux AppImage ABI GREEN. Candidate delta from post-correction base d752b2609d8a173e0b6f516f3dcbae4b509640d1 is version-only in package.json, launcher/package.json and src/version.ts; v5.0.15 remains unpublished. Concurrent unrelated main drift was excluded and is recorded in evidence."
