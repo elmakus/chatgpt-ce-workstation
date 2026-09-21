@@ -1,4 +1,0 @@
-#!/command/with-contenv bash
-set -Eeuo pipefail
-
-exec s6-setuidgid codex /opt/workstation/bin/desktop-session.sh

@@ -1,6 +1,0 @@
-.env
-*.local
-*.local.*
-secrets/
-.workstation-build/
-.workstation-update/

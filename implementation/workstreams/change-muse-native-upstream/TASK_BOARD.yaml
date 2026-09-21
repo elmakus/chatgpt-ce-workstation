@@ -268,7 +268,7 @@ cards:
 
   - id: "M01-T18"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T18.md"
-    execution_status: blocked
+    execution_status: in_progress
     executor: chatgpt
     dependencies:
       - "M01-T17"
@@ -279,4 +279,4 @@ cards:
     result_commit: null
     result_pr: null
     evidence: null
-    tests_summary: "BLOCKED after safe activation/rollback — exact v5.0.16 image remained healthy and WORKSTATION_RUNTIME_GREEN, but ordinary Codex 0.155 native/app-server sampling attempts Responses WebSocket to the local 5.0.16 bridge and receives HTTP 426 Upgrade Required. Muse was rolled back to unset; R3 owns transport investigation."
+    tests_summary: "R3 RESOLVED — the observed HTTP 426 is the exact expected Codex 0.155 WebSocket-to-HTTP fallback signal; a fresh unchanged-config app-server gpt-5.6-sol turn completed NATIVE_CONTROL_OK. Resume activation/final verification; no transport correction required."
