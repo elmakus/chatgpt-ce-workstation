@@ -1,12 +1,12 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "change-muse-native-upstream"
-plan_revision: "R8"
+plan_revision: "R9"
 current_milestone: "M01"
 
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "0c2f508602744500eb73a17a240e095c26a1892a"
+  head: "5afc1c984c8208da80d76921b339f3466b624fba"
 
 research_obligation: null
 
@@ -268,7 +268,7 @@ cards:
 
   - id: "M01-T18"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T18.md"
-    execution_status: blocked
+    execution_status: superseded
     executor: chatgpt
     dependencies:
       - "M01-T17"
@@ -279,4 +279,19 @@ cards:
     result_commit: null
     result_pr: null
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T18-recursive-schema-blocker.md"
-    tests_summary: "BLOCKED — R4 confirms a third Muse/Meta compatibility boundary: recursive local JSON Schema refs in real Codex Desktop tool parameters are rejected. R9 draft is frozen for pending independent plan review. First future target-host action remains rollback to the exact v5.0.16 Muse-disabled baseline; Tower was offline when rollback was required."
+    tests_summary: "SUPERSEDED by approved R9 after R4 confirmed the recursive-schema Muse incompatibility. The failed integrated attempt and blocker evidence remain preserved; rollback itself is carried by M01-T19."
+
+  - id: "M01-T19"
+    contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T19.md"
+    execution_status: ready
+    executor: chatgpt
+    dependencies:
+      - "M01-T17"
+    review_requirement: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
