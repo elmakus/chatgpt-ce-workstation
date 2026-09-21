@@ -1,6 +1,6 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "change-muse-native-upstream"
-plan_revision: "R5"
+plan_revision: "R6"
 current_milestone: "M01"
 
 execution_ref:
@@ -116,5 +116,5 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T07-hook-repair-checkpoint.md"
-    tests_summary: "BLOCKED — hook repair, v5.0.14 migration, Muse activation, catalog isolation, native Sol smoke, browser-backed smoke, source validation and runtime verification are GREEN; minimal tool-free muse-spark-1.2 Responses smoke is GREEN, but normal native Codex client turns for muse-spark-1.2/1.3 deterministically fail after routing because the Muse backend rejects a recursive tool JSON schema. Research obligation R1 owns root-cause/ownership classification before T07 can complete."
+    evidence: "implementation/workstreams/change-muse-native-upstream/research/R1.md"
+    tests_summary: "BLOCKED — R1 isolated the normal Codex Muse failure to recursive Gmail message-part schemas in mcp__codex_apps__gmail; CLIProxyAPI Meta provider compatibility is the correct remaining correction boundary. Production Muse activation was rolled back on the same frozen Workstation image: Muse unset, native upstream unchanged, local catalog retains gpt-5.6-sol + chatgpt-web/high|light|medium with zero Muse rows, route status clean, WORKSTATION_RUNTIME_GREEN. Continuation is R6 strategic planning + independent plan review."
