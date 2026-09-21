@@ -176,7 +176,7 @@ cards:
     tests_summary: "BLOCKED before production mutation — repeated D25 candidate builds fail closed on transient archive.ubuntu.com noble-updates InRelease replica mismatch; production remains healthy on v5.0.14; bounded L1/L2 updater correction required before T11 resumes."
   - id: "M01-T12"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T12.md"
-    execution_status: ready
+    execution_status: in_progress
     executor: chatgpt
     dependencies:
       - "M01-T10"
