@@ -162,7 +162,7 @@ cards:
     tests_summary: "GREEN — Fork Linux Release run 35602104526 published v5.0.15 from exact independently GREEN SHA 3a6d1d28c28dbe1be885077ae53fe4bba62b9673; verify/package/Linux ABI/app smoke/publish succeeded; tag is identical to reviewed SHA; AppImage digest bdad25547ae79f29ee27a029bed5ec6c7762f98a92e7578762de40a113b9b49d and checksums.txt digest are consistent; unrelated main remained unchanged; PR #15 closed unmerged."
   - id: "M01-T11"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T11.md"
-    execution_status: ready
+    execution_status: in_progress
     executor: chatgpt
     dependencies:
       - "M01-T10"
