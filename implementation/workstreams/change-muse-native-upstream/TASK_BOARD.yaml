@@ -64,7 +64,7 @@ cards:
     tests_summary: "GREEN — related-fork CI run 35580909483 succeeded on exact HEAD 9ec01b939a08a191082b551bc2d6dc738a0159e2: actionlint plus macOS/Windows/Ubuntu bun run verify, package and app smoke; Linux AppImage ABI validation GREEN."
   - id: "M01-T04"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T04.md"
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     dependencies:
       - "M01-T03"
