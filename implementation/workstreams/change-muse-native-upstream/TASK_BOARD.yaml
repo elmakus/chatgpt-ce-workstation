@@ -6,9 +6,9 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "cd9f9930881a30d6bf4452d044d486ce18975198"
+  head: "f1f99a5e94e783e0bba9433c3242c532a6b80846"
 
-research_obligation: null
+research_obligation: "implementation/workstreams/change-muse-native-upstream/research/R4.md"
 
 milestones:
   M01:
@@ -268,7 +268,7 @@ cards:
 
   - id: "M01-T18"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T18.md"
-    execution_status: in_progress
+    execution_status: blocked
     executor: chatgpt
     dependencies:
       - "M01-T17"
@@ -278,5 +278,5 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T18-native-transport-blocker.md"
-    tests_summary: "R3 RESOLVED — the observed HTTP 426 is the exact expected Codex 0.155 WebSocket-to-HTTP fallback signal; a fresh unchanged-config app-server gpt-5.6-sol turn completed NATIVE_CONTROL_OK. Resume activation/final verification; no transport correction required."
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T18-recursive-schema-blocker.md"
+    tests_summary: "BLOCKED — real Codex Desktop Muse Spark 1.3 Contributor turn fails with invalid_request_error param=parameters: Recursive JSON schemas are not currently supported. M01-T18 rollback is required but Tower is currently offline; R4 owns exact schema/root-cause and bounded Muse-only compatibility research."
