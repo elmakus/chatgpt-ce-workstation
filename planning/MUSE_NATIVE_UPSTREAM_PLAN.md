@@ -1,6 +1,6 @@
 # Muse native upstream integration plan
 
-Status: **draft**
+Status: **approved**
 Revision: **R7**
 Date: 2026-09-21
 Review requirement: **RECOMMENDED**
