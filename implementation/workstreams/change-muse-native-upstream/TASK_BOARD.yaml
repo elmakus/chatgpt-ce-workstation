@@ -181,7 +181,7 @@ cards:
     dependencies:
       - "M01-T10"
     review_requirement: RECOMMENDED
-    review_state: pending
+    review_state: in_progress
     review_subject: "elmakus/chatgpt-ce-workstation@55c61b0df3e4a09ca36614e4ddcec352499f51e3"
     review_evidence: null
     result_commit: "55c61b0df3e4a09ca36614e4ddcec352499f51e3"
