@@ -6,9 +6,9 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "e6a19311f895c287533c2f744208f83610d19c8f"
+  head: "6f3f4745f7164c72cda5962147db770b58fc0679"
 
-research_obligation: null
+research_obligation: "implementation/workstreams/change-muse-native-upstream/research/R1.md"
 
 milestones:
   M01:
@@ -106,7 +106,7 @@ cards:
     tests_summary: "GREEN — D25 update consumed exact Codex Web GPT v5.0.14 AppImage SHA-256 2c68166425e049241c61ae76eafd42afdde37343e1e887ef977fd43bf636cbf2; last-update status=success; promoted image ce07c414... is healthy; WORKSTATION_RUNTIME_GREEN; native upstream unchanged; Muse upstream remains unset; rollback baseline retained."
   - id: "M01-T07"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T07.md"
-    execution_status: in_progress
+    execution_status: blocked
     executor: chatgpt
     dependencies:
       - "M01-T06"
@@ -117,4 +117,4 @@ cards:
     result_commit: null
     result_pr: null
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T07-hook-repair-checkpoint.md"
-    tests_summary: "IN PROGRESS — authorized hook repair GREEN: exact journal-owned managed block restored, unrelated Codex config unchanged, launcher migrated persistent runtime to v5.0.14, 127.0.0.1:17841 listening, route status clean, gpt-5.6-sol end-to-end smoke GREEN, authenticated catalog restored chatgpt-web/high|light|medium. Browser-backed smoke reaches authenticated browser bridge but is currently limited by ChatGPT rate limiting. Muse remains unset per bounded repair-only checkpoint; full T07 acceptance not yet complete."
+    tests_summary: "BLOCKED — hook repair, v5.0.14 migration, Muse activation, catalog isolation, native Sol smoke, browser-backed smoke, source validation and runtime verification are GREEN; minimal tool-free muse-spark-1.2 Responses smoke is GREEN, but normal native Codex client turns for muse-spark-1.2/1.3 deterministically fail after routing because the Muse backend rejects a recursive tool JSON schema. Research obligation R1 owns root-cause/ownership classification before T07 can complete."
