@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "711e66ac9d71574f5e36c8860bd9fdd2a1eeea87"
+  head: "77fc08ff3cbda6433debd992ddd305842298cf8e"
 
 research_obligation: null
 
@@ -50,8 +50,8 @@ cards:
     tests_summary: "SUPERSEDED by approved R5 after BLOCKED live activation: the v5.0.13 fork cannot consume the observed CLIProxyAPI data/id catalog; rollback remained GREEN and the blocker evidence is preserved."
   - id: "M01-T03"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T03.md"
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: chatgpt
     dependencies:
       - "M01-T01"
     review_requirement: RECOMMENDED
