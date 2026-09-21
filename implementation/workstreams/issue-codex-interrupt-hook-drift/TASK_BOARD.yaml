@@ -6,13 +6,13 @@ current_milestone: "M01"
 execution_ref:
   branch: "fix/codex-interrupt-hook-drift"
   pr: null
-  head: null
+  head: "c9a4f30acf84203f822b2ef33bc5191ac90d46b4"
 
 research_obligation: null
 
 milestones:
   M01:
-    execution_status: "ready"
+    execution_status: "in_progress"
     checkpoint: null
     evidence: null
     result: null
@@ -21,9 +21,9 @@ cards:
   - id: "M01-T01"
     contract: "implementation/workstreams/issue-codex-interrupt-hook-drift/cards/M01-T01.md"
     milestone: "M01"
-    execution_status: "ready"
+    execution_status: "in_progress"
     dependencies: []
-    executor: null
+    executor: "chatgpt"
     result_commit: null
     result_pr: null
     evidence: null
