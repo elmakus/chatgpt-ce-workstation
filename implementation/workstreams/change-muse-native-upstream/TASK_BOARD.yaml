@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "5afc1c984c8208da80d76921b339f3466b624fba"
+  head: "75747ac7d6bcb42eedf39ac554cc8c17e52b5fba"
 
 research_obligation: null
 
@@ -283,7 +283,7 @@ cards:
 
   - id: "M01-T19"
     contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T19.md"
-    execution_status: in_progress
+    execution_status: blocked
     executor: chatgpt
     dependencies:
       - "M01-T17"
@@ -293,5 +293,5 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T19-tower-offline-blocker.md"
+    tests_summary: "BLOCKED — Refresh Gate confirmed Tower offline; Desktop Commander last saw it at 2026-09-21T17:33:51.569+00:00 and ping cannot run because no device is connected. No target-host mutation occurred; exact v5.0.16 Muse-disabled rollback remains the next legal runtime action."
