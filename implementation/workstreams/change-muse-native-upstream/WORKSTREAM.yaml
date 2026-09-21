@@ -17,7 +17,7 @@ intake:
 routing:
   exploratory_scope: null
   research_obligation: null
-  plan_review: "planning/reviews/MUSE_NATIVE_UPSTREAM_R6.md"
+  plan_review: "planning/reviews/MUSE_NATIVE_UPSTREAM_R7.md"
 
 task_board: "implementation/workstreams/change-muse-native-upstream/TASK_BOARD.yaml"
 
@@ -25,6 +25,7 @@ authority:
   requirements: "requirements/MUSE_NATIVE_UPSTREAM.md"
   decisions:
     - "docs/DECISIONS.md#d29--muse-is-an-optional-parallel-native-upstream-through-cliproxyapi"
+    - "docs/DECISIONS.md#d30--muse-bound-codex-turns-intentionally-omit-gmail-tools"
   plan: "planning/MUSE_NATIVE_UPSTREAM_PLAN.md"
 
 review:

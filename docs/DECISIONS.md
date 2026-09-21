@@ -479,3 +479,19 @@ The runtime contract is:
 
 **Boundary:** this decision is separate from D21 `muse-max` worker orchestration, which uses official Muse Code directly. It does not move Muse worker scheduling into Workstation.
 
+## D30 — Muse-bound Codex turns intentionally omit Gmail tools
+
+**Decision (2026-09-21):** when `codex-chatgpt-web` routes a normal Codex Responses request to a `muse-*` model, it may intentionally remove the entire `mcp__codex_apps__gmail` tool namespace before forwarding the request to CLIProxyAPI.
+
+This capability exception is **Muse-only**:
+- Gmail remains unchanged for ordinary native/Codex-LB models;
+- browser-backed `chatgpt-web/*` behavior remains unchanged;
+- non-Gmail Muse tools remain untouched unless separate verified incompatibility evidence establishes another exception;
+- Workstation does not gain request-body filtering/provider-routing logic.
+
+**Accepted consequence:** Muse models cannot use Gmail tools through this route. The operator explicitly accepts that reduced Muse capability.
+
+**Rationale:** live R1 Research proved that Meta/Muse rejects the recursive `GmailMessagePartRequest` schema used by four Gmail actions with `Recursive JSON schemas are not currently supported`, while the same Muse route succeeds without that namespace and non-Muse routes remain healthy. Omitting the namespace only on Muse-bound turns is simpler and lower-risk than altering recursive tool semantics or modifying the separately operated CLIProxyAPI provider.
+
+**Revisit condition:** restoring Gmail for Muse is a separate future change if the provider later accepts the recursive schema or a semantics-preserving compatibility mechanism is independently proven.
+

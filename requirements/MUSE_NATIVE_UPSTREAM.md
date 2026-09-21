@@ -1,12 +1,12 @@
 # Muse native upstream integration
 
 Status: **approved**
-Revision: **R1**
+Revision: **R2**
 Date: 2026-09-21
 
 ## Goal
 
-Expose Muse models already served by the operator-managed CLIProxyAPI to Codex through the existing released `codex-chatgpt-web` parallel-native-upstream capability, while preserving Codex-LB and ChatGPT Web behavior.
+Expose Muse models already served by the operator-managed CLIProxyAPI to Codex through the existing released `codex-chatgpt-web` parallel-native-upstream capability, while preserving Codex-LB and ChatGPT Web behavior. Muse operation may intentionally omit Gmail tools as the accepted provider-specific capability exception defined below.
 
 ## Requirements
 
@@ -16,7 +16,7 @@ The Workstation Compose/runtime configuration MUST expose `CODEX_CHATGPT_WEB_MUS
 
 ### R2 — Muse routes only by the existing `muse-*` contract
 
-The Workstation MUST rely on the released fork's existing routing contract:
+The Workstation MUST rely on the fork's existing routing contract:
 - `muse-*` native model IDs route to CLIProxyAPI;
 - other native Codex model IDs remain on the normal native/Codex-LB upstream;
 - `chatgpt-web/*` remains on the browser-backed ChatGPT Web path.
@@ -48,14 +48,28 @@ Acceptance MUST verify:
 - browser-backed `chatgpt-web/*` remains available;
 - no secret value is committed or emitted by the verification output.
 
+### R7 — Gmail is intentionally unavailable on Muse-bound turns
+
+For a Responses request whose selected model is `muse-*`, the fork MUST omit the Codex Gmail namespace tool `mcp__codex_apps__gmail` before forwarding the request to CLIProxyAPI.
+
+This is an explicitly accepted Muse-only capability reduction:
+- all Gmail actions under that namespace may be unavailable to Muse;
+- every non-Gmail tool entry MUST remain available to the Muse request unless independently unsupported by verified evidence;
+- ordinary native/Codex-LB requests MUST retain Gmail unchanged;
+- browser-backed `chatgpt-web/*` behavior MUST remain unchanged;
+- Workstation itself MUST NOT implement this request-body filtering.
+
+Acceptance MUST include a normal native Codex client turn using an available `muse-*` model and prove that the forwarded Muse request omits the Gmail namespace while the turn succeeds.
+
 ## Non-goals
 
 - changing Muse Code / `muse-max` worker orchestration;
-- adding provider-routing logic to Workstation itself;
+- adding provider-routing or request-body filtering logic to Workstation itself;
 - routing every CLIProxyAPI model into Codex;
 - moving Codex-LB behind CLIProxyAPI;
-- storing CLIProxyAPI ingress credentials in Git or `.env`.
+- storing CLIProxyAPI ingress credentials in Git or `.env`;
+- preserving Gmail tool availability when the selected model is `muse-*`.
 
 ## Acceptance-level outcome
 
-After deployment with the configured CLIProxyAPI endpoint and persistent ingress key, Codex model discovery shows the available `muse-*` models while ordinary native Codex and `chatgpt-web/*` routes remain functional and isolated.
+After deployment with the configured CLIProxyAPI endpoint and persistent ingress key, Codex model discovery shows the available `muse-*` models; a normal Muse turn succeeds with Gmail intentionally omitted; and ordinary native Codex plus `chatgpt-web/*` routes remain functional and isolated with their existing capabilities unchanged.

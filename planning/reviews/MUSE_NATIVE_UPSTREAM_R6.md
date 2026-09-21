@@ -4,7 +4,7 @@ Plan revision: R6
 Review requirement: RECOMMENDED
 Review state: pending
 Review subject: elmakus/chatgpt-ce-workstation@7b65b5167b8ee8ae4408aee9f5ae396f1430033b:planning/MUSE_NATIVE_UPSTREAM_PLAN.md
-Review evidence: null
+Review evidence: NOT REVIEWED — superseded before independent review by the operator-authorized Definition R2 / D30 Muse-only Gmail capability exception; manifest routing moved to R7.
 
 ## Authority
 

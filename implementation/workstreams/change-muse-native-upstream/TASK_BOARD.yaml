@@ -1,6 +1,6 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "change-muse-native-upstream"
-plan_revision: "R6"
+plan_revision: "R7"
 current_milestone: "M01"
 
 execution_ref:
@@ -117,4 +117,4 @@ cards:
     result_commit: null
     result_pr: null
     evidence: "implementation/workstreams/change-muse-native-upstream/research/R1.md"
-    tests_summary: "BLOCKED — R1 isolated the normal Codex Muse failure to recursive Gmail message-part schemas in mcp__codex_apps__gmail; CLIProxyAPI Meta provider compatibility is the correct remaining correction boundary. Production Muse activation was rolled back on the same frozen Workstation image: Muse unset, native upstream unchanged, local catalog retains gpt-5.6-sol + chatgpt-web/high|light|medium with zero Muse rows, route status clean, WORKSTATION_RUNTIME_GREEN. Continuation is R6 strategic planning + independent plan review."
+    tests_summary: "BLOCKED — R1 proved Meta/Muse rejects the recursive Gmail namespace; operator accepted D30 Muse-only Gmail omission. R7 now owns a fork-side filter/release/D25/activation path. Production remains safely rolled back with Muse unset, native upstream unchanged, Sol + chatgpt-web/* available and WORKSTATION_RUNTIME_GREEN."
