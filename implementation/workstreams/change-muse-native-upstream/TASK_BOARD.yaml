@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "77fc08ff3cbda6433debd992ddd305842298cf8e"
+  head: "e6a19311f895c287533c2f744208f83610d19c8f"
 
 research_obligation: null
 
@@ -55,10 +55,10 @@ cards:
     dependencies:
       - "M01-T01"
     review_requirement: RECOMMENDED
-    review_state: null
-    review_subject: null
-    review_evidence: null
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@9ec01b939a08a191082b551bc2d6dc738a0159e2"
+    review_evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T03-related-fork-correction.md"
+    result_commit: "9ec01b939a08a191082b551bc2d6dc738a0159e2"
+    result_pr: "elmakus/codex-chatgpt-web#11"
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T03-related-fork-correction.md"
+    tests_summary: "GREEN — related-fork CI run 35580909483 succeeded on exact HEAD 9ec01b939a08a191082b551bc2d6dc738a0159e2: actionlint plus macOS/Windows/Ubuntu bun run verify, package and app smoke; Linux AppImage ABI validation GREEN."
