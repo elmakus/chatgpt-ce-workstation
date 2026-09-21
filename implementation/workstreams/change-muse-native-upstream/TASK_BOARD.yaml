@@ -6,7 +6,7 @@ current_milestone: "M01"
 execution_ref:
   branch: "work/muse-native-upstream"
   pr: null
-  head: "2c9b9901ecae4db56488a6b17a17fed4250fc2ba"
+  head: "38127a97a256d235299a8b0c8fafb22a38e97ab5"
 
 research_obligation: null
 
@@ -219,3 +219,18 @@ cards:
     result_pr: "elmakus/codex-chatgpt-web#17"
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T14-related-fork-web-search-normalization.md"
     tests_summary: "GREEN — related-fork CI run 35617383232 succeeded on exact head acc95f7a5447144bdfc5cd40ff50ce7e63dd3e95: actionlint plus Ubuntu/macOS/Windows bun run verify, package and app smoke; Linux AppImage ABI GREEN. Exact compare to published release/v5.0.15@3a6d1d28c28dbe1be885077ae53fe4bba62b9673 is 2 commits / 2 files only (native passthrough + focused tests), with no version/release metadata changes."
+
+  - id: "M01-T15"
+    contract: "implementation/workstreams/change-muse-native-upstream/cards/M01-T15.md"
+    execution_status: ready
+    executor: chatgpt
+    dependencies:
+      - "M01-T14"
+    review_requirement: RECOMMENDED
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
