@@ -9,7 +9,7 @@
 - Integration target: `main`
 - Dependency classification: independent
 - Parent workstream: none
-- Intake state: active
+- Intake state: complete
 
 ## Operator intent
 
