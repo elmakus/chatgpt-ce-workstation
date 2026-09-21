@@ -227,9 +227,9 @@ cards:
     dependencies:
       - "M01-T14"
     review_requirement: RECOMMENDED
-    review_state: in_progress
+    review_state: green
     review_subject: "elmakus/codex-chatgpt-web@d7c9db70cf1d54029c061490d73335146a23ed28"
-    review_evidence: null
+    review_evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T15-independent-review.md"
     result_commit: "d7c9db70cf1d54029c061490d73335146a23ed28"
     result_pr: "elmakus/codex-chatgpt-web#18"
     evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T15-release-candidate.md"
