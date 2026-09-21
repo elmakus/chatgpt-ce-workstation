@@ -116,5 +116,5 @@ cards:
     review_evidence: null
     result_commit: null
     result_pr: null
-    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T07-live-routing-outage.md"
-    tests_summary: "IN PROGRESS — user authorized bounded repair of the existing journal-owned Interrupt hook; recovery will snapshot persistent config, preserve unrelated Codex configuration, restore only the managed hook state, and verify proxy/routing before resuming T07 acceptance."
+    evidence: "implementation/workstreams/change-muse-native-upstream/evidence/M01-T07-hook-repair-checkpoint.md"
+    tests_summary: "IN PROGRESS — authorized hook repair GREEN: exact journal-owned managed block restored, unrelated Codex config unchanged, launcher migrated persistent runtime to v5.0.14, 127.0.0.1:17841 listening, route status clean, gpt-5.6-sol end-to-end smoke GREEN, authenticated catalog restored chatgpt-web/high|light|medium. Browser-backed smoke reaches authenticated browser bridge but is currently limited by ChatGPT rate limiting. Muse remains unset per bounded repair-only checkpoint; full T07 acceptance not yet complete."
