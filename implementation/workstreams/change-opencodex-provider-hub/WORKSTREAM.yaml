@@ -1,6 +1,6 @@
 id: "change-opencodex-provider-hub"
 kind: "change"
-status: "planning"
+status: "ready"
 
 branch: "work/opencodex-provider-hub"
 base_ref: "dfa41ce0867824757a50dc151afe3a87c4826457"
@@ -19,7 +19,7 @@ routing:
   research_obligation: null
   plan_review: null
 
-task_board: null
+task_board: "implementation/workstreams/change-opencodex-provider-hub/TASK_BOARD.yaml"
 
 authority:
   requirements: "requirements/OPENCODEX_PROVIDER_HUB.md"
