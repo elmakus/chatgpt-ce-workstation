@@ -301,3 +301,21 @@ This closes R4. The exact-candidate build/readback evidence from workflow run `3
 ### Review handoff
 
 The Card remains non-terminal because independent review is RECOMMENDED. The next immutable review subject is `commit:c6e6c8f437d8c378525177a5685862153f1c0ef3`.
+
+
+## Independent review — current corrected subject
+
+Review subject: `commit:c6e6c8f437d8c378525177a5685862153f1c0ef3`
+Verdict: **GREEN**
+
+Independent review against OPH-M01-T01, OPH-R1, OPH-PLAN-R2 and decisions D8/D10/D11/D14/D15/D16/D25/D31 found no remaining acceptance-blocking defect.
+
+Evidence independently verified:
+
+- the reviewed implementation source remains identical to the previously corrected source at `d93f5d7f7b1e6773c83c86a447a271e7ccbb1382`; comparison from that subject through `c6e6c8f437d8c378525177a5685862153f1c0ef3` changes only this workstream's Task Board/evidence bookkeeping;
+- exact-candidate workflow run `35696273152` checked out source-identical subject `30d42dd73b8b613bb20cbb2617e5ee6c5c97e970`, completed the `exact-candidate` job GREEN, built the non-production image, verified the frozen resolution label/embedded manifest, verified OpenCodex version, kept production/upstream browser executables distinct, and verified the upstream proof runtime exposes `serve`;
+- comparison from `30d42dd73b8b613bb20cbb2617e5ee6c5c97e970` through the reviewed subject changes only Task Board/evidence bookkeeping, so that candidate runtime evidence covers the unchanged implementation/build source;
+- CI workflow run `35699340685` checked out exact subject `c6e6c8f437d8c378525177a5685862153f1c0ef3`; `source-validation`, `dockerfile-check`, and `secret-scan` all completed GREEN;
+- reviewed source uses strict frozen OpenCodex SRI/shasum and upstream proof SHA/identity/asset validation, installs the two candidate components under distinct image-owned paths, retains `/usr/local/bin/codex-web-gpt` as the existing production browser path, and adds no candidate auto-start, `ocx init`, provider-route/catalog takeover, or secret material.
+
+The Card acceptance surface is satisfied. Live provider compatibility and route takeover remain intentionally outside this Card and stay gated to later OPH milestones.
