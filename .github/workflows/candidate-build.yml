@@ -73,36 +73,36 @@ jobs:
           test "$embedded_sha" = "$RESOLUTION_SHA256"
 
           docker run --rm --entrypoint /bin/bash "$image_ref" -ceu '
-            python3 - <<"PY"
-import json
-import pathlib
-import shutil
-import subprocess
+          python3 - <<"PY"
+          import json
+          import pathlib
+          import shutil
+          import subprocess
 
-resolution = json.loads(pathlib.Path("/opt/workstation/upstream-resolution.json").read_text())
-components = resolution["components"]
+          resolution = json.loads(pathlib.Path("/opt/workstation/upstream-resolution.json").read_text())
+          components = resolution["components"]
 
-ocx = shutil.which("ocx")
-if not ocx:
-    raise SystemExit("OpenCodex executable missing")
-ocx_version = subprocess.check_output([ocx, "--version"], text=True).strip()
-if components["opencodex"]["version"] not in ocx_version:
-    raise SystemExit(f"OpenCodex version mismatch: {ocx_version}")
+          ocx = shutil.which("ocx")
+          if not ocx:
+              raise SystemExit("OpenCodex executable missing")
+          ocx_version = subprocess.check_output([ocx, "--version"], text=True).strip()
+          if components["opencodex"]["version"] not in ocx_version:
+              raise SystemExit(f"OpenCodex version mismatch: {ocx_version}")
 
-upstream = shutil.which("codex-chatgpt-web-upstream")
-production = shutil.which("codex-web-gpt")
-if not upstream or not production or upstream == production:
-    raise SystemExit("browser proof and production executables are not isolated")
-manifests = list(pathlib.Path("/opt/codex-chatgpt-web-upstream").glob("*/manifest.json"))
-if len(manifests) != 1:
-    raise SystemExit(f"expected one upstream runtime manifest, found {len(manifests)}")
-runtime = json.loads(manifests[0].read_text())
-if runtime.get("appVersion") != components["codex_web_gpt_upstream"]["version"]:
-    raise SystemExit("upstream browser runtime version mismatch")
-help_text = subprocess.check_output([upstream, "--help"], text=True)
-if "serve" not in help_text:
-    raise SystemExit("upstream browser proof executable lacks serve command")
-PY
+          upstream = shutil.which("codex-chatgpt-web-upstream")
+          production = shutil.which("codex-web-gpt")
+          if not upstream or not production or upstream == production:
+              raise SystemExit("browser proof and production executables are not isolated")
+          manifests = list(pathlib.Path("/opt/codex-chatgpt-web-upstream").glob("*/manifest.json"))
+          if len(manifests) != 1:
+              raise SystemExit(f"expected one upstream runtime manifest, found {len(manifests)}")
+          runtime = json.loads(manifests[0].read_text())
+          if runtime.get("appVersion") != components["codex_web_gpt_upstream"]["version"]:
+              raise SystemExit("upstream browser runtime version mismatch")
+          help_text = subprocess.check_output([upstream, "--help"], text=True)
+          if "serve" not in help_text:
+              raise SystemExit("upstream browser proof executable lacks serve command")
+          PY
           '
 
           echo "CANDIDATE_EVIDENCE image_ref=$image_ref"
