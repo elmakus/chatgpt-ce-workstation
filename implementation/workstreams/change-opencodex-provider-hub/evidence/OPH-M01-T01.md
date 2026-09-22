@@ -275,3 +275,29 @@ Required bounded correction: execute the repository `CI` workflow against an imm
 ### Review classification
 
 R4 is a bounded execution/evidence correction inside the existing OPH-R1 / OPH-PLAN-R2 authority. No Project Definition or strategic-plan change is required, and no additional implementation-source defect was found.
+
+
+## Corrected subject after R4 CI evidence completion
+
+Corrected implementation/evidence subject: `c6e6c8f437d8c378525177a5685862153f1c0ef3`.
+
+The implementation source remains unchanged from the previously corrected source. The only repository changes since `30d42dd73b8b613bb20cbb2617e5ee6c5c97e970` are durable Task Board/review evidence updates; no Dockerfile, workflow, resolver, renderer, installer, Compose, runtime or production-route source changed.
+
+### GitHub Actions CI evidence
+
+Workflow run: `35699340685`
+Event: `workflow_dispatch`
+Head SHA: `c6e6c8f437d8c378525177a5685862153f1c0ef3`
+Conclusion: **success**
+
+Required jobs:
+
+- `source-validation` — **success**, including repository source validation, noVNC workarea checks and ShellCheck;
+- `dockerfile-check` — **success**, including Docker Buildx static Dockerfile check;
+- `secret-scan` — **success**, including full-history Gitleaks scan.
+
+This closes R4. The exact-candidate build/readback evidence from workflow run `35696273152` remains applicable to the unchanged implementation/build source; the later commits through this corrected subject changed only durable workflow/review bookkeeping and evidence.
+
+### Review handoff
+
+The Card remains non-terminal because independent review is RECOMMENDED. The next immutable review subject is `commit:c6e6c8f437d8c378525177a5685862153f1c0ef3`.
