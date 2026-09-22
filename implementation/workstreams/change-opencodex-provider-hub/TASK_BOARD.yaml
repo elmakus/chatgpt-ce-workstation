@@ -27,7 +27,7 @@ cards:
     contract: "implementation/workstreams/change-opencodex-provider-hub/cards/OPH-M01-T01.md"
     milestone: "OPH-M01"
     dependencies: []
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     result_commit: "c6e6c8f437d8c378525177a5685862153f1c0ef3"
     result_pr: null
