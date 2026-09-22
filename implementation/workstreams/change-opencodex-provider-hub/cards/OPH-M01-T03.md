@@ -21,7 +21,7 @@
 - `ocx config validate <path> [--json]` validates a candidate configuration without requiring `ocx init`.
 - A custom provider row is representable with an explicit provider id plus `adapter` and `baseUrl`; API-key material is not required merely to schema-validate the row.
 - Provider ids are constrained by OpenCodex to deterministic routing-safe names using letters/numbers/dot/underscore/hyphen.
-- Frozen OpenCodex `v2.59.0` includes the registry provider `meta-model` using the `openai-responses` adapter at `https://api.meta.ai/v1`, with static Muse Spark 1.3 model metadata. Credential acquisition/use remains a later live gate.
+- Frozen OpenCodex `v2.59.0` includes the registry provider `meta-muse` using the `openai-responses` adapter at `https://api.meta.ai/v1`, OAuth auth mode, static header `x-api-version: 1.0.0`, and static Muse Spark 1.3 model metadata. Its own upstream note marks first device login/unverified subscription use as unsupported/high-risk; credential acquisition/use remains a later operator-owned live gate.
 - The final upstream `codex-chatgpt-web` daemon ownership and final service-manager/layout remain unresolved by design and are not frozen by this Card.
 
 ### Must preserve
@@ -29,11 +29,11 @@
 - The current fork-backed Codex Web GPT route, production Codex home and current CE route/catalog owner remain unchanged.
 - All generated or validated proof configuration must live in the isolated proof OpenCodex home established by T02 or in disposable test paths; never write normal `~/.opencodex` or `~/.codex`.
 - Provider credentials, ChatGPT/OAuth state, Muse credentials, CLIProxyAPI secrets, browser login/profile state and generated management tokens must not be embedded in Git, image layers, generated fixture output or command-line examples.
-- Provider namespaces are deterministic and non-ambiguous. The proof topology uses stable ids for the three downstream families: `codex-lb`, `cliproxyapi`, and `chatgpt-web`; native Meta remains the upstream registry identity `meta-model`.
+- Provider namespaces are deterministic and non-ambiguous. The proof topology uses stable ids for the three downstream families: `codex-lb`, `cliproxyapi`, and `chatgpt-web`; native Meta Muse remains the upstream registry identity `meta-muse`.
 - Downstream base URLs and model selections are explicit proof inputs, not guessed production defaults. Loopback/private proof endpoints may be accepted only through an explicit provider-level private-network opt-in supported by OpenCodex.
 - Configuration generation/validation is offline and opt-in. It must not start OpenCodex/downstream daemons, run provider tests, perform login, call `ocx init`, call `ocx sync`, install services/shims, or alter CE/Codex injection/catalog state.
 - Browser-backed traffic remains designated as browser-backed; this Card must not map `chatgpt-web` rows to native/API Codex or Meta models.
-- A static/generated Meta provider row is not evidence that Muse subscription credential reuse or behavioral equivalence is GREEN. OPH-REQ-007 remains for later live acceptance.
+- A static/generated `meta-muse` provider row is not evidence that Muse subscription credential reuse, billing semantics, device login, or behavioral equivalence is GREEN. OPH-REQ-007 remains for later live acceptance.
 - The independent `change-muse-native-upstream` workstream remains untouched and unsuperseded.
 
 ### Must not / rationale that must travel
@@ -60,7 +60,7 @@ The repository can deterministically render and validate a secret-free, isolated
   - `codex-lb` as an explicitly supplied OpenAI-compatible downstream;
   - `cliproxyapi` as an explicitly supplied OpenAI-compatible downstream;
   - `chatgpt-web` as an explicitly supplied browser-backed downstream;
-  - frozen OpenCodex `meta-model` / Muse Spark metadata without credential material.
+  - frozen OpenCodex `meta-muse` / Muse Spark metadata without credential material or login.
 - Require explicit downstream base URL inputs and bounded adapter/model inputs where the live contract is not yet proven; validate names/URLs/adapter choices fail-closed.
 - Make loopback/private downstream intent explicit rather than silently widening outbound-network policy.
 - Produce deterministic output for identical inputs and support writing to a caller-selected disposable path or the isolated proof-home config path.
@@ -80,7 +80,7 @@ The repository can deterministically render and validate a secret-free, isolated
 
 ## Acceptance
 
-- Identical inputs render byte-identical provider-proof configuration with stable provider ids `codex-lb`, `cliproxyapi`, `chatgpt-web`, and `meta-model`.
+- Identical inputs render byte-identical provider-proof configuration with stable provider ids `codex-lb`, `cliproxyapi`, `chatgpt-web`, and `meta-muse`.
 - Generated configuration contains no API keys, OAuth tokens, browser credentials, passwords, management tokens or secret placeholders that could be mistaken for deployable credentials.
 - Required downstream endpoint inputs are explicit and validated; malformed/non-http(s) endpoints fail closed, and loopback/private endpoints require explicit private-network intent.
 - The generated candidate validates successfully with the exact frozen installed OpenCodex `2.59.0` using `ocx config validate` under isolated T02 state roots.
