@@ -21,6 +21,11 @@ services:
         AGENT_WORKSPACE_INTEGRITY: ${AGENT_WORKSPACE_INTEGRITY:?frozen Agent Workspace integrity is required}
         CODEX_CHATGPT_WEB_VERSION: ${CODEX_CHATGPT_WEB_VERSION:?frozen codex-chatgpt-web version is required}
         CODEX_CHATGPT_WEB_SHA256: ${CODEX_CHATGPT_WEB_SHA256:?frozen codex-chatgpt-web SHA-256 is required}
+        CODEX_CHATGPT_WEB_UPSTREAM_VERSION: ${CODEX_CHATGPT_WEB_UPSTREAM_VERSION:?frozen upstream codex-chatgpt-web version is required}
+        CODEX_CHATGPT_WEB_UPSTREAM_SHA256: ${CODEX_CHATGPT_WEB_UPSTREAM_SHA256:?frozen upstream codex-chatgpt-web SHA-256 is required}
+        OPENCODEX_VERSION: ${OPENCODEX_VERSION:?frozen OpenCodex version is required}
+        OPENCODEX_INTEGRITY: ${OPENCODEX_INTEGRITY:?frozen OpenCodex integrity is required}
+        OPENCODEX_SHASUM: ${OPENCODEX_SHASUM:?frozen OpenCodex shasum is required}
         MUSE_INSTALLER_URL: ${MUSE_INSTALLER_URL:?frozen Muse installer URL is required}
         MUSE_INSTALLER_SHA256: ${MUSE_INSTALLER_SHA256:?frozen Muse installer SHA-256 is required}
         MUSE_EXPECTED_VERSION: ${MUSE_EXPECTED_VERSION:?frozen Muse release id is required}
