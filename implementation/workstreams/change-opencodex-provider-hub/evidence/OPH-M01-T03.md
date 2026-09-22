@@ -53,3 +53,15 @@ The correction on the reviewed implementation subject parses the validation outp
 - the independent Muse workstream is untouched
 - live provider compatibility and operator acceptance remain later workflow obligations
 
+## Independent review attempt 1 — RED
+
+Reviewed immutable subject: `commit:414877d910b1a02d7b603d38e2979d6bb7337faf`.
+
+The frozen OpenCodex 2.59.0 `meta-muse` registry contract, exact-subject CI run `35709835674`, and exact-subject candidate run `35709835663` independently match the implementation evidence. Provider ids, secret-free schema shape, disabled native injection/steering, production-home fencing, and exact installed `ocx config validate` behavior are consistent with the Card.
+
+Acceptance-blocking findings:
+
+1. The Card explicitly requires focused negative coverage for malformed URLs and missing required endpoint inputs. `scripts/test-opencodex-proof-config.sh` covers secret-bearing input, private-endpoint opt-in, unsupported adapters, and path fencing, but contains no malformed-URL case and no missing-`baseUrl`/endpoint case. The implementation has fail-closed code paths for these inputs, but the required regression evidence is absent.
+2. `atomic_write_json()` unconditionally runs `path.parent.chmod(0o700)` after `mkdir(..., exist_ok=True)`. For a caller-selected pre-existing `--disposable` directory, rendering therefore mutates that directory's permissions even though the Card authorizes writing the proof artifact there, not retagging unrelated parent-directory access. This is an unnecessary side effect on the disposable-output surface and is not covered by a regression test.
+
+Classification: bounded L1/L2 correction inside accepted OPH-R1 / OPH-PLAN-R2 authority. No product, planning, research, credential, live-provider, or user-authorization decision is required.
