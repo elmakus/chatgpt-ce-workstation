@@ -1,6 +1,6 @@
 id: "change-opencodex-provider-hub"
 kind: "change"
-status: "ready"
+status: "in_progress"
 
 branch: "work/opencodex-provider-hub"
 base_ref: "dfa41ce0867824757a50dc151afe3a87c4826457"
