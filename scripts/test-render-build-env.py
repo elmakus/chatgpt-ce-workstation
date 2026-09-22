@@ -98,6 +98,16 @@ class BuildEnvTests(unittest.TestCase):
                 {"CODEX_CHATGPT_WEB_SHA256"},
             ),
             (
+                "codex_web_gpt_upstream",
+                {"package_sha256": "a"*64, "identity": "2@sha256:" + "a"*64},
+                {"CODEX_CHATGPT_WEB_UPSTREAM_SHA256"},
+            ),
+            (
+                "opencodex",
+                {"integrity": "sha512-y", "shasum": "b"*40, "identity": "3.0.0@sha512-y"},
+                {"OPENCODEX_INTEGRITY", "OPENCODEX_SHASUM"},
+            ),
+            (
                 "muse_code",
                 {"installer_sha256": "a"*64, "identity": "1@sha256:" + "a"*64},
                 {"MUSE_INSTALLER_SHA256"},
