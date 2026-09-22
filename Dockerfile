@@ -333,6 +333,7 @@ LABEL io.chatgpt-ce-workstation.upstream-resolution-sha256="${UPSTREAM_RESOLUTIO
 RUN chmod 0755 /opt/workstation/bin/*.sh \
     /usr/local/bin/chatgpt-ce \
     /usr/local/bin/muse \
+    /usr/local/bin/workstation-opencodex-proof \
     /usr/local/bin/workstation-healthcheck \
     /etc/cont-init.d/10-workstation-init \
     /etc/s6-overlay/s6-rc.d/desktop/run \

@@ -23,12 +23,12 @@ production_codex_home="$(canonical "$home/.codex")"
 proof_home="$(canonical "$proof_home")"
 proof_codex_home="$(canonical "$proof_codex_home")"
 
-if [[ "$proof_home" == "$production_opencodex_home" || "$proof_home" == "$production_codex_home" ]]; then
-  echo "proof OpenCodex home aliases a production home" >&2
+if [[ "$proof_home" == "$production_opencodex_home" || "$proof_home" == "$production_opencodex_home/"* || "$proof_home" == "$production_codex_home" || "$proof_home" == "$production_codex_home/"* ]]; then
+  echo "proof OpenCodex home overlaps a production home" >&2
   exit 2
 fi
-if [[ "$proof_codex_home" == "$production_codex_home" || "$proof_codex_home" == "$production_opencodex_home" ]]; then
-  echo "proof Codex home aliases a production home" >&2
+if [[ "$proof_codex_home" == "$production_codex_home" || "$proof_codex_home" == "$production_codex_home/"* || "$proof_codex_home" == "$production_opencodex_home" || "$proof_codex_home" == "$production_opencodex_home/"* ]]; then
+  echo "proof Codex home overlaps a production home" >&2
   exit 2
 fi
 if [[ "$proof_home" == "$proof_codex_home" ]]; then
@@ -50,7 +50,7 @@ run_ocx() {
 case "$command_name" in
   start)
     [[ "$#" -eq 0 ]] || { echo "start accepts no extra arguments" >&2; exit 2; }
-    exec env OPENCODEX_HOME="$proof_home" CODEX_HOME="$proof_codex_home" ocx start --port "$proof_port"
+    run_ocx start --port "$proof_port"
     ;;
   stop)
     [[ "$#" -eq 0 ]] || { echo "stop accepts no extra arguments" >&2; exit 2; }
