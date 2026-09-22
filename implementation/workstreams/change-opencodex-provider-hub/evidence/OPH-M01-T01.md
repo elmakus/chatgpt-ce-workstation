@@ -213,3 +213,43 @@ Required bounded correction: obtain a real exact-candidate workflow run on an im
 ### Review classification
 
 This is a bounded execution/evidence correction inside the existing OPH-R1 / OPH-PLAN-R2 authority. No source-design defect beyond the missing required workflow evidence was found in this review.
+
+
+## Corrected subject after R3 evidence completion
+
+Corrected implementation/evidence subject: `30d42dd73b8b613bb20cbb2617e5ee6c5c97e970`.
+
+The only change since the prior reviewed source subject is durable workflow/review state; implementation source remains the corrected source previously reviewed at `d93f5d7f7b1e6773c83c86a447a271e7ccbb1382`. The required checked-in GitHub Actions workflow was then executed by the operator against this exact branch subject.
+
+### GitHub Actions exact-candidate workflow evidence
+
+Workflow run: `35696273152`
+Event: `workflow_dispatch`
+Head SHA: `30d42dd73b8b613bb20cbb2617e5ee6c5c97e970`
+Conclusion: **success**
+Job: `exact-candidate` — **success**
+
+Required workflow steps were GREEN, including:
+
+- checkout of exact head `30d42dd73b8b613bb20cbb2617e5ee6c5c97e970`;
+- frozen upstream resolution;
+- exact non-production candidate build;
+- `Read back exact candidate provenance`.
+
+Workflow-produced candidate evidence:
+
+- image ref: `chatgpt-ce-workstation-ci:candidate-e6a786ec6416f067`;
+- image ID: `sha256:f0ae39b39eefae84457a8fec81dc4964d0b390de3d5bf47e5e4ff40f23eb48ed`;
+- resolution SHA-256: `e6a786ec6416f067fef1818a9f92db5dbff26a49653befaffc0d446b3751ef0b`;
+- image label SHA-256 matched the resolution SHA-256;
+- embedded resolution SHA-256 matched the same exact value;
+- OpenCodex executable/version readback passed;
+- upstream and production browser executables were distinct;
+- upstream runtime version matched the frozen manifest;
+- upstream proof executable exposed the expected `serve` command.
+
+This closes R3's missing-workflow-evidence condition. The workflow ran entirely on GitHub-hosted CI and did not mutate the production Workstation container, provider routing, persistent `/home/codex`, browser profile, OAuth state, or the currently running OpenCodex instance.
+
+### Review handoff
+
+The Card remains non-terminal because independent review is RECOMMENDED. The next immutable review subject is `commit:30d42dd73b8b613bb20cbb2617e5ee6c5c97e970`.
