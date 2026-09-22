@@ -1,9 +1,10 @@
 # Master Plan — OpenCodex Provider Hub
 
-Plan revision: `OPH-PLAN-R1`
+Plan revision: `OPH-PLAN-R2`
 Status: `draft`
 Date: `2026-09-22`
 Independent plan review: `RECOMMENDED`
+Supersedes: `OPH-PLAN-R1` after independent review RED; this revision corrects the two bounded plan-only gaps recorded in `planning/reviews/OPH-PLAN-R1.md`.
 
 ## Goal and authority
 
@@ -102,7 +103,7 @@ OPH-REQ-002..007, 009, 011, 012, 015, 017.
    - compaction where advertised;
    - required authentication/headers;
    - browser-backed model IDs without collision.
-4. Verify OpenCodex native Meta Muse independently and compare the required Muse capability surface with the retained CLIProxyAPI path.
+4. Verify OpenCodex native Meta Muse independently and compare the required Muse capability surface with the retained CLIProxyAPI path. If native Meta Muse is proposed as the replacement for the CLIProxyAPI Muse route, the comparison must cover the accepted Muse model, intended effort behavior, a harmless tool path, and the required session/task path; failure of any of those keeps Muse on the retained CLIProxyAPI route.
 5. Normalize only OpenCodex/provider configuration where possible. If the upstream browser daemon requires source modification merely to operate behind OpenCodex, record that as a proof failure/blocker rather than immediately recreating our fork.
 6. Produce one exact operator-run direct-smoke checklist.
 
@@ -114,13 +115,13 @@ The operator runs the supplied checklist and reports results for:
 - `Codex-LB model list + one harmless response` — PASS/FAIL.
 - `CLIProxyAPI model list + one harmless response` — PASS/FAIL.
 - `upstream chatgpt-web model list + one browser-backed response` — PASS/FAIL.
-- `Meta Muse model + one response` — PASS/FAIL.
+- `Meta Muse route` — PASS/FAIL for one model + response. If native OpenCodex Meta Muse is proposed to replace the CLIProxyAPI Muse route, this gate additionally requires operator-GREEN evidence that the accepted Muse model is selected, the intended effort behavior is preserved, one harmless tool path works, and the required session/task path remains on the intended Meta Muse route without silent provider substitution. If that conditional equivalence check is not GREEN, the retained CLIProxyAPI Muse route remains authoritative for the proof.
 
 For each failure, capture the exact command/model/error and relevant bounded log excerpt.
 
 ### Acceptance checkpoint
 
-All required provider families needed for the CE picker have at least one proven OpenCodex route, and upstream `codex-chatgpt-web serve` is either GREEN as an unmodified downstream or the workstream is explicitly blocked for compatibility resolution.
+All required provider families needed for the CE picker have at least one proven OpenCodex route, and upstream `codex-chatgpt-web serve` is either GREEN as an unmodified downstream or the workstream is explicitly blocked for compatibility resolution. If the tested topology selects native OpenCodex Meta Muse instead of the retained CLIProxyAPI Muse route, the conditional Muse equivalence surface above is also GREEN; otherwise the topology keeps Muse on CLIProxyAPI.
 
 No CE route ownership changes occur in this milestone.
 
@@ -145,6 +146,7 @@ OPH-REQ-001..016.
 3. Sync a curated proof catalog with distinct provider namespaces and truthful capability metadata.
 4. Prepare a one-command or tightly bounded rollback sequence before the live switch.
 5. Provide the operator an ordered live checklist that starts with picker/catalog evidence and only then exercises model turns.
+6. Before any recreate step, provide the exact proof-image recreate and rollback commands. The proof-capable image must still retain the current fork-backed path as the recoverable production/fallback source; no unattended live rebuild is authorized.
 
 ### Operator live gate OPH-LIVE-B
 
@@ -162,7 +164,12 @@ The operator reports PASS/FAIL for this exact sequence:
 6. **Subagents:** one bounded subagent smoke confirms the selected compatibility/native protocol and expected provider identity for parent/child.
 7. **Android Remote:** open/use the task from Android Remote and complete one harmless prompt/tool interaction.
 8. **Restart persistence:** restart the relevant proof services (and CE if needed) and verify the expected catalog/provider config survives from persistent state.
-9. **Rollback:** disable/remove OpenCodex Codex integration and verify the previous known-working CE/Codex Web GPT route returns without loss of ChatGPT login, browser profile or projects.
+9. **Recreate persistence:** after explicit operator authorization, recreate/update the Workstation from the proof-capable branch/image that still retains the custom fork as the recoverable source path. Verify OpenCodex/provider configuration, provider credentials, ChatGPT login, browser profile and projects survive as required, then re-check CE startup, picker ownership and one representative route. If this recreate check is not run or is not GREEN, OPH-M04 is blocked.
+10. **Rollback:** disable/remove OpenCodex Codex integration and verify the previous known-working CE/Codex Web GPT route returns without loss of ChatGPT login, browser profile or projects.
+
+### Explicit live authorization gate
+
+The plan authorizes preparation of the proof-capable image and exact commands, not an unattended Workstation recreate. OPH-LIVE-B recreate is a user-controlled action. The operator performs/authorizes it and reports the result. Without operator authorization, the workstream stops before OPH-M04 because the required recreate evidence is absent.
 
 ### Failure rule
 
@@ -170,7 +177,7 @@ Any FAIL stops migration. Preserve the current production path and route the exa
 
 ### Acceptance checkpoint
 
-OPH-LIVE-B is fully GREEN and exact evidence is durable enough to identify the tested versions/configuration.
+OPH-LIVE-B is fully GREEN, including restart **and recreate** persistence, and exact evidence is durable enough to identify the tested versions/configuration.
 
 ## Milestone OPH-M04 — Production source migration
 
@@ -188,7 +195,7 @@ OPH-REQ-001..018.
 
 ### Planned work packages
 
-1. Change the smart-upstream resolver from the fork release to the verified upstream `miuuyy/codex-chatgpt-web` release identity.
+1. Only after OPH-LIVE-B including recreate persistence is GREEN, change the smart-upstream resolver from the fork release to the verified upstream `miuuyy/codex-chatgpt-web` release identity.
 2. Generalize/replace the current fork-specific installer assumptions, especially the required packaged Codex-LB key helper.
 3. Promote OpenCodex from opt-in proof component to repository-owned runtime component using the lifecycle proven by M01–M03.
 4. Remove production dependence on `CODEX_CHATGPT_WEB_NATIVE_UPSTREAM` where provider aggregation is now owned by OpenCodex.
@@ -237,7 +244,7 @@ OPH-M04 GREEN.
    - one native Codex/Codex-LB turn;
    - one CLIProxyAPI turn;
    - one browser-backed Full Harness turn;
-   - one Meta Muse turn;
+   - one Meta Muse turn; if production uses native OpenCodex Meta Muse instead of CLIProxyAPI Muse, repeat the accepted Muse effort/tool/session-path equivalence smoke;
    - Android Remote;
    - restart persistence;
    - rollback readiness.
@@ -267,7 +274,7 @@ Three evidence layers are deliberately separate:
 
 1. **Repository/static:** resolver identities, installers, configs, validation tests, secret hygiene, singular ownership rules.
 2. **Disposable/candidate runtime:** process health, generated catalog/config shape, direct provider HTTP/Responses behavior and rollback mechanics.
-3. **Operator live Workstation:** CE picker, browser-backed Full Harness, compact/subagents, Android Remote, restart persistence and production rollback.
+3. **Operator live Workstation:** CE picker, browser-backed Full Harness, compact/subagents, conditional native-Muse equivalence, Android Remote, restart/recreate persistence and production rollback.
 
 A lower layer cannot substitute for a required higher-layer PASS.
 
@@ -295,6 +302,7 @@ current production
   -> isolated OpenCodex proof
   -> direct provider smoke
   -> temporary CE takeover
+  -> restart + proof-image recreate persistence
   -> rollback proof
   -> repository migration
   -> exact production candidate
@@ -329,10 +337,11 @@ Result: `GREEN`.
 - Production mutation occurs only after two earlier reversible proof layers.
 - User ownership of live tests is explicit and appears at each live boundary.
 - Existing Codex-LB/CLIProxyAPI services are preserved rather than prematurely removed.
-- The custom fork is retired only after behavioral equivalence is proven.
+- The custom fork is not migrated away from in source until browser behavior, rollback, restart and proof-image recreate persistence are operator-GREEN.
 - The active Muse-native-upstream workstream remains isolated.
-- Rollback is tested before source migration.
+- Restart, proof-image recreate persistence and rollback are tested before source migration.
 - Android Remote, Full Harness, compact and subagent behavior are included rather than relying on a simple text-response smoke.
+- If native OpenCodex Meta Muse is selected as the Muse replacement, operator live evidence must cover the accepted model, effort behavior, harmless tool path and required session/task path; otherwise Muse remains on CLIProxyAPI.
 - YAGNI: no new provider/router abstraction is planned inside the Workstation or browser adapter; OpenCodex owns that responsibility.
 - No unresolved Definition-owned product choice is hidden in implementation.
 - Independent plan review is `RECOMMENDED` because this is a material architecture migration with live rollback consequences and independent review is practical.
