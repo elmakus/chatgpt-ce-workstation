@@ -1,7 +1,7 @@
 # Master Plan — OpenCodex Provider Hub
 
 Plan revision: `OPH-PLAN-R2`
-Status: `draft`
+Status: `approved`
 Date: `2026-09-22`
 Independent plan review: `RECOMMENDED`
 Supersedes: `OPH-PLAN-R1` after independent review RED; this revision corrects the two bounded plan-only gaps recorded in `planning/reviews/OPH-PLAN-R1.md`.
