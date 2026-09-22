@@ -1,0 +1,41 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "change-opencodex-provider-hub"
+plan_revision: "OPH-PLAN-R2"
+current_milestone: "OPH-M01"
+
+execution_ref:
+  branch: "work/opencodex-provider-hub"
+  pr: null
+  head: null
+
+research_obligation: null
+
+milestones:
+  OPH-M01:
+    execution_status: ready
+    decision_state: accepted
+    result: null
+    acceptance_evidence: null
+    handoff: null
+    review_requirement: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: "OPH-M01-T01"
+    contract: "implementation/workstreams/change-opencodex-provider-hub/cards/OPH-M01-T01.md"
+    milestone: "OPH-M01"
+    dependencies: []
+    execution_status: ready
+    executor: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    openspec: null
+    review_requirement: RECOMMENDED
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    blocker: null
