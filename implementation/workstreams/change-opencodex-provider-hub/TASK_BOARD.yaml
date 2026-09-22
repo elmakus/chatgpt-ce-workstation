@@ -12,11 +12,11 @@ research_obligation: null
 
 milestones:
   OPH-M01:
-    execution_status: in_progress
+    execution_status: done
     decision_state: accepted
-    result: null
-    acceptance_evidence: null
-    handoff: null
+    result: "commit:33023b6915b1fe80b2e1efa828af3fd2f90348ec"
+    acceptance_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01.md"
+    handoff: "implementation/workstreams/change-opencodex-provider-hub/handoffs/M01_HANDOFF.md"
     review_requirement: none
     review_state: null
     review_subject: null
