@@ -63,7 +63,7 @@ cards:
     milestone: "OPH-M01"
     dependencies:
       - "OPH-M01-T02"
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     result_commit: "33023b6915b1fe80b2e1efa828af3fd2f90348ec"
     result_pr: null
