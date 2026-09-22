@@ -253,3 +253,25 @@ This closes R3's missing-workflow-evidence condition. The workflow ran entirely 
 ### Review handoff
 
 The Card remains non-terminal because independent review is RECOMMENDED. The next immutable review subject is `commit:30d42dd73b8b613bb20cbb2617e5ee6c5c97e970`.
+
+
+## Independent review — exact workflow-evidence subject
+
+Review subject: `commit:30d42dd73b8b613bb20cbb2617e5ee6c5c97e970`
+Verdict: **RED**
+
+The exact-candidate defect recorded as R3 is closed. Independent readback of GitHub Actions run `35696273152` confirms `workflow_dispatch` on exact `head_sha=30d42dd73b8b613bb20cbb2617e5ee6c5c97e970`, a GREEN `exact-candidate` job, exact-subject checkout, successful candidate build, and successful provenance/readback. The job logs confirm matching resolution/image-label/embedded SHA-256 `e6a786ec6416f067fef1818a9f92db5dbff26a49653befaffc0d446b3751ef0b`, a version-matching `ocx`, and distinct upstream-proof versus production browser executables.
+
+The reviewed implementation source is unchanged from the prior corrected source subject `d93f5d7f7b1e6773c83c86a447a271e7ccbb1382`; the intervening changes through the reviewed subject affect only durable Task Board/evidence state. Independent source inspection confirms strict fail-closed OpenCodex SRI/shasum and upstream proof SHA/identity/asset validation, isolated candidate install paths, no candidate auto-start, no `ocx init`, no provider route/catalog takeover, and no production fork replacement in this Card.
+
+### R4 — required CI source/static/secret checks have no workflow evidence
+
+The Card's required checks explicitly include `CI source validation / Dockerfile static check / secret scan`. The repository-owned `.github/workflows/ci.yml` defines those as the `source-validation`, `dockerfile-check`, and `secret-scan` jobs.
+
+GitHub Actions reports only one run for the exact reviewed subject: `35696273152`, the separate `Exact candidate build` workflow. There is no `CI` workflow run for `30d42dd73b8b613bb20cbb2617e5ee6c5c97e970`. There is likewise no workflow run at the source-identical prior corrected subject `d93f5d7f7b1e6773c83c86a447a271e7ccbb1382`. The locally recorded `validate-source.sh` GREEN result is useful source evidence but does not supply the separately required CI Dockerfile-static and repository-history secret-scan results.
+
+Required bounded correction: execute the repository `CI` workflow against an immutable subject whose implementation source is the reviewed corrected source, capture GREEN results for `source-validation`, `dockerfile-check`, and `secret-scan`, then freeze the resulting exact subject for fresh independent review.
+
+### Review classification
+
+R4 is a bounded execution/evidence correction inside the existing OPH-R1 / OPH-PLAN-R2 authority. No Project Definition or strategic-plan change is required, and no additional implementation-source defect was found.
