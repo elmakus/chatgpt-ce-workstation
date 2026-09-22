@@ -43,7 +43,14 @@ JSON
 
 config="$tmp/provider-proof.json"
 "$helper" render --spec "$spec" --output "$config" --disposable >/dev/null
-validation="$("$helper" validate --config "$config" --disposable)"
+set +e
+validation="$("$helper" validate --config "$config" --disposable 2>&1)"
+validation_rc=$?
+set -e
+if (( validation_rc != 0 )); then
+  printf '%s\n' "$validation" >&2
+  exit "$validation_rc"
+fi
 printf '%s\n' "$validation" | grep -F '"ok":true' >/dev/null
 
 python3 - "$config" <<'PY'
