@@ -18,9 +18,9 @@ milestones:
     acceptance_evidence: null
     handoff: null
     review_requirement: none
-    review_state: null
-    review_subject: null
-    review_evidence: null
+    review_state: pending
+    review_subject: "commit:40ad8ee1182304b54f628b588787b8c97002eba4"
+    review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
 
 cards:
   - id: "OPH-M01-T01"
@@ -29,10 +29,10 @@ cards:
     dependencies: []
     execution_status: in_progress
     executor: chatgpt
-    result_commit: null
+    result_commit: "40ad8ee1182304b54f628b588787b8c97002eba4"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
+    tests_summary: "Source/focused validation GREEN on exact subject; non-production exact-candidate image build attempted twice and failed closed before new proof-component installation/readback because existing D25 Ubuntu APT InRelease identity changed during mirror/CDN propagation; exact hashes and later converged resolver state captured in evidence."
     openspec: null
     review_requirement: RECOMMENDED
     review_state: null
