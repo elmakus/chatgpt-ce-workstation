@@ -6,7 +6,7 @@ current_milestone: "OPH-M02"
 execution_ref:
   branch: "work/opencodex-provider-hub"
   pr: 23
-  head: "33023b6915b1fe80b2e1efa828af3fd2f90348ec"
+  head: "e6602ed132ecdb9d15ab7839339015206e3eb598"
 
 research_obligation: null
 
@@ -94,13 +94,13 @@ cards:
       - "OPH-M01-T03"
     execution_status: in_progress
     executor: chatgpt
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "e6602ed132ecdb9d15ab7839339015206e3eb598"
+    result_pr: 23
+    evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M02-T01.md"
+    tests_summary: "Focused/source validation GREEN; exact CI run 35717632054 GREEN on e6602ed132ecdb9d15ab7839339015206e3eb598 with Dockerfile check, source-validation/ShellCheck, and secret-scan GREEN; exact candidate build run 35717632009 GREEN with frozen image provenance and OPENCODEX_LIVE_A_RUNTIME_GREEN from the installed helper using fake transport only."
     openspec: null
     review_requirement: RECOMMENDED
     review_state: pending
-    review_subject: null
-    review_evidence: null
+    review_subject: "commit:e6602ed132ecdb9d15ab7839339015206e3eb598"
+    review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M02-T01.md"
     blocker: null
