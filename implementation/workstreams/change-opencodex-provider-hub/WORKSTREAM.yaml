@@ -17,7 +17,7 @@ intake:
 routing:
   exploratory_scope: null
   research_obligation: null
-  plan_review: null
+  plan_review: "planning/reviews/OPH-PLAN-R1.md"
 
 task_board: null
 
@@ -25,7 +25,7 @@ authority:
   requirements: "requirements/OPENCODEX_PROVIDER_HUB.md"
   decisions:
     - "docs/DECISIONS.md#d31--opencodex-is-the-candidate-single-provider-hub-and-catalog-owner"
-  plan: null
+  plan: "planning/OPENCODEX_PROVIDER_HUB_PLAN.md"
 
 review:
   requirement: null
