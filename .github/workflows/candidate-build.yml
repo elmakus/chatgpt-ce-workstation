@@ -12,6 +12,9 @@ on:
       - "scripts/build/**"
       - "scripts/test-resolve-upstreams.py"
       - "scripts/test-render-build-env.py"
+      - "rootfs/usr/local/bin/workstation-opencodex-proof-config"
+      - "scripts/test-opencodex-proof-config.sh"
+      - "scripts/candidate-opencodex-proof-config-smoke.sh"
       - ".github/workflows/candidate-build.yml"
   workflow_dispatch:
 
@@ -111,3 +114,11 @@ jobs:
           echo "CANDIDATE_EVIDENCE label_sha256=$label"
           echo "CANDIDATE_EVIDENCE embedded_sha256=$embedded_sha"
           df -h /
+
+      - name: Validate isolated OpenCodex provider proof config
+        run: |
+          image_ref="$IMAGE_NAME:$CANDIDATE_TAG"
+          docker run --rm \
+            --entrypoint /bin/bash \
+            -v "$PWD/scripts/candidate-opencodex-proof-config-smoke.sh:/tmp/opencodex-proof-config-smoke.sh:ro" \
+            "$image_ref" /tmp/opencodex-proof-config-smoke.sh
