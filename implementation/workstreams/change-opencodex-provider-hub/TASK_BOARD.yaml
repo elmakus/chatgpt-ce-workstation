@@ -6,7 +6,7 @@ current_milestone: "OPH-M01"
 execution_ref:
   branch: "work/opencodex-provider-hub"
   pr: null
-  head: "414877d910b1a02d7b603d38e2979d6bb7337faf"
+  head: "33023b6915b1fe80b2e1efa828af3fd2f90348ec"
 
 research_obligation: null
 
@@ -65,13 +65,13 @@ cards:
       - "OPH-M01-T02"
     execution_status: in_progress
     executor: chatgpt
-    result_commit: "414877d910b1a02d7b603d38e2979d6bb7337faf"
+    result_commit: "33023b6915b1fe80b2e1efa828af3fd2f90348ec"
     result_pr: null
     evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T03.md"
-    tests_summary: "Focused provider-config/source validation GREEN; CI run 35709835674 GREEN with source-validation, dockerfile-check, secret-scan, and ShellCheck; Exact candidate build run 35709835663 GREEN with frozen image provenance/readback and OPENCODEX_PROOF_CONFIG_RUNTIME_GREEN on subject 414877d910b1a02d7b603d38e2979d6bb7337faf."
+    tests_summary: "Corrected proof-config/source validation GREEN; CI run 35713048312 GREEN with source-validation, dockerfile-check, secret-scan, and ShellCheck; Exact candidate build run 35713048323 GREEN with frozen image provenance/readback and OPENCODEX_PROOF_CONFIG_RUNTIME_GREEN on corrected subject 33023b6915b1fe80b2e1efa828af3fd2f90348ec."
     openspec: null
     review_requirement: RECOMMENDED
-    review_state: red
-    review_subject: "commit:414877d910b1a02d7b603d38e2979d6bb7337faf"
+    review_state: pending
+    review_subject: "commit:33023b6915b1fe80b2e1efa828af3fd2f90348ec"
     review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T03.md"
     blocker: null
