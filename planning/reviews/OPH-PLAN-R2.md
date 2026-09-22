@@ -2,9 +2,9 @@
 
 Plan revision: OPH-PLAN-R2
 Review requirement: RECOMMENDED
-Review state: pending
+Review state: in_progress
 Review subject: planning/OPENCODEX_PROVIDER_HUB_PLAN.md blob fd53679fe0afb74b38bcbdeb857b5dc75f028532 (frozen at commit b0a687f84fa9086d32f0a07162f7cdc436921bc0)
-Review evidence: pending independent review
+Review evidence: independent review in progress
 
 ## Review authority
 
