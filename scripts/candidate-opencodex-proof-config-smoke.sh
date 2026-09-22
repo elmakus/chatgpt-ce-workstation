@@ -51,7 +51,7 @@ if (( validation_rc != 0 )); then
   printf '%s\n' "$validation" >&2
   exit "$validation_rc"
 fi
-printf '%s\n' "$validation" | grep -F '"ok":true' >/dev/null
+printf '%s\n' "$validation" | python3 -c 'import json, sys; data = json.load(sys.stdin); raise SystemExit(0 if data.get("ok") is True else 1)'
 
 python3 - "$config" <<'PY'
 import json, pathlib, sys
