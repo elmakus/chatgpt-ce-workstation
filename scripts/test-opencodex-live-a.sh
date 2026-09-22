@@ -81,7 +81,7 @@ export FAKE_CURL_LOG="$log"
 health="$(bash "$helper" health)"
 grep -F '"ok":true' <<<"$health" >/dev/null || fail "health result missing"
 
-models="$(bash bash "$helper" models)"
+models="$(bash "$helper" models)"
 expected_models=$'chatgpt-web/chatgpt-web/proof-model\ncliproxyapi/proof-model\ncodex-lb/proof-model\nmeta-muse/muse-spark-1.3'
 [[ "$models" == "$expected_models" ]] || fail "model catalog was not normalized deterministically"
 
