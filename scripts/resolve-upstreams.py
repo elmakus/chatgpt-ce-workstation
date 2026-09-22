@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import hashlib
 import json
 import os
@@ -119,6 +121,21 @@ def validate_version(value: str, label: str = "version") -> str:
     value = value.strip()
     if not value or not SAFE_VERSION_RE.fullmatch(value):
         raise ResolutionError(f"{label} is empty or unsafe")
+    return value
+
+
+def validate_npm_sha512_integrity(value: str, label: str = "npm integrity") -> str:
+    value = value.strip()
+    prefix = "sha512-"
+    if not value.startswith(prefix):
+        raise ResolutionError(f"{label} must use sha512 SRI")
+    encoded = value[len(prefix):]
+    try:
+        digest = base64.b64decode(encoded, validate=True)
+    except (binascii.Error, ValueError) as exc:
+        raise ResolutionError(f"{label} has invalid base64 payload") from exc
+    if len(digest) != 64:
+        raise ResolutionError(f"{label} must encode exactly 64 SHA-512 bytes")
     return value
 
 
@@ -492,8 +509,9 @@ def resolve_npm_package(
         raise ResolutionError(f"{label} npm version has no dist metadata")
     integrity = dist.get("integrity")
     shasum = dist.get("shasum")
-    if not isinstance(integrity, str) or not integrity.startswith("sha512-"):
+    if not isinstance(integrity, str):
         raise ResolutionError(f"{label} npm integrity is missing/invalid")
+    integrity = validate_npm_sha512_integrity(integrity, f"{label} npm integrity")
     if not isinstance(shasum, str) or not re.fullmatch(r"[0-9a-f]{40}", shasum):
         raise ResolutionError(f"{label} npm shasum is missing/invalid")
     return {
