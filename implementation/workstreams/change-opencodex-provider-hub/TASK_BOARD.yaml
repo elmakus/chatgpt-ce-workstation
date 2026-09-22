@@ -53,7 +53,7 @@ cards:
     tests_summary: "Focused lifecycle/source validation GREEN; exact frozen-candidate runtime proof GREEN for isolated start/health/status/stop with production-home sentinels unchanged; CI run 35702966558 GREEN on subject 22e226ceb4d6d63b98051c738877c85f69bc9ab5. Duplicate Exact candidate build run 35702966572 was cancelled after the same-subject runtime proof had already succeeded."
     openspec: null
     review_requirement: RECOMMENDED
-    review_state: pending
+    review_state: in_progress
     review_subject: "commit:22e226ceb4d6d63b98051c738877c85f69bc9ab5"
     review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T02.md"
     blocker: null
