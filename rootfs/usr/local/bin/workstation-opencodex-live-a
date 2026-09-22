@@ -30,6 +30,8 @@ command -v "$curl_bin" >/dev/null 2>&1 || fail "curl transport is unavailable"
 
 base_url="http://127.0.0.1:${proof_port}"
 curl_common=(
+  --disable
+  --noproxy '*'
   --silent
   --show-error
   --fail-with-body
