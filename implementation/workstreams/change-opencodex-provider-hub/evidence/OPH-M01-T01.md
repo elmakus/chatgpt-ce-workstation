@@ -193,3 +193,23 @@ No production Workstation service/container or persistent provider state was mod
 ### Review handoff
 
 The corrected implementation remains non-terminal and requires a fresh independent review because the Card's review requirement is RECOMMENDED. The new immutable review subject is `commit:d93f5d7f7b1e6773c83c86a447a271e7ccbb1382`.
+
+
+## Independent review — corrected subject
+
+Review subject: `commit:d93f5d7f7b1e6773c83c86a447a271e7ccbb1382`
+Verdict: **RED**
+
+The corrected source closes the two implementation defects from the prior review. The GitHub Actions candidate readback block is now structurally inside the workflow `run: |` scalar and its extracted shell parses successfully; the frozen OpenCodex/upstream candidate fields are now validated fail-closed for SHA/SRI format and identity/asset consistency, with deterministic negative coverage. The reviewed source also keeps the production fork install/start path distinct and does not introduce provider credentials, route takeover, `ocx init`, candidate auto-start, or catalog mutation.
+
+### R3 — required exact-subject CI/workflow readback evidence is absent
+
+The Card requires the exact-candidate build workflow, CI/check results, and candidate-image provenance/readback produced by that workflow. For the exact reviewed subject `d93f5d7f7b1e6773c83c86a447a271e7ccbb1382`, GitHub Actions reports zero workflow runs for that `head_sha`, and no commit-status checks are present.
+
+The corrected implementation evidence explicitly records that the successful exact-candidate build/readback was executed directly from the subject rather than through `.github/workflows/candidate-build.yml`. That direct non-production build is useful implementation evidence, but it does not satisfy the separate Card requirement for the checked-in workflow itself to execute and produce the candidate provenance/readback. Static YAML/shell validation likewise cannot substitute for that required workflow execution.
+
+Required bounded correction: obtain a real exact-candidate workflow run on an immutable corrected implementation subject, capture its CI/check result plus workflow-produced image provenance/readback, then freeze the resulting exact subject for a fresh independent review. No product-definition or strategic-plan change is required.
+
+### Review classification
+
+This is a bounded execution/evidence correction inside the existing OPH-R1 / OPH-PLAN-R2 authority. No source-design defect beyond the missing required workflow evidence was found in this review.
