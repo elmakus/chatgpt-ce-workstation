@@ -384,8 +384,12 @@ grep -F 'command -v ocx' Dockerfile >/dev/null || fail 'candidate image does not
 grep -F 'command -v codex-chatgpt-web-upstream' Dockerfile >/dev/null || fail 'candidate image does not verify isolated upstream browser executable'
 [[ -s rootfs/usr/local/bin/workstation-opencodex-proof ]] || fail 'OpenCodex proof lifecycle helper missing'
 bash scripts/test-opencodex-proof-lifecycle.sh || fail 'isolated OpenCodex proof lifecycle tests'
+[[ -s rootfs/usr/local/bin/workstation-opencodex-proof-config ]] || fail 'OpenCodex proof config helper missing'
+python3 -m py_compile rootfs/usr/local/bin/workstation-opencodex-proof-config \
+  || fail 'OpenCodex proof config helper Python compile check'
+bash scripts/test-opencodex-proof-config.sh || fail 'isolated OpenCodex provider config tests'
 if grep -F 'workstation-opencodex-proof' scripts/container/desktop-session-inner.sh >/dev/null; then
-  fail 'OpenCodex proof lifecycle must not auto-start in the desktop session'
+  fail 'OpenCodex proof tooling must not auto-start in the desktop session'
 fi
 if grep -F 'codex-chatgpt-web-upstream' scripts/container/desktop-session-inner.sh >/dev/null; then
   fail 'upstream browser proof runtime must not auto-start in the desktop session'
