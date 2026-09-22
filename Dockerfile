@@ -16,6 +16,11 @@ ARG S6_OVERLAY_NOARCH_SHA256
 ARG S6_OVERLAY_X86_64_SHA256
 ARG CODEX_CHATGPT_WEB_VERSION
 ARG CODEX_CHATGPT_WEB_SHA256
+ARG CODEX_CHATGPT_WEB_UPSTREAM_VERSION
+ARG CODEX_CHATGPT_WEB_UPSTREAM_SHA256
+ARG OPENCODEX_VERSION
+ARG OPENCODEX_INTEGRITY
+ARG OPENCODEX_SHASUM
 ARG AGENT_WORKSPACE_VERSION
 ARG AGENT_WORKSPACE_INTEGRITY
 ARG MUSE_INSTALLER_URL=https://dev.meta.ai/install.sh
@@ -298,6 +303,25 @@ RUN set -eux; \
       /tmp/install-codex-web-gpt.sh; \
     command -v codex-web-gpt; \
     rm -f /tmp/install-codex-web-gpt.sh
+
+COPY scripts/build/install-opencodex.sh /tmp/install-opencodex.sh
+RUN set -eux; \
+    chmod 0755 /tmp/install-opencodex.sh; \
+    OPENCODEX_VERSION="${OPENCODEX_VERSION}" \
+    OPENCODEX_INTEGRITY="${OPENCODEX_INTEGRITY}" \
+    OPENCODEX_SHASUM="${OPENCODEX_SHASUM}" \
+      /tmp/install-opencodex.sh; \
+    command -v ocx; \
+    rm -f /tmp/install-opencodex.sh
+
+COPY scripts/build/install-codex-web-gpt-upstream.sh /tmp/install-codex-web-gpt-upstream.sh
+RUN set -eux; \
+    chmod 0755 /tmp/install-codex-web-gpt-upstream.sh; \
+    CODEX_CHATGPT_WEB_UPSTREAM_VERSION="${CODEX_CHATGPT_WEB_UPSTREAM_VERSION}" \
+    CODEX_CHATGPT_WEB_UPSTREAM_SHA256="${CODEX_CHATGPT_WEB_UPSTREAM_SHA256}" \
+      /tmp/install-codex-web-gpt-upstream.sh; \
+    command -v codex-chatgpt-web-upstream; \
+    rm -f /tmp/install-codex-web-gpt-upstream.sh
 
 COPY rootfs/ /
 COPY scripts/container/ /opt/workstation/bin/
