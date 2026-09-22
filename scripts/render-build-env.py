@@ -177,6 +177,17 @@ def build_inputs(manifest: Mapping[str, object]) -> dict[str, str]:
     x86_sha = require_text(assets, "s6-overlay-x86_64.tar.xz", "s6_overlay.assets")
     ubuntu_indexes = frozen_ubuntu_indexes(ubuntu_packages)
 
+    if require_text(codex_upstream, "repository", "codex_web_gpt_upstream") != "miuuyy/codex-chatgpt-web":
+        raise ManifestError("upstream Codex Web GPT proof repository is invalid")
+    if require_text(opencodex, "package", "opencodex") != "@bitkyc08/opencodex":
+        raise ManifestError("OpenCodex package identity is invalid")
+    opencodex_integrity = require_text(opencodex, "integrity", "opencodex")
+    opencodex_shasum = require_text(opencodex, "shasum", "opencodex")
+    if not opencodex_integrity.startswith("sha512-"):
+        raise ManifestError("OpenCodex npm integrity is invalid")
+    if not re.fullmatch(r"[0-9a-f]{40}", opencodex_shasum):
+        raise ManifestError("OpenCodex npm shasum is invalid")
+
     values = {
         "UBUNTU_BASE": f"{family}@{digest}",
         "UBUNTU_APT_IDENTITY": require_text(ubuntu_packages, "identity", "ubuntu_packages"),
@@ -196,8 +207,8 @@ def build_inputs(manifest: Mapping[str, object]) -> dict[str, str]:
         "CODEX_CHATGPT_WEB_UPSTREAM_VERSION": require_text(codex_upstream, "version", "codex_web_gpt_upstream"),
         "CODEX_CHATGPT_WEB_UPSTREAM_SHA256": require_text(codex_upstream, "package_sha256", "codex_web_gpt_upstream"),
         "OPENCODEX_VERSION": require_text(opencodex, "version", "opencodex"),
-        "OPENCODEX_INTEGRITY": require_text(opencodex, "integrity", "opencodex"),
-        "OPENCODEX_SHASUM": require_text(opencodex, "shasum", "opencodex"),
+        "OPENCODEX_INTEGRITY": opencodex_integrity,
+        "OPENCODEX_SHASUM": opencodex_shasum,
         "MUSE_INSTALLER_URL": require_text(muse, "installer_url", "muse_code"),
         "MUSE_INSTALLER_SHA256": require_text(muse, "installer_sha256", "muse_code"),
         "MUSE_EXPECTED_VERSION": require_text(muse, "version", "muse_code"),
