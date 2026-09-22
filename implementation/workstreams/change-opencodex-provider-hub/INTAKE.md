@@ -1,6 +1,6 @@
 # Intake — OpenCodex provider hub
 
-Status: active
+Status: complete
 
 ## Identity
 
@@ -36,12 +36,15 @@ Path: Project Definition -> Strategic Planning.
 
 Reason: adopting OpenCodex as the route/catalog owner changes accepted workstation architecture, including D11 and the relationship between Codex Web GPT, Muse, Codex-LB and CLIProxyAPI. This is not a bounded implementation continuation.
 
-The Definition must preserve a fail-safe migration rule: no existing working provider path is removed or superseded durably until the corresponding operator-run live acceptance gate is GREEN.
+The Definition preserves a fail-safe migration rule: no existing working provider path is removed or superseded durably until the corresponding operator-run live acceptance gate is GREEN.
 
 ## User-owned live gate
 
-The operator will execute live tests on the workstation and report the observed result. ChatGPT will provide exact commands/checklists and will not claim live success without that report.
+The operator executes live tests on the workstation and reports the observed result. ChatGPT supplies exact commands/checklists and does not claim live success without that report.
 
-## Next durable owner
+## Materialized downstream authority
 
-Pending materialization of canonical requirements/decision authority for this workstream.
+- Requirements: `requirements/OPENCODEX_PROVIDER_HUB.md` revision `OPH-R1`, approved.
+- Decision: `docs/DECISIONS.md#d31--opencodex-is-the-candidate-single-provider-hub-and-catalog-owner`.
+- Definition Complete: GREEN.
+- Next route: Strategic Planning.
