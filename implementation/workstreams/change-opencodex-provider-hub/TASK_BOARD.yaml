@@ -6,7 +6,7 @@ current_milestone: "OPH-M01"
 execution_ref:
   branch: "work/opencodex-provider-hub"
   pr: null
-  head: "30d42dd73b8b613bb20cbb2617e5ee6c5c97e970"
+  head: "c6e6c8f437d8c378525177a5685862153f1c0ef3"
 
 research_obligation: null
 
@@ -27,15 +27,15 @@ cards:
     contract: "implementation/workstreams/change-opencodex-provider-hub/cards/OPH-M01-T01.md"
     milestone: "OPH-M01"
     dependencies: []
-    execution_status: blocked
+    execution_status: in_progress
     executor: chatgpt
-    result_commit: "30d42dd73b8b613bb20cbb2617e5ee6c5c97e970"
+    result_commit: "c6e6c8f437d8c378525177a5685862153f1c0ef3"
     result_pr: null
     evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
-    tests_summary: "Corrected source validation GREEN; GitHub Actions Exact candidate build run 35696273152 GREEN on exact subject 30d42dd73b8b613bb20cbb2617e5ee6c5c97e970; exact build and workflow-produced image provenance/readback GREEN with resolution/label/embedded SHA-256 e6a786ec6416f067fef1818a9f92db5dbff26a49653befaffc0d446b3751ef0b."
+    tests_summary: "Corrected source validation GREEN; Exact candidate build run 35696273152 GREEN with workflow-produced image provenance/readback; CI run 35699340685 GREEN on corrected subject c6e6c8f437d8c378525177a5685862153f1c0ef3 with source-validation, dockerfile-check, and secret-scan all GREEN."
     openspec: null
     review_requirement: RECOMMENDED
-    review_state: red
-    review_subject: "commit:30d42dd73b8b613bb20cbb2617e5ee6c5c97e970"
+    review_state: pending
+    review_subject: "commit:c6e6c8f437d8c378525177a5685862153f1c0ef3"
     review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
-    blocker: "R4 evidence correction requires a real GitHub Actions CI workflow run (ci.yml) on the current work/opencodex-provider-hub branch, with source-validation, dockerfile-check, and secret-scan GREEN. This chat cannot dispatch a new workflow: the GitHub connector has no workflow-dispatch action; authorized Tower is online but gh is not installed and GH_TOKEN/GITHUB_TOKEN are unset. Operator must manually dispatch the CI workflow on this branch, without changing implementation source, then return for readback/reconciliation."
+    blocker: null
