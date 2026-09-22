@@ -27,7 +27,7 @@ cards:
     contract: "implementation/workstreams/change-opencodex-provider-hub/cards/OPH-M01-T01.md"
     milestone: "OPH-M01"
     dependencies: []
-    execution_status: in_progress
+    execution_status: blocked
     executor: chatgpt
     result_commit: "d93f5d7f7b1e6773c83c86a447a271e7ccbb1382"
     result_pr: null
@@ -38,4 +38,4 @@ cards:
     review_state: red
     review_subject: "commit:d93f5d7f7b1e6773c83c86a447a271e7ccbb1382"
     review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
-    blocker: null
+    blocker: "Required exact-candidate GitHub Actions workflow run is not dispatchable from the current chat: the GitHub connector exposes no workflow-dispatch write action, and the authorized Tower bridge has neither gh nor a GitHub token available. Run Exact candidate build manually on work/opencodex-provider-hub, then return with the workflow run available for readback."
