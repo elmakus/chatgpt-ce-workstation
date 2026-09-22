@@ -4,6 +4,10 @@ set -Eeuo pipefail
 fail() { echo "FAIL: $*" >&2; exit 1; }
 helper="rootfs/usr/local/bin/workstation-opencodex-proof-config"
 
+run_helper() {
+  python3 "$helper" "$@"
+}
+
 python3 -m py_compile "$helper" || fail "proof config helper Python syntax"
 
 tmp="$(mktemp -d)"
@@ -41,8 +45,8 @@ JSON
 
 out1="$tmp/config-1.json"
 out2="$tmp/config-2.json"
-"$helper" render --spec "$spec" --output "$out1" --disposable >/dev/null
-"$helper" render --spec "$spec" --output "$out2" --disposable >/dev/null
+run_helper render --spec "$spec" --output "$out1" --disposable >/dev/null
+run_helper render --spec "$spec" --output "$out2" --disposable >/dev/null
 cmp "$out1" "$out2" >/dev/null || fail "identical inputs did not render byte-identical output"
 
 python3 - "$out1" <<'PY'
@@ -91,7 +95,7 @@ data=json.loads(pathlib.Path(sys.argv[1]).read_text())
 data["providers"]["codex-lb"]["apiKey"]="not-a-real-secret"
 pathlib.Path(sys.argv[2]).write_text(json.dumps(data))
 PY
-if "$helper" render --spec "$bad_spec" --output "$tmp/bad.json" --disposable >/dev/null 2>&1; then
+if run_helper render --spec "$bad_spec" --output "$tmp/bad.json" --disposable >/dev/null 2>&1; then
   fail "secret-bearing provider input was accepted"
 fi
 
@@ -102,7 +106,7 @@ data=json.loads(pathlib.Path(sys.argv[1]).read_text())
 data["providers"]["codex-lb"]["allowPrivateNetwork"]=False
 pathlib.Path(sys.argv[2]).write_text(json.dumps(data))
 PY
-if "$helper" render --spec "$bad_private" --output "$tmp/bad-private-out.json" --disposable >/dev/null 2>&1; then
+if run_helper render --spec "$bad_private" --output "$tmp/bad-private-out.json" --disposable >/dev/null 2>&1; then
   fail "private endpoint without explicit opt-in was accepted"
 fi
 
@@ -113,14 +117,14 @@ data=json.loads(pathlib.Path(sys.argv[1]).read_text())
 data["providers"]["cliproxyapi"]["adapter"]="anthropic"
 pathlib.Path(sys.argv[2]).write_text(json.dumps(data))
 PY
-if "$helper" render --spec "$bad_adapter" --output "$tmp/bad-adapter-out.json" --disposable >/dev/null 2>&1; then
+if run_helper render --spec "$bad_adapter" --output "$tmp/bad-adapter-out.json" --disposable >/dev/null 2>&1; then
   fail "unsupported proof adapter was accepted"
 fi
 
-if "$helper" render --spec "$spec" --output "$home/.opencodex/config.json" --disposable >/dev/null 2>&1; then
+if run_helper render --spec "$spec" --output "$home/.opencodex/config.json" --disposable >/dev/null 2>&1; then
   fail "production OpenCodex config path was accepted"
 fi
-if "$helper" render --spec "$spec" --output "$tmp/no-disposable.json" >/dev/null 2>&1; then
+if run_helper render --spec "$spec" --output "$tmp/no-disposable.json" >/dev/null 2>&1; then
   fail "outside-proof output was accepted without --disposable"
 fi
 
@@ -135,7 +139,7 @@ SH
 chmod 0755 "$fake_bin/ocx"
 export PATH="$fake_bin:$PATH"
 export OCX_PROOF_LOG="$tmp/ocx.log"
-"$helper" validate --config "$out1" --disposable >/dev/null
+run_helper validate --config "$out1" --disposable >/dev/null
 grep -F "OPENCODEX_HOME=$home/.local/state/chatgpt-ce-workstation/opencodex-proof/opencodex" "$OCX_PROOF_LOG" >/dev/null   || fail "validate did not fence OPENCODEX_HOME"
 grep -F "CODEX_HOME=$home/.local/state/chatgpt-ce-workstation/opencodex-proof/codex-home" "$OCX_PROOF_LOG" >/dev/null   || fail "validate did not fence CODEX_HOME"
 grep -F "ARGS=config validate $out1 --json" "$OCX_PROOF_LOG" >/dev/null   || fail "validate did not use bounded offline ocx config validate"
