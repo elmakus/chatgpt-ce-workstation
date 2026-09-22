@@ -92,3 +92,21 @@ Exact corrected-subject verification:
 No production route/catalog ownership, credential handling, live provider traffic, login flow, startup wiring, or independent Muse workstream behavior changed in the correction.
 
 A new independent review is required for this corrected subject. Review attempt 1 remains preserved above as RED evidence for the superseded subject.
+
+## Independent review attempt 2 — GREEN
+
+Reviewed immutable subject: `commit:33023b6915b1fe80b2e1efa828af3fd2f90348ec`.
+
+Verdict: **GREEN**. No acceptance-blocking finding remains on the corrected subject.
+
+Independent readback verified the Card contract and its OPH-R1 / OPH-PLAN-R2 authority slice against the actual immutable source rather than relying on the implementing-session narrative. The corrected subject preserves the stable provider ids `codex-lb`, `cliproxyapi`, `chatgpt-web`, and `meta-muse`; keeps native Codex injection/steering disabled; fences normal `~/.opencodex` and `~/.codex`; requires explicit private-network intent for literal local/private endpoints; rejects secret-shaped provider input; and invokes only the bounded `ocx config validate <path> --json` path under the isolated T02 state roots.
+
+The two attempt-1 defects are closed on the reviewed subject: the renderer no longer changes mode on a pre-existing disposable parent, and focused negative coverage now exercises both a non-http(s) endpoint and a missing required `baseUrl`. The permission regression is also covered explicitly.
+
+Exact-subject external evidence was independently read back:
+
+- CI run `35713048312` has `head_sha=33023b6915b1fe80b2e1efa828af3fd2f90348ec` and is GREEN for source validation, Dockerfile checks, ShellCheck, and repository secret scan.
+- Exact candidate build run `35713048323` has the same `head_sha`, is GREEN, proves matching frozen-candidate provenance `2ef0f0e719fc02e034d49416d704dbdfaeccaf5c101a2130377e1a682c60068a`, and records `OPENCODEX_PROOF_CONFIG_RUNTIME_GREEN` from the image-owned installed OpenCodex.
+- Frozen upstream tag `lidge-jun/opencodex@v2.59.0` resolves to `134c92a01b120162f00c7275189cc47858720379`. Its registry/model seeds independently match the proof row's `meta-muse` adapter/base URL/OAuth identity, `x-api-version: 1.0.0`, two Muse Spark 1.3 model ids, 1,048,576-token context window, text+image modality, and `minimal|low|medium|high|xhigh` identity reasoning ladder. The upstream warning also confirms that subscription/device-login semantics remain unsupported/unverified and therefore outside this Card's GREEN claim.
+
+This verdict covers deterministic secret-free configuration/schema validation only. It does not claim live provider compatibility, credential reuse, billing/subscription behavior, browser-daemon compatibility, picker takeover, or production-route migration; those remain later proof/live-acceptance obligations.
