@@ -462,3 +462,42 @@ Cleanup is forbidden before the new production image has passed the D25/R12 succ
 The exact Docker/BuildKit filtering, builder identity and age/size/GC mechanism are implementation details to be selected only after verifying the target Unraid backend. They must preserve the workstation-only scope and bounded-retention outcome.
 
 **Rationale:** D25 intentionally retains a previous known-working image and uses BuildKit cache for efficient repeated updates, but without an explicit lifecycle older candidate/rollback artifacts and historical cache can accumulate indefinitely on bounded Unraid Docker storage. Keeping only the current image plus one rollback baseline preserves deterministic recovery while separating safe image retention from bounded cache reuse.
+
+## D31 — OpenCodex is the candidate single provider-hub and catalog owner
+
+**Decision (2026-09-22):** evaluate OpenCodex as the single Codex-facing provider-routing and model-catalog owner for ChatGPT CE, with migration permitted only after operator-run live acceptance proves the required provider paths.
+
+The target architecture is:
+
+```text
+ChatGPT CE / bundled Codex
+        |
+        v
+     OpenCodex
+        |
+        +--> native Codex / Codex-LB
+        +--> CLIProxyAPI providers when retained
+        +--> Meta Muse through OpenCodex when proven equivalent
+        +--> upstream codex-chatgpt-web serve --> ChatGPT Web browser adapter
+```
+
+OpenCodex should own provider aggregation rather than extending `codex-chatgpt-web` with additional native-provider routing. The preferred browser-backed component is unmodified upstream `miuuyy/codex-chatgpt-web`; the existing `elmakus/codex-chatgpt-web` fork may be retired only after its required Workstation behavior is proven available through the upstream daemon behind OpenCodex.
+
+This is a **proof-gated migration decision**, not authority to remove existing services immediately:
+
+- Codex-LB remains an allowed native upstream and is not decommissioned merely because OpenCodex has account-pooling features.
+- CLIProxyAPI remains an allowed OpenAI-compatible provider and is not decommissioned merely because OpenCodex has a native Meta Muse integration.
+- The active `change-muse-native-upstream` workstream remains independent until live evidence proves the new path covers its intended behavior and normal workflow closure/supersession is performed.
+- Existing production route/catalog ownership remains recoverable until the replacement has passed the required live gates.
+- Live Workstation acceptance is performed by the operator from an exact checklist supplied by ChatGPT; static/source evidence alone cannot declare the migration successful.
+
+**Rationale:** OpenCodex already owns the concerns that motivated the earlier native-aggregator design: provider routing, catalog generation/injection, custom OpenAI-compatible providers, ChatGPT/Codex account pooling and Meta Muse. Keeping those responsibilities in a browser adapter creates two routing products to maintain. The remaining unique responsibility of `codex-chatgpt-web` is the browser-backed ChatGPT Web execution path, which is better treated as one downstream provider if its standalone daemon proves compatible.
+
+**Rejected as the default architecture:**
+- continuing to grow `elmakus/codex-chatgpt-web` into the top-level native provider aggregator;
+- making CLIProxyAPI the mandatory top-level catalog owner when OpenCodex can own the Codex integration directly;
+- deleting Codex-LB/CLIProxyAPI before behavioral equivalence is proven;
+- claiming upstream `codex-chatgpt-web serve` compatibility before the operator-run live proof.
+
+**Numbering note:** D31 intentionally avoids D29/D30, which are already used by the independent active `work/muse-native-upstream` workstream and may later be integrated or superseded through its own lifecycle.
+
