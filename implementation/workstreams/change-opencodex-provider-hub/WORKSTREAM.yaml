@@ -1,6 +1,6 @@
 id: "change-opencodex-provider-hub"
 kind: "change"
-status: "discovery"
+status: "planning"
 
 branch: "work/opencodex-provider-hub"
 base_ref: "dfa41ce0867824757a50dc151afe3a87c4826457"
@@ -11,7 +11,7 @@ parent_branch: null
 parent_dependency: null
 
 intake:
-  state: active
+  state: complete
   record: "implementation/workstreams/change-opencodex-provider-hub/INTAKE.md"
 
 routing:
@@ -22,8 +22,9 @@ routing:
 task_board: null
 
 authority:
-  requirements: null
-  decisions: []
+  requirements: "requirements/OPENCODEX_PROVIDER_HUB.md"
+  decisions:
+    - "docs/DECISIONS.md#d31--opencodex-is-the-candidate-single-provider-hub-and-catalog-owner"
   plan: null
 
 review:
