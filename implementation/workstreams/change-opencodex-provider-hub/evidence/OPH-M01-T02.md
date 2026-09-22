@@ -52,3 +52,23 @@ A separate GitHub Exact candidate build run `35702966572` was also triggered by 
 - no OpenCodex proof process is started by normal desktop/container startup
 - no provider credentials or generated management tokens were added
 - provider-family definitions, upstream browser proof daemon startup, route/catalog takeover, and final service-manager choices remain deferred to later JIT Cards
+
+
+## Independent review verdict
+
+Verdict: **GREEN**  
+Reviewed immutable subject: `commit:22e226ceb4d6d63b98051c738877c85f69bc9ab5`
+
+Independent review verified the Card contract, OPH-R1 authority slice, accepted decisions, OPH-M01 plan boundary, exact subject tree/diff, and exact-subject CI evidence.
+
+Findings:
+
+- All lifecycle operations `start|stop|health|status` are funneled through `run_ocx`, which supplies both isolated `OPENCODEX_HOME` and `CODEX_HOME`.
+- Default proof state is deterministic under the persistent user home and separated from normal `~/.opencodex` / `~/.codex`; exact or nested production-home overrides are rejected.
+- The helper exposes only bounded proof commands and contains no `ocx init`, `service`, `ensure`, or `codex-shim` path.
+- The proof helper is not wired into normal desktop startup and the reviewed subject does not change CE route/catalog ownership or provider configuration.
+- Exact-subject PR CI run `35702966558` is GREEN for source validation, Dockerfile checks, secret scan, and ShellCheck; the checkout explicitly merged head `22e226ceb4d6d63b98051c738877c85f69bc9ab5`.
+- The recorded exact-candidate runtime proof exercised the installed frozen OpenCodex through start/health/status/stop, preserved both production-home sentinel hashes, and bound the built image to the frozen upstream-resolution provenance recorded above.
+- Scope remains bounded to the reversible diagnostic substrate; provider-family configuration and final service-manager/browser-daemon ownership remain deferred as required by the OPH-M01 JIT boundary.
+
+No blocking acceptance, authority, safety, or proportional-design defect was found in the reviewed subject.
