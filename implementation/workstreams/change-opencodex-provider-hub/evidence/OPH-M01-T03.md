@@ -65,3 +65,30 @@ Acceptance-blocking findings:
 2. `atomic_write_json()` unconditionally runs `path.parent.chmod(0o700)` after `mkdir(..., exist_ok=True)`. For a caller-selected pre-existing `--disposable` directory, rendering therefore mutates that directory's permissions even though the Card authorizes writing the proof artifact there, not retagging unrelated parent-directory access. This is an unnecessary side effect on the disposable-output surface and is not covered by a regression test.
 
 Classification: bounded L1/L2 correction inside accepted OPH-R1 / OPH-PLAN-R2 authority. No product, planning, research, credential, live-provider, or user-authorization decision is required.
+
+## Bounded correction after review attempt 1
+
+Corrected immutable implementation subject: `commit:33023b6915b1fe80b2e1efa828af3fd2f90348ec`.
+
+The RED findings were corrected without expanding Card authority:
+
+- `atomic_write_json()` now changes parent-directory mode to `0700` only when that final parent did not already exist; a pre-existing caller-selected `--disposable` parent keeps its existing permissions.
+- focused negative coverage now rejects a non-http(s) provider URL and a provider row missing required `baseUrl`;
+- a regression case renders into a pre-existing mode-`0755` disposable parent and verifies the parent remains `0755`.
+
+Exact corrected-subject verification:
+
+- GitHub CI run `35713048312` — GREEN on `33023b6915b1fe80b2e1efa828af3fd2f90348ec`;
+  - `source-validation` — GREEN, including the corrected proof-config test;
+  - `dockerfile-check` — GREEN;
+  - `secret-scan` — GREEN.
+- GitHub Exact candidate build run `35713048323` — GREEN on the same subject;
+  - frozen upstream resolution SHA-256: `2ef0f0e719fc02e034d49416d704dbdfaeccaf5c101a2130377e1a682c60068a`;
+  - image: `chatgpt-ce-workstation-ci:candidate-2ef0f0e719fc02e0`;
+  - image ID: `sha256:ea072166f8c4b5ea54e18cdf8b96a7103a900c4a91f675401e791de0460d04b7`;
+  - provenance readback — GREEN;
+  - exact installed frozen OpenCodex proof validation — `OPENCODEX_PROOF_CONFIG_RUNTIME_GREEN`.
+
+No production route/catalog ownership, credential handling, live provider traffic, login flow, startup wiring, or independent Muse workstream behavior changed in the correction.
+
+A new independent review is required for this corrected subject. Review attempt 1 remains preserved above as RED evidence for the superseded subject.
