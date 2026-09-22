@@ -35,7 +35,7 @@ cards:
     tests_summary: "Corrected source validation GREEN; Exact candidate build run 35696273152 GREEN with workflow-produced image provenance/readback; CI run 35699340685 GREEN on corrected subject c6e6c8f437d8c378525177a5685862153f1c0ef3 with source-validation, dockerfile-check, and secret-scan all GREEN."
     openspec: null
     review_requirement: RECOMMENDED
-    review_state: in_progress
+    review_state: green
     review_subject: "commit:c6e6c8f437d8c378525177a5685862153f1c0ef3"
     review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
     blocker: null
