@@ -1,0 +1,136 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+usage() {
+  cat >&2 <<'EOF'
+usage:
+  workstation-opencodex-live-a health
+  workstation-opencodex-live-a models
+  workstation-opencodex-live-a model <provider/model-id>
+  workstation-opencodex-live-a response <provider/model-id>
+EOF
+}
+
+fail() {
+  echo "error: $*" >&2
+  exit 2
+}
+
+command_name="${1:-}"
+[[ -n "$command_name" ]] || { usage; exit 2; }
+shift || true
+
+proof_port="${OPENCODEX_PROOF_PORT:-10170}"
+if [[ ! "$proof_port" =~ ^[0-9]+$ ]] || (( proof_port < 1 || proof_port > 65535 )); then
+  fail "OPENCODEX_PROOF_PORT must be an integer from 1 to 65535"
+fi
+
+curl_bin="${OPH_LIVE_A_CURL_BIN:-curl}"
+command -v "$curl_bin" >/dev/null 2>&1 || fail "curl transport is unavailable"
+
+base_url="http://127.0.0.1:${proof_port}"
+curl_common=(
+  --silent
+  --show-error
+  --fail-with-body
+  --connect-timeout 5
+  --max-time 120
+)
+
+require_model_id() {
+  local value="$1"
+  [[ "$value" =~ ^[A-Za-z0-9._:+-]+/[A-Za-z0-9._:/+-]+$ ]]     || fail "model id must be an explicit provider/model id"
+}
+
+fetch_models() {
+  "$curl_bin" "${curl_common[@]}"     --header 'Accept: application/json'     "$base_url/v1/models"
+}
+
+case "$command_name" in
+  health)
+    [[ "$#" -eq 0 ]] || fail "health accepts no extra arguments"
+    "$curl_bin" "${curl_common[@]}"       --header 'Accept: application/json'       "$base_url/healthz"
+    ;;
+  models)
+    [[ "$#" -eq 0 ]] || fail "models accepts no extra arguments"
+    catalog="$(fetch_models)"
+    python3 -c '
+import json, sys
+data=json.loads(sys.stdin.read())
+rows=data.get("data")
+if not isinstance(rows, list):
+    raise SystemExit("malformed model catalog")
+ids=[]
+for row in rows:
+    if not isinstance(row, dict) or not isinstance(row.get("id"), str):
+        raise SystemExit("malformed model catalog row")
+    ids.append(row["id"])
+for model_id in sorted(ids):
+    print(model_id)
+' <<<"$catalog"
+    ;;
+  model)
+    [[ "$#" -eq 1 ]] || fail "model requires exactly one provider/model id"
+    model_id="$1"
+    require_model_id "$model_id"
+    catalog="$(fetch_models)"
+    python3 - "$model_id" <<'PY' <<<"$catalog"
+import json
+import sys
+
+wanted = sys.argv[1]
+data = json.loads(sys.stdin.read())
+rows = data.get("data")
+if not isinstance(rows, list):
+    raise SystemExit("malformed model catalog")
+for row in rows:
+    if isinstance(row, dict) and row.get("id") == wanted:
+        print(wanted)
+        raise SystemExit(0)
+raise SystemExit(f"model not present in OpenCodex catalog: {wanted}")
+PY
+    ;;
+  response)
+    [[ "$#" -eq 1 ]] || fail "response requires exactly one provider/model id"
+    model_id="$1"
+    require_model_id "$model_id"
+    payload="$(python3 - "$model_id" <<'PY'
+import json
+import sys
+print(json.dumps({
+    "model": sys.argv[1],
+    "input": "Reply with exactly: OPH-LIVE-A OK",
+    "stream": False,
+}, separators=(",", ":")))
+PY
+)"
+    response="$(
+      "$curl_bin" "${curl_common[@]}"         --header 'Accept: application/json'         --header 'Content-Type: application/json'         --request POST         --data-binary "$payload"         "$base_url/v1/responses"
+    )"
+    python3 - <<'PY' <<<"$response"
+import json
+import sys
+
+data=json.loads(sys.stdin.read())
+if not isinstance(data, dict) or data.get("error") is not None:
+    raise SystemExit("OpenCodex response contains an error")
+output=data.get("output")
+if not isinstance(output, list):
+    raise SystemExit("malformed Responses payload")
+texts=[]
+for item in output:
+    if not isinstance(item, dict):
+        continue
+    for part in item.get("content", []):
+        if isinstance(part, dict) and isinstance(part.get("text"), str):
+            texts.append(part["text"])
+if "OPH-LIVE-A OK" not in "\n".join(texts):
+    raise SystemExit("harmless response marker missing")
+print("OPH-LIVE-A_RESPONSE_GREEN")
+PY
+    ;;
+  *)
+    usage
+    fail "unknown command: $command_name"
+    ;;
+esac
