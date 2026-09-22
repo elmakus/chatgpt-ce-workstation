@@ -26,8 +26,10 @@ def manifest():
             "ce": {"identity":"b"*40,"override":False,"provenance":"git-ls-remote","ref":"main","repository":"https://example.invalid/ce.git"},
             "chrome": {"architecture":"amd64","identity":"145@sha256:"+"c"*64,"override":False,"package":"google-chrome-stable","package_sha256":"c"*64,"provenance":"google-apt-signed-metadata","repository_path":"pool/chrome.deb","signing_key_sha256":"d"*64,"size":1,"version":"145.0.0-1"},
             "codex_web_gpt": {"asset":"codex.AppImage","identity":"1@sha256:"+"e"*64,"override":False,"package_sha256":"e"*64,"provenance":"github-stable-release-checksums","repository":"elmakus/codex-chatgpt-web","version":"1.0.0"},
+            "codex_web_gpt_upstream": {"asset":"codex-upstream.AppImage","identity":"2@sha256:"+"8"*64,"override":False,"package_sha256":"8"*64,"provenance":"github-stable-release-checksums","repository":"miuuyy/codex-chatgpt-web","version":"2.0.0"},
             "muse_code": {"channel":"muse-stable","identity":"1@sha256:"+"f"*64,"installer_sha256":"f"*64,"installer_url":"https://dev.meta.ai/install.sh","override":False,"provenance":"meta-stable-channel-and-installer","version":"1.1.1-R1.1"},
             "openai_chatgpt": {"architecture":"amd64","identity":"1@sha256:"+"1"*64,"override":False,"package":"chatgpt","provenance":"ce-signed-stable-metadata","repository":"https://packages.example","repository_path":"pool/chatgpt.deb","sha256":"1"*64,"size":2,"version":"1.0.0"},
+            "opencodex": {"identity":"3.0.0@sha512-z","integrity":"sha512-z","override":False,"package":"@bitkyc08/opencodex","provenance":"npm-registry","shasum":"9"*40,"version":"3.0.0"},
             "rust": {"channel_manifest_sha256":"2"*64,"identity":"1@sha256:"+"2"*64,"installer_sha256":"3"*64,"override":False,"provenance":"rust-static-stable-manifest","version":"1.90.0"},
             "s6_overlay": {"assets":{"s6-overlay-noarch.tar.xz":"4"*64,"s6-overlay-x86_64.tar.xz":"5"*64},"identity":"3.2@sha256:"+"6"*64,"override":False,"provenance":"github-stable-release-assets","repository":"just-containers/s6-overlay","version":"3.2.3.2"},
             "ubuntu_base": {"family":"ubuntu:24.04","identity":"sha256:"+"7"*64,"override":False,"provenance":"docker-registry-manifest"},
@@ -56,6 +58,8 @@ class BuildEnvTests(unittest.TestCase):
             "archive.ubuntu.com_ubuntu_dists_noble_InRelease=" + "9"*64,
         )
         self.assertEqual(values["CANDIDATE_IMAGE_TAG"], f"candidate-{expected_digest[:16]}")
+        self.assertEqual(values["CODEX_CHATGPT_WEB_UPSTREAM_VERSION"], "2.0.0")
+        self.assertEqual(values["OPENCODEX_VERSION"], "3.0.0")
 
     def test_unknown_fields_are_rejected_before_manifest_embedding(self):
         data = manifest()
