@@ -14,6 +14,9 @@ resolver = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(resolver)
 
 
+VALID_SHA512_X = "sha512-eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eA=="
+VALID_SHA512_Y = "sha512-eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eQ=="
+
 class ResolverTests(unittest.TestCase):
     def test_parse_ubuntu_digest(self):
         digest = "sha256:" + "a" * 64
@@ -257,7 +260,7 @@ SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
             "versions": {
                 "0.3.3": {
                     "dist": {
-                        "integrity": "sha512-AbCdEf==",
+                        "integrity": VALID_SHA512_X,
                         "shasum": "a" * 40,
                     }
                 }
@@ -269,7 +272,7 @@ SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
 
         result = resolver.resolve_agent_workspace(None, fetcher)
         self.assertEqual(result["version"], "0.3.3")
-        self.assertEqual(result["identity"], "0.3.3@sha512-AbCdEf==")
+        self.assertEqual(result["identity"], f"0.3.3@{VALID_SHA512_X}")
         self.assertFalse(result["override"])
 
     def test_agent_workspace_override_is_explicit(self):
@@ -278,7 +281,7 @@ SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
             "versions": {
                 "0.3.2": {
                     "dist": {
-                        "integrity": "sha512-Override==",
+                        "integrity": VALID_SHA512_Y,
                         "shasum": "b" * 40,
                     }
                 }
@@ -461,13 +464,30 @@ SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
         )
 
 
+    def test_npm_integrity_rejects_malformed_sha512_payload(self):
+        metadata = {
+            "dist-tags": {"latest": "3.4.5"},
+            "versions": {
+                "3.4.5": {
+                    "dist": {
+                        "integrity": "sha512-not-valid-base64!",
+                        "shasum": "a" * 40,
+                    }
+                }
+            },
+        }
+        with self.assertRaises(resolver.ResolutionError):
+            resolver.resolve_opencodex(
+                None, lambda _url: json.dumps(metadata).encode("utf-8")
+            )
+
     def test_opencodex_uses_frozen_npm_identity(self):
         metadata = {
             "dist-tags": {"latest": "3.4.5"},
             "versions": {
                 "3.4.5": {
                     "dist": {
-                        "integrity": "sha512-proof",
+                        "integrity": VALID_SHA512_X,
                         "shasum": "a" * 40,
                     }
                 }
@@ -481,7 +501,7 @@ SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
         result = resolver.resolve_opencodex(None, fake_fetcher)
         self.assertEqual(result["package"], "@bitkyc08/opencodex")
         self.assertEqual(result["version"], "3.4.5")
-        self.assertEqual(result["identity"], "3.4.5@sha512-proof")
+        self.assertEqual(result["identity"], f"3.4.5@{VALID_SHA512_X}")
         self.assertFalse(result["override"])
 
     def test_upstream_codex_web_identity_is_distinct_from_fork(self):
