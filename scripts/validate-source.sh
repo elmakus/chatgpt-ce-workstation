@@ -17,7 +17,7 @@ echo '=== shell syntax ==='
 mapfile -t shell_files < <(
   {
     find scripts -type f -name '*.sh' -print
-    find rootfs -type f \( -name '*.sh' -o -path '*/usr/local/bin/chatgpt-ce' -o -path '*/usr/local/bin/muse' -o -path '*/usr/local/bin/workstation-healthcheck' \) -print
+    find rootfs -type f \( -name '*.sh' -o -path '*/usr/local/bin/chatgpt-ce' -o -path '*/usr/local/bin/muse' -o -path '*/usr/local/bin/workstation-opencodex-proof' -o -path '*/usr/local/bin/workstation-opencodex-live-a' -o -path '*/usr/local/bin/workstation-healthcheck' \) -print
     find rootfs/etc/cont-init.d -type f -print 2>/dev/null || true
     find rootfs/etc/s6-overlay/s6-rc.d -type f -name run -print 2>/dev/null || true
   } | sort -u
@@ -388,6 +388,11 @@ bash scripts/test-opencodex-proof-lifecycle.sh || fail 'isolated OpenCodex proof
 python3 -m py_compile rootfs/usr/local/bin/workstation-opencodex-proof-config \
   || fail 'OpenCodex proof config helper Python compile check'
 bash scripts/test-opencodex-proof-config.sh || fail 'isolated OpenCodex provider config tests'
+[[ -s rootfs/usr/local/bin/workstation-opencodex-live-a ]] || fail 'OpenCodex OPH-LIVE-A probe helper missing'
+bash scripts/test-opencodex-live-a.sh || fail 'isolated OpenCodex OPH-LIVE-A probe tests'
+if grep -F 'workstation-opencodex-live-a' scripts/container/desktop-session-inner.sh >/dev/null; then
+  fail 'OpenCodex OPH-LIVE-A probe must not auto-run in the desktop session'
+fi
 if grep -F 'workstation-opencodex-proof' scripts/container/desktop-session-inner.sh >/dev/null; then
   fail 'OpenCodex proof tooling must not auto-start in the desktop session'
 fi
