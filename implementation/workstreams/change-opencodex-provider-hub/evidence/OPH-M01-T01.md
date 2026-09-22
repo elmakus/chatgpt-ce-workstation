@@ -96,3 +96,42 @@ Current fresh Ubuntu APT resolution from that later call:
 - The concrete build failure is durably captured here as required by the Card acceptance contract; it is not waived or reclassified as GREEN.
 
 Independent review should judge the exact implementation subject and this evidence, including whether the captured fail-closed candidate-build result is sufficient under the Card contract or whether a later rerun/follow-up is required before the Card can be finalized.
+
+
+## Independent review
+
+Review subject: `commit:40ad8ee1182304b54f628b588787b8c97002eba4`
+Verdict: **RED**
+
+The implementation preserves the production fork route, adds distinct frozen candidate identities, and the focused source tests reported above are consistent with the reviewed source. The review nevertheless found two acceptance-blocking defects.
+
+### R1 — Exact-candidate GitHub Actions workflow is invalid
+
+The reviewed change adds the candidate-image readback Python heredoc to `.github/workflows/candidate-build.yml`, but the heredoc body is emitted at YAML column 1 rather than remaining indented inside the `run: |` scalar. GitHub therefore cannot materialize the workflow job.
+
+Exact external evidence for the reviewed subject:
+
+- workflow run: `35689565827`;
+- `head_sha`: `40ad8ee1182304b54f628b588787b8c97002eba4`;
+- conclusion: `failure`;
+- jobs returned by the run: none.
+
+This means the Card-required CI/exact-candidate image readback path did not execute on the reviewed subject. The separately captured Tower APT provenance failures do not waive this defect because they exercise a different execution surface and do not prove the checked-in GitHub workflow is runnable.
+
+Required bounded correction: fix the workflow block structure, validate the workflow on the corrected exact subject, and retain the existing fail-closed candidate readback checks.
+
+### R2 — New frozen candidate identity validation is not fail-closed enough
+
+The Card requires missing/unknown/**malformed** candidate identity fields to be rejected before build inputs are accepted. On the reviewed subject:
+
+- `codex_web_gpt_upstream.package_sha256` is only read as non-empty text by `render-build-env.py`; it is not validated as 64 lowercase hex there;
+- `opencodex.integrity` is accepted solely by a `sha512-` prefix check;
+- the canonical `identity` strings for both new components are not cross-checked against their version + checksum/integrity fields.
+
+Consequently a frozen manifest can carry an inconsistent/malformed candidate identity and still pass the render stage, contrary to the Card acceptance language. The installer may fail later for some malformed values, but that is not equivalent to rejecting malformed frozen build inputs at the manifest/render boundary.
+
+Required bounded correction: add strict format/consistency validation for the new candidate fields in the renderer and deterministic negative tests covering malformed/mismatched identities.
+
+### Review classification
+
+Both defects are bounded L1/L2 implementation corrections inside the already accepted OPH-R1 / OPH-PLAN-R2 authority. No Definition or strategic-plan change is required.
