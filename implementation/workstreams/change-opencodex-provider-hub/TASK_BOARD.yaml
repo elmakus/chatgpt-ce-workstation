@@ -6,7 +6,7 @@ current_milestone: "OPH-M01"
 execution_ref:
   branch: "work/opencodex-provider-hub"
   pr: null
-  head: "d93f5d7f7b1e6773c83c86a447a271e7ccbb1382"
+  head: "30d42dd73b8b613bb20cbb2617e5ee6c5c97e970"
 
 research_obligation: null
 
@@ -27,15 +27,15 @@ cards:
     contract: "implementation/workstreams/change-opencodex-provider-hub/cards/OPH-M01-T01.md"
     milestone: "OPH-M01"
     dependencies: []
-    execution_status: blocked
+    execution_status: in_progress
     executor: chatgpt
-    result_commit: "d93f5d7f7b1e6773c83c86a447a271e7ccbb1382"
+    result_commit: "30d42dd73b8b613bb20cbb2617e5ee6c5c97e970"
     result_pr: null
     evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
-    tests_summary: "Corrected exact subject d93f5d7: resolver 23/23 GREEN; renderer 15/15 GREEN; installer contracts GREEN; SOURCE_VALIDATION_GREEN; candidate workflow block/shell syntax GREEN; non-production exact-candidate build + image provenance/readback GREEN with resolution SHA-256 e6a786ec6416f067fef1818a9f92db5dbff26a49653befaffc0d446b3751ef0b."
+    tests_summary: "Corrected source validation GREEN; GitHub Actions Exact candidate build run 35696273152 GREEN on exact subject 30d42dd73b8b613bb20cbb2617e5ee6c5c97e970; exact build and workflow-produced image provenance/readback GREEN with resolution/label/embedded SHA-256 e6a786ec6416f067fef1818a9f92db5dbff26a49653befaffc0d446b3751ef0b."
     openspec: null
     review_requirement: RECOMMENDED
-    review_state: red
-    review_subject: "commit:d93f5d7f7b1e6773c83c86a447a271e7ccbb1382"
+    review_state: pending
+    review_subject: "commit:30d42dd73b8b613bb20cbb2617e5ee6c5c97e970"
     review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
-    blocker: "Required exact-candidate GitHub Actions workflow run is not dispatchable from the current chat: the GitHub connector exposes no workflow-dispatch write action, and the authorized Tower bridge has neither gh nor a GitHub token available. Run Exact candidate build manually on work/opencodex-provider-hub, then return with the workflow run available for readback."
+    blocker: null
