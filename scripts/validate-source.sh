@@ -73,6 +73,7 @@ grep -F -- '--metadata-only' scripts/build/Dockerfile.upstream-resolution >/dev/
   || fail 'OpenAI metadata resolver does not use CE metadata-only signed resolver path'
 python3 scripts/test-resolve-upstreams.py || fail 'frozen upstream resolver fixture tests'
 python3 scripts/test-render-build-env.py || fail 'frozen manifest build-input fixture tests'
+bash scripts/test-proof-component-installers.sh || fail 'proof component installer contract tests'
 grep -F 'ARG UBUNTU_BASE' Dockerfile >/dev/null || fail 'Dockerfile has no explicit frozen Ubuntu base arg'
 grep -F 'FROM ${UBUNTU_BASE}' Dockerfile >/dev/null || fail 'Dockerfile does not consume the frozen Ubuntu base'
 grep -F 'CE_COMMIT' Dockerfile >/dev/null || fail 'Dockerfile does not consume the exact CE commit'
@@ -81,6 +82,9 @@ grep -F 'OPENAI_PACKAGE_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does n
 grep -F 'AGENT_WORKSPACE_INTEGRITY' Dockerfile >/dev/null || fail 'Dockerfile does not bind Agent Workspace integrity'
 grep -F 'S6_OVERLAY_NOARCH_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind s6 asset hashes'
 grep -F 'CODEX_CHATGPT_WEB_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind Codex Web GPT checksum'
+grep -F 'CODEX_CHATGPT_WEB_UPSTREAM_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind upstream Codex Web GPT proof checksum'
+grep -F 'OPENCODEX_INTEGRITY' Dockerfile >/dev/null || fail 'Dockerfile does not bind OpenCodex npm integrity'
+grep -F 'OPENCODEX_SHASUM' Dockerfile >/dev/null || fail 'Dockerfile does not bind OpenCodex npm shasum'
 grep -F 'MUSE_EXPECTED_VERSION' Dockerfile >/dev/null || fail 'Dockerfile does not bind Muse stable release id'
 grep -F 'CHROME_PACKAGE_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind Chrome package checksum'
 grep -F 'RUST_STABLE_MANIFEST_SHA256' Dockerfile >/dev/null || fail 'Dockerfile does not bind Rust stable manifest identity'
@@ -213,6 +217,8 @@ env \
   S6_OVERLAY_VERSION=3.2.3.2 S6_OVERLAY_NOARCH_SHA256="${fixture_sha}" S6_OVERLAY_X86_64_SHA256="${fixture_sha}" \
   AGENT_WORKSPACE_VERSION=0.0.0 AGENT_WORKSPACE_INTEGRITY="sha512-fixture" \
   CODEX_CHATGPT_WEB_VERSION=0.0.0 CODEX_CHATGPT_WEB_SHA256="${fixture_sha}" \
+  CODEX_CHATGPT_WEB_UPSTREAM_VERSION=0.0.0 CODEX_CHATGPT_WEB_UPSTREAM_SHA256="${fixture_sha}" \
+  OPENCODEX_VERSION=0.0.0 OPENCODEX_INTEGRITY="sha512-fixture" OPENCODEX_SHASUM="$(printf 'a%.0s' {1..40})" \
   MUSE_INSTALLER_URL=https://dev.meta.ai/install.sh MUSE_INSTALLER_SHA256="${fixture_sha}" MUSE_EXPECTED_VERSION=0.0.0-R0.0 \
   CHROME_VERSION=1.0.0-1 CHROME_PACKAGE_SHA256="${fixture_sha}" GOOGLE_LINUX_PUB_MATERIAL_SHA256="${fixture_sha}" \
   RUST_VERSION=1.90.0 RUST_STABLE_MANIFEST_SHA256="${fixture_sha}" RUSTUP_INSTALLER_SHA256="${fixture_sha}" \
@@ -364,12 +370,21 @@ grep -F 'PACKAGE_WITH_UPDATER=0' Dockerfile >/dev/null || fail 'CE native update
 grep -F 'CODEX_WEB_GPT_DISABLE_UPDATES="\${CODEX_WEB_GPT_DISABLE_UPDATES:-1}"' scripts/build/install-codex-web-gpt.sh >/dev/null \
   || fail 'Codex Web GPT self-updater is not disabled by default in the workstation wrapper'
 grep -F '# CODEX_CHATGPT_WEB_VERSION=' .env.example >/dev/null || fail 'Codex Web GPT expert override is not documented as optional'
+grep -F '# CODEX_CHATGPT_WEB_UPSTREAM_VERSION=' .env.example >/dev/null || fail 'upstream Codex Web GPT proof override is not documented as optional'
+grep -F '# OPENCODEX_VERSION=' .env.example >/dev/null || fail 'OpenCodex expert override is not documented as optional'
 if grep -F 'releases/latest' scripts/build/install-codex-web-gpt.sh >/dev/null; then
   fail 'Codex Web GPT build installer still resolves a moving latest release'
 fi
 grep -F 'CODEX_CHATGPT_WEB_SHA256' scripts/build/install-codex-web-gpt.sh >/dev/null \
   || fail 'Codex Web GPT build installer does not require frozen checksum'
 grep -F 'codex-web-gpt-set-codex-lb-key' scripts/build/install-codex-web-gpt.sh >/dev/null || fail 'Codex Web GPT packaged Codex-LB key helper is not installed'
+[[ -s scripts/build/install-opencodex.sh ]] || fail 'OpenCodex frozen installer helper missing'
+[[ -s scripts/build/install-codex-web-gpt-upstream.sh ]] || fail 'upstream Codex Web GPT proof installer missing'
+grep -F 'command -v ocx' Dockerfile >/dev/null || fail 'candidate image does not verify OpenCodex executable'
+grep -F 'command -v codex-chatgpt-web-upstream' Dockerfile >/dev/null || fail 'candidate image does not verify isolated upstream browser executable'
+if grep -F 'codex-chatgpt-web-upstream' scripts/container/desktop-session-inner.sh >/dev/null; then
+  fail 'upstream browser proof runtime must not auto-start in the desktop session'
+fi
 [[ -s scripts/build/install-muse-code.sh ]] || fail 'Muse build installer helper missing'
 [[ -s rootfs/usr/local/bin/muse ]] || fail 'Muse runtime wrapper missing'
 grep -F '/opt/muse-code/bin/muse' rootfs/usr/local/bin/muse >/dev/null || fail 'Muse wrapper does not target image-owned install'
