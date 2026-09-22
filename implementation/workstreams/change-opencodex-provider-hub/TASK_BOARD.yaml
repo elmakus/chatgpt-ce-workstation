@@ -57,3 +57,21 @@ cards:
     review_subject: "commit:22e226ceb4d6d63b98051c738877c85f69bc9ab5"
     review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T02.md"
     blocker: null
+
+  - id: "OPH-M01-T03"
+    contract: "implementation/workstreams/change-opencodex-provider-hub/cards/OPH-M01-T03.md"
+    milestone: "OPH-M01"
+    dependencies:
+      - "OPH-M01-T02"
+    execution_status: ready
+    executor: chatgpt
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    openspec: null
+    review_requirement: RECOMMENDED
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    blocker: null
