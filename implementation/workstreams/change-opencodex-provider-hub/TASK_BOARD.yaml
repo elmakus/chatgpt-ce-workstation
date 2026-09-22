@@ -100,7 +100,7 @@ cards:
     tests_summary: "Focused/source validation GREEN; exact CI run 35717632054 GREEN on e6602ed132ecdb9d15ab7839339015206e3eb598 with Dockerfile check, source-validation/ShellCheck, and secret-scan GREEN; exact candidate build run 35717632009 GREEN with frozen image provenance and OPENCODEX_LIVE_A_RUNTIME_GREEN from the installed helper using fake transport only."
     openspec: null
     review_requirement: RECOMMENDED
-    review_state: pending
+    review_state: in_progress
     review_subject: "commit:e6602ed132ecdb9d15ab7839339015206e3eb598"
     review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M02-T01.md"
     blocker: null
