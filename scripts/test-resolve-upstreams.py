@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import base64
 import importlib.util
 import json
 import tempfile
@@ -14,8 +15,8 @@ resolver = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(resolver)
 
 
-VALID_SHA512_X = "sha512-eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eA=="
-VALID_SHA512_Y = "sha512-eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eQ=="
+VALID_SHA512_X = "sha512-" + base64.b64encode(b"x" * 64).decode("ascii")
+VALID_SHA512_Y = "sha512-" + base64.b64encode(b"y" * 64).decode("ascii")
 
 class ResolverTests(unittest.TestCase):
     def test_parse_ubuntu_digest(self):
