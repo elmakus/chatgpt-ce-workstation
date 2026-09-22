@@ -78,35 +78,35 @@ chmod 0755 "$fake_curl"
 export OPH_LIVE_A_CURL_BIN="$fake_curl"
 export FAKE_CURL_LOG="$log"
 
-health="$("$helper" health)"
+health="$(bash "$helper" health)"
 grep -F '"ok":true' <<<"$health" >/dev/null || fail "health result missing"
 
-models="$("$helper" models)"
+models="$(bash bash "$helper" models)"
 expected_models=$'chatgpt-web/chatgpt-web/proof-model\ncliproxyapi/proof-model\ncodex-lb/proof-model\nmeta-muse/muse-spark-1.3'
 [[ "$models" == "$expected_models" ]] || fail "model catalog was not normalized deterministically"
 
-[[ "$("$helper" model codex-lb/proof-model)" == "codex-lb/proof-model" ]] ||
+[[ "$(bash "$helper" model codex-lb/proof-model)" == "codex-lb/proof-model" ]] ||
   fail "exact model lookup failed"
-if "$helper" model codex-lb/missing >/dev/null 2>&1; then
+if bash "$helper" model codex-lb/missing >/dev/null 2>&1; then
   fail "missing exact model was accepted"
 fi
-if "$helper" model gpt-5.6-sol >/dev/null 2>&1; then
+if bash "$helper" model gpt-5.6-sol >/dev/null 2>&1; then
   fail "bare model id was accepted"
 fi
-if "$helper" model 'codex-lb/bad id' >/dev/null 2>&1; then
+if bash "$helper" model 'codex-lb/bad id' >/dev/null 2>&1; then
   fail "model id with whitespace was accepted"
 fi
 
-[[ "$("$helper" response codex-lb/proof-model)" == "OPH-LIVE-A_RESPONSE_GREEN" ]] ||
+[[ "$(bash "$helper" response codex-lb/proof-model)" == "OPH-LIVE-A_RESPONSE_GREEN" ]] ||
   fail "harmless response smoke failed"
-if FAKE_CURL_MODE=malformed-response "$helper" response codex-lb/proof-model >/dev/null 2>&1; then
+if FAKE_CURL_MODE=malformed-response bash "$helper" response codex-lb/proof-model >/dev/null 2>&1; then
   fail "malformed Responses payload was accepted"
 fi
 
-if OPENCODEX_PROOF_PORT=0 "$helper" health >/dev/null 2>&1; then
+if OPENCODEX_PROOF_PORT=0 bash "$helper" health >/dev/null 2>&1; then
   fail "invalid proof port was accepted"
 fi
-if "$helper" health extra >/dev/null 2>&1; then
+if bash "$helper" health extra >/dev/null 2>&1; then
   fail "extra health argument was accepted"
 fi
 
