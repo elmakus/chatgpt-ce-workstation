@@ -35,7 +35,7 @@ cards:
     tests_summary: "Corrected exact subject d93f5d7: resolver 23/23 GREEN; renderer 15/15 GREEN; installer contracts GREEN; SOURCE_VALIDATION_GREEN; candidate workflow block/shell syntax GREEN; non-production exact-candidate build + image provenance/readback GREEN with resolution SHA-256 e6a786ec6416f067fef1818a9f92db5dbff26a49653befaffc0d446b3751ef0b."
     openspec: null
     review_requirement: RECOMMENDED
-    review_state: in_progress
+    review_state: red
     review_subject: "commit:d93f5d7f7b1e6773c83c86a447a271e7ccbb1382"
     review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
     blocker: null
