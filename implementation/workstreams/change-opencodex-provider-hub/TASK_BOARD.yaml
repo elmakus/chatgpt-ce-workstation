@@ -6,7 +6,7 @@ current_milestone: "OPH-M01"
 execution_ref:
   branch: "work/opencodex-provider-hub"
   pr: null
-  head: "ebbaf17ce6c229cf3146a3af92d802b6892a8392"
+  head: "d93f5d7f7b1e6773c83c86a447a271e7ccbb1382"
 
 research_obligation: null
 
@@ -29,13 +29,13 @@ cards:
     dependencies: []
     execution_status: in_progress
     executor: chatgpt
-    result_commit: "40ad8ee1182304b54f628b588787b8c97002eba4"
+    result_commit: "d93f5d7f7b1e6773c83c86a447a271e7ccbb1382"
     result_pr: null
     evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
-    tests_summary: "Source/focused validation GREEN on exact subject; non-production exact-candidate image build attempted twice and failed closed before new proof-component installation/readback because existing D25 Ubuntu APT InRelease identity changed during mirror/CDN propagation; exact hashes and later converged resolver state captured in evidence."
+    tests_summary: "Corrected exact subject d93f5d7: resolver 23/23 GREEN; renderer 15/15 GREEN; installer contracts GREEN; SOURCE_VALIDATION_GREEN; candidate workflow block/shell syntax GREEN; non-production exact-candidate build + image provenance/readback GREEN with resolution SHA-256 e6a786ec6416f067fef1818a9f92db5dbff26a49653befaffc0d446b3751ef0b."
     openspec: null
     review_requirement: RECOMMENDED
-    review_state: red
-    review_subject: "commit:40ad8ee1182304b54f628b588787b8c97002eba4"
+    review_state: pending
+    review_subject: "commit:d93f5d7f7b1e6773c83c86a447a271e7ccbb1382"
     review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
     blocker: null
