@@ -15,6 +15,9 @@ on:
       - "rootfs/usr/local/bin/workstation-opencodex-proof-config"
       - "scripts/test-opencodex-proof-config.sh"
       - "scripts/candidate-opencodex-proof-config-smoke.sh"
+      - "rootfs/usr/local/bin/workstation-opencodex-live-a"
+      - "scripts/test-opencodex-live-a.sh"
+      - "scripts/candidate-opencodex-live-a-smoke.sh"
       - ".github/workflows/candidate-build.yml"
   workflow_dispatch:
 
@@ -122,3 +125,12 @@ jobs:
             --entrypoint /bin/bash \
             -v "$PWD/scripts/candidate-opencodex-proof-config-smoke.sh:/tmp/opencodex-proof-config-smoke.sh:ro" \
             "$image_ref" /tmp/opencodex-proof-config-smoke.sh
+
+      - name: Validate isolated OpenCodex OPH-LIVE-A probe
+        run: |
+          image_ref="$IMAGE_NAME:$CANDIDATE_TAG"
+          docker run --rm \
+            --entrypoint /bin/bash \
+            -v "$PWD/scripts/test-opencodex-live-a.sh:/tmp/test-opencodex-live-a.sh:ro" \
+            -v "$PWD/scripts/candidate-opencodex-live-a-smoke.sh:/tmp/opencodex-live-a-smoke.sh:ro" \
+            "$image_ref" /tmp/opencodex-live-a-smoke.sh
