@@ -6,7 +6,7 @@ current_milestone: "OPH-M01"
 execution_ref:
   branch: "work/opencodex-provider-hub"
   pr: null
-  head: "168cbbb00c5a521cb2cf53e16592fe4d4a311217"
+  head: "efd63154488829bcdb04b89e02d81cf6025bd354"
 
 research_obligation: null
 
@@ -45,8 +45,8 @@ cards:
     milestone: "OPH-M01"
     dependencies:
       - "OPH-M01-T01"
-    execution_status: ready
-    executor: null
+    execution_status: in_progress
+    executor: chatgpt
     result_commit: null
     result_pr: null
     evidence: null
