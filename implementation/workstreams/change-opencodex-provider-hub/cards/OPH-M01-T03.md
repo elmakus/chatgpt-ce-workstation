@@ -7,7 +7,7 @@
 ## Authority slice
 
 - Master Plan / milestone contract: `planning/OPENCODEX_PROVIDER_HUB_PLAN.md` revision `OPH-PLAN-R2`, milestone `OPH-M01 — Reversible provider-hub proof substrate`
-- Requirements: `requirements/OPENCODEX_PROVIDER_HUB.md` revision `OPH-R1`: OPH-REQ-001, 003, 004, 008, 009, 010, 011, 012, 013, 016, 017, 018
+- Requirements: `requirements/OPENCODEX_PROVIDER_HUB.md` revision `OPH-R1`: OPH-REQ-001, 002, 003, 004, 005, 006, 007, 008, 009, 010, 011, 012, 013, 015, 016, 017, 018
 - Accepted decisions: `docs/DECISIONS.md` D8, D10, D11, D14, D15, D16, D25, D31
 - Relevant OpenSpec: none
 - Accepted dependency results:
