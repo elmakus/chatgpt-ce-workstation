@@ -71,7 +71,7 @@ cards:
     tests_summary: "Corrected proof-config/source validation GREEN; CI run 35713048312 GREEN with source-validation, dockerfile-check, secret-scan, and ShellCheck; Exact candidate build run 35713048323 GREEN with frozen image provenance/readback and OPENCODEX_PROOF_CONFIG_RUNTIME_GREEN on corrected subject 33023b6915b1fe80b2e1efa828af3fd2f90348ec."
     openspec: null
     review_requirement: RECOMMENDED
-    review_state: pending
+    review_state: in_progress
     review_subject: "commit:33023b6915b1fe80b2e1efa828af3fd2f90348ec"
     review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T03.md"
     blocker: null
