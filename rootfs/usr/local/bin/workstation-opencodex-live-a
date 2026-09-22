@@ -39,7 +39,8 @@ curl_common=(
 
 require_model_id() {
   local value="$1"
-  [[ "$value" =~ ^[A-Za-z0-9._:+-]+/[A-Za-z0-9._:/+-]+$ ]]     || fail "model id must be an explicit provider/model id"
+  [[ "$value" =~ ^[A-Za-z0-9._:+-]+/[A-Za-z0-9._:/+-]+$ ]] ||
+    fail "model id must be an explicit provider/model id"
 }
 
 fetch_models() {
@@ -74,13 +75,11 @@ for model_id in sorted(ids):
     model_id="$1"
     require_model_id "$model_id"
     catalog="$(fetch_models)"
-    python3 - "$model_id" <<'PY' <<<"$catalog"
-import json
-import sys
-
-wanted = sys.argv[1]
-data = json.loads(sys.stdin.read())
-rows = data.get("data")
+    python3 -c '
+import json, sys
+wanted=sys.argv[1]
+data=json.loads(sys.stdin.read())
+rows=data.get("data")
 if not isinstance(rows, list):
     raise SystemExit("malformed model catalog")
 for row in rows:
@@ -88,7 +87,7 @@ for row in rows:
         print(wanted)
         raise SystemExit(0)
 raise SystemExit(f"model not present in OpenCodex catalog: {wanted}")
-PY
+' "$model_id" <<<"$catalog"
     ;;
   response)
     [[ "$#" -eq 1 ]] || fail "response requires exactly one provider/model id"
@@ -107,10 +106,8 @@ PY
     response="$(
       "$curl_bin" "${curl_common[@]}"         --header 'Accept: application/json'         --header 'Content-Type: application/json'         --request POST         --data-binary "$payload"         "$base_url/v1/responses"
     )"
-    python3 - <<'PY' <<<"$response"
-import json
-import sys
-
+    python3 -c '
+import json, sys
 data=json.loads(sys.stdin.read())
 if not isinstance(data, dict) or data.get("error") is not None:
     raise SystemExit("OpenCodex response contains an error")
@@ -127,7 +124,7 @@ for item in output:
 if "OPH-LIVE-A OK" not in "\n".join(texts):
     raise SystemExit("harmless response marker missing")
 print("OPH-LIVE-A_RESPONSE_GREEN")
-PY
+' <<<"$response"
     ;;
   *)
     usage
