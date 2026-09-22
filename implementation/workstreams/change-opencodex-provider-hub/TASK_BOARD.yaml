@@ -6,7 +6,7 @@ current_milestone: "OPH-M01"
 execution_ref:
   branch: "work/opencodex-provider-hub"
   pr: null
-  head: "efd63154488829bcdb04b89e02d81cf6025bd354"
+  head: "22e226ceb4d6d63b98051c738877c85f69bc9ab5"
 
 research_obligation: null
 
@@ -47,13 +47,13 @@ cards:
       - "OPH-M01-T01"
     execution_status: in_progress
     executor: chatgpt
-    result_commit: null
+    result_commit: "22e226ceb4d6d63b98051c738877c85f69bc9ab5"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T02.md"
+    tests_summary: "Focused lifecycle/source validation GREEN; exact frozen-candidate runtime proof GREEN for isolated start/health/status/stop with production-home sentinels unchanged; CI run 35702966558 GREEN on subject 22e226ceb4d6d63b98051c738877c85f69bc9ab5. Duplicate Exact candidate build run 35702966572 was cancelled after the same-subject runtime proof had already succeeded."
     openspec: null
     review_requirement: RECOMMENDED
-    review_state: null
-    review_subject: null
-    review_evidence: null
+    review_state: pending
+    review_subject: "commit:22e226ceb4d6d63b98051c738877c85f69bc9ab5"
+    review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T02.md"
     blocker: null
