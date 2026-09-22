@@ -110,6 +110,35 @@ if run_helper render --spec "$bad_private" --output "$tmp/bad-private-out.json" 
   fail "private endpoint without explicit opt-in was accepted"
 fi
 
+bad_url="$tmp/bad-url.json"
+python3 - "$spec" "$bad_url" <<'PY'
+import json, pathlib, sys
+data=json.loads(pathlib.Path(sys.argv[1]).read_text())
+data["providers"]["codex-lb"]["baseUrl"]="ftp://127.0.0.1:18741/v1"
+pathlib.Path(sys.argv[2]).write_text(json.dumps(data))
+PY
+if run_helper render --spec "$bad_url" --output "$tmp/bad-url-out.json" --disposable >/dev/null 2>&1; then
+  fail "malformed/non-http(s) provider endpoint was accepted"
+fi
+
+missing_endpoint="$tmp/missing-endpoint.json"
+python3 - "$spec" "$missing_endpoint" <<'PY'
+import json, pathlib, sys
+data=json.loads(pathlib.Path(sys.argv[1]).read_text())
+del data["providers"]["cliproxyapi"]["baseUrl"]
+pathlib.Path(sys.argv[2]).write_text(json.dumps(data))
+PY
+if run_helper render --spec "$missing_endpoint" --output "$tmp/missing-endpoint-out.json" --disposable >/dev/null 2>&1; then
+  fail "missing required provider endpoint was accepted"
+fi
+
+preexisting_parent="$tmp/preexisting-parent"
+mkdir -p "$preexisting_parent"
+chmod 0755 "$preexisting_parent"
+run_helper render --spec "$spec" --output "$preexisting_parent/config.json" --disposable >/dev/null
+[[ "$(stat -c '%a' "$preexisting_parent")" == "755" ]] \
+  || fail "render changed permissions on a pre-existing disposable parent"
+
 bad_adapter="$tmp/bad-adapter.json"
 python3 - "$spec" "$bad_adapter" <<'PY'
 import json, pathlib, sys
