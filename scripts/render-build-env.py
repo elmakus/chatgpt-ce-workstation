@@ -17,7 +17,9 @@ COMPONENTS = {
     "ce",
     "chrome",
     "codex_web_gpt",
+    "codex_web_gpt_upstream",
     "muse_code",
+    "opencodex",
     "openai_chatgpt",
     "rust",
     "s6_overlay",
@@ -30,8 +32,10 @@ ALLOWED_FIELDS = {
     "ce": {"identity", "override", "provenance", "ref", "repository"},
     "chrome": {"architecture", "identity", "override", "package", "package_sha256", "provenance", "repository_path", "signing_key_sha256", "size", "version"},
     "codex_web_gpt": {"asset", "identity", "override", "package_sha256", "provenance", "repository", "version"},
+    "codex_web_gpt_upstream": {"asset", "identity", "override", "package_sha256", "provenance", "repository", "version"},
     "muse_code": {"channel", "identity", "installer_sha256", "installer_url", "override", "provenance", "version"},
     "openai_chatgpt": {"architecture", "identity", "override", "package", "provenance", "repository", "repository_path", "sha256", "size", "version"},
+    "opencodex": {"identity", "integrity", "override", "package", "provenance", "shasum", "version"},
     "rust": {"channel_manifest_sha256", "identity", "installer_sha256", "override", "provenance", "version"},
     "s6_overlay": {"assets", "identity", "override", "provenance", "repository", "version"},
     "ubuntu_base": {"family", "identity", "override", "provenance"},
@@ -157,6 +161,8 @@ def build_inputs(manifest: Mapping[str, object]) -> dict[str, str]:
     agent = require_mapping(c["agent_workspace"], "agent_workspace")
     s6 = require_mapping(c["s6_overlay"], "s6_overlay")
     codex = require_mapping(c["codex_web_gpt"], "codex_web_gpt")
+    codex_upstream = require_mapping(c["codex_web_gpt_upstream"], "codex_web_gpt_upstream")
+    opencodex = require_mapping(c["opencodex"], "opencodex")
     muse = require_mapping(c["muse_code"], "muse_code")
     chrome = require_mapping(c["chrome"], "chrome")
     rust = require_mapping(c["rust"], "rust")
@@ -187,6 +193,11 @@ def build_inputs(manifest: Mapping[str, object]) -> dict[str, str]:
         "S6_OVERLAY_X86_64_SHA256": x86_sha,
         "CODEX_CHATGPT_WEB_VERSION": require_text(codex, "version", "codex_web_gpt"),
         "CODEX_CHATGPT_WEB_SHA256": require_text(codex, "package_sha256", "codex_web_gpt"),
+        "CODEX_CHATGPT_WEB_UPSTREAM_VERSION": require_text(codex_upstream, "version", "codex_web_gpt_upstream"),
+        "CODEX_CHATGPT_WEB_UPSTREAM_SHA256": require_text(codex_upstream, "package_sha256", "codex_web_gpt_upstream"),
+        "OPENCODEX_VERSION": require_text(opencodex, "version", "opencodex"),
+        "OPENCODEX_INTEGRITY": require_text(opencodex, "integrity", "opencodex"),
+        "OPENCODEX_SHASUM": require_text(opencodex, "shasum", "opencodex"),
         "MUSE_INSTALLER_URL": require_text(muse, "installer_url", "muse_code"),
         "MUSE_INSTALLER_SHA256": require_text(muse, "installer_sha256", "muse_code"),
         "MUSE_EXPECTED_VERSION": require_text(muse, "version", "muse_code"),
