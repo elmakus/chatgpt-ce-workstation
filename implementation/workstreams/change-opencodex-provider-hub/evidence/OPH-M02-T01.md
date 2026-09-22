@@ -75,3 +75,18 @@ The candidate smoke explicitly requires `/usr/local/bin/workstation-opencodex-li
 This evidence proves only the reusable local probe and its image packaging. It does not claim that Codex-LB, CLIProxyAPI, upstream ChatGPT Web, or Meta Muse has passed OPH-LIVE-A. No live provider call was performed by this Card.
 
 Those provider-specific observations remain operator-owned live-gate evidence for later OPH-M02 JIT work.
+
+
+## Independent review attempt 1 — RED
+
+Reviewed immutable subject: `commit:e6602ed132ecdb9d15ab7839339015206e3eb598`.
+
+Verdict: **RED**. The implementation otherwise matches the bounded OPH-M02-T01 surface and the exact-subject source/candidate evidence is GREEN, but one acceptance-blocking local-only/no-secret defect remains.
+
+The helper invokes the default curl transport without disabling curl's user configuration or proxy inheritance. Consequently, a caller's normal `~/.curlrc` can inject credential-bearing headers such as `Authorization`, and proxy configuration can move a nominal `127.0.0.1` request away from a direct loopback transport. This contradicts the Card's preserved boundary that the helper targets only loopback and accepts no Authorization/API-key/cookie input. The focused fake-transport test proves only the URL argument and does not detect inherited curl configuration.
+
+Independent reproduction outside project state confirmed standard curl behavior: with `HOME` pointing to a temporary directory containing `.curlrc` with `header = "Authorization: Bearer FROM_CURLRC"`, a request to a loopback HTTP server arrived with that Authorization header. No project/provider credential or live provider call was used for this reproduction.
+
+Required bounded correction: make the real curl path ignore user curl configuration and bypass proxies for this helper (for example by placing `--disable` first and using `--noproxy '*'`), and add focused regression coverage that requires those transport-fencing options while preserving the existing fake-transport/offline contract.
+
+Classification: bounded L1/L2 correction inside accepted OPH-R1 / OPH-PLAN-R2 authority. No product, plan, credential, live-provider, or user-authorization decision is required.
