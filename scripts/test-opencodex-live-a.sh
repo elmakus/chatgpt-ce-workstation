@@ -15,11 +15,22 @@ log="$tmp/curl.log"
 cat >"$fake_curl" <<'SH'
 #!/usr/bin/env bash
 set -Eeuo pipefail
+[[ "${1:-}" == "--disable" ]] || {
+  echo "curl transport did not disable user config first" >&2
+  exit 93
+}
+shift
+saw_noproxy=0
 url=""
 payload=""
 method="GET"
 while (($#)); do
   case "$1" in
+    --noproxy)
+      [[ "${2:-}" == "*" ]] || exit 94
+      saw_noproxy=1
+      shift 2
+      ;;
     --data-binary)
       payload="${2:-}"
       shift 2
@@ -38,6 +49,10 @@ while (($#)); do
   esac
 done
 
+(( saw_noproxy == 1 )) || {
+  echo "curl transport did not bypass proxies" >&2
+  exit 95
+}
 [[ "$url" == http://127.0.0.1:10170/* ]] || {
   echo "unexpected URL: $url" >&2
   exit 90
