@@ -135,3 +135,61 @@ Required bounded correction: add strict format/consistency validation for the ne
 ### Review classification
 
 Both defects are bounded L1/L2 implementation corrections inside the already accepted OPH-R1 / OPH-PLAN-R2 authority. No Definition or strategic-plan change is required.
+
+
+## Corrected subject after RED review
+
+Corrected implementation subject: `d93f5d7f7b1e6773c83c86a447a271e7ccbb1382`
+
+The bounded R1/R2 corrections stay within the accepted OPH-R1 / OPH-PLAN-R2 authority:
+
+- the candidate-build readback heredoc is structurally inside the GitHub Actions `run: |` block;
+- OpenCodex npm SHA-512 SRI is validated as strict base64 encoding of exactly 64 digest bytes;
+- upstream browser proof SHA-256 is validated as exactly 64 lowercase hex characters;
+- upstream asset/identity and OpenCodex identity are cross-checked against their frozen version + checksum/integrity values;
+- deterministic negative tests cover malformed and mismatched candidate identities.
+
+The existing production `elmakus/codex-chatgpt-web` install/launcher remains the production path. The corrected subject does not start OpenCodex, run `ocx init`, mutate `~/.codex`, alter provider routing/catalog state, or start the upstream proof runtime.
+
+### Corrected-subject source and workflow validation
+
+Executed on Tower from a fresh clone reset to exact subject `d93f5d7f7b1e6773c83c86a447a271e7ccbb1382`:
+
+- `python3 scripts/test-resolve-upstreams.py` — GREEN, 23 tests.
+- `python3 scripts/test-render-build-env.py` — GREEN, 15 tests.
+- `bash scripts/test-proof-component-installers.sh` — GREEN.
+- `bash scripts/validate-source.sh` — `SOURCE_VALIDATION_GREEN`.
+- extracted exact `Read back exact candidate provenance` workflow shell block — `WORKFLOW_BLOCK_INDENT_OK`.
+- extracted workflow shell body — `bash -n` GREEN as `WORKFLOW_SHELL_OK`.
+
+The previous invalid-workflow symptom does not recur as a malformed push workflow run on the corrected subject. The candidate workflow itself is configured for pull-request / manual dispatch, so the exact runtime proof below was executed directly from the same corrected subject rather than creating an unrelated PR solely to trigger CI.
+
+### Exact corrected-subject candidate build and image readback
+
+A non-production exact-candidate build was executed from exact subject `d93f5d7f7b1e6773c83c86a447a271e7ccbb1382` with a freshly frozen resolver manifest.
+
+Result: **GREEN**.
+
+- image: `chatgpt-ce-workstation-oph-review:candidate-e6a786ec6416f067`
+- image ID: `sha256:938f7e3024dce94936912e0a5ac23bdd305523449392a77f40163f99f2a717f4`
+- frozen resolution SHA-256: `e6a786ec6416f067fef1818a9f92db5dbff26a49653befaffc0d446b3751ef0b`
+- image resolution label matched the frozen resolution SHA-256;
+- embedded `/opt/workstation/upstream-resolution.json` byte-matched the frozen input;
+- OpenCodex `ocx` was present and its version matched the frozen OpenCodex component;
+- `codex-chatgpt-web-upstream` and production `codex-web-gpt` resolved to distinct executables;
+- the upstream runtime manifest version matched the frozen upstream component;
+- upstream proof `--help` exposed the expected `serve` command.
+
+The build passed the D25 Ubuntu APT identity checks that had failed closed on the earlier reviewed subject. The frozen Ubuntu aggregate identity was `sha256:5634740a319f19b60a53380280fe96608bcf62c90366bfa1da171fefccd6ed15`, including the converged `noble-backports` InRelease SHA-256 `6569ef03ae3d3ae4db73c8c00d1bb290a1e5874e30280d91aa6207d2a8ca745e`.
+
+Candidate proof identities used by the successful build remained:
+
+- OpenCodex: `@bitkyc08/opencodex@2.59.0`, integrity `sha512-Un/aahv/CEgNkevHmLDidlzsJH9HpEjEr7KSMB4BWTW82U9TDUaiN2N13+E7G5/sCV+FclsaLC3QIeXFZ3YH1w==`, shasum `cab35ddd186a8646f08c9d9031f614c2595e9170`;
+- upstream browser proof: `miuuyy/codex-chatgpt-web` `5.0.8`, SHA-256 `289c9938fd7e2ba076dfa8c003dda7dfe67f6762a9bab4da508a5dbc17b75abb`;
+- existing production fork: `elmakus/codex-chatgpt-web` `5.0.16`, SHA-256 `7a46e032a74d1bd848a8d946f36d4d427ec2a89e6aa047c518a0bd6bea922f30`.
+
+No production Workstation service/container or persistent provider state was modified by this non-production build/readback.
+
+### Review handoff
+
+The corrected implementation remains non-terminal and requires a fresh independent review because the Card's review requirement is RECOMMENDED. The new immutable review subject is `commit:d93f5d7f7b1e6773c83c86a447a271e7ccbb1382`.
