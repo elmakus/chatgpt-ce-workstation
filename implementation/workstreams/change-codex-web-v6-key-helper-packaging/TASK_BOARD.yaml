@@ -1,0 +1,38 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "change-codex-web-v6-key-helper-packaging"
+plan_revision: "smart-upstream-updates-R4"
+current_milestone: "M00"
+
+execution_ref:
+  branch: "work/codex-web-v6-key-helper-packaging"
+  pr: 26
+  head: "3cba885401cb1e9fdd787ab6605af6efde1b8479"
+
+research_obligation: null
+
+milestones:
+  M00:
+    decision_state: accepted
+    execution_status: done
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m00--codex-web-gpt-fork-release-readiness"
+    checkpoint: "elmakus/codex-chatgpt-web@78297853c0d17242a241592719e5204e5de30078"
+    evidence: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/evidence/M00-release-publication.md"
+    handoff: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/handoffs/M00_HANDOFF.md"
+
+cards:
+  - id: "M00-T04"
+    title: "Restore Codex-LB key helper to packaged v6 launcher"
+    milestone: "M00"
+    decision_state: accepted
+    execution_status: done
+    executor: chatgpt
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/cards/M00-T04.md"
+    review_state: green
+    review_subject: "elmakus/codex-chatgpt-web@78297853c0d17242a241592719e5204e5de30078"
+    review_evidence: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/evidence/M00-T04-review.md"
+    result_commit: "elmakus/codex-chatgpt-web@78297853c0d17242a241592719e5204e5de30078"
+    result_pr: 21
+    evidence: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/evidence/M00-T04-implementation.md"
+    tests_summary: "GREEN on exact fork subject 78297853c0d17242a241592719e5204e5de30078: CI 36201143502 actionlint + Ubuntu/macOS/Windows verify/package/smoke GREEN; Ubuntu AppImage ABI and actual-AppImage helper-presence smoke GREEN; live Tower pre-promotion failure preserved production healthy on 5.0.16."
