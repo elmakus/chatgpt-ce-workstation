@@ -30,5 +30,5 @@ branch_cleanup:
   ref: null
   verified_head: null
   evidence: null
-pr: null
+pr: 24
 result: null
