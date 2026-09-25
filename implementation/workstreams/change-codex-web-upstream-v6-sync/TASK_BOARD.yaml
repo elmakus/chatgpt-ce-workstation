@@ -1,17 +1,24 @@
 project: "chatgpt-ce-workstation"
 workstream_id: "change-codex-web-upstream-v6-sync"
-plan_revision: "smart-upstream-updates-R2"
-current_milestone: "none"
+plan_revision: "smart-upstream-updates-R4"
+current_milestone: "M00"
 execution_ref:
   branch: "work/codex-web-upstream-v6-sync"
   pr: null
   head: null
 research_obligation: null
-milestones: {}
+milestones:
+  M00:
+    title: "Codex Web GPT fork release readiness"
+    decision_state: "accepted"
+    execution_status: "in_progress"
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m00--codex-web-gpt-fork-release-readiness"
+    checkpoint: null
+    evidence: null
 cards:
   - id: "T01"
     title: "Rebase Codex Web GPT fork onto upstream v6.1.0"
-    milestone: "none"
+    milestone: "M00"
     decision_state: "accepted"
     execution_status: "done"
     executor: "chatgpt"
