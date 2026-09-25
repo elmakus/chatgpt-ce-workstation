@@ -31,10 +31,10 @@ authority:
 
 review:
   requirement: "RECOMMENDED"
-  state: null
-  subject: null
-  evidence: null
-  covered_by: null
+  state: "green"
+  subject: "elmakus/codex-chatgpt-web@78297853c0d17242a241592719e5204e5de30078"
+  evidence: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/evidence/M00-final-integration-refresh.md"
+  covered_by: "TASK_BOARD.yaml#M00-T04"
 
 branch_cleanup:
   state: null
