@@ -1,0 +1,41 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "change-codex-web-upstream-sync"
+plan_revision: "IMPLEMENTATION_PLAN-PHASE7"
+current_milestone: "CWUS-M01"
+
+execution_ref:
+  branch: "work/codex-web-upstream-sync"
+  pr: null
+  head: "4cbc95e7d90d5715e84d676b2a11f81d69ca6e31"
+
+research_obligation: null
+
+milestones:
+  CWUS-M01:
+    execution_status: ready
+    decision_state: accepted
+    result: null
+    acceptance_evidence: null
+    handoff: null
+    review_requirement: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: "CWUS-M01-T01"
+    contract: "implementation/workstreams/change-codex-web-upstream-sync/cards/CWUS-M01-T01.md"
+    milestone: "CWUS-M01"
+    dependencies: []
+    execution_status: ready
+    executor: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
+    openspec: null
+    review_requirement: RECOMMENDED
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    blocker: null
