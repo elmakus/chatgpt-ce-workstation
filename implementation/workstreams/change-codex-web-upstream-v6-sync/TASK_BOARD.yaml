@@ -1,0 +1,27 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "change-codex-web-upstream-v6-sync"
+plan_revision: "smart-upstream-updates-R2"
+current_milestone: "none"
+execution_ref:
+  branch: "work/codex-web-upstream-v6-sync"
+  pr: null
+  head: null
+research_obligation: null
+milestones: {}
+cards:
+  - id: "T01"
+    title: "Rebase Codex Web GPT fork onto upstream v6.1.0"
+    milestone: "none"
+    decision_state: "accepted"
+    execution_status: "in_progress"
+    executor: "chatgpt"
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/workstreams/change-codex-web-upstream-v6-sync/cards/T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
