@@ -2,10 +2,10 @@
 
 Plan revision: smart-upstream-updates-R4
 Review requirement: RECOMMENDED
-Review state: in_progress
+Review state: green
 Review subject: elmakus/chatgpt-ce-workstation@c957fc7c8cc4da5a3ca24e077b1f0ae75225fe6a
 Reviewed plan: planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md
-Review evidence: pending
+Review evidence: GREEN — the immutable R4 subject is a bounded plan-only reconciliation of R3: it adds D28 and incorporates the already-approved, independently GREEN Workstation Docker retention Master Plan for R17-R24 without changing M00 or M01-M04 product/runtime outcomes. All R1-R24 now have explicit owners/execution paths; R17-R24 retain their existing retention-plan milestone ownership and are inherited as constraints on Smart M03/M04 rather than duplicated. The combined contracts preserve post-verification-only cleanup, exact current + one previous rollback protection, workstation-scoped/reference-safe image cleanup, separate bounded BuildKit retention, cleanup-failure separation, persistent-data exclusion, and multi-cycle/failure-order evidence. M00 remains a non-production fork-release-readiness formalization matching the already-executed T01/final-integration GREEN subject; M01 cannot close its Codex Web GPT resolution surface until publication is verified. D15/D4 ordering, pre-build immutable Ubuntu identity, M04 live-write authorization, authenticity/checksum, image-managed updater disable, and routing/auth isolation boundaries remain intact. No P0/P1 plan defect found.
 
 ## Trigger and bounded corrective delta from R3
 
@@ -45,4 +45,4 @@ Audit especially whether:
 
 ## Verdict
 
-PENDING
+GREEN
