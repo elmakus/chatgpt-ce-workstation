@@ -32,3 +32,20 @@ cards:
     result_pr: null
     evidence: "implementation/workstreams/change-codex-web-upstream-v6-sync/evidence/T01-upstream-v6-sync.md"
     tests_summary: "GREEN — exact final candidate tree 55b18ccd0395684119d7b545f5cb630dc98be084: focused fork regression 122/122, full runtime 811 pass / 4 skip / 0 fail, Node 24 launcher suite GREEN, typecheck/build GREEN, release-path Linux AppImage build and representative ABI/package smoke GREEN."
+
+  - id: "T02"
+    title: "Align fork release candidate with canonical private release lineage"
+    milestone: "M00"
+    decision_state: "accepted"
+    execution_status: "ready"
+    executor: null
+    depends_on: ["T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/change-codex-web-upstream-v6-sync/cards/T02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
