@@ -5,7 +5,7 @@ current_milestone: "M00"
 
 execution_ref:
   branch: "work/codex-web-v6-key-helper-packaging"
-  pr: null
+  pr: 26
   head: "3cba885401cb1e9fdd787ab6605af6efde1b8479"
 
 research_obligation: null
