@@ -37,15 +37,15 @@ cards:
     title: "Align fork release candidate with canonical private release lineage"
     milestone: "M00"
     decision_state: "accepted"
-    execution_status: "in_progress"
+    execution_status: "done"
     executor: "chatgpt"
     depends_on: ["T01"]
     openspec_change: null
     contract: "implementation/workstreams/change-codex-web-upstream-v6-sync/cards/T02.md"
     review_state: null
     review_subject: null
-    review_evidence: null
-    result_commit: null
+    review_evidence: "implementation/workstreams/change-codex-web-upstream-v6-sync/evidence/T02-release-lineage-correction.md"
+    result_commit: "elmakus/codex-chatgpt-web@7dac256e2607cf6cb46ce0441f17a123fb50bbda"
     result_pr: null
     evidence: null
-    tests_summary: null
+    tests_summary: "GREEN — exact candidate 7dac256e2607cf6cb46ce0441f17a123fb50bbda: check-version GREEN (6.1.0-private.1), packaging contract 13/13, root + launcher typecheck GREEN, launcher production build GREEN, actionlint v1.7.7 GREEN; diff from reviewed T01 subject is one commit / six release-metadata-contract files."
