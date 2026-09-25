@@ -11,7 +11,7 @@ parent_branch: null
 parent_dependency: null
 
 intake:
-  state: active
+  state: complete
   record: "implementation/workstreams/change-codex-web-upstream-sync/INTAKE.md"
 
 routing:
@@ -19,7 +19,7 @@ routing:
   research_obligation: null
   plan_review: null
 
-task_board: null
+task_board: "implementation/workstreams/change-codex-web-upstream-sync/TASK_BOARD.yaml"
 
 authority:
   requirements: null
@@ -28,7 +28,7 @@ authority:
   plan: "docs/IMPLEMENTATION_PLAN.md#phase-7--codex-web-gpt-configuration-and-audit"
 
 review:
-  requirement: null
+  requirement: RECOMMENDED
   state: null
   subject: null
   evidence: null
