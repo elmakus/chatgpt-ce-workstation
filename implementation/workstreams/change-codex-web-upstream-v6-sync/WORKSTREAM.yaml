@@ -1,6 +1,6 @@
 id: "change-codex-web-upstream-v6-sync"
 kind: "change"
-status: "in_progress"
+status: "planning"
 branch: "work/codex-web-upstream-v6-sync"
 base_ref: "elmakus/chatgpt-ce-workstation@dfa41ce0867824757a50dc151afe3a87c4826457"
 integration_target: "main"
@@ -13,7 +13,7 @@ intake:
 routing:
   exploratory_scope: null
   research_obligation: null
-  plan_review: null
+  plan_review: "planning/reviews/smart-upstream-updates-R3.md"
 task_board: "implementation/workstreams/change-codex-web-upstream-v6-sync/TASK_BOARD.yaml"
 authority:
   requirements: "requirements/SMART_UPSTREAM_UPDATES.md"
