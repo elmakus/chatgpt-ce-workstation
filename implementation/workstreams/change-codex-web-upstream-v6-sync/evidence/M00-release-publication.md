@@ -62,3 +62,17 @@ M00 did not rebuild, recreate, promote or otherwise mutate the running Workstati
 ## M00 conclusion
 
 GREEN / done. The configured Codex Web GPT fork now has an independently reviewed, merged and canonically published v6.1.0 private release. The M01 publication prerequisite is satisfied.
+
+## Workstation final-target integration readback
+
+Workstation PR #24 (`Close Codex Web GPT v6.1 fork release readiness`) merged the closure-ready package into `main`.
+
+- exact PR head: `bf1d8406d06f95617e0448d6762b9d360aca9c28`
+- exact integration target before merge: `dfa41ce0867824757a50dc151afe3a87c4826457`
+- exact merge result: `main@1e1d2cea3581cc758ec58bea5a67f9e5f99b3b43`
+- PR mergeability at final readback: GREEN
+- required status checks: none configured for this PR
+- original source branch `work/codex-web-upstream-v6-sync` was automatically removed by GitHub after merge
+
+The target-side package therefore contains the milestone checkpoint, evidence, cumulative handoff, exact manifest review verdict, PR pointer and final integration result without depending on the deleted source branch.
+
