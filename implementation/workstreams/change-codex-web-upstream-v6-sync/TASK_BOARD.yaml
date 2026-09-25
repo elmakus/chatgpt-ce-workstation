@@ -49,3 +49,21 @@ cards:
     result_pr: null
     evidence: null
     tests_summary: "GREEN — exact candidate 7dac256e2607cf6cb46ce0441f17a123fb50bbda: check-version GREEN (6.1.0-private.1), packaging contract 13/13, root + launcher typecheck GREEN, launcher production build GREEN, actionlint v1.7.7 GREEN; diff from reviewed T01 subject is one commit / six release-metadata-contract files."
+
+
+  - id: "T03"
+    title: "Repair exact-tree health privacy regression for private release lineage"
+    milestone: "M00"
+    decision_state: "accepted"
+    execution_status: "ready"
+    executor: null
+    depends_on: ["T02"]
+    openspec_change: null
+    contract: "implementation/workstreams/change-codex-web-upstream-v6-sync/cards/T03.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
