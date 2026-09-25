@@ -5,7 +5,7 @@ current_milestone: "M00"
 execution_ref:
   branch: "work/codex-web-upstream-v6-sync"
   pr: null
-  head: "f2c8c67f3fc24bf02f5fb9ea84bdef1ae37da1dc"
+  head: "49f5e58ef8e8f4ff894bb589c4d60298a61924d2"
 research_obligation: null
 milestones:
   M00:
@@ -55,8 +55,8 @@ cards:
     title: "Repair exact-tree health privacy regression for private release lineage"
     milestone: "M00"
     decision_state: "accepted"
-    execution_status: "ready"
-    executor: null
+    execution_status: "in_progress"
+    executor: "chatgpt"
     depends_on: ["T02"]
     openspec_change: null
     contract: "implementation/workstreams/change-codex-web-upstream-v6-sync/cards/T03.md"
