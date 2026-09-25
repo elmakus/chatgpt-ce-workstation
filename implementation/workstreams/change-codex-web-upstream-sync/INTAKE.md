@@ -3,7 +3,7 @@
 Date: 2026-09-25
 Workstream ID: `change-codex-web-upstream-sync`
 Kind: `change`
-Status: active
+Status: complete
 
 ## Operator intent
 
