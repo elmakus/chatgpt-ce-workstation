@@ -24,7 +24,7 @@ cards:
     title: "Restore Codex-LB key helper to packaged v6 launcher"
     milestone: "M00"
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     executor: chatgpt
     depends_on: []
     openspec_change: null
