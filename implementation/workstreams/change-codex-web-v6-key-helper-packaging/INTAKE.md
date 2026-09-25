@@ -9,7 +9,7 @@
 - Integration target: `main`
 - Dependency classification: independent
 - Parent workstream: none
-- Intake state: active
+- Intake state: complete
 
 ## Authorized bounded scope
 
@@ -38,4 +38,8 @@ The defect is independently reproducible from current Workstation `main` and cur
 
 ## Downstream classification
 
-Pending final post-creation classification.
+- Path: execution_prep under existing accepted Smart Upstream Updates M00 authority.
+- Reason: root cause and correction are concrete, no accepted requirement/decision changes, and the correction is a bounded continuation of the already-approved fork release-readiness contract.
+- Canonical Task Board: `implementation/workstreams/change-codex-web-v6-key-helper-packaging/TASK_BOARD.yaml`
+- Prepared Card: `M00-T04`
+- Next route: `execution:M00-T04`
