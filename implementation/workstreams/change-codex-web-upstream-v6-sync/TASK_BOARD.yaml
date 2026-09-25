@@ -1,0 +1,70 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "change-codex-web-upstream-v6-sync"
+plan_revision: "smart-upstream-updates-R4"
+current_milestone: "M00"
+execution_ref:
+  branch: "work/codex-web-upstream-v6-sync"
+  pr: 24
+  head: "49f5e58ef8e8f4ff894bb589c4d60298a61924d2"
+research_obligation: null
+milestones:
+  M00:
+    title: "Codex Web GPT fork release readiness"
+    decision_state: "accepted"
+    execution_status: "done"
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m00--codex-web-gpt-fork-release-readiness"
+    checkpoint: "elmakus/codex-chatgpt-web@b39499c391744eaa378b157822e18b9218590b60"
+    evidence: "implementation/workstreams/change-codex-web-upstream-v6-sync/evidence/M00-release-publication.md"
+    handoff: "implementation/workstreams/change-codex-web-upstream-v6-sync/handoffs/M00_HANDOFF.md"
+cards:
+  - id: "T01"
+    title: "Rebase Codex Web GPT fork onto upstream v6.1.0"
+    milestone: "M00"
+    decision_state: "accepted"
+    execution_status: "done"
+    executor: "chatgpt"
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/workstreams/change-codex-web-upstream-v6-sync/cards/T01.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: "elmakus/codex-chatgpt-web@0dcf8ed9dbd229cf908cc68b31f4126c0af2414d"
+    result_pr: null
+    evidence: "implementation/workstreams/change-codex-web-upstream-v6-sync/evidence/T01-upstream-v6-sync.md"
+    tests_summary: "GREEN — exact final candidate tree 55b18ccd0395684119d7b545f5cb630dc98be084: focused fork regression 122/122, full runtime 811 pass / 4 skip / 0 fail, Node 24 launcher suite GREEN, typecheck/build GREEN, release-path Linux AppImage build and representative ABI/package smoke GREEN."
+
+  - id: "T02"
+    title: "Align fork release candidate with canonical private release lineage"
+    milestone: "M00"
+    decision_state: "accepted"
+    execution_status: "done"
+    executor: "chatgpt"
+    depends_on: ["T01"]
+    openspec_change: null
+    contract: "implementation/workstreams/change-codex-web-upstream-v6-sync/cards/T02.md"
+    review_state: null
+    review_subject: null
+    review_evidence: "implementation/workstreams/change-codex-web-upstream-v6-sync/evidence/T02-release-lineage-correction.md"
+    result_commit: "elmakus/codex-chatgpt-web@7dac256e2607cf6cb46ce0441f17a123fb50bbda"
+    result_pr: null
+    evidence: null
+    tests_summary: "GREEN — exact candidate 7dac256e2607cf6cb46ce0441f17a123fb50bbda: check-version GREEN (6.1.0-private.1), packaging contract 13/13, root + launcher typecheck GREEN, launcher production build GREEN, actionlint v1.7.7 GREEN; diff from reviewed T01 subject is one commit / six release-metadata-contract files."
+
+
+  - id: "T03"
+    title: "Repair exact-tree health privacy regression for private release lineage"
+    milestone: "M00"
+    decision_state: "accepted"
+    execution_status: "done"
+    executor: "chatgpt"
+    depends_on: ["T02"]
+    openspec_change: null
+    contract: "implementation/workstreams/change-codex-web-upstream-v6-sync/cards/T03.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: "elmakus/codex-chatgpt-web@b39499c391744eaa378b157822e18b9218590b60"
+    result_pr: null
+    evidence: "implementation/workstreams/change-codex-web-upstream-v6-sync/evidence/T03-health-privacy-private-lineage-correction.md"
+    tests_summary: "GREEN — exact corrected candidate b39499c391744eaa378b157822e18b9218590b60: focused health 38/38, full runtime 811 pass / 4 skip / 0 fail, root + launcher typecheck/build GREEN, Node 24 launcher 347 pass / 1 skip / 0 fail, release-path Linux x64 AppImage build + packaged launcher smoke + current-Arch ABI smoke GREEN."

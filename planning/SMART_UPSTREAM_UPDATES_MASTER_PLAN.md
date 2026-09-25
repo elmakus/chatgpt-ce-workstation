@@ -1,11 +1,15 @@
 # Smart upstream updates Master Plan
 
 Status: **approved**
-Plan revision: **smart-upstream-updates-R2**
-Date: 2026-09-20
-Independent plan review: **RECOMMENDED**
+Plan revision: **smart-upstream-updates-R4**
+Date: 2026-09-25
+Independent plan review: **GREEN** — `planning/reviews/smart-upstream-updates-R4.md`
 
-R2 supersedes R1 after independent plan review found two bounded planning gaps: incomplete carry-through of D15/D4 deployment regression checkpoints, and ambiguity about whether the Ubuntu base-image identity could be recorded only after an unconstrained build.
+R4 supersedes R3 after independent review found one bounded planning-authority reconciliation defect: the canonical Smart Upstream Updates Definition had already been extended with approved retention requirements R17-R24 and accepted D28, owned by the separately approved and independently GREEN `planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md`, while R3 still presented coverage as if R1-R16 were the complete requirement set. R4 incorporates that approved retention plan by reference, adds explicit cross-plan coverage/invariants, and does not duplicate or reopen its already accepted milestone architecture.
+
+R3's intended correction is preserved unchanged: final-integration recovery of the separately executed Codex Web GPT fork sync proved that the workflow has no legal Close shape for a non-micro-fix Card with `current_milestone: none`. M00 remains the explicit already-authorized related-repository prerequisite before M01 integrated acceptance. M00 and the existing M01-M04 outcomes, runtime behavior, fork boundaries and M04 live-write authorization gate are unchanged.
+
+R2 previously superseded R1 after independent plan review found two bounded planning gaps: incomplete carry-through of D15/D4 deployment regression checkpoints, and ambiguity about whether the Ubuntu base-image identity could be recorded only after an unconstrained build.
 
 ## Goal and authority
 
@@ -22,6 +26,8 @@ Authority:
 - `docs/DECISIONS.md#D15`
 - `docs/DECISIONS.md#D16`
 - `docs/DECISIONS.md#D25`
+- `docs/DECISIONS.md#D28`
+- approved retention extension: `planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md` for R17-R24
 
 The accepted product policy is latest trusted stable/current channels with Ubuntu held on the 24.04 LTS family. Exact resolver formats, Docker stage decomposition and rollback command details remain implementation decisions.
 
@@ -42,12 +48,17 @@ Current upstream checks during discovery also proved that a real drift exists to
 
 ## Execution strategy
 
-Separate the problem into four checkpoints:
+Separate the problem into five checkpoints:
 
-1. establish a deterministic upstream-resolution contract;
-2. make the image consume that frozen contract with cache-friendly inputs and inspectable metadata;
-3. make `update.sh` promote/rollback exact image identities safely while preserving the accepted source-validation -> host-preflight -> image-build ordering before production mutation;
-4. exercise the final updater on the real workstation only after explicit deployment/live-write authorization, then run the full D15/D4 regression sequence after recreation.
+1. prepare and independently review a current release-ready Codex Web GPT downstream-fork subject without mutating workstation production;
+2. establish a deterministic upstream-resolution contract;
+3. make the image consume that frozen contract with cache-friendly inputs and inspectable metadata;
+4. make `update.sh` promote/rollback exact image identities safely while preserving the accepted source-validation -> host-preflight -> image-build ordering before production mutation;
+5. exercise the final updater on the real workstation only after explicit deployment/live-write authorization, then run the full D15/D4 regression sequence after recreation.
+
+M00 is the fork-supply prerequisite for the Codex Web GPT identity consumed by M01. Work on unrelated M01 resolver inputs may proceed independently, but M01 integrated acceptance cannot close until M00 publication is verified.
+
+R17-R24 and D28 remain governed by the separately approved Workstation Docker retention Master Plan. Its milestone contracts are incorporated here by reference as inherited constraints on the shared updater lifecycle, especially M03/M04. This Smart Upstream plan must not weaken, duplicate or silently reassign those accepted retention outcomes: cleanup remains strictly post-verification; exact current production plus one immediately previous known-working rollback image remain protected; image cleanup stays workstation-scoped/reference-safe; BuildKit cache retention stays separate and bounded; cleanup failure remains distinct from production success; persistent data remains out of scope; and the multi-cycle/failure-order evidence contract remains required.
 
 Technical probing of vendor metadata is allowed inside M01/JIT when it selects the strongest practical identity source without changing the accepted latest-stable policy.
 
@@ -55,7 +66,46 @@ Do not use a timestamp or random nonce as a substitute when a real upstream iden
 
 The Ubuntu base is not an exception to resolve-first/freeze-first semantics: the selected `ubuntu:24.04` family member must be bound to an exact digest or demonstrably equivalent immutable identity before the candidate build consumes it. BuildKit may perform the mechanical lookup only when that exact identity is frozen before build execution and carried into candidate provenance; post-hoc recording of whatever a moving tag happened to resolve to is insufficient.
 
+## Milestone M00 — Codex Web GPT fork release readiness
+
+### Outcome
+
+The configured downstream Codex Web GPT fork has one exact release-ready subject based on the current trusted upstream stable release, with Workstation-required fork behavior preserved and independently reviewed, without mutating workstation production.
+
+### Requirement ownership
+
+R4 fork-supply prerequisite. M00 inherits the existing authenticity/checksum, runtime-self-updater and isolation invariants without changing their accepted contracts.
+
+### Dependencies
+
+None.
+
+### Planned work packages
+
+- Rebase/merge the configured downstream fork onto the current trusted upstream stable release rather than maintaining an indefinitely stale fork baseline.
+- Preserve Workstation-required Codex-LB routing/auth isolation and persistent key-file behavior.
+- Preserve parallel Muse/CLIProxyAPI routing, model-catalog normalization and bounded Muse compatibility rewrites.
+- Preserve native encoded-body/model-hint routing, proxy-resolution restrictions and fork-specific interrupt-hook recovery compatibility unless the upstream implementation provides an equivalent or stronger path.
+- Preserve image-managed update policy and fork release provenance/checksum behavior.
+- Run focused fork regressions plus the applicable full runtime, launcher, typecheck/build and representative package/release smoke checks on one exact candidate.
+- Freeze that exact candidate for the manifest-owned final-integration review before fork main/release publication.
+
+### Acceptance
+
+- The exact candidate is based on the trusted current upstream stable subject and also contains the required pre-sync fork behavior/history.
+- Current upstream UI/model/effort/runtime behavior remains present; conflict resolution does not blindly restore obsolete fork implementations over stronger upstream equivalents.
+- Codex-LB and Muse credentials remain separated and incoming ChatGPT OAuth is not forwarded to configured proxy backends.
+- Muse-specific request/catalog normalization remains bounded to the intended Muse surfaces and ordinary native Codex traffic is not rewritten unnecessarily.
+- Fork release provenance/checksum and image-managed updater-disable behavior remain intact.
+- Focused fork tests, full applicable runtime tests, launcher tests, typecheck/build and representative package/release smoke are GREEN on the exact reviewed tree.
+- The workstream-level final-integration review is GREEN for the exact release-ready subject before publication.
+- No Workstation production image/container is rebuilt, recreated or promoted as part of M00.
+
 ## Milestone M01 — Frozen upstream resolution contract
+
+### Dependencies
+
+M00 publication is verified for the Codex Web GPT fork identity before M01 integrated acceptance. Unrelated resolver implementation may proceed before that checkpoint.
 
 ### Outcome
 
@@ -166,7 +216,11 @@ M01-M02 implementation and applicable independent review GREEN.
 
 ### Requirement ownership
 
-R1, R9-R16.
+R1, R9-R16 directly. R17-R24 are inherited from the approved retention extension and remain owned by `planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md` M01-M04.
+
+### Inherited retention contract
+
+M03 promotion/verification/rollback orchestration must preserve the already-approved D28/R17-R24 ordering and evidence semantics. Retention cleanup is unreachable before successful health/runtime verification; the current image and one previous known-working rollback baseline remain protected; cleanup is workstation-scoped; BuildKit cache GC is separately bounded/scoped; and post-success cleanup failure must not be reported as update/rollback failure.
 
 ### Planned work packages
 
@@ -205,6 +259,8 @@ M03 implementation and applicable independent review GREEN.
 ### Outcome
 
 The accepted updater is deployed to the real workstation and proves both successful smart update behavior, the full accepted D15/D4 regression sequence, and bounded rollback behavior.
+
+R17-R24 live retention/cleanup acceptance remains governed by the already approved retention Master Plan M04 and D28; this milestone must preserve that integrated production behavior rather than define a second cleanup architecture.
 
 ### Explicit authorization gate
 
@@ -253,7 +309,7 @@ If a live test reveals a behavioral defect, do not normalize it as expected upda
 | R1 one normal updater | M03, M04 |
 | R2 lower-level build primitive | M02, M03 |
 | R3 Ubuntu 24.04 family | M01, M02, M04 |
-| R4 latest stable/current upstreams | M01, M02, M04 |
+| R4 latest stable/current upstreams | M00, M01, M02, M04 |
 | R5 resolve/freeze identities | M01, M02 |
 | R6 CE/OpenAI separate freshness | M01, M02 |
 | R7 no timestamp-only invalidation | M01, M02, M04 |
@@ -266,6 +322,14 @@ If a live test reveals a behavioral defect, do not normalize it as expected upda
 | R14 explicit overrides | M01, M02 |
 | R15 fail-closed upstream resolution | M01, M03 |
 | R16 validation coverage | M01-M04 |
+| R17 cleanup ordering | Retention Master Plan M01-M03; inherited by Smart M03-M04 |
+| R18 current + one rollback retention | Retention Master Plan M01, M03, M04; inherited by Smart M03-M04 |
+| R19 scoped/reference-safe image cleanup | Retention Master Plan M01, M03, M04; inherited by Smart M03-M04 |
+| R20 bounded scoped BuildKit cache | Retention Master Plan M02-M04; inherited by Smart M03-M04 |
+| R21 cleanup failure separation | Retention Master Plan M01-M03; inherited by Smart M03-M04 |
+| R22 persistent data excluded | Retention Master Plan M01, M04; inherited by Smart M03-M04 |
+| R23 retention evidence | Retention Master Plan M01-M04; inherited by Smart M03-M04 |
+| R24 multi-cycle/failure validation | Retention Master Plan M03-M04; inherited by Smart M03-M04 |
 
 ## Migration / rollback strategy
 
@@ -276,6 +340,8 @@ The operational migration is from timestamp-driven `update.sh` to resolver-drive
 During M04, keep the previous production image identity until the new updater's full live acceptance is GREEN. Do not prune the rollback image before health/runtime plus D15/D4 application regression acceptance.
 
 A failed candidate never becomes accepted merely because rollback worked.
+
+The integrated updater also carries the accepted D28/R17-R24 post-success retention phase. Cleanup may begin only after the promoted candidate is fully verified; it must preserve the exact rollback baseline required by failure paths, remain workstation-scoped, keep persistent data out of scope, and report cleanup status separately. The approved retention Master Plan remains the detailed milestone authority for those outcomes.
 
 ## JIT / execution-prep boundaries
 
@@ -289,12 +355,14 @@ Execution Prep may choose:
 - mock/isolated Compose test harness details;
 - the concrete existing/new helper wiring used to realize the accepted host-preflight checkpoint.
 
-Those choices must stay inside D25 and the requirements. In particular, JIT may choose the mechanism for base-image resolution but may not weaken the pre-build frozen-identity invariant. If a vendor channel cannot provide enough stable identity/trust evidence to meet the Definition, open a Research obligation rather than weakening the contract silently.
+Those choices must stay inside D25, D28, the canonical requirements and the incorporated approved retention plan. In particular, JIT may choose the mechanism for base-image resolution but may not weaken the pre-build frozen-identity invariant. If a vendor channel cannot provide enough stable identity/trust evidence to meet the Definition, open a Research obligation rather than weakening the contract silently.
 
 ## Planning audit
 
 GREEN:
-- every approved requirement has a milestone owner and execution path;
+- every approved requirement has an explicit owner and execution path across this plan plus the incorporated approved retention Master Plan;
+- R17-R24 and D28 are explicitly preserved by reference rather than silently omitted, duplicated or reassigned;
+- the configured Codex Web GPT fork has an explicit release-readiness checkpoint before M01 can close its resolved release identity;
 - latest-stable policy and Ubuntu 24.04 family pin are both preserved;
 - the Ubuntu base is frozen to an exact immutable identity before candidate build execution;
 - CE and OpenAI payload freshness are not conflated;
