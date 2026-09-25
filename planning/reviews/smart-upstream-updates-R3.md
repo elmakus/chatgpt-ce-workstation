@@ -2,10 +2,10 @@
 
 Plan revision: smart-upstream-updates-R3
 Review requirement: RECOMMENDED
-Review state: in_progress
+Review state: red
 Review subject: elmakus/chatgpt-ce-workstation@ada620528d7bf538c65cde697a977b4174c23360
 Reviewed plan: planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md
-Review evidence: pending
+Review evidence: RED — P1 planning incompleteness on the exact immutable R3 subject. `requirements/SMART_UPSTREAM_UPDATES.md` is approved and already contains R17-R24 (post-success retention/cleanup ordering, exactly one previous known-working image, workstation-scoped/reference-safe image cleanup, bounded separate BuildKit cache policy, distinct cleanup-failure reporting, persistent-data exclusion, retention evidence, and multi-cycle/failure-order validation). R3 still declares authority only through D25, omits accepted D28, assigns requirement ownership only through R16, and its Requirement coverage table stops at R16 while the Planning audit incorrectly claims every approved requirement has a milestone owner. This is not cured by M00: the M00 topology itself is proportionate and consistent with R4, preserves fork authenticity/checksum/self-updater/isolation boundaries, matches the already executed fork-sync acceptance, blocks M01 Codex Web GPT closure until publication is verified, and introduces no production mutation. The defect is bounded to the Master Plan: reconcile current approved R17-R24 + D28 into milestone outcomes/acceptance/coverage without weakening M00 or the M04 live-write gate, then freeze a new plan revision for independent review.
 
 ## Trigger and bounded delta from R2
 
@@ -35,4 +35,4 @@ Audit especially whether:
 
 ## Verdict
 
-PENDING
+RED
