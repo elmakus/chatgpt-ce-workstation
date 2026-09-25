@@ -13,7 +13,7 @@ intake:
 routing:
   exploratory_scope: null
   research_obligation: null
-  plan_review: "planning/reviews/smart-upstream-updates-R3.md"
+  plan_review: "planning/reviews/smart-upstream-updates-R4.md"
 task_board: "implementation/workstreams/change-codex-web-upstream-v6-sync/TASK_BOARD.yaml"
 authority:
   requirements: "requirements/SMART_UPSTREAM_UPDATES.md"
