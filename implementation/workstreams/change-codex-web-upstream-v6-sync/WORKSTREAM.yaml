@@ -21,9 +21,9 @@ authority:
   plan: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md"
 review:
   requirement: "RECOMMENDED"
-  state: "red"
-  subject: "elmakus/codex-chatgpt-web@7dac256e2607cf6cb46ce0441f17a123fb50bbda"
-  evidence: "implementation/workstreams/change-codex-web-upstream-v6-sync/evidence/final-integration-review-7dac256e-red.md"
+  state: "pending"
+  subject: "elmakus/codex-chatgpt-web@b39499c391744eaa378b157822e18b9218590b60"
+  evidence: null
   covered_by: null
 branch_cleanup:
   state: null
