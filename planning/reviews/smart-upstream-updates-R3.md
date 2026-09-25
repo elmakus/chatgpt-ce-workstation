@@ -2,7 +2,7 @@
 
 Plan revision: smart-upstream-updates-R3
 Review requirement: RECOMMENDED
-Review state: pending
+Review state: in_progress
 Review subject: elmakus/chatgpt-ce-workstation@ada620528d7bf538c65cde697a977b4174c23360
 Reviewed plan: planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md
 Review evidence: pending
