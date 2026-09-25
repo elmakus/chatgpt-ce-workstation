@@ -1,0 +1,44 @@
+id: "change-codex-web-upstream-sync"
+kind: "change"
+status: "in_progress"
+
+branch: "work/codex-web-upstream-sync"
+base_ref: "dfa41ce0867824757a50dc151afe3a87c4826457"
+integration_target: "main"
+
+parent_workstream: null
+parent_branch: null
+parent_dependency: null
+
+intake:
+  state: active
+  record: "implementation/workstreams/change-codex-web-upstream-sync/INTAKE.md"
+
+routing:
+  exploratory_scope: null
+  research_obligation: null
+  plan_review: null
+
+task_board: null
+
+authority:
+  requirements: null
+  decisions:
+    - "docs/DECISIONS.md#d11--codex-web-gpt-included-our-fork-is-the-default-package-source"
+  plan: "docs/IMPLEMENTATION_PLAN.md#phase-7--codex-web-gpt-configuration-and-audit"
+
+review:
+  requirement: null
+  state: null
+  subject: null
+  evidence: null
+  covered_by: null
+
+branch_cleanup:
+  state: null
+  ref: null
+  verified_head: null
+  evidence: null
+
+pr: null
+result: null
