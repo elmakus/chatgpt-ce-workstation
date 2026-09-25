@@ -49,12 +49,11 @@ The first `Fork Linux Release` attempt failed before publication while entering 
 
 ## Next durable starting point
 
-M00 is complete and its publication prerequisite for M01 is satisfied.
+M00 and workstream `change-codex-web-upstream-v6-sync` are terminally complete.
 
-For this branch-isolated workstream, the immediate remaining obligation is final-target integration into Workstation `main`:
-1. keep the current integration refresh valid against `main`;
-2. preserve the manifest-owned GREEN final-integration review;
-3. open/verify the Workstation PR carrying this closure-ready package;
-4. merge to `main` and reconcile only merge-result-dependent terminal manifest/Task Board metadata from target-side state.
+- Workstation PR #24 merged to `main@1e1d2cea3581cc758ec58bea5a67f9e5f99b3b43`.
+- The original source branch was auto-deleted after merge; no cleanup fallback is active.
+- Canonical Codex Web GPT release `v6.1.0-private.1` remains pinned to the independently reviewed fork subject `b39499c391744eaa378b157822e18b9218590b60`.
+- The historical primary `feature-smart-upstream-updates` workstream already has M01-M04 terminally done; this M00 workstream closes the later prerequisite/reconciliation gap rather than opening a new M01 execution lane.
 
-No production deployment/live-write action is part of this remaining M00 workstream close.
+There is no remaining Card, Research, review, stacked-dependency, integration, release-publication or production-write obligation in this workstream.
