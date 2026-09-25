@@ -6,7 +6,7 @@ current_milestone: "CWUS-M01"
 execution_ref:
   branch: "work/codex-web-upstream-sync"
   pr: null
-  head: "8242b5d050199c176d3d7f94e391d97adbc04aeb"
+  head: "396a3439d728f874351055796a1cdb08ddec61e9"
 
 research_obligation: null
 
@@ -29,13 +29,13 @@ cards:
     dependencies: []
     execution_status: in_progress
     executor: chatgpt
-    result_commit: null
-    result_pr: null
-    evidence: null
-    tests_summary: null
+    result_commit: "2900b93a800f2c01e68aaba7b35c6600a6bbf25b"
+    result_pr: 19
+    evidence: "implementation/workstreams/change-codex-web-upstream-sync/evidence/CWUS-M01-T01.md"
+    tests_summary: "Local root 811 pass/4 skip/0 fail; launcher 346 pass/1 skip/0 fail; runtime/AppImage/ABI smoke GREEN; GitHub CI run 36175596450 macOS/Windows/Ubuntu/actionlint all success."
     openspec: null
     review_requirement: RECOMMENDED
-    review_state: null
-    review_subject: null
-    review_evidence: null
+    review_state: pending
+    review_subject: "elmakus/codex-chatgpt-web@2900b93a800f2c01e68aaba7b35c6600a6bbf25b (PR #19)"
+    review_evidence: "implementation/workstreams/change-codex-web-upstream-sync/evidence/CWUS-M01-T01.md"
     blocker: null
