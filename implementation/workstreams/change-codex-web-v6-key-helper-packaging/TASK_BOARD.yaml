@@ -1,0 +1,38 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "change-codex-web-v6-key-helper-packaging"
+plan_revision: "smart-upstream-updates-R4"
+current_milestone: "M00"
+
+execution_ref:
+  branch: "work/codex-web-v6-key-helper-packaging"
+  pr: null
+  head: "97450ebf43c82ffa4b14aa9ce261f5653503b3bb"
+
+research_obligation: null
+
+milestones:
+  M00:
+    decision_state: accepted
+    execution_status: ready
+    contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m00--codex-web-gpt-fork-release-readiness"
+    checkpoint: null
+    evidence: null
+    handoff: null
+
+cards:
+  - id: "M00-T04"
+    title: "Restore Codex-LB key helper to packaged v6 launcher"
+    milestone: "M00"
+    decision_state: accepted
+    execution_status: ready
+    executor: null
+    depends_on: []
+    openspec_change: null
+    contract: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/cards/M00-T04.md"
+    review_state: null
+    review_subject: null
+    review_evidence: null
+    result_commit: null
+    result_pr: null
+    evidence: null
+    tests_summary: null
