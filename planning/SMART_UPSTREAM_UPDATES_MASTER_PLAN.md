@@ -5,7 +5,9 @@ Plan revision: **smart-upstream-updates-R3**
 Date: 2026-09-25
 Independent plan review: **RECOMMENDED**
 
-R3 supersedes R2 only in execution topology. Final-integration recovery of the separately executed Codex Web GPT fork sync proved that the current workflow has no legal Close shape for a non-micro-fix Card with `current_milestone: none`. R3 makes that already-authorized related-repository prerequisite explicit as M00, before M01 integrated acceptance. No product/system requirement, runtime behavior, live-write boundary or M01-M04 outcome is changed.\n\nR2 previously superseded R1 after independent plan review found two bounded planning gaps: incomplete carry-through of D15/D4 deployment regression checkpoints, and ambiguity about whether the Ubuntu base-image identity could be recorded only after an unconstrained build.
+R3 supersedes R2 only in execution topology. Final-integration recovery of the separately executed Codex Web GPT fork sync proved that the current workflow has no legal Close shape for a non-micro-fix Card with `current_milestone: none`. R3 makes that already-authorized related-repository prerequisite explicit as M00, before M01 integrated acceptance. No product/system requirement, runtime behavior, live-write boundary or M01-M04 outcome is changed.
+
+R2 previously superseded R1 after independent plan review found two bounded planning gaps: incomplete carry-through of D15/D4 deployment regression checkpoints, and ambiguity about whether the Ubuntu base-image identity could be recorded only after an unconstrained build.
 
 ## Goal and authority
 
@@ -337,7 +339,8 @@ Those choices must stay inside D25 and the requirements. In particular, JIT may 
 
 GREEN:
 - every approved requirement has a milestone owner and execution path;
-- the configured Codex Web GPT fork has an explicit release-readiness checkpoint before M01 can close its resolved release identity;\n- latest-stable policy and Ubuntu 24.04 family pin are both preserved;
+- the configured Codex Web GPT fork has an explicit release-readiness checkpoint before M01 can close its resolved release identity;
+- latest-stable policy and Ubuntu 24.04 family pin are both preserved;
 - the Ubuntu base is frozen to an exact immutable identity before candidate build execution;
 - CE and OpenAI payload freshness are not conflated;
 - cache goals are realistic about Docker dependency invalidation;
