@@ -29,9 +29,9 @@ cards:
     depends_on: []
     openspec_change: null
     contract: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/cards/M00-T04.md"
-    review_state: in_progress
+    review_state: green
     review_subject: "elmakus/codex-chatgpt-web@78297853c0d17242a241592719e5204e5de30078"
-    review_evidence: null
+    review_evidence: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/evidence/M00-T04-review.md"
     result_commit: "elmakus/codex-chatgpt-web@78297853c0d17242a241592719e5204e5de30078"
     result_pr: 21
     evidence: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/evidence/M00-T04-implementation.md"
