@@ -1,6 +1,6 @@
 id: "change-codex-web-upstream-v6-sync"
 kind: "change"
-status: "in_progress"
+status: "review"
 branch: "work/codex-web-upstream-v6-sync"
 base_ref: "elmakus/chatgpt-ce-workstation@dfa41ce0867824757a50dc151afe3a87c4826457"
 integration_target: "main"
@@ -21,9 +21,9 @@ authority:
   plan: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md"
 review:
   requirement: "RECOMMENDED"
-  state: "green"
-  subject: "elmakus/codex-chatgpt-web@0dcf8ed9dbd229cf908cc68b31f4126c0af2414d"
-  evidence: "implementation/workstreams/change-codex-web-upstream-v6-sync/evidence/final-integration-review.md"
+  state: "pending"
+  subject: "elmakus/codex-chatgpt-web@7dac256e2607cf6cb46ce0441f17a123fb50bbda"
+  evidence: null
   covered_by: null
 branch_cleanup:
   state: null
