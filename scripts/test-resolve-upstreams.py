@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import base64
 import importlib.util
 import json
 import tempfile
@@ -13,6 +14,9 @@ assert SPEC and SPEC.loader
 resolver = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(resolver)
 
+
+VALID_SHA512_X = "sha512-" + base64.b64encode(b"x" * 64).decode("ascii")
+VALID_SHA512_Y = "sha512-" + base64.b64encode(b"y" * 64).decode("ascii")
 
 class ResolverTests(unittest.TestCase):
     def test_parse_ubuntu_digest(self):
@@ -257,7 +261,7 @@ SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
             "versions": {
                 "0.3.3": {
                     "dist": {
-                        "integrity": "sha512-AbCdEf==",
+                        "integrity": VALID_SHA512_X,
                         "shasum": "a" * 40,
                     }
                 }
@@ -269,7 +273,7 @@ SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
 
         result = resolver.resolve_agent_workspace(None, fetcher)
         self.assertEqual(result["version"], "0.3.3")
-        self.assertEqual(result["identity"], "0.3.3@sha512-AbCdEf==")
+        self.assertEqual(result["identity"], f"0.3.3@{VALID_SHA512_X}")
         self.assertFalse(result["override"])
 
     def test_agent_workspace_override_is_explicit(self):
@@ -278,7 +282,7 @@ SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
             "versions": {
                 "0.3.2": {
                     "dist": {
-                        "integrity": "sha512-Override==",
+                        "integrity": VALID_SHA512_Y,
                         "shasum": "b" * 40,
                     }
                 }
@@ -460,6 +464,83 @@ SHA256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
             first["components"]["rust"], second["components"]["rust"]
         )
 
+
+    def test_npm_integrity_rejects_malformed_sha512_payload(self):
+        metadata = {
+            "dist-tags": {"latest": "3.4.5"},
+            "versions": {
+                "3.4.5": {
+                    "dist": {
+                        "integrity": "sha512-not-valid-base64!",
+                        "shasum": "a" * 40,
+                    }
+                }
+            },
+        }
+        with self.assertRaises(resolver.ResolutionError):
+            resolver.resolve_opencodex(
+                None, lambda _url: json.dumps(metadata).encode("utf-8")
+            )
+
+    def test_opencodex_uses_frozen_npm_identity(self):
+        metadata = {
+            "dist-tags": {"latest": "3.4.5"},
+            "versions": {
+                "3.4.5": {
+                    "dist": {
+                        "integrity": VALID_SHA512_X,
+                        "shasum": "a" * 40,
+                    }
+                }
+            },
+        }
+
+        def fake_fetcher(url):
+            self.assertIn("%40bitkyc08%2Fopencodex", url)
+            return json.dumps(metadata).encode("utf-8")
+
+        result = resolver.resolve_opencodex(None, fake_fetcher)
+        self.assertEqual(result["package"], "@bitkyc08/opencodex")
+        self.assertEqual(result["version"], "3.4.5")
+        self.assertEqual(result["identity"], f"3.4.5@{VALID_SHA512_X}")
+        self.assertFalse(result["override"])
+
+    def test_upstream_codex_web_identity_is_distinct_from_fork(self):
+        checksum = "b" * 64
+        release = {
+            "tag_name": "v5.0.8",
+            "draft": False,
+            "prerelease": False,
+            "assets": [
+                {
+                    "name": "codex-web-gpt-5.0.8-linux-x64.AppImage",
+                    "browser_download_url": "https://example.invalid/upstream.AppImage",
+                },
+                {
+                    "name": "checksums.txt",
+                    "browser_download_url": "https://example.invalid/checksums.txt",
+                },
+            ],
+        }
+
+        def fake_fetcher(url):
+            if url.endswith("/releases/latest"):
+                self.assertIn("miuuyy/codex-chatgpt-web", url)
+                return json.dumps(release).encode("utf-8")
+            if url.endswith("/checksums.txt"):
+                return (
+                    checksum
+                    + "  codex-web-gpt-5.0.8-linux-x64.AppImage\n"
+                ).encode("utf-8")
+            raise AssertionError(url)
+
+        result = resolver.resolve_codex_web_gpt_upstream(None, fake_fetcher)
+        self.assertEqual(result["repository"], "miuuyy/codex-chatgpt-web")
+        self.assertEqual(result["package_sha256"], checksum)
+        self.assertNotEqual(
+            resolver.DEFAULT_CODEX_WEB_REPOSITORY,
+            resolver.DEFAULT_CODEX_WEB_UPSTREAM_REPOSITORY,
+        )
 
 if __name__ == "__main__":
     unittest.main()

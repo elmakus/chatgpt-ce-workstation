@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import hashlib
 import json
 import re
@@ -17,7 +19,9 @@ COMPONENTS = {
     "ce",
     "chrome",
     "codex_web_gpt",
+    "codex_web_gpt_upstream",
     "muse_code",
+    "opencodex",
     "openai_chatgpt",
     "rust",
     "s6_overlay",
@@ -30,8 +34,10 @@ ALLOWED_FIELDS = {
     "ce": {"identity", "override", "provenance", "ref", "repository"},
     "chrome": {"architecture", "identity", "override", "package", "package_sha256", "provenance", "repository_path", "signing_key_sha256", "size", "version"},
     "codex_web_gpt": {"asset", "identity", "override", "package_sha256", "provenance", "repository", "version"},
+    "codex_web_gpt_upstream": {"asset", "identity", "override", "package_sha256", "provenance", "repository", "version"},
     "muse_code": {"channel", "identity", "installer_sha256", "installer_url", "override", "provenance", "version"},
     "openai_chatgpt": {"architecture", "identity", "override", "package", "provenance", "repository", "repository_path", "sha256", "size", "version"},
+    "opencodex": {"identity", "integrity", "override", "package", "provenance", "shasum", "version"},
     "rust": {"channel_manifest_sha256", "identity", "installer_sha256", "override", "provenance", "version"},
     "s6_overlay": {"assets", "identity", "override", "provenance", "repository", "version"},
     "ubuntu_base": {"family", "identity", "override", "provenance"},
@@ -55,6 +61,34 @@ def require_text(component: Mapping[str, object], key: str, label: str) -> str:
         raise ManifestError(f"{label}.{key} is missing/invalid")
     if any(ch in value for ch in "\r\n\0"):
         raise ManifestError(f"{label}.{key} contains control characters")
+    return value
+
+
+def require_safe_version(component: Mapping[str, object], key: str, label: str) -> str:
+    value = require_text(component, key, label)
+    if not re.fullmatch(r"[0-9A-Za-z._+-]+", value):
+        raise ManifestError(f"{label}.{key} is unsafe")
+    return value
+
+
+def require_bare_sha256(component: Mapping[str, object], key: str, label: str) -> str:
+    value = require_text(component, key, label)
+    if not re.fullmatch(r"[0-9a-f]{64}", value):
+        raise ManifestError(f"{label}.{key} must be 64 lowercase hex characters")
+    return value
+
+
+def require_sha512_integrity(component: Mapping[str, object], key: str, label: str) -> str:
+    value = require_text(component, key, label)
+    prefix = "sha512-"
+    if not value.startswith(prefix):
+        raise ManifestError(f"{label}.{key} must use sha512 SRI")
+    try:
+        digest = base64.b64decode(value[len(prefix):], validate=True)
+    except (binascii.Error, ValueError) as exc:
+        raise ManifestError(f"{label}.{key} has invalid base64 payload") from exc
+    if len(digest) != 64:
+        raise ManifestError(f"{label}.{key} must encode exactly 64 SHA-512 bytes")
     return value
 
 
@@ -157,6 +191,8 @@ def build_inputs(manifest: Mapping[str, object]) -> dict[str, str]:
     agent = require_mapping(c["agent_workspace"], "agent_workspace")
     s6 = require_mapping(c["s6_overlay"], "s6_overlay")
     codex = require_mapping(c["codex_web_gpt"], "codex_web_gpt")
+    codex_upstream = require_mapping(c["codex_web_gpt_upstream"], "codex_web_gpt_upstream")
+    opencodex = require_mapping(c["opencodex"], "opencodex")
     muse = require_mapping(c["muse_code"], "muse_code")
     chrome = require_mapping(c["chrome"], "chrome")
     rust = require_mapping(c["rust"], "rust")
@@ -170,6 +206,37 @@ def build_inputs(manifest: Mapping[str, object]) -> dict[str, str]:
     noarch_sha = require_text(assets, "s6-overlay-noarch.tar.xz", "s6_overlay.assets")
     x86_sha = require_text(assets, "s6-overlay-x86_64.tar.xz", "s6_overlay.assets")
     ubuntu_indexes = frozen_ubuntu_indexes(ubuntu_packages)
+
+    if require_text(codex_upstream, "repository", "codex_web_gpt_upstream") != "miuuyy/codex-chatgpt-web":
+        raise ManifestError("upstream Codex Web GPT proof repository is invalid")
+    upstream_version = require_safe_version(
+        codex_upstream, "version", "codex_web_gpt_upstream"
+    )
+    upstream_sha = require_bare_sha256(
+        codex_upstream, "package_sha256", "codex_web_gpt_upstream"
+    )
+    upstream_asset = require_text(codex_upstream, "asset", "codex_web_gpt_upstream")
+    expected_upstream_asset = f"codex-web-gpt-{upstream_version}-linux-x64.AppImage"
+    if upstream_asset != expected_upstream_asset:
+        raise ManifestError("upstream Codex Web GPT proof asset is inconsistent")
+    if require_text(codex_upstream, "identity", "codex_web_gpt_upstream") != (
+        f"{upstream_version}@sha256:{upstream_sha}"
+    ):
+        raise ManifestError("upstream Codex Web GPT proof identity is inconsistent")
+
+    if require_text(opencodex, "package", "opencodex") != "@bitkyc08/opencodex":
+        raise ManifestError("OpenCodex package identity is invalid")
+    opencodex_version = require_safe_version(opencodex, "version", "opencodex")
+    opencodex_integrity = require_sha512_integrity(
+        opencodex, "integrity", "opencodex"
+    )
+    opencodex_shasum = require_text(opencodex, "shasum", "opencodex")
+    if not re.fullmatch(r"[0-9a-f]{40}", opencodex_shasum):
+        raise ManifestError("OpenCodex npm shasum is invalid")
+    if require_text(opencodex, "identity", "opencodex") != (
+        f"{opencodex_version}@{opencodex_integrity}"
+    ):
+        raise ManifestError("OpenCodex identity is inconsistent")
 
     values = {
         "UBUNTU_BASE": f"{family}@{digest}",
@@ -187,6 +254,11 @@ def build_inputs(manifest: Mapping[str, object]) -> dict[str, str]:
         "S6_OVERLAY_X86_64_SHA256": x86_sha,
         "CODEX_CHATGPT_WEB_VERSION": require_text(codex, "version", "codex_web_gpt"),
         "CODEX_CHATGPT_WEB_SHA256": require_text(codex, "package_sha256", "codex_web_gpt"),
+        "CODEX_CHATGPT_WEB_UPSTREAM_VERSION": upstream_version,
+        "CODEX_CHATGPT_WEB_UPSTREAM_SHA256": upstream_sha,
+        "OPENCODEX_VERSION": opencodex_version,
+        "OPENCODEX_INTEGRITY": opencodex_integrity,
+        "OPENCODEX_SHASUM": opencodex_shasum,
         "MUSE_INSTALLER_URL": require_text(muse, "installer_url", "muse_code"),
         "MUSE_INSTALLER_SHA256": require_text(muse, "installer_sha256", "muse_code"),
         "MUSE_EXPECTED_VERSION": require_text(muse, "version", "muse_code"),

@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+command_name="${1:-}"
+if [[ -z "$command_name" ]]; then
+  echo "usage: workstation-opencodex-proof <start|stop|health|status|paths>" >&2
+  exit 2
+fi
+shift || true
+
+home="${HOME:?HOME is required}"
+proof_root="${OPENCODEX_PROOF_ROOT:-$home/.local/state/chatgpt-ce-workstation/opencodex-proof}"
+proof_home="${OPENCODEX_PROOF_HOME:-$proof_root/opencodex}"
+proof_codex_home="${OPENCODEX_PROOF_CODEX_HOME:-$proof_root/codex-home}"
+proof_port="${OPENCODEX_PROOF_PORT:-10170}"
+
+canonical() {
+  realpath -m -- "$1"
+}
+
+production_opencodex_home="$(canonical "$home/.opencodex")"
+production_codex_home="$(canonical "$home/.codex")"
+proof_home="$(canonical "$proof_home")"
+proof_codex_home="$(canonical "$proof_codex_home")"
+
+if [[ "$proof_home" == "$production_opencodex_home" || "$proof_home" == "$production_opencodex_home/"* || "$proof_home" == "$production_codex_home" || "$proof_home" == "$production_codex_home/"* ]]; then
+  echo "proof OpenCodex home overlaps a production home" >&2
+  exit 2
+fi
+if [[ "$proof_codex_home" == "$production_codex_home" || "$proof_codex_home" == "$production_codex_home/"* || "$proof_codex_home" == "$production_opencodex_home" || "$proof_codex_home" == "$production_opencodex_home/"* ]]; then
+  echo "proof Codex home overlaps a production home" >&2
+  exit 2
+fi
+if [[ "$proof_home" == "$proof_codex_home" ]]; then
+  echo "proof OpenCodex and Codex homes must be distinct" >&2
+  exit 2
+fi
+if [[ ! "$proof_port" =~ ^[0-9]+$ ]] || (( proof_port < 1 || proof_port > 65535 )); then
+  echo "OPENCODEX_PROOF_PORT must be an integer from 1 to 65535" >&2
+  exit 2
+fi
+
+mkdir -p "$proof_home" "$proof_codex_home"
+chmod 0700 "$proof_home" "$proof_codex_home"
+
+run_ocx() {
+  env OPENCODEX_HOME="$proof_home" CODEX_HOME="$proof_codex_home" ocx "$@"
+}
+
+case "$command_name" in
+  start)
+    [[ "$#" -eq 0 ]] || { echo "start accepts no extra arguments" >&2; exit 2; }
+    run_ocx start --port "$proof_port"
+    ;;
+  stop)
+    [[ "$#" -eq 0 ]] || { echo "stop accepts no extra arguments" >&2; exit 2; }
+    run_ocx stop
+    ;;
+  health)
+    [[ "$#" -eq 0 ]] || { echo "health accepts no extra arguments" >&2; exit 2; }
+    run_ocx health --json
+    ;;
+  status)
+    [[ "$#" -eq 0 ]] || { echo "status accepts no extra arguments" >&2; exit 2; }
+    run_ocx status
+    ;;
+  paths)
+    [[ "$#" -eq 0 ]] || { echo "paths accepts no extra arguments" >&2; exit 2; }
+    printf 'OPENCODEX_HOME=%s\nCODEX_HOME=%s\nPORT=%s\n' "$proof_home" "$proof_codex_home" "$proof_port"
+    ;;
+  *)
+    echo "unknown proof command: $command_name" >&2
+    exit 2
+    ;;
+esac

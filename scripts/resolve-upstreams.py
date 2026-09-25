@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import hashlib
 import json
 import os
@@ -28,8 +30,10 @@ DEFAULT_UBUNTU_IMAGE = "ubuntu:24.04"
 DEFAULT_CE_REPOSITORY = "https://github.com/ilysenko/codex-desktop-linux.git"
 DEFAULT_CE_REF = "main"
 DEFAULT_AGENT_PACKAGE = "@agent-sh/agent-workspace-linux"
+DEFAULT_OPENCODEX_PACKAGE = "@bitkyc08/opencodex"
 DEFAULT_S6_REPOSITORY = "just-containers/s6-overlay"
 DEFAULT_CODEX_WEB_REPOSITORY = "elmakus/codex-chatgpt-web"
+DEFAULT_CODEX_WEB_UPSTREAM_REPOSITORY = "miuuyy/codex-chatgpt-web"
 DEFAULT_MUSE_INSTALLER_URL = "https://dev.meta.ai/install.sh"
 DEFAULT_MUSE_CHANNEL_URL = "https://api.meta.ai/muse-code/channels/muse-stable"
 DEFAULT_RUST_MANIFEST_URL = "https://static.rust-lang.org/dist/channel-rust-stable.toml"
@@ -117,6 +121,21 @@ def validate_version(value: str, label: str = "version") -> str:
     value = value.strip()
     if not value or not SAFE_VERSION_RE.fullmatch(value):
         raise ResolutionError(f"{label} is empty or unsafe")
+    return value
+
+
+def validate_npm_sha512_integrity(value: str, label: str = "npm integrity") -> str:
+    value = value.strip()
+    prefix = "sha512-"
+    if not value.startswith(prefix):
+        raise ResolutionError(f"{label} must use sha512 SRI")
+    encoded = value[len(prefix):]
+    try:
+        digest = base64.b64decode(encoded, validate=True)
+    except (binascii.Error, ValueError) as exc:
+        raise ResolutionError(f"{label} has invalid base64 payload") from exc
+    if len(digest) != 64:
+        raise ResolutionError(f"{label} must encode exactly 64 SHA-512 bytes")
     return value
 
 
@@ -462,45 +481,66 @@ def resolve_apt_metadata(
     return ubuntu_packages, chrome
 
 
-def resolve_agent_workspace(
+def resolve_npm_package(
+    package: str,
     version_override: str | None,
+    label: str,
     fetcher: Fetcher = fetch_url,
 ) -> dict:
-    encoded = urllib.parse.quote(DEFAULT_AGENT_PACKAGE, safe="")
+    encoded = urllib.parse.quote(package, safe="")
     metadata = json_from_bytes(
         fetcher(f"https://registry.npmjs.org/{encoded}"),
-        "Agent Workspace npm metadata",
+        f"{label} npm metadata",
     )
     if version_override:
-        version = validate_version(version_override.lstrip("v"), "Agent Workspace override")
+        version = validate_version(version_override.lstrip("v"), f"{label} override")
         overridden = True
     else:
         dist_tags = metadata.get("dist-tags")
         if not isinstance(dist_tags, dict) or not isinstance(dist_tags.get("latest"), str):
-            raise ResolutionError("Agent Workspace npm metadata has no latest dist-tag")
-        version = validate_version(dist_tags["latest"], "Agent Workspace latest version")
+            raise ResolutionError(f"{label} npm metadata has no latest dist-tag")
+        version = validate_version(dist_tags["latest"], f"{label} latest version")
         overridden = False
     versions = metadata.get("versions")
     if not isinstance(versions, dict) or not isinstance(versions.get(version), dict):
-        raise ResolutionError(f"Agent Workspace npm metadata has no version {version}")
+        raise ResolutionError(f"{label} npm metadata has no version {version}")
     dist = versions[version].get("dist")
     if not isinstance(dist, dict):
-        raise ResolutionError("Agent Workspace npm version has no dist metadata")
+        raise ResolutionError(f"{label} npm version has no dist metadata")
     integrity = dist.get("integrity")
     shasum = dist.get("shasum")
-    if not isinstance(integrity, str) or not integrity.startswith("sha512-"):
-        raise ResolutionError("Agent Workspace npm integrity is missing/invalid")
+    if not isinstance(integrity, str):
+        raise ResolutionError(f"{label} npm integrity is missing/invalid")
+    integrity = validate_npm_sha512_integrity(integrity, f"{label} npm integrity")
     if not isinstance(shasum, str) or not re.fullmatch(r"[0-9a-f]{40}", shasum):
-        raise ResolutionError("Agent Workspace npm shasum is missing/invalid")
+        raise ResolutionError(f"{label} npm shasum is missing/invalid")
     return {
         "identity": f"{version}@{integrity}",
         "integrity": integrity,
         "override": overridden,
-        "package": DEFAULT_AGENT_PACKAGE,
+        "package": package,
         "provenance": "npm-registry",
         "shasum": shasum,
         "version": version,
     }
+
+
+def resolve_agent_workspace(
+    version_override: str | None,
+    fetcher: Fetcher = fetch_url,
+) -> dict:
+    return resolve_npm_package(
+        DEFAULT_AGENT_PACKAGE, version_override, "Agent Workspace", fetcher
+    )
+
+
+def resolve_opencodex(
+    version_override: str | None,
+    fetcher: Fetcher = fetch_url,
+) -> dict:
+    return resolve_npm_package(
+        DEFAULT_OPENCODEX_PACKAGE, version_override, "OpenCodex", fetcher
+    )
 
 
 def github_release(
@@ -592,12 +632,13 @@ def parse_checksum_file(text: str, asset_name: str) -> str:
     return validate_bare_sha256(matches[0], f"checksum for {asset_name}")
 
 
-def resolve_codex_web_gpt(
+def resolve_codex_web_gpt_repository(
+    repository: str,
     version_override: str | None,
     fetcher: Fetcher = fetch_url,
 ) -> dict:
     release, version, overridden = github_release(
-        DEFAULT_CODEX_WEB_REPOSITORY, version_override, fetcher
+        repository, version_override, fetcher
     )
     asset_name = f"codex-web-gpt-{version}-linux-x64.AppImage"
     release_asset(release, asset_name)
@@ -616,9 +657,27 @@ def resolve_codex_web_gpt(
         "override": overridden,
         "package_sha256": package_sha,
         "provenance": "github-stable-release-checksums",
-        "repository": DEFAULT_CODEX_WEB_REPOSITORY,
+        "repository": repository,
         "version": version,
     }
+
+
+def resolve_codex_web_gpt(
+    version_override: str | None,
+    fetcher: Fetcher = fetch_url,
+) -> dict:
+    return resolve_codex_web_gpt_repository(
+        DEFAULT_CODEX_WEB_REPOSITORY, version_override, fetcher
+    )
+
+
+def resolve_codex_web_gpt_upstream(
+    version_override: str | None,
+    fetcher: Fetcher = fetch_url,
+) -> dict:
+    return resolve_codex_web_gpt_repository(
+        DEFAULT_CODEX_WEB_UPSTREAM_REPOSITORY, version_override, fetcher
+    )
 
 
 def resolve_muse_code(
@@ -777,8 +836,16 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
         default=os.environ.get("S6_OVERLAY_VERSION"),
     )
     parser.add_argument(
+        "--opencodex-version",
+        default=os.environ.get("OPENCODEX_VERSION") or None,
+    )
+    parser.add_argument(
         "--codex-web-gpt-version",
         default=os.environ.get("CODEX_CHATGPT_WEB_VERSION") or None,
+    )
+    parser.add_argument(
+        "--codex-web-gpt-upstream-version",
+        default=os.environ.get("CODEX_CHATGPT_WEB_UPSTREAM_VERSION") or None,
     )
     parser.add_argument(
         "--muse-installer-url",
@@ -809,6 +876,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             "agent_workspace": resolve_agent_workspace(args.agent_workspace_version),
             "chrome": chrome,
             "codex_web_gpt": resolve_codex_web_gpt(args.codex_web_gpt_version),
+            "codex_web_gpt_upstream": resolve_codex_web_gpt_upstream(
+                args.codex_web_gpt_upstream_version
+            ),
+            "opencodex": resolve_opencodex(args.opencodex_version),
             "muse_code": resolve_muse_code(
                 args.muse_installer_url, args.muse_installer_sha256
             ),

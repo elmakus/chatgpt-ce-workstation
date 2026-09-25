@@ -1,0 +1,106 @@
+project: "chatgpt-ce-workstation"
+workstream_id: "change-opencodex-provider-hub"
+plan_revision: "OPH-PLAN-R2"
+current_milestone: "OPH-M02"
+
+execution_ref:
+  branch: "work/opencodex-provider-hub"
+  pr: 23
+  head: "e6602ed132ecdb9d15ab7839339015206e3eb598"
+
+research_obligation: null
+
+milestones:
+  OPH-M01:
+    execution_status: done
+    decision_state: accepted
+    result: "commit:33023b6915b1fe80b2e1efa828af3fd2f90348ec"
+    acceptance_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01.md"
+    handoff: "implementation/workstreams/change-opencodex-provider-hub/handoffs/M01_HANDOFF.md"
+    review_requirement: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+  OPH-M02:
+    execution_status: in_progress
+    decision_state: accepted
+    result: null
+    acceptance_evidence: null
+    handoff: null
+    review_requirement: none
+    review_state: null
+    review_subject: null
+    review_evidence: null
+
+cards:
+  - id: "OPH-M01-T01"
+    contract: "implementation/workstreams/change-opencodex-provider-hub/cards/OPH-M01-T01.md"
+    milestone: "OPH-M01"
+    dependencies: []
+    execution_status: done
+    executor: chatgpt
+    result_commit: "c6e6c8f437d8c378525177a5685862153f1c0ef3"
+    result_pr: null
+    evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
+    tests_summary: "Corrected source validation GREEN; Exact candidate build run 35696273152 GREEN with workflow-produced image provenance/readback; CI run 35699340685 GREEN on corrected subject c6e6c8f437d8c378525177a5685862153f1c0ef3 with source-validation, dockerfile-check, and secret-scan all GREEN."
+    openspec: null
+    review_requirement: RECOMMENDED
+    review_state: green
+    review_subject: "commit:c6e6c8f437d8c378525177a5685862153f1c0ef3"
+    review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T01.md"
+    blocker: null
+
+  - id: "OPH-M01-T02"
+    contract: "implementation/workstreams/change-opencodex-provider-hub/cards/OPH-M01-T02.md"
+    milestone: "OPH-M01"
+    dependencies:
+      - "OPH-M01-T01"
+    execution_status: done
+    executor: chatgpt
+    result_commit: "22e226ceb4d6d63b98051c738877c85f69bc9ab5"
+    result_pr: null
+    evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T02.md"
+    tests_summary: "Focused lifecycle/source validation GREEN; exact frozen-candidate runtime proof GREEN for isolated start/health/status/stop with production-home sentinels unchanged; CI run 35702966558 GREEN on subject 22e226ceb4d6d63b98051c738877c85f69bc9ab5. Duplicate Exact candidate build run 35702966572 was cancelled after the same-subject runtime proof had already succeeded."
+    openspec: null
+    review_requirement: RECOMMENDED
+    review_state: green
+    review_subject: "commit:22e226ceb4d6d63b98051c738877c85f69bc9ab5"
+    review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T02.md"
+    blocker: null
+
+  - id: "OPH-M01-T03"
+    contract: "implementation/workstreams/change-opencodex-provider-hub/cards/OPH-M01-T03.md"
+    milestone: "OPH-M01"
+    dependencies:
+      - "OPH-M01-T02"
+    execution_status: done
+    executor: chatgpt
+    result_commit: "33023b6915b1fe80b2e1efa828af3fd2f90348ec"
+    result_pr: null
+    evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T03.md"
+    tests_summary: "Corrected proof-config/source validation GREEN; CI run 35713048312 GREEN with source-validation, dockerfile-check, secret-scan, and ShellCheck; Exact candidate build run 35713048323 GREEN with frozen image provenance/readback and OPENCODEX_PROOF_CONFIG_RUNTIME_GREEN on corrected subject 33023b6915b1fe80b2e1efa828af3fd2f90348ec."
+    openspec: null
+    review_requirement: RECOMMENDED
+    review_state: green
+    review_subject: "commit:33023b6915b1fe80b2e1efa828af3fd2f90348ec"
+    review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M01-T03.md"
+    blocker: null
+
+  - id: "OPH-M02-T01"
+    contract: "implementation/workstreams/change-opencodex-provider-hub/cards/OPH-M02-T01.md"
+    milestone: "OPH-M02"
+    dependencies:
+      - "OPH-M01-T03"
+    execution_status: in_progress
+    executor: chatgpt
+    result_commit: "e6602ed132ecdb9d15ab7839339015206e3eb598"
+    result_pr: 23
+    evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M02-T01.md"
+    tests_summary: "Focused/source validation GREEN; exact CI run 35717632054 GREEN on e6602ed132ecdb9d15ab7839339015206e3eb598 with Dockerfile check, source-validation/ShellCheck, and secret-scan GREEN; exact candidate build run 35717632009 GREEN with frozen image provenance and OPENCODEX_LIVE_A_RUNTIME_GREEN from the installed helper using fake transport only."
+    openspec: null
+    review_requirement: RECOMMENDED
+    review_state: red
+    review_subject: "commit:e6602ed132ecdb9d15ab7839339015206e3eb598"
+    review_evidence: "implementation/workstreams/change-opencodex-provider-hub/evidence/OPH-M02-T01.md"
+    blocker: null
