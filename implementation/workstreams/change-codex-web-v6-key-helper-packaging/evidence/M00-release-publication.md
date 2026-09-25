@@ -63,3 +63,17 @@ M00 did not rebuild, recreate, promote or otherwise mutate the running Workstati
 ## M00 conclusion
 
 GREEN / done. The configured fork now has the independently reviewed packaging correction merged and canonically published as `v6.1.0-private.2`, with the actual Linux release path proving the corrected AppImage package/smoke contract.
+
+
+## Workstation final-target integration readback
+
+Workstation PR #26 (`Close Codex Web GPT v6 key-helper packaging repair`) merged the closure-ready package into `main`.
+
+- exact PR head: `30bb457e9ad140c0585f88bf5bdf19a162575e38`
+- exact integration target before merge: `3f5c37dd33ef674357c7d0ace91dad637aaf79a5`
+- exact merge result: `main@ec3336428e6cb157e14bfc63585b6763f4ad14d6`
+- PR mergeability at final readback: GREEN
+- compare surface before merge: nine files, all under `implementation/workstreams/change-codex-web-v6-key-helper-packaging/`; no Workstation runtime/source file changed
+- original source branch `work/codex-web-v6-key-helper-packaging` was automatically removed by GitHub after merge
+
+The target-side package therefore contains the completed M00 checkpoint, implementation/review/publication evidence, cumulative handoff, manifest final-integration GREEN, PR pointer and immutable final integration result without depending on the deleted source branch.
