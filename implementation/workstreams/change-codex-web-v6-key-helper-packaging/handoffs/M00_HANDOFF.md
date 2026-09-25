@@ -45,6 +45,8 @@ Published release identity:
 
 ## Next durable starting point
 
-M00 is complete. The immediate remaining managed-workstream obligation is final-target integration of this closure-ready namespaced package into Workstation `main`.
+M00 is complete. Workstation PR #26 carries this closure-ready namespaced package into `main`; its integration target at PR creation was `main@3f5c37dd33ef674357c7d0ace91dad637aaf79a5`.
+
+The remaining managed-workstream obligation is final refresh/readback, merge of PR #26, and merge-result-dependent target-side terminal reconciliation.
 
 The normal live Workstation update that originally exposed the packaging defect is not part of the M00 production boundary. Its already-authorized operational continuation may resume only after the corrected release and this workstream's final-target integration are durably complete.
