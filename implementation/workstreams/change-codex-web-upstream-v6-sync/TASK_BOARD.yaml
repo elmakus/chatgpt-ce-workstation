@@ -55,7 +55,7 @@ cards:
     title: "Repair exact-tree health privacy regression for private release lineage"
     milestone: "M00"
     decision_state: "accepted"
-    execution_status: "in_progress"
+    execution_status: "done"
     executor: "chatgpt"
     depends_on: ["T02"]
     openspec_change: null
@@ -63,7 +63,7 @@ cards:
     review_state: null
     review_subject: null
     review_evidence: null
-    result_commit: null
+    result_commit: "elmakus/codex-chatgpt-web@b39499c391744eaa378b157822e18b9218590b60"
     result_pr: null
-    evidence: null
-    tests_summary: null
+    evidence: "implementation/workstreams/change-codex-web-upstream-v6-sync/evidence/T03-health-privacy-private-lineage-correction.md"
+    tests_summary: "GREEN — exact corrected candidate b39499c391744eaa378b157822e18b9218590b60: focused health 38/38, full runtime 811 pass / 4 skip / 0 fail, root + launcher typecheck/build GREEN, Node 24 launcher 347 pass / 1 skip / 0 fail, release-path Linux x64 AppImage build + packaged launcher smoke + current-Arch ABI smoke GREEN."
