@@ -1,6 +1,6 @@
 id: "change-codex-web-upstream-v6-sync"
 kind: "change"
-status: "planning"
+status: "in_progress"
 branch: "work/codex-web-upstream-v6-sync"
 base_ref: "elmakus/chatgpt-ce-workstation@dfa41ce0867824757a50dc151afe3a87c4826457"
 integration_target: "main"
