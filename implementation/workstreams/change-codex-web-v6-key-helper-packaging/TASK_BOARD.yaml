@@ -13,11 +13,11 @@ research_obligation: null
 milestones:
   M00:
     decision_state: accepted
-    execution_status: in_progress
+    execution_status: done
     contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m00--codex-web-gpt-fork-release-readiness"
-    checkpoint: null
-    evidence: null
-    handoff: null
+    checkpoint: "elmakus/codex-chatgpt-web@78297853c0d17242a241592719e5204e5de30078"
+    evidence: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/evidence/M00-release-publication.md"
+    handoff: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/handoffs/M00_HANDOFF.md"
 
 cards:
   - id: "M00-T04"
