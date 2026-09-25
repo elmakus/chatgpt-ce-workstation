@@ -1,6 +1,6 @@
 id: "change-codex-web-v6-key-helper-packaging"
 kind: "change"
-status: "ready"
+status: "review"
 
 branch: "work/codex-web-v6-key-helper-packaging"
 base_ref: "elmakus/chatgpt-ce-workstation@3f5c37dd33ef674357c7d0ace91dad637aaf79a5"
