@@ -1,9 +1,9 @@
 # Smart upstream updates Master Plan
 
-Status: **draft**
+Status: **approved**
 Plan revision: **smart-upstream-updates-R4**
 Date: 2026-09-25
-Independent plan review: **RECOMMENDED**
+Independent plan review: **GREEN** — `planning/reviews/smart-upstream-updates-R4.md`
 
 R4 supersedes R3 after independent review found one bounded planning-authority reconciliation defect: the canonical Smart Upstream Updates Definition had already been extended with approved retention requirements R17-R24 and accepted D28, owned by the separately approved and independently GREEN `planning/WORKSTATION_DOCKER_RETENTION_MASTER_PLAN.md`, while R3 still presented coverage as if R1-R16 were the complete requirement set. R4 incorporates that approved retention plan by reference, adds explicit cross-plan coverage/invariants, and does not duplicate or reopen its already accepted milestone architecture.
 
