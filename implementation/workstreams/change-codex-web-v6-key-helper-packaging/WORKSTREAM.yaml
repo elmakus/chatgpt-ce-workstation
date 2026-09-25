@@ -1,6 +1,6 @@
 id: "change-codex-web-v6-key-helper-packaging"
 kind: "change"
-status: "discovery"
+status: "ready"
 
 branch: "work/codex-web-v6-key-helper-packaging"
 base_ref: "elmakus/chatgpt-ce-workstation@3f5c37dd33ef674357c7d0ace91dad637aaf79a5"
@@ -11,7 +11,7 @@ parent_branch: null
 parent_dependency: null
 
 intake:
-  state: "active"
+  state: "complete"
   record: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/INTAKE.md"
 
 routing:
@@ -19,7 +19,7 @@ routing:
   research_obligation: null
   plan_review: null
 
-task_board: null
+task_board: "implementation/workstreams/change-codex-web-v6-key-helper-packaging/TASK_BOARD.yaml"
 
 authority:
   requirements: "requirements/SMART_UPSTREAM_UPDATES.md"
