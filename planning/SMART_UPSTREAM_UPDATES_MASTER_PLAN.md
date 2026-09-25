@@ -1,11 +1,11 @@
 # Smart upstream updates Master Plan
 
-Status: **approved**
-Plan revision: **smart-upstream-updates-R2**
-Date: 2026-09-20
+Status: **draft**
+Plan revision: **smart-upstream-updates-R3**
+Date: 2026-09-25
 Independent plan review: **RECOMMENDED**
 
-R2 supersedes R1 after independent plan review found two bounded planning gaps: incomplete carry-through of D15/D4 deployment regression checkpoints, and ambiguity about whether the Ubuntu base-image identity could be recorded only after an unconstrained build.
+R3 supersedes R2 only in execution topology. Final-integration recovery of the separately executed Codex Web GPT fork sync proved that the current workflow has no legal Close shape for a non-micro-fix Card with `current_milestone: none`. R3 makes that already-authorized related-repository prerequisite explicit as M00, before M01 integrated acceptance. No product/system requirement, runtime behavior, live-write boundary or M01-M04 outcome is changed.\n\nR2 previously superseded R1 after independent plan review found two bounded planning gaps: incomplete carry-through of D15/D4 deployment regression checkpoints, and ambiguity about whether the Ubuntu base-image identity could be recorded only after an unconstrained build.
 
 ## Goal and authority
 
@@ -42,12 +42,15 @@ Current upstream checks during discovery also proved that a real drift exists to
 
 ## Execution strategy
 
-Separate the problem into four checkpoints:
+Separate the problem into five checkpoints:
 
-1. establish a deterministic upstream-resolution contract;
-2. make the image consume that frozen contract with cache-friendly inputs and inspectable metadata;
-3. make `update.sh` promote/rollback exact image identities safely while preserving the accepted source-validation -> host-preflight -> image-build ordering before production mutation;
-4. exercise the final updater on the real workstation only after explicit deployment/live-write authorization, then run the full D15/D4 regression sequence after recreation.
+1. prepare and independently review a current release-ready Codex Web GPT downstream-fork subject without mutating workstation production;
+2. establish a deterministic upstream-resolution contract;
+3. make the image consume that frozen contract with cache-friendly inputs and inspectable metadata;
+4. make `update.sh` promote/rollback exact image identities safely while preserving the accepted source-validation -> host-preflight -> image-build ordering before production mutation;
+5. exercise the final updater on the real workstation only after explicit deployment/live-write authorization, then run the full D15/D4 regression sequence after recreation.
+
+M00 is the fork-supply prerequisite for the Codex Web GPT identity consumed by M01. Work on unrelated M01 resolver inputs may proceed independently, but M01 integrated acceptance cannot close until M00 publication is verified.
 
 Technical probing of vendor metadata is allowed inside M01/JIT when it selects the strongest practical identity source without changing the accepted latest-stable policy.
 
@@ -55,7 +58,46 @@ Do not use a timestamp or random nonce as a substitute when a real upstream iden
 
 The Ubuntu base is not an exception to resolve-first/freeze-first semantics: the selected `ubuntu:24.04` family member must be bound to an exact digest or demonstrably equivalent immutable identity before the candidate build consumes it. BuildKit may perform the mechanical lookup only when that exact identity is frozen before build execution and carried into candidate provenance; post-hoc recording of whatever a moving tag happened to resolve to is insufficient.
 
+## Milestone M00 — Codex Web GPT fork release readiness
+
+### Outcome
+
+The configured downstream Codex Web GPT fork has one exact release-ready subject based on the current trusted upstream stable release, with Workstation-required fork behavior preserved and independently reviewed, without mutating workstation production.
+
+### Requirement ownership
+
+R4 fork-supply prerequisite. M00 inherits the existing authenticity/checksum, runtime-self-updater and isolation invariants without changing their accepted contracts.
+
+### Dependencies
+
+None.
+
+### Planned work packages
+
+- Rebase/merge the configured downstream fork onto the current trusted upstream stable release rather than maintaining an indefinitely stale fork baseline.
+- Preserve Workstation-required Codex-LB routing/auth isolation and persistent key-file behavior.
+- Preserve parallel Muse/CLIProxyAPI routing, model-catalog normalization and bounded Muse compatibility rewrites.
+- Preserve native encoded-body/model-hint routing, proxy-resolution restrictions and fork-specific interrupt-hook recovery compatibility unless the upstream implementation provides an equivalent or stronger path.
+- Preserve image-managed update policy and fork release provenance/checksum behavior.
+- Run focused fork regressions plus the applicable full runtime, launcher, typecheck/build and representative package/release smoke checks on one exact candidate.
+- Freeze that exact candidate for the manifest-owned final-integration review before fork main/release publication.
+
+### Acceptance
+
+- The exact candidate is based on the trusted current upstream stable subject and also contains the required pre-sync fork behavior/history.
+- Current upstream UI/model/effort/runtime behavior remains present; conflict resolution does not blindly restore obsolete fork implementations over stronger upstream equivalents.
+- Codex-LB and Muse credentials remain separated and incoming ChatGPT OAuth is not forwarded to configured proxy backends.
+- Muse-specific request/catalog normalization remains bounded to the intended Muse surfaces and ordinary native Codex traffic is not rewritten unnecessarily.
+- Fork release provenance/checksum and image-managed updater-disable behavior remain intact.
+- Focused fork tests, full applicable runtime tests, launcher tests, typecheck/build and representative package/release smoke are GREEN on the exact reviewed tree.
+- The workstream-level final-integration review is GREEN for the exact release-ready subject before publication.
+- No Workstation production image/container is rebuilt, recreated or promoted as part of M00.
+
 ## Milestone M01 — Frozen upstream resolution contract
+
+### Dependencies
+
+M00 publication is verified for the Codex Web GPT fork identity before M01 integrated acceptance. Unrelated resolver implementation may proceed before that checkpoint.
 
 ### Outcome
 
@@ -253,7 +295,7 @@ If a live test reveals a behavioral defect, do not normalize it as expected upda
 | R1 one normal updater | M03, M04 |
 | R2 lower-level build primitive | M02, M03 |
 | R3 Ubuntu 24.04 family | M01, M02, M04 |
-| R4 latest stable/current upstreams | M01, M02, M04 |
+| R4 latest stable/current upstreams | M00, M01, M02, M04 |
 | R5 resolve/freeze identities | M01, M02 |
 | R6 CE/OpenAI separate freshness | M01, M02 |
 | R7 no timestamp-only invalidation | M01, M02, M04 |
@@ -295,7 +337,7 @@ Those choices must stay inside D25 and the requirements. In particular, JIT may 
 
 GREEN:
 - every approved requirement has a milestone owner and execution path;
-- latest-stable policy and Ubuntu 24.04 family pin are both preserved;
+- the configured Codex Web GPT fork has an explicit release-readiness checkpoint before M01 can close its resolved release identity;\n- latest-stable policy and Ubuntu 24.04 family pin are both preserved;
 - the Ubuntu base is frozen to an exact immutable identity before candidate build execution;
 - CE and OpenAI payload freshness are not conflated;
 - cache goals are realistic about Docker dependency invalidation;
