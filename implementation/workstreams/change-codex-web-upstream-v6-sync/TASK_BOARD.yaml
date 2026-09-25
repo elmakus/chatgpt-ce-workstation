@@ -11,10 +11,11 @@ milestones:
   M00:
     title: "Codex Web GPT fork release readiness"
     decision_state: "accepted"
-    execution_status: "in_progress"
+    execution_status: "done"
     contract: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md#milestone-m00--codex-web-gpt-fork-release-readiness"
-    checkpoint: null
-    evidence: null
+    checkpoint: "elmakus/codex-chatgpt-web@b39499c391744eaa378b157822e18b9218590b60"
+    evidence: "implementation/workstreams/change-codex-web-upstream-v6-sync/evidence/M00-release-publication.md"
+    handoff: "implementation/workstreams/change-codex-web-upstream-v6-sync/handoffs/M00_HANDOFF.md"
 cards:
   - id: "T01"
     title: "Rebase Codex Web GPT fork onto upstream v6.1.0"
