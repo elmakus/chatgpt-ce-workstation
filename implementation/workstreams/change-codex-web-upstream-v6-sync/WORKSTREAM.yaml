@@ -21,7 +21,7 @@ authority:
   plan: "planning/SMART_UPSTREAM_UPDATES_MASTER_PLAN.md"
 review:
   requirement: "RECOMMENDED"
-  state: "pending"
+  state: "in_progress"
   subject: "elmakus/codex-chatgpt-web@0dcf8ed9dbd229cf908cc68b31f4126c0af2414d"
   evidence: "implementation/workstreams/change-codex-web-upstream-v6-sync/evidence/T01-upstream-v6-sync.md"
   covered_by: null
