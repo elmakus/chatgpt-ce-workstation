@@ -45,8 +45,13 @@ Published release identity:
 
 ## Next durable starting point
 
-M00 is complete. Workstation PR #26 carries this closure-ready namespaced package into `main`; its integration target at PR creation was `main@3f5c37dd33ef674357c7d0ace91dad637aaf79a5`.
+M00 and workstream `change-codex-web-v6-key-helper-packaging` are terminally complete.
 
-The remaining managed-workstream obligation is final refresh/readback, merge of PR #26, and merge-result-dependent target-side terminal reconciliation.
+- Workstation PR #26 merged to `main@ec3336428e6cb157e14bfc63585b6763f4ad14d6`.
+- The original source branch was auto-deleted after merge; no cleanup fallback is active.
+- Canonical Codex Web GPT release `v6.1.0-private.2` remains pinned to independently reviewed subject `78297853c0d17242a241592719e5204e5de30078`.
+- The historical primary `feature-smart-upstream-updates` workstream already has M01-M04 terminally done; this corrective M00 workstream does not open a new implementation milestone.
 
-The normal live Workstation update that originally exposed the packaging defect is not part of the M00 production boundary. Its already-authorized operational continuation may resume only after the corrected release and this workstream's final-target integration are durably complete.
+There is no remaining Card, Research, review, stacked-dependency, integration or release-publication obligation in this workstream.
+
+The normal live Workstation update that originally exposed the packaging defect remains an already-authorized operational continuation outside the M00 production boundary; it may now resume against the corrected published release.
